@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && pnpm run -C webComponents dev",
     "generate-version": "tsx scripts/generate-version.ts",
-    "lint": "eslint --ext .ts,.jsx,.tsx,.vue --fix --quiet ./packages"
+    "lint": "eslint --ext .ts,.jsx,.tsx --fix --quiet ./packages"
   },
   "peerDependencies": {
     "vue": "^3.2.0"
