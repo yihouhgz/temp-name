@@ -1,0 +1,41 @@
+{
+  "name": "temp-name",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.9.0",
+  "workspaces": [
+    "packages/*",
+    "docs"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && pnpm run -C webComponents dev",
+    "generate-version": "tsx scripts/generate-version.ts",
+    "lint": "eslint --ext .ts,.jsx,.tsx,.vue --fix --quiet ./packages"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@types/node": "^24.0.14",
+    "@typescript-eslint/eslint-plugin": "^8.37.0",
+    "commitlint": "^19.8.1",
+    "consola": "^3.4.2",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin,": "link:@typescript-eslint/eslint-plugin,",
+    "eslint-plugin-prettier": "^5.5.1",
+    "husky": "^9.1.7",
+    "parser,": "link:@typescript-eslint/parser,",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.4"
+  },
+  "dependencies": {
+    "vue": "^3.5.17"
+  }
+}
