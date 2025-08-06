@@ -14,7 +14,8 @@
     "build-test": "tsc && rollup -c",
     "generate-version": "tsx scripts/generate-version.ts",
     "lint": "eslint --ext .ts,.jsx,.tsx --fix --quiet ./packages",
-    "dev": "pnpm -C play dev"
+    "dev": "pnpm run clean && pnpm run build-test && pnpm -C play dev",
+    "clean": "rimraf dist"
   },
   "license": "ISC",
   "devDependencies": {
@@ -48,6 +49,7 @@
     "parser,": "link:@typescript-eslint/parser,",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
     "rollup": "^4.46.2",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-copy": "^3.5.0",
