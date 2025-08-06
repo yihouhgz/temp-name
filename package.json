@@ -14,7 +14,7 @@
     "build-test": "tsc && rollup -c",
     "generate-version": "tsx scripts/generate-version.ts",
     "lint": "eslint --ext .ts,.jsx,.tsx --fix --quiet ./packages",
-    "dev": "pnpm -C play dev"
+    "dev": "pnpm run build-test && pnpm -C play dev"
   },
   "license": "ISC",
   "devDependencies": {
