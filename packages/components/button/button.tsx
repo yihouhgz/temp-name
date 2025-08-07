@@ -3,26 +3,46 @@ import { defineComponent, ref } from 'vue'
 import { buttonProps } from './type'
 // import { prefix } from 'constants/config'
 import Wave from '../wave'
-import './style/button.scss'
+import CameraIcon from '../icon/camera'
+import './style/button'
 
 const Button = defineComponent(
   (props, ctx) => {
-    const number = ref(0)
-    const handleClick = () => {
-      number.value++
+    const buttonRef = ref<HTMLButtonElement>()
+    const handleClick = (event: MouseEvent) => {
+      if (buttonRef.value) {
+        buttonRef.value?.blur()
+      }
+      ctx.emit('click', event)
     }
     const defaultRender = () => {
       return (
-        <div>
-          {ctx.slots.default?.()}
-          {number.value}
+        <div style="display: flex;align-items: center;">
+          <CameraIcon style="margin-right: 8px;" />
+          <span>{ctx.slots.default?.()}</span>
         </div>
       )
     }
+
+    const buttonClass = [
+      'tempui-button',
+      `tempui-button-${props.type}`,
+      `tempui-button-${props.size}`,
+      {
+        'is-disabled': props.disabled,
+        'tempui-button-loading': props.loading
+      }
+    ]
+
     return () => {
       return (
         <Wave disabled={false}>
-          <button class="temp-button" onClick={handleClick}>
+          <button
+            ref={buttonRef}
+            class={buttonClass}
+            onClick={handleClick}
+            disabled={props.disabled}
+          >
             {defaultRender()}
           </button>
         </Wave>

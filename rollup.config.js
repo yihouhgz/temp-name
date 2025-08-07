@@ -1,7 +1,7 @@
 // import { name } from './package.json'
 import typescript from 'rollup-plugin-typescript2'
 import vuePlugin from 'rollup-plugin-vue'
-// import autoprefixer from 'autoprefixer'
+import autoprefixer from 'autoprefixer'
 import postcss from 'rollup-plugin-postcss'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import images from '@rollup/plugin-image'
@@ -21,6 +21,11 @@ export default {
   output: [
     {
       name,
+      file: file('umd'),
+      format: 'umd'
+    },
+    {
+      name,
       file: file('esm'),
       format: 'esm'
     },
@@ -33,20 +38,15 @@ export default {
   external: ['vue'],
   plugins: [
     nodeResolve({
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
-      moduleDirectories: ['node_modules']
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', 'scss'],
+      moduleDirectories: ['node_modules', 'packages']
     }),
     commonjs(),
     postcss({
       modules: false, // 启用 CSS Modules
-      extract: (css) => {
-        const fileName = css
-          .split('/')
-          .pop()
-          .replace(/\.[^/.]+$/, '')
-        return `dist/styles/${fileName}.css`
-      }, // 提取 CSS 到单独文件
-      use: ['sass'] // 使用 Sass 编译器
+      extract: true, // 提取 CSS 到单独文件
+      use: ['sass'], // 使用 Sass 编译器
+      plugins: [autoprefixer()]
     }),
     typescript({
       // tsconfig: './tsconfig.base.json',
@@ -80,6 +80,10 @@ export default {
         {
           src: 'packages/assets/*',
           dest: 'dist/assets'
+        },
+        {
+          src: 'packages/theme/**/*',
+          dest: 'dist/theme'
         }
       ]
     })

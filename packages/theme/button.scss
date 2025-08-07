@@ -1,0 +1,264 @@
+.tempui-button {
+  position: relative;
+  display: inline-block;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  height: 32px;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: var(--tempui-border-radius-small);
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  outline: none;
+  transform: scale(1);
+  transform-origin: center;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+
+  // 添加 pressed 状态的过渡效果
+  &.tempui-button-pressed {
+    transform: scale(0.98);
+    transition: transform 0.1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+
+  &-primary {
+    color: rgba(var(--tempui-white), 1);
+    background-color: var(--tempui-color-primary);
+    border-color: var(--tempui-color-primary);
+
+    &:hover,
+    &:focus {
+      background-color: var(--tempui-color-primary-hover);
+      border-color: var(--tempui-color-primary-hover);
+    }
+
+    &:active,
+    &.tempui-button-pressed {
+      background-color: var(--tempui-color-primary-active);
+      border-color: var(--tempui-color-primary-active);
+    }
+
+    &.is-disabled,
+    &[disabled] {
+      color: rgba(var(--tempui-white), 1);
+      background-color: var(--tempui-color-primary-disabled);
+      border-color: var(--tempui-color-primary-disabled);
+      cursor: not-allowed;
+    }
+  }
+
+  &-secondary {
+    color: rgba(var(--tempui-white), 1);
+    background-color: var(--tempui-color-secondary);
+    border-color: var(--tempui-color-secondary);
+
+    &:hover,
+    &:focus {
+      background-color: var(--tempui-color-secondary-hover);
+      border-color: var(--tempui-color-secondary-hover);
+    }
+
+    &:active,
+    &.tempui-button-pressed {
+      background-color: var(--tempui-color-secondary-active);
+      border-color: var(--tempui-color-secondary-active);
+    }
+
+    &.is-disabled,
+    &[disabled] {
+      color: rgba(var(--tempui-white), 1);
+      background-color: var(--tempui-color-secondary-disabled);
+      border-color: var(--tempui-color-secondary-disabled);
+      cursor: not-allowed;
+    }
+  }
+
+  &-tertiary {
+    color: var(--tempui-color-text-1);
+    background-color: transparent;
+    border-color: var(--tempui-color-border);
+
+    &:hover,
+    &:focus {
+      color: var(--tempui-color-text-1);
+      background-color: var(--tempui-color-tertiary-light-hover);
+      border-color: var(--tempui-color-tertiary);
+    }
+
+    &:active,
+    &.tempui-button-pressed {
+      color: var(--tempui-color-text-1);
+      background-color: var(--tempui-color-tertiary-light-active);
+      border-color: var(--tempui-color-tertiary);
+    }
+
+    &.is-disabled,
+    &[disabled] {
+      color: var(--tempui-color-disabled-text);
+      background-color: var(--tempui-color-disabled-fill);
+      border-color: var(--tempui-color-disabled-border);
+      cursor: not-allowed;
+    }
+  }
+
+  &-warning {
+    color: rgba(var(--tempui-white), 1);
+    background-color: var(--tempui-color-warning);
+    border-color: var(--tempui-color-warning);
+
+    &:hover,
+    &:focus {
+      background-color: var(--tempui-color-warning-hover);
+      border-color: var(--tempui-color-warning-hover);
+    }
+
+    &:active,
+    &.tempui-button-pressed {
+      background-color: var(--tempui-color-warning-active);
+      border-color: var(--tempui-color-warning-active);
+    }
+
+    &.is-disabled,
+    &[disabled] {
+      color: rgba(var(--tempui-white), 1);
+      background-color: var(--tempui-color-warning-light-default);
+      border-color: var(--tempui-color-warning-light-default);
+      cursor: not-allowed;
+    }
+  }
+
+  &-danger {
+    color: rgba(var(--tempui-white), 1);
+    background-color: var(--tempui-color-danger);
+    border-color: var(--tempui-color-danger);
+
+    &:hover,
+    &:focus {
+      background-color: var(--tempui-color-danger-hover);
+      border-color: var(--tempui-color-danger-hover);
+    }
+
+    &:active,
+    &.tempui-button-pressed {
+      background-color: var(--tempui-color-danger-active);
+      border-color: var(--tempui-color-danger-active);
+    }
+
+    &.is-disabled,
+    &[disabled] {
+      color: rgba(var(--tempui-white), 1);
+      background-color: var(--tempui-color-danger-light-default);
+      border-color: var(--tempui-color-danger-light-default);
+      cursor: not-allowed;
+    }
+  }
+
+  &-ghost {
+    color: var(--tempui-color-text-1);
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+
+    &:hover,
+    &:focus {
+      color: var(--tempui-color-text-1);
+      background-color: var(--tempui-color-tertiary-light-hover);
+    }
+
+    &:active,
+    &.tempui-button-pressed {
+      color: var(--tempui-color-text-1);
+      background-color: var(--tempui-color-tertiary-light-active);
+    }
+
+    &.is-disabled,
+    &[disabled] {
+      color: var(--tempui-color-disabled-text);
+      background-color: transparent;
+      border-color: transparent;
+      cursor: not-allowed;
+    }
+  }
+
+  &-link {
+    color: var(--tempui-color-link);
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+
+    &:hover,
+    &:focus {
+      color: var(--tempui-color-link-hover);
+      border-color: transparent;
+      background-color: transparent;
+    }
+
+    &:active,
+    &.tempui-button-pressed {
+      color: var(--tempui-color-link-active);
+      border-color: transparent;
+      background-color: transparent;
+    }
+
+    &.is-disabled,
+    &[disabled] {
+      color: var(--tempui-color-link-disabled);
+      background-color: transparent;
+      border-color: transparent;
+      cursor: not-allowed;
+    }
+  }
+
+  // Size variants
+  &-small {
+    height: 24px;
+    padding: 0 7px;
+    font-size: 12px;
+    border-radius: var(--tempui-border-radius-small);
+  }
+
+  &-large {
+    height: 40px;
+    padding: 6px 15px;
+    font-size: 16px;
+    border-radius: var(--tempui-border-radius-medium);
+  }
+
+  // Status
+  &.is-disabled,
+  &[disabled] {
+    cursor: not-allowed;
+    > * {
+      pointer-events: none;
+    }
+  }
+
+  &-loading {
+    position: relative;
+    pointer-events: none;
+
+    &::before {
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      bottom: -1px;
+      left: -1px;
+      z-index: 1;
+      display: block;
+      background: transparent;
+      border-radius: inherit;
+      content: '';
+    }
+  }
+}

@@ -10,7 +10,7 @@ export interface ButtonProps {
 export const buttonProps = {
   type: {
     type: String,
-    default: 'default'
+    default: 'primary'
   },
   size: {
     type: String,
