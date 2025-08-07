@@ -1,10 +1,12 @@
 import Color from 'color'
-
 import type { formatType, ColorType, ColorInstance } from './type'
 const formats: formatType[] = ['hex', 'rgb', 'hsl']
+type ColorInstanceType = ColorInstance & {
+  color?: number[]
+}
 export const getRgbStr = (color: ColorType) => {
-  const colorInstance = Color(color).rgb().round()
-  return colorInstance.color.join(',')
+  const colorInstance: ColorInstanceType = Color(color).rgb().round()
+  return colorInstance.color?.join(',')
 }
 
 function getFormat(format: formatType): formatType {

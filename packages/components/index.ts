@@ -10,9 +10,6 @@ type App = {
 export const install = (app: App) => {
   components.forEach((component) => {
     console.log(app, component)
-    app.component(
-      component.name as typeof component & { name: string },
-      component
-    )
+    app.component(component.name, component)
   })
 }

@@ -5,7 +5,8 @@ import { buttonProps } from './type'
 import Wave from '../wave'
 import CameraIcon from '../icon/camera'
 import './style/button'
-
+import { generate, getRgbStr, getPresetColors } from 'theme/derive'
+generate('#fff')
 const Button = defineComponent(
   (props, ctx) => {
     const buttonRef = ref<HTMLButtonElement>()
@@ -13,6 +14,7 @@ const Button = defineComponent(
       if (buttonRef.value) {
         buttonRef.value?.blur()
       }
+      console.log('click')
       ctx.emit('click', event)
     }
     const defaultRender = () => {

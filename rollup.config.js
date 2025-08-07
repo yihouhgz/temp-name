@@ -74,19 +74,19 @@ export default {
     //   plugins: [autoprefixer()],
     //   extract: 'bundle.css'
     // }),
-    images({ include: ['**/*.png', '**/*.jpg', '**/*.svg'] }),
-    copy({
-      targets: [
-        {
-          src: 'packages/assets/*',
-          dest: 'dist/assets'
-        },
-        {
-          src: 'packages/theme/**/*',
-          dest: 'dist/theme'
-        }
-      ]
-    })
+    images({ include: ['**/*.png', '**/*.jpg', '**/*.svg'] })
+    // copy({
+    //   targets: [
+    //     {
+    //       src: 'packages/assets/*',
+    //       dest: 'dist/assets'
+    //     },
+    //     {
+    //       src: 'packages/theme/**/*',
+    //       dest: 'dist/theme'
+    //     }
+    //   ]
+    // })
     // terser()
   ]
 }
