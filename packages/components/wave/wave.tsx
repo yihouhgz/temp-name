@@ -1,57 +1,67 @@
-import { defineComponent, ref, onUnmounted } from 'vue'
+import { defineComponent, onUnmounted, watchEffect, Fragment } from 'vue'
+import { prefix } from 'constants/config'
+import { getTargetWaveColor } from './utils'
+function validateNum(value: number) {
+  return Number.isNaN(value) ? 0 : value
+}
 
 const Wave = defineComponent(
   (props, { slots }) => {
-    const waveRef = ref<HTMLElement | null>(null)
-    const animRef = ref<HTMLSpanElement | null>(null)
-    function onClick(e: MouseEvent) {
-      if (props.disabled || !waveRef.value) return
-      // 移除上一次动画
-      if (animRef.value) {
-        animRef.value.remove()
-        animRef.value = null
+    if (props.disabled) return () => <Fragment>{slots.default?.()}</Fragment>
+    else {
+      const showEffect = () => {
+        const holder = document.createElement('div')
+        holder.style.position = 'absolute'
+        holder.style.left = '0px'
+        holder.style.top = '0px'
+
+        const width = props.target?.offsetWidth
+        const height = props.target?.offsetHeight
+        holder.style.width = `${width}px`
+        holder.style.height = `${height}px`
+        const nodeStyle = getComputedStyle(props.target)
+        const {
+          borderTopLeftRadius,
+          borderTopRightRadius,
+          borderBottomLeftRadius,
+          borderBottomRightRadius
+        } = nodeStyle
+        const borderRadius = [
+          borderTopLeftRadius,
+          borderTopRightRadius,
+          borderBottomRightRadius,
+          borderBottomLeftRadius
+        ].map((radius) => validateNum(parseFloat(radius)))
+        const waveStyle = {
+          color: getTargetWaveColor(props.target),
+          width: `${width}px`,
+          height: `${height}px`,
+          borderRadius: borderRadius.map((radius) => `${radius}px`).join(' ')
+        }
+        console.log(waveStyle)
+
+        props.target?.insertBefore(holder, props.target?.firstChild)
       }
-      const el = waveRef.value
-      const rect = el.getBoundingClientRect()
-      const wave = document.createElement('span')
-      wave.className = 'vue-wave-effect'
-      wave.style.left = `${e.clientX - rect.left}px`
-      wave.style.top = `${e.clientY - rect.top}px`
-
-      animRef.value = wave
-      el.appendChild(wave)
-
-      wave.addEventListener(
-        'animationend',
-        () => {
-          wave.remove()
-          animRef.value = null
-        },
-        { once: true }
-      )
+      const handleClick = (e: MouseEvent) => {
+        console.log(e, 'handleClick')
+        showEffect()
+      }
+      watchEffect(() => {
+        if (props.target) props.target.addEventListener('click', handleClick)
+      })
+      onUnmounted(() => {
+        props.target.removeEventListener('click', handleClick)
+      })
+      return () => {
+        return <Fragment>{slots.default?.()}</Fragment>
+      }
     }
-    onUnmounted(() => {
-      if (animRef.value) animRef.value.remove()
-    })
-    return () => (
-      <div
-        ref={waveRef}
-        class="vue-wave-container"
-        onClick={onClick}
-        style={{
-          position: 'relative',
-          overflow: 'hidden',
-          display: 'inline-block'
-        }}
-      >
-        {slots.default?.()}
-      </div>
-    )
   },
   {
-    name: 'wave',
+    name: `${prefix}-wave`,
     props: {
-      disabled: { type: Boolean, default: false, required: false }
+      disabled: { type: Boolean, default: false, required: false },
+      target: { type: HTMLElement, required: false }
     }
   }
 )

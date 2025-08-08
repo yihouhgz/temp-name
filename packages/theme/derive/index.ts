@@ -66,5 +66,4 @@ function getPresetColors() {
 
   return presetColors
 }
-
 export { generate, getRgbStr, getPresetColors }

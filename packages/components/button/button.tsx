@@ -1,12 +1,12 @@
 import { defineComponent, ref } from 'vue'
 // import type { ButtonInstance } from './type'
 import { buttonProps } from './type'
-// import { prefix } from 'constants/config'
+import { prefix } from 'constants/config'
 import Wave from '../wave'
 import CameraIcon from '../icon/camera'
 import './style/button'
-import { generate, getRgbStr, getPresetColors } from 'theme/derive'
-generate('#fff')
+import { generate } from 'theme/derive'
+console.log(prefix, 'prefix', generate('#fff'))
 const Button = defineComponent(
   (props, ctx) => {
     const buttonRef = ref<HTMLButtonElement>()
@@ -14,7 +14,6 @@ const Button = defineComponent(
       if (buttonRef.value) {
         buttonRef.value?.blur()
       }
-      console.log('click')
       ctx.emit('click', event)
     }
     const defaultRender = () => {
@@ -38,7 +37,7 @@ const Button = defineComponent(
 
     return () => {
       return (
-        <Wave disabled={false}>
+        <Wave disabled={false} target={buttonRef.value as HTMLElement}>
           <button
             ref={buttonRef}
             class={buttonClass}
@@ -52,7 +51,7 @@ const Button = defineComponent(
     }
   },
   {
-    name: 'nl-button',
+    name: `${prefix}-button`,
     props: buttonProps
   }
 )
