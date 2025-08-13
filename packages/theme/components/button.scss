@@ -1,8 +1,9 @@
 .tempui-button {
   position: relative;
-  display: inline-block;
+  // display: inline-block;
+  display: inline-flex;
+  align-items: center;
   font-weight: 400;
-  white-space: nowrap;
   text-align: center;
   cursor: pointer;
   user-select: none;
@@ -18,8 +19,22 @@
   transform: scale(1);
   transform-origin: center;
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
+  vertical-align: middle;
+  white-space: nowrap;
+
+  &-content {
+    display: flex;
+    align-items: center;
+    & svg {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+    }
+  }
+
+  & + .tempui-button {
+    margin-left: 12px;
+  }
 
   // 添加 pressed 状态的过渡效果
   &.tempui-button-pressed {
@@ -247,18 +262,26 @@
   &-loading {
     position: relative;
     pointer-events: none;
-
-    &::before {
-      position: absolute;
-      top: -1px;
-      right: -1px;
-      bottom: -1px;
-      left: -1px;
-      z-index: 1;
-      display: block;
-      background: transparent;
-      border-radius: inherit;
-      content: '';
+    opacity: var(--tempui-opacity-loading);
+    & svg {
+      width: 16px;
+      height: 16px;
+      animation: animation-rotate 0.8s linear infinite;
+      animation-fill-mode: forwards;
     }
+  }
+
+  &-icon {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &-block {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-left: 0px !important;
   }
 }

@@ -609,6 +609,7 @@ body .tempui-always-dark {
 }
 
 body {
+  --tempui-opacity-loading: 0.65;
   --tempui-transform_scale-none: scale(1, 1);
   --tempui-transform_scale-small: scale(1, 1);
   --tempui-transform_scale-medium: scale(1, 1);

@@ -1,14 +1,17 @@
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 // import type { ButtonInstance } from './type'
-import { buttonProps } from './type'
+import { buttonPropsDefaults } from './type'
 import { prefix } from 'constants/config'
 import Wave from '../wave'
-import CameraIcon from '../icon/camera'
+// import CameraIcon from '../icon/camera'
+import LoadingIcon from '../icon/loading'
 import './style/button'
 import { generate } from 'theme/derive'
 console.log(prefix, 'prefix', generate('#fff'))
+console.log(buttonPropsDefaults, 'ButtonPropsType')
 const Button = defineComponent(
   (props, ctx) => {
+    console.log(props, 'props')
     const buttonRef = ref<HTMLButtonElement>()
     const handleClick = (event: MouseEvent) => {
       if (buttonRef.value) {
@@ -16,33 +19,43 @@ const Button = defineComponent(
       }
       ctx.emit('click', event)
     }
+
+    const iconRender = () => {
+      if (props.loading) return <LoadingIcon />
+      else {
+        return ctx.slots.icon ? ctx.slots.icon() : <></>
+      }
+    }
     const defaultRender = () => {
       return (
-        <div style="display: flex;align-items: center;">
-          <CameraIcon style="margin-right: 8px;" />
+        <span class="tempui-button-content">
+          {iconRender()}
           <span>{ctx.slots.default?.()}</span>
-        </div>
+        </span>
       )
     }
 
-    const buttonClass = [
+    const buttonClass = computed(() => [
       'tempui-button',
       `tempui-button-${props.type}`,
       `tempui-button-${props.size}`,
       {
         'is-disabled': props.disabled,
-        'tempui-button-loading': props.loading
+        'tempui-button-loading': props.loading && !props.disabled,
+        'tempui-button-icon': ctx.slots.icon,
+        'tempui-button-block': props.block
       }
-    ]
+    ])
 
     return () => {
       return (
-        <Wave disabled={false} target={buttonRef.value as HTMLElement}>
+        <Wave disabled={props.disabled} target={buttonRef.value as HTMLElement}>
           <button
             ref={buttonRef}
-            class={buttonClass}
+            class={buttonClass.value}
             onClick={handleClick}
             disabled={props.disabled}
+            {...ctx.attrs}
           >
             {defaultRender()}
           </button>
@@ -52,7 +65,8 @@ const Button = defineComponent(
   },
   {
     name: `${prefix}-button`,
-    props: buttonProps
+    props: buttonPropsDefaults,
+    emits: ['click']
   }
 )
 

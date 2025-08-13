@@ -1,0 +1,17 @@
+.wave-effect {
+  @keyframes playEffect {
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.15, 1.3);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.2, 1.4);
+    }
+  }
+  animation: playEffect 0.4s;
+}

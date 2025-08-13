@@ -1,4 +1,4 @@
-export default function CameraIcon(props) {
+export default function CameraIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
