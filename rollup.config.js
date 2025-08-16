@@ -1,11 +1,10 @@
-// import { name } from './package.json'
 import typescript from 'rollup-plugin-typescript2'
 import vuePlugin from 'rollup-plugin-vue'
 import autoprefixer from 'autoprefixer'
 import postcss from 'rollup-plugin-postcss'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import images from '@rollup/plugin-image'
-// import copy from 'rollup-plugin-copy'
+import copy from 'rollup-plugin-copy'
 import babel from 'rollup-plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 // import { terser } from 'rollup-plugin-terser'
@@ -60,7 +59,7 @@ export default {
         },
         exclude: ['**/*.test.ts', '**/*.test.tsx']
       },
-      include: ['packages/**/*']
+      include: ['packages/**/*.ts', 'packages/**/*.tsx']
     }),
     babel({
       exclude: 'node_modules/**',
@@ -70,23 +69,16 @@ export default {
     // scss({
     //   processor: () => postcss([autoprefixer()])
     // }),
-    // postcss({
-    //   plugins: [autoprefixer()],
-    //   extract: 'bundle.css'
-    // }),
-    images({ include: ['**/*.png', '**/*.jpg', '**/*.svg'] })
-    // copy({
-    //   targets: [
-    //     {
-    //       src: 'packages/assets/*',
-    //       dest: 'dist/assets'
-    //     },
-    //     {
-    //       src: 'packages/theme/**/*',
-    //       dest: 'dist/theme'
-    //     }
-    //   ]
-    // })
+    images({ include: ['**/*.png', '**/*.jpg', '**/*.svg'] }),
+    copy({
+      targets: [
+        {
+          src: 'packages/components/package.build.json',
+          dest: 'dist',
+          rename: 'package.json'
+        }
+      ]
+    })
     // terser()
   ]
 }

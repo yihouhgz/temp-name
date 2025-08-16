@@ -1,4 +1,5 @@
 import { ref, defineComponent } from 'vue'
+import { Button } from '../dist'
 const App = defineComponent(() => {
   const loading = ref(false)
   const handleClick = () => {
@@ -29,6 +30,7 @@ const App = defineComponent(() => {
   }
   return () => (
     <div>
+      <Button type="primary">确定</Button>
       <nl-button
         loading={loading.value}
         onClick={handleClick}
@@ -37,7 +39,9 @@ const App = defineComponent(() => {
       >
         我是按钮
       </nl-button>
-      <nl-button type="secondary">我是按钮</nl-button>
+      <nl-button type="secondary" size="small">
+        我是按钮
+      </nl-button>
       <nl-button type="tertiary">我是按钮</nl-button>
       <nl-button type="warning">我是按钮</nl-button>
       <nl-button type="danger">商品买断</nl-button>

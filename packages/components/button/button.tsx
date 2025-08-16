@@ -1,9 +1,9 @@
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, type VNode } from 'vue'
 // import type { ButtonInstance } from './type'
 import { buttonPropsDefaults } from './type'
 import { prefix } from 'constants/config'
 import Wave from '../wave'
-// import CameraIcon from '../icon/camera'
+import { isFunction, isString } from '../_util'
 import LoadingIcon from '../icon/loading'
 import './style/button'
 import { generate } from 'theme/derive'
@@ -14,23 +14,53 @@ const Button = defineComponent(
     console.log(props, 'props')
     const buttonRef = ref<HTMLButtonElement>()
     const handleClick = (event: MouseEvent) => {
+      ctx.emit('click', event)
       if (buttonRef.value) {
         buttonRef.value?.blur()
       }
-      ctx.emit('click', event)
     }
 
     const iconRender = () => {
       if (props.loading) return <LoadingIcon />
       else {
-        return ctx.slots.icon ? ctx.slots.icon() : <></>
+        return props.icon ? (
+          isFunction(props.icon) ? (
+            props.icon()
+          ) : (
+            props.icon
+          )
+        ) : ctx.slots.icon ? (
+          ctx.slots.icon()
+        ) : (
+          <></>
+        )
       }
+    }
+    const defaultTextRender = () => {
+      const vnode: VNode[] | undefined = ctx.slots.default?.()
+      if (
+        props.autoInsertSpace &&
+        vnode &&
+        vnode[0] &&
+        isString(vnode[0].children) &&
+        vnode[0].children.length === 2
+      ) {
+        const isTwoChineseChars = (str: string) => {
+          const reg = /^[\u3400-\u4DBF\u4E00-\u9FFF]{2}$/
+          return reg.test(str)
+        }
+        const content = vnode[0].children
+        if (isTwoChineseChars(content)) {
+          vnode[0].children = content[0] + ' ' + content[1]
+        }
+      }
+      return vnode
     }
     const defaultRender = () => {
       return (
         <span class="tempui-button-content">
           {iconRender()}
-          <span>{ctx.slots.default?.()}</span>
+          <span>{defaultTextRender()}</span>
         </span>
       )
     }

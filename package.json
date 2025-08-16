@@ -15,7 +15,7 @@
     "build-test:watch": "tsc && rollup -c -w",
     "generate-version": "tsx scripts/generate-version.ts",
     "lint": "eslint --ext .ts,.jsx,.tsx --fix --quiet ./packages",
-    "dev": "pnpm run clean && concurrently \"pnpm run build-test:watch\" \"pnpm -C play dev\"",
+    "dev": "concurrently \"pnpm run build-test:watch\" \"pnpm -C play dev\"",
     "dev:sequential": "pnpm run clean && pnpm run build-test && pnpm -C play dev",
     "clean": "rimraf dist"
   },
