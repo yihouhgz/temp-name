@@ -14,10 +14,12 @@ import Icon from '../icon'
 const Input = defineComponent(
   (props, ctx) => {
     const inputWrapperRef = ref<HTMLDivElement>()
+    const inputRef = ref<HTMLInputElement>()
     const inputSelfData = reactive({
-      value: '',
+      value: props.value,
       showClearIcon: false,
-      focus: false
+      focus: false,
+      showPassword: false
     })
     const inputWrapperClass = computed(() => {
       return [
@@ -42,13 +44,32 @@ const Input = defineComponent(
     })
 
     const handleTargetInputChange = (e: Event) => {
-      inputSelfData.value = (e.target as HTMLInputElement).value
       ctx.emit('update:modelValue', inputSelfData.value)
       ctx.emit('change', inputSelfData.value)
     }
     const handleTargetInput = (e: Event) => {
+      inputSelfData.value = (e.target as HTMLInputElement).value
       const target = e.target as HTMLInputElement
       ctx.emit('input', target.value)
+    }
+
+    const showClearIconWapper = computed(() => {
+      props.showClear
+      inputSelfData.value
+      if (
+        (inputSelfData.focus || inputSelfData.showClearIcon) &&
+        inputSelfData.value &&
+        props.showClear
+      ) {
+        return true
+      }
+      return false
+    })
+    const handleClearInput = () => {
+      inputSelfData.value = ''
+      ctx.emit('input', '')
+      ctx.emit('change', '')
+      inputRef.value?.focus()
     }
     const handleTargetInputFocus = (e: Event) => {
       inputSelfData.focus = true
@@ -77,20 +98,22 @@ const Input = defineComponent(
       inputWrapperRef.value?.removeEventListener('mouseleave', handleMoveLeave)
     })
 
-    const showPassword = ref(false)
     const triggerPasswordStatus = () => {
-      showPassword.value = !showPassword.value
+      inputRef.value?.focus()
+      inputSelfData.showPassword = !inputSelfData.showPassword
     }
     return () => {
       return (
         <div class={inputWrapperClass.value} ref={inputWrapperRef}>
           <input
+            ref={inputRef}
+            value={inputSelfData.value}
             onChange={handleTargetInputChange}
             onInput={handleTargetInput}
             onFocus={handleTargetInputFocus}
             onBlur={handleTargetInputBlur}
             type={
-              props.type === 'password' && showPassword.value
+              props.type === 'password' && inputSelfData.showPassword
                 ? 'text'
                 : props.type
             }
@@ -99,16 +122,23 @@ const Input = defineComponent(
             class={inputTargetClass.value}
             {...ctx.attrs}
           />
-          {props.showClear && (
+          {showClearIconWapper.value && (
             <div class="tempui-input-clearable-icon">
-              <Icon name="IconClear"></Icon>
+              <Icon
+                disabled={props.disabled}
+                name="IconClear"
+                onClick={handleClearInput}
+              ></Icon>
             </div>
           )}
           {props.type === 'password' && (
             <div class="tempui-input-password-icon">
               <Icon
+                disabled={props.disabled}
                 name={
-                  showPassword.value ? 'IconEyeOpened' : 'IconEyeClosedSolid'
+                  inputSelfData.showPassword
+                    ? 'IconEyeOpened'
+                    : 'IconEyeClosedSolid'
                 }
                 onClick={triggerPasswordStatus}
               ></Icon>

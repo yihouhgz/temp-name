@@ -10,6 +10,10 @@ const iconProps = {
     type: String,
     default: 'default',
     require: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 }
 const loadSvg = async (name: string) => {
@@ -40,7 +44,13 @@ const Icon = defineComponent({
       }
     })
     const iconClass = computed(() => {
-      return ['tempui-icon']
+      return [
+        'tempui-icon',
+        {
+          [`tempui-icon-${props.size}`]: props.size,
+          'tempui-icon-disabled': props.disabled
+        }
+      ]
     })
     const handleClick = (e: MouseEvent) => {
       // props.onClick?.(e)

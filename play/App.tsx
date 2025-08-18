@@ -1,7 +1,11 @@
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, watchEffect } from 'vue'
 import { Button } from '../dist'
 const App = defineComponent(() => {
   const loading = ref(false)
+  const inputvalue = ref('llll')
+  watchEffect(() => {
+    console.log(inputvalue.value)
+  })
   const handleClick = () => {
     loading.value = true
     setTimeout(() => {
@@ -54,7 +58,11 @@ const App = defineComponent(() => {
         <nl-button type="danger">商品买断</nl-button>
       </div>
       <div style="margin-top: 20px;width: 300px;">
-        <nl-input showClear type="password"></nl-input>
+        <nl-input
+          showClear
+          type="password"
+          v-model={inputvalue.value}
+        ></nl-input>
       </div>
       <div class="margin-top: 20px;">
         <nl-icon name="camera"></nl-icon>

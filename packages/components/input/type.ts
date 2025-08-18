@@ -1,5 +1,9 @@
 import type { PropType, VNode } from 'vue'
 export const inputPropsDefaults = {
+  value: {
+    type: String,
+    default: ''
+  },
   size: {
     values: ['small', 'default', 'large'],
     default: 'default'

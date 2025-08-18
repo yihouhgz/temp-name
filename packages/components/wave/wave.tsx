@@ -55,6 +55,7 @@ const Wave = defineComponent(
       }
 
       const handleClick = () => {
+        console.log('hhh')
         showEffect()
       }
 
