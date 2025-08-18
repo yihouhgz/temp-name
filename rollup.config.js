@@ -55,7 +55,8 @@ export default {
           jsx: 'preserve',
           moduleResolution: 'node',
           emitDeclarationOnly: false,
-          noEmit: false
+          noEmit: false,
+          module: 'esnext'
         },
         exclude: ['**/*.test.ts', '**/*.test.tsx']
       },
@@ -76,6 +77,10 @@ export default {
           src: 'packages/components/package.build.json',
           dest: 'dist',
           rename: 'package.json'
+        },
+        {
+          src: 'packages/components/icon/svgs',
+          dest: 'dist'
         }
       ]
     })

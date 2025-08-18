@@ -1,0 +1,16 @@
+.tempui-icon {
+  display: inline-block;
+  font-style: normal;
+  line-height: 0;
+  text-align: center;
+  text-transform: none;
+  text-rendering: optimizeLegibility;
+  fill: currentColor;
+  cursor: pointer;
+  &:hover {
+    color: var(--tempui-color-primary-hover);
+  }
+  &-default {
+    font-size: 16px;
+  }
+}

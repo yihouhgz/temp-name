@@ -1,17 +1,15 @@
 import { defineComponent, ref, computed, type VNode } from 'vue'
-// import type { ButtonInstance } from './type'
 import { buttonPropsDefaults } from './type'
 import { prefix } from 'constants/config'
 import Wave from '../wave'
 import { isFunction, isString } from '../_util'
-import LoadingIcon from '../icon/loading'
+import Icon from '../icon'
 import './style/button'
 import { generate } from 'theme/derive'
 console.log(prefix, 'prefix', generate('#fff'))
 console.log(buttonPropsDefaults, 'ButtonPropsType')
 const Button = defineComponent(
   (props, ctx) => {
-    console.log(props, 'props')
     const buttonRef = ref<HTMLButtonElement>()
     const handleClick = (event: MouseEvent) => {
       ctx.emit('click', event)
@@ -21,7 +19,7 @@ const Button = defineComponent(
     }
 
     const iconRender = () => {
-      if (props.loading) return <LoadingIcon />
+      if (props.loading) return <Icon name="loading"></Icon>
       else {
         return props.icon ? (
           isFunction(props.icon) ? (

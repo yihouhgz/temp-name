@@ -1,0 +1,142 @@
+.tempui-input {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  box-shadow: none;
+  background-color: var(--tempui-color-fill-0);
+  border: 1px solid transparent;
+  border-radius: var(--tempui-border-radius-small);
+  width: 100%;
+  outline: none;
+  cursor: text;
+  box-sizing: border-box;
+  color: var(--tempui-color-text-0);
+  transition:
+    background-color var(--tempui-transition_duration-none)
+      var(--tempui-transition_function-easeIn)
+      var(--tempui-transition_delay-none),
+    border var(--tempui-transition_duration-none)
+      var(--tempui-transition_function-easeIn)
+      var(--tempui-transition_delay-none);
+  transform: scale(var(--tempui-transform_scale-none));
+
+  &:hover {
+    background-color: var(--tempui-color-fill-1);
+    border-color: transparent;
+  }
+
+  &-large {
+    height: 40px;
+    font-size: 16px;
+  }
+
+  &-default {
+    height: 32px;
+  }
+
+  &-small {
+    height: 24px;
+    font-size: 14px;
+  }
+
+  &-clearable,
+  &-password {
+    display: inline-flex;
+    align-items: center;
+    &-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--tempui-color-text-2);
+      font-style: normal;
+      line-height: 0;
+      text-align: center;
+      text-transform: none;
+      text-rendering: optimizeLegibility;
+      fill: currentColor;
+      margin-right: 8px;
+      &:hover {
+        color: var(--tempui-color-primary-hover);
+      }
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  // -------------- status --------------
+  &-disabled,
+  &-target-disabled {
+    cursor: not-allowed;
+    color: initial;
+  }
+
+  &-focus {
+    background-color: var(--tempui-color-fill-0);
+    border: 1px solid var(--tempui-color-focus-border);
+    &:hover {
+      background-color: var(--tempui-color-fill-0);
+      border: 1px solid var(--tempui-color-focus-border);
+    }
+  }
+
+  // -------------- target input --------------
+  &-target {
+    border: none;
+    outline: none;
+    width: 100%;
+    color: inherit;
+    padding-left: 12px;
+    padding-right: 12px;
+    background-color: transparent;
+    box-sizing: border-box;
+    caret-color: var(--tempui-color-primary);
+    transition:
+      background-color var(--tempui-transition_duration-none)
+        var(--tempui-transition_function-easeIn)
+        var(--tempui-transition_delay-none),
+      border var(--tempui-transition_duration-none)
+        var(--tempui-transition_function-easeIn)
+        var(--tempui-transition_delay-none);
+    transform: scale(var(--tempui-transform_scale-none));
+
+    &-large,
+    &-default,
+    &-small {
+      font-size: 14px;
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        Segoe UI,
+        PingFang SC,
+        Hiragino Sans GB,
+        Microsoft YaHei,
+        Helvetica Neue,
+        Helvetica,
+        Arial,
+        sans-serif;
+    }
+    &-large {
+      height: 38px;
+      font-size: 16px;
+      line-height: 22px;
+      line-height: 38px;
+    }
+
+    &-default {
+      height: 30px;
+      line-height: 30px;
+    }
+
+    &-small {
+      height: 22px;
+      line-height: 22px;
+    }
+  }
+}

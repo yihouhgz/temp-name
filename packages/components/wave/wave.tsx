@@ -59,12 +59,17 @@ const Wave = defineComponent(
       }
 
       watchEffect(() => {
-        if (props.target) props.target.addEventListener('click', handleClick)
+        if (props.target)
+          props.target.addEventListener('click', handleClick, {
+            capture: true
+          })
       })
 
       onUnmounted(() => {
         if (props.target) {
-          props.target.removeEventListener('click', handleClick)
+          props.target.removeEventListener('click', handleClick, {
+            capture: true
+          })
         }
       })
 

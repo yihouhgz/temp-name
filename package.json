@@ -15,7 +15,7 @@
     "build-test:watch": "tsc && rollup -c -w",
     "generate-version": "tsx scripts/generate-version.ts",
     "lint": "eslint --ext .ts,.jsx,.tsx --fix --quiet ./packages",
-    "dev": "concurrently \"pnpm run build-test:watch\" \"pnpm -C play dev\"",
+    "dev": "pnpm run clean && concurrently \"pnpm run build-test:watch\" \"pnpm -C play dev\"",
     "dev:sequential": "pnpm run clean && pnpm run build-test && pnpm -C play dev",
     "clean": "rimraf dist"
   },
@@ -63,6 +63,7 @@
     "rollup-plugin-typescript2": "^0.36.0",
     "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.90.0",
+    "tslib": "^2.8.1",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",

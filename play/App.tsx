@@ -30,21 +30,35 @@ const App = defineComponent(() => {
   }
   return () => (
     <div>
-      <Button type="primary">确定</Button>
-      <nl-button
-        loading={loading.value}
-        onClick={handleClick}
-        icon={CameraIcon}
-        v-slots={{ icon: CameraIcon }}
-      >
-        我是按钮
-      </nl-button>
-      <nl-button type="secondary" size="small">
-        我是按钮
-      </nl-button>
-      <nl-button type="tertiary">我是按钮</nl-button>
-      <nl-button type="warning">我是按钮</nl-button>
-      <nl-button type="danger">商品买断</nl-button>
+      <div>
+        <Button type="primary">确定</Button>
+        <nl-button
+          loading={loading.value}
+          onClick={handleClick}
+          icon={CameraIcon}
+          v-slots={{ icon: CameraIcon }}
+        >
+          我是按钮
+        </nl-button>
+        <nl-button
+          type="secondary"
+          size="small"
+          icon={CameraIcon}
+          loading={loading.value}
+          onClick={handleClick}
+        >
+          我是按钮
+        </nl-button>
+        <nl-button type="tertiary">我是按钮</nl-button>
+        <nl-button type="warning">我是按钮</nl-button>
+        <nl-button type="danger">商品买断</nl-button>
+      </div>
+      <div style="margin-top: 20px;width: 300px;">
+        <nl-input showClear type="password"></nl-input>
+      </div>
+      <div class="margin-top: 20px;">
+        <nl-icon name="camera"></nl-icon>
+      </div>
     </div>
   )
 })
