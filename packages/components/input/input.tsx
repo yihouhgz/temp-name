@@ -129,6 +129,12 @@ const Input = defineComponent(
       ctx.emit('update:modelValue', value)
     }
 
+    //expose input ref method
+    ctx.expose({
+      focus: () => inputRef.value?.focus(),
+      blur: () => inputRef.value?.blur()
+    })
+
     return () => {
       return (
         <div class={inputWrapperClass.value} ref={inputWrapperRef}>
