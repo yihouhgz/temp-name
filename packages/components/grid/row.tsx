@@ -54,7 +54,7 @@ const Row = defineComponent(
         props.type === 'flex' ? `tempui-row-${props.type}` : 'tempui-row',
         {
           [`tempui-row-flex-${props.justify}`]: props.justify,
-          [`tempui-row-felx-${props.align}`]: props.align
+          [`tempui-row-flex-${props.align}`]: props.align
         }
       ]
     })
