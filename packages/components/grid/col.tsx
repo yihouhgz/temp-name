@@ -60,10 +60,7 @@ const props = {
 const Col = defineComponent(
   (props, ctx) => {
     const rowScope = useRowScope()
-    if (!rowScope) {
-      consola.warn('Col must be placed as a child of Row')
-    }
-    console.log(rowScope, 'rowScope')
+    if (!rowScope) consola.warn('Col must be placed as a child of Row')
     const colClass = computed(() => {
       const { span } = props
       return [
