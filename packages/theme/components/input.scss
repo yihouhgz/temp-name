@@ -69,12 +69,11 @@
     }
   }
 
-  // -------------- status --------------
-  &-disabled,
-  &-target-disabled {
-    cursor: not-allowed;
-    color: initial;
+  &-borderless {
+    background-color: transparent;
   }
+
+  // -------------- status --------------
 
   &-focus {
     background-color: var(--tempui-color-fill-0);
@@ -83,6 +82,52 @@
       background-color: var(--tempui-color-fill-0);
       border: 1px solid var(--tempui-color-focus-border);
     }
+  }
+  &.tempui-input-warning.tempui-input-focus {
+    background-color: var(--tempui-color-warning-light-default);
+    border-color: var(--tempui-color-warning);
+  }
+  &.tempui-input-error.tempui-input-focus {
+    background-color: var(--tempui-color-danger-light-default);
+    border-color: var(--tempui-color-danger);
+  }
+
+  &.tempui-input-error {
+    background-color: var(--tempui-color-danger-light-default);
+    border-color: var(--tempui-color-danger-light-default);
+    .tempui-input-target {
+      caret-color: var(--tempui-color-danger);
+    }
+    &:hover:not(.tempui-input-focus) {
+      background-color: var(--tempui-color-danger-light-hover);
+      border-color: var(--tempui-color-danger-light-hover);
+    }
+    &:active {
+      background-color: var(--tempui-color-danger-light-active);
+      border-color: var(--tempui-color-danger);
+    }
+  }
+
+  &.tempui-input-warning {
+    background-color: var(--tempui-color-warning-light-default);
+    border-color: var(--tempui-color-warning-light-default);
+    .tempui-input-target {
+      caret-color: var(--tempui-color-warning);
+    }
+    &:hover:not(.tempui-input-focus) {
+      background-color: var(--tempui-color-warning-light-hover);
+      border-color: var(--tempui-color-warning-light-hover);
+    }
+    &:active {
+      background-color: var(--tempui-color-warning-light-active);
+      border-color: var(--tempui-color-warning);
+    }
+  }
+
+  &-disabled,
+  &-target-disabled {
+    cursor: not-allowed;
+    color: initial;
   }
 
   // -------------- target input --------------

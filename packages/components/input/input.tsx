@@ -16,11 +16,13 @@ const Input = defineComponent(
     const inputWrapperRef = ref<HTMLDivElement>()
     const inputRef = ref<HTMLInputElement>()
     const inputSelfData = reactive({
-      value: props.value,
+      value: props.value || props.defaultValue,
       showClearIcon: false,
       focus: false,
       showPassword: false
     })
+
+    // style handle
     const inputWrapperClass = computed(() => {
       return [
         'tempui-input',
@@ -28,6 +30,9 @@ const Input = defineComponent(
         {
           'tempui-input-disabled': props.disabled,
           'tempui-input-clearable': props.showClear,
+          'tempui-input-borderless': props.borderless,
+          [`tempui-input-${props.validateStatus}`]:
+            props.validateStatus !== 'default',
           'tempui-input-focus': inputSelfData.focus
         }
       ]
@@ -43,44 +48,45 @@ const Input = defineComponent(
       ]
     })
 
+    // traget input event handle
     const handleTargetInputChange = (e: Event) => {
-      ctx.emit('update:modelValue', inputSelfData.value)
-      ctx.emit('change', inputSelfData.value)
-    }
-    const handleTargetInput = (e: Event) => {
       inputSelfData.value = (e.target as HTMLInputElement).value
       const target = e.target as HTMLInputElement
-      ctx.emit('input', target.value)
+      handleUpdateModelValue(target.value)
+      ctx.emit('change', inputSelfData.value, e)
     }
-
-    const showClearIconWapper = computed(() => {
-      props.showClear
-      inputSelfData.value
-      if (
-        (inputSelfData.focus || inputSelfData.showClearIcon) &&
-        inputSelfData.value &&
-        props.showClear
-      ) {
-        return true
-      }
-      return false
-    })
-    const handleClearInput = () => {
-      inputSelfData.value = ''
-      ctx.emit('input', '')
-      ctx.emit('change', '')
-      inputRef.value?.focus()
-    }
-    const handleTargetInputFocus = (e: Event) => {
+    const handleTargetInputFocus = (e: FocusEvent) => {
       inputSelfData.focus = true
       ctx.emit('focus', e)
     }
-    const handleTargetInputBlur = (e: Event) => {
+    const handleTargetInputBlur = (e: FocusEvent) => {
       inputSelfData.focus = false
       ctx.emit('blur', e)
     }
+    const handleControlInputCursorForFocus = () => {
+      inputRef.value?.focus()
+      requestAnimationFrame(() => {
+        inputSelfData.focus = true
+        const len = inputRef.value?.value.length
+        if (len) inputRef.value?.setSelectionRange(len, len)
+      })
+    }
+
+    // control the cleaning icon
+    const showClearIconWapper = computed(() => {
+      const flag = inputSelfData.focus || inputSelfData.showClearIcon
+      if (inputValue.value && props.showClear && flag) return true
+      return false
+    })
+    const handleClearInput = (e: MouseEvent) => {
+      inputSelfData.value = ''
+      ctx.emit('clear', e)
+      handleUpdateModelValue(inputSelfData.value)
+      ctx.emit('change', inputSelfData.value, e)
+      handleControlInputCursorForFocus()
+    }
     const handleMoveEnter = () => {
-      if (inputSelfData.value && props.showClear) {
+      if (props.showClear) {
         inputSelfData.showClearIcon = true
       }
     }
@@ -98,18 +104,33 @@ const Input = defineComponent(
       inputWrapperRef.value?.removeEventListener('mouseleave', handleMoveLeave)
     })
 
+    // password icon status trigger
     const triggerPasswordStatus = () => {
-      inputRef.value?.focus()
+      handleControlInputCursorForFocus()
       inputSelfData.showPassword = !inputSelfData.showPassword
     }
+
+    // v-model
+    const inputValue = computed(() => {
+      if (props.modelValue !== undefined) return props.modelValue
+      if (props.value !== undefined && props.value === inputSelfData.value) {
+        return props.value
+      }
+      // When the props value is different from its own value, the own value is adopted
+      return inputSelfData.value
+    })
+    const handleUpdateModelValue = (value: string) => {
+      ctx.emit('update:modelValue', value)
+    }
+
     return () => {
       return (
         <div class={inputWrapperClass.value} ref={inputWrapperRef}>
           <input
             ref={inputRef}
-            value={inputSelfData.value}
+            value={inputValue.value}
             onChange={handleTargetInputChange}
-            onInput={handleTargetInput}
+            onInput={handleTargetInputChange}
             onFocus={handleTargetInputFocus}
             onBlur={handleTargetInputBlur}
             type={
@@ -151,7 +172,7 @@ const Input = defineComponent(
   {
     name: prefix + '-input',
     props: inputPropsDefaults,
-    emits: ['update:modelValue', 'change', 'input', 'focus', 'blur']
+    emits: ['update:modelValue', 'change', 'focus', 'blur', 'clear']
   }
 )
 

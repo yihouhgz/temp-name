@@ -59,8 +59,8 @@ const App = defineComponent(() => {
       </div>
       <div style="margin-top: 20px;width: 300px;">
         <nl-input
+          validateStatus={inputvalue.value.length < 10 ? 'error' : 'default'}
           showClear
-          type="password"
           v-model={inputvalue.value}
         ></nl-input>
       </div>
