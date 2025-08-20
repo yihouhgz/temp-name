@@ -10,6 +10,7 @@ import { prefix } from 'constants/config'
 import './style/input'
 import { inputPropsDefaults } from './type'
 import Icon from '../icon'
+import consola from '../_util/console'
 
 const Input = defineComponent(
   (props, ctx) => {
@@ -75,7 +76,8 @@ const Input = defineComponent(
     // control the cleaning icon
     const showClearIconWapper = computed(() => {
       const flag = inputSelfData.focus || inputSelfData.showClearIcon
-      if (inputValue.value && props.showClear && flag) return true
+      if (inputValue.value && props.showClear && flag && !props.disabled)
+        return true
       return false
     })
     const handleClearInput = (e: MouseEvent) => {
@@ -109,8 +111,12 @@ const Input = defineComponent(
       handleControlInputCursorForFocus()
       inputSelfData.showPassword = !inputSelfData.showPassword
     }
-
     // v-model
+    if (props.modelValue !== undefined && props.value !== undefined) {
+      consola.warn(
+        'Input components modelValue and value cannot be passed in simultaneously.'
+      )
+    }
     const inputValue = computed(() => {
       if (props.modelValue !== undefined) return props.modelValue
       if (props.value !== undefined && props.value === inputSelfData.value) {

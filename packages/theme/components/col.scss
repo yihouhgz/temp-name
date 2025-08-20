@@ -1,0 +1,40 @@
+.tempui-col {
+  $cloMax: 24;
+  @for $n from 1 through $cloMax {
+    &-#{$n} {
+      display: block;
+      box-sizing: border-box;
+      width: ($n / $cloMax) * 100%;
+      flex: 0 0 auto;
+      float: left;
+    }
+  }
+
+  &-offset {
+    @for $n from 1 through $cloMax {
+      &-#{$n} {
+        margin-left: ($n / $cloMax) * 100%;
+      }
+    }
+  }
+
+  &-push {
+    @for $n from 1 through $cloMax {
+      &-#{$n} {
+        display: block;
+        box-sizing: border-box;
+        width: ($n / $cloMax) * 100%;
+      }
+    }
+  }
+
+  &-pull {
+    @for $n from 1 through $cloMax {
+      &-#{$n} {
+        display: block;
+        box-sizing: border-box;
+        width: ($n / $cloMax) * 100%;
+      }
+    }
+  }
+}

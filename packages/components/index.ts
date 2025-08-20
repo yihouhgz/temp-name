@@ -4,6 +4,8 @@ import Button from './button/index'
 import Watermark from './watermark/index'
 import Input from './input/index'
 import Icon from './icon/index'
-const components = [Button, Watermark, Input, Icon]
+import { Row, Col } from './grid/index'
+const components = [Button, Watermark, Input, Icon, Row, Col]
 export const install = (app: App) => withInstall(app, components)
-export { Button, Watermark }
+export { Button, Watermark, Input, Icon, Row, Col }
+console.log(Col, 'Col', Col.name)

@@ -1,0 +1,51 @@
+.tempui-row {
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  height: auto;
+  margin-right: 0;
+  margin-left: 0;
+  zoom: 1;
+  &::before {
+    display: table;
+    content: '';
+  }
+  &::after {
+    display: table;
+    content: '';
+    clear: both;
+  }
+
+  // flex
+  &-flex {
+    display: flex;
+    flex-flow: row wrap;
+    // align
+    &-top {
+      align-items: flex-start;
+    }
+    &-middle {
+      align-items: center;
+    }
+    &-bottom {
+      align-items: flex-end;
+    }
+
+    // justify
+    &-center {
+      justify-content: center;
+    }
+    &-start {
+      justify-content: flex-start;
+    }
+    &-end {
+      justify-content: flex-end;
+    }
+    &-space-around {
+      justify-content: space-around;
+    }
+    &-space-between {
+      justify-content: space-between;
+    }
+  }
+}
