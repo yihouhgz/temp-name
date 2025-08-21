@@ -1,8 +1,9 @@
 import { defineComponent } from 'vue'
 import { watermarkProps } from './type'
+import { prefix } from 'constants/config'
 
 const Watermark = defineComponent({
-  name: 'watermark',
+  name: prefix + '-watermark',
   props: watermarkProps,
   setup(props) {
     console.log(props)

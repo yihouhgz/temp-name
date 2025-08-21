@@ -1,5 +1,3 @@
-import { withDefaults, defineProps } from 'vue'
-
 export const watermarkProps = {
   width: 120,
   height: 64,

@@ -1,0 +1,127 @@
+.tempui-tooltip {
+  &-wrapper {
+    transform-origin: calc(100% - 86px) 0%;
+    animation-fill-mode: forwards;
+    position: relative;
+    background-color: rgba(var(--tempui-grey-7), 1);
+    color: var(--tempui-color-bg-0);
+    border-radius: var(--tempui-border-radius-medium);
+    padding: 8px 12px;
+    left: 0;
+    top: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-size: 14px;
+    line-height: 20px;
+    font-family:
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      Segoe UI,
+      PingFang SC,
+      Hiragino Sans GB,
+      Microsoft YaHei,
+      Helvetica Neue,
+      Helvetica,
+      Arial,
+      sans-serif;
+    // opacity: 0;
+    max-width: 240px;
+  }
+  &-content {
+    min-width: 0;
+  }
+  &-arrow {
+    height: 7px;
+    width: 24px;
+    position: absolute;
+    color: rgba(var(--tempui-grey-7), 1);
+  }
+  //top, topLeft, topRight, left, leftTop, leftBottom, right, rightTop, rightBottom, bottom, bottomLeft, bottomRight
+  &-top {
+    &-arrow {
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -6px;
+    }
+  }
+  &-topLeft {
+    &-arrow {
+      left: 10px;
+      bottom: -6px;
+    }
+  }
+  &-topRight {
+    &-arrow {
+      bottom: -6px;
+      right: 6px;
+    }
+  }
+
+  &-left {
+    &-arrow {
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  &-leftTop {
+    &-arrow {
+      right: -6px;
+      top: 5px;
+    }
+  }
+  &-leftBottom {
+    &-arrow {
+      right: -6px;
+      bottom: 5px;
+    }
+  }
+  &-leftTop {
+    &-arrow {
+      right: -6px;
+      top: 5px;
+    }
+  }
+
+  &-right {
+    &-arrow {
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
+  &-rightTop {
+    &-arrow {
+      left: -6px;
+      top: 5px;
+    }
+  }
+  &-rightBottom {
+    &-arrow {
+      left: -6px;
+      bottom: 5px;
+    }
+  }
+
+  &-bottom {
+    &-arrow {
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(180deg);
+    }
+  }
+  &-bottomLeft {
+    &-arrow {
+      top: -6px;
+      left: 6px;
+    }
+  }
+  &-bottomRight {
+    &-arrow {
+      top: -6px;
+      right: 6px;
+      transform: rotate(180deg);
+    }
+  }
+}

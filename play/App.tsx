@@ -205,9 +205,11 @@ const App = defineComponent(() => {
           <nl-col span={4}>
             <div class="col-content">col-4</div>
           </nl-col>
-          <nl-col span={4}>
-            <div class="col-content">col-4</div>
-          </nl-col>
+          <nl-tooltip content={<div>111</div>}>
+            <nl-col span={4}>
+              <div class="col-content">col-4</div>
+            </nl-col>
+          </nl-tooltip>
           <nl-col span={4}>
             <div class="col-content">col-4</div>
           </nl-col>
@@ -217,6 +219,11 @@ const App = defineComponent(() => {
         <nl-popover>
           <div>111</div>
         </nl-popover>
+      </div>
+      <div>
+        <nl-tooltip content={<div>111</div>}>
+          <div style="width:200px;">222</div>
+        </nl-tooltip>
       </div>
     </div>
   )
