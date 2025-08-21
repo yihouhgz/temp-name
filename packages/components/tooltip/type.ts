@@ -31,5 +31,9 @@ export const tooltioProps = {
     type: [Function] as PropType<(el: HTMLElement) => HTMLElement>,
     default: () => () => document.body,
     required: false
+  },
+  trigger: {
+    values: ['hover', 'focus', 'click', 'custom', 'contextMenu'],
+    default: 'hover'
   }
 }

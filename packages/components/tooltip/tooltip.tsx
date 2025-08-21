@@ -4,10 +4,12 @@ import './style/tooltip'
 import { tooltioProps } from './type'
 import { isFunction } from '../_util'
 import Portal from '../portal'
+import { watchEffect } from 'vue'
 
 const Tooltip = defineComponent(
   (props, ctx) => {
     const tooltipDefaultRef = ref()
+    const targetElementRef = ref()
     const targetElementRect = ref()
     const wrapperClass = computed(() => {
       return ['tempui-tooltip-wrapper', 'tempui-tooltip-' + props.position]
@@ -19,13 +21,23 @@ const Tooltip = defineComponent(
       ]
     })
     const show = ref(false)
-    setTimeout(() => {
-      show.value = true
-    }, 2000)
     nextTick(() => {
       console.log(tooltipDefaultRef.value.nextElementSibling)
       const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
+      targetElementRef.value = target
       targetElementRect.value = target.getBoundingClientRect()
+    })
+
+    const triggerHnadle = () => {
+      console.log('jjasjdasd')
+      show.value = !show.value
+    }
+
+    watchEffect(() => {
+      const target = targetElementRef.value as HTMLElement
+      if (target) {
+        target.addEventListener('click', triggerHnadle)
+      }
     })
     const ContentWrapper = () => {
       if (isFunction(props.content)) {
