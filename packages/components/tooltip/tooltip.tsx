@@ -1,44 +1,63 @@
-import { defineComponent, ref, nextTick, computed, Fragment } from 'vue'
+import { defineComponent, ref, computed, Fragment, watchEffect, cloneVNode, onMounted } from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
 import { tooltioProps } from './type'
-import { isFunction } from '../_util'
+import { isFunction, isComponentByVNode } from '../_util'
 import Portal from '../portal'
-import { watchEffect } from 'vue'
+import { triggerEventMap } from './trigger'
+import { useEventListener, useClickOutside } from '../_util/hooks'
 
 const Tooltip = defineComponent(
   (props, ctx) => {
+    const tooltipPortal = ref()
     const tooltipDefaultRef = ref()
     const targetElementRef = ref()
+    const slotRef = ref()
     const targetElementRect = ref()
     const wrapperClass = computed(() => {
-      return ['tempui-tooltip-wrapper', 'tempui-tooltip-' + props.position]
-    })
-    const arrowClass = computed(() => {
       return [
-        'tempui-tooltip-arrow',
-        'tempui-tooltip-' + props.position + '-arrow'
+        props.wrapper ? props.wrapper : 'tempui-tooltip-wrapper',
+        'tempui-tooltip-' + props.position
       ]
     })
+    const arrowClass = computed(() => {
+      return ['tempui-tooltip-arrow', 'tempui-tooltip-' + props.position + '-arrow']
+    })
     const show = ref(false)
-    nextTick(() => {
-      console.log(tooltipDefaultRef.value.nextElementSibling)
-      const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
-      targetElementRef.value = target
-      targetElementRect.value = target.getBoundingClientRect()
+    const showTooltip = computed(() => {
+      if (props.trigger !== 'custom') {
+        return show.value
+      }
+      return props.visible
     })
 
     const triggerHnadle = () => {
       console.log('jjasjdasd')
-      show.value = !show.value
+      show.value = true
     }
-
-    watchEffect(() => {
-      const target = targetElementRef.value as HTMLElement
-      if (target) {
-        target.addEventListener('click', triggerHnadle)
+    onMounted(() => {
+      const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
+      targetElementRef.value = target
+      targetElementRect.value = target.getBoundingClientRect()
+      const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
+      useEventListener(target, eventMap.enter, triggerHnadle)
+      if (eventMap.enter === 'click') {
+        const handleClickOutside = (event: Event) => {
+          if (!props.clickToHide) {
+            if (tooltipPortal.value.contains(event.target)) return
+          }
+          show.value = false
+        }
+        useClickOutside(target, handleClickOutside)
+      } else {
+        if (eventMap.enter !== 'custom') {
+          useEventListener(target, eventMap.leave, () => {
+            show.value = false
+          })
+        }
       }
     })
+    watchEffect(() => {})
     const ContentWrapper = () => {
       if (isFunction(props.content)) {
         return props.content()
@@ -47,7 +66,7 @@ const Tooltip = defineComponent(
     }
     const TooltipPortal = () => {
       return (
-        <div class={wrapperClass.value}>
+        <div class={wrapperClass.value} ref={tooltipPortal}>
           <div class="tempui-tooltip-content">
             <ContentWrapper></ContentWrapper>
           </div>
@@ -68,10 +87,28 @@ const Tooltip = defineComponent(
         </div>
       )
     }
+
+    const _defaultRender = () => {
+      let children = ctx.slots.default?.()
+      if (children && children.length) {
+        const newChildren: typeof children = []
+        children.forEach((child) => {
+          // if child solt is Component
+          console.log(child, 'kk')
+          newChildren.push(isComponentByVNode(child) ? cloneVNode(child, { ref: slotRef }) : child)
+        })
+        children = newChildren
+      }
+      if (children && children.length > 1) {
+        return <span>{children}</span>
+      }
+      return <Fragment ref={tooltipDefaultRef}>{children}</Fragment>
+    }
+    if (props.showArrow && props.clickToHide) _defaultRender() //todo slot为component下的trigger foucs
     return () => {
       return (
         <>
-          {show.value && (
+          {showTooltip.value && (
             <Portal
               getPopupContainer={props.getPopupContainer}
               targetElementRect={targetElementRect.value}

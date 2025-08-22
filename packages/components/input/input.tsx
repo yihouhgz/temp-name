@@ -1,16 +1,10 @@
-import {
-  defineComponent,
-  computed,
-  onMounted,
-  ref,
-  onBeforeUnmount,
-  reactive
-} from 'vue'
+import { defineComponent, computed, onMounted, ref, onBeforeUnmount, reactive } from 'vue'
 import { prefix } from 'constants/config'
 import './style/input'
 import { inputPropsDefaults } from './type'
 import Icon from '../icon'
 import consola from '../_util/console'
+import { formChildrenIndex } from '../_util/tab-index'
 
 const Input = defineComponent(
   (props, ctx) => {
@@ -32,8 +26,7 @@ const Input = defineComponent(
           'tempui-input-disabled': props.disabled,
           'tempui-input-clearable': props.showClear,
           'tempui-input-borderless': props.borderless,
-          [`tempui-input-${props.validateStatus}`]:
-            props.validateStatus !== 'default',
+          [`tempui-input-${props.validateStatus}`]: props.validateStatus !== 'default',
           'tempui-input-focus': inputSelfData.focus
         }
       ]
@@ -76,8 +69,7 @@ const Input = defineComponent(
     // control the cleaning icon
     const showClearIconWapper = computed(() => {
       const flag = inputSelfData.focus || inputSelfData.showClearIcon
-      if (inputValue.value && props.showClear && flag && !props.disabled)
-        return true
+      if (inputValue.value && props.showClear && flag && !props.disabled) return true
       return false
     })
     const handleClearInput = (e: MouseEvent) => {
@@ -113,9 +105,7 @@ const Input = defineComponent(
     }
     // v-model
     if (props.modelValue !== undefined && props.value !== undefined) {
-      consola.warn(
-        'Input components modelValue and value cannot be passed in simultaneously.'
-      )
+      consola.warn('Input components modelValue and value cannot be passed in simultaneously.')
     }
     const inputValue = computed(() => {
       if (props.modelValue !== undefined) return props.modelValue
@@ -139,17 +129,14 @@ const Input = defineComponent(
       return (
         <div class={inputWrapperClass.value} ref={inputWrapperRef}>
           <input
+            tabindex={formChildrenIndex}
             ref={inputRef}
             value={inputValue.value}
             onChange={handleTargetInputChange}
             onInput={handleTargetInputChange}
             onFocus={handleTargetInputFocus}
             onBlur={handleTargetInputBlur}
-            type={
-              props.type === 'password' && inputSelfData.showPassword
-                ? 'text'
-                : props.type
-            }
+            type={props.type === 'password' && inputSelfData.showPassword ? 'text' : props.type}
             disabled={props.disabled}
             placeholder={props.placeholder}
             class={inputTargetClass.value}
@@ -157,22 +144,14 @@ const Input = defineComponent(
           />
           {showClearIconWapper.value && (
             <div class="tempui-input-clearable-icon">
-              <Icon
-                disabled={props.disabled}
-                name="IconClear"
-                onClick={handleClearInput}
-              ></Icon>
+              <Icon disabled={props.disabled} name="IconClear" onClick={handleClearInput}></Icon>
             </div>
           )}
           {props.type === 'password' && (
             <div class="tempui-input-password-icon">
               <Icon
                 disabled={props.disabled}
-                name={
-                  inputSelfData.showPassword
-                    ? 'IconEyeOpened'
-                    : 'IconEyeClosedSolid'
-                }
+                name={inputSelfData.showPassword ? 'IconEyeOpened' : 'IconEyeClosedSolid'}
                 onClick={triggerPasswordStatus}
               ></Icon>
             </div>

@@ -58,18 +58,23 @@ const App = defineComponent(() => {
         <nl-button type="warning">我是按钮</nl-button>
         <nl-button type="danger">商品买断</nl-button>
       </div>
-      <div style="margin-top: 20px;width: 300px;">
-        <nl-input
-          placeholder="请输入内容"
-          validateStatus={inputvalue.value.length < 10 ? 'error' : 'default'}
-          showClear
-          v-model={inputvalue.value}
-        ></nl-input>
+      <div style="width: 300px;" class="top-50">
+        <nl-tooltip content={<div>111</div>} trigger="focus">
+          <nl-input
+            placeholder="请输入内容"
+            validateStatus={inputvalue.value.length < 10 ? 'error' : 'default'}
+            showClear
+            v-model={inputvalue.value}
+          ></nl-input>
+        </nl-tooltip>
       </div>
-      <div class="margin-top: 20px;">
+      <div class="top-20">
+        <nl-select></nl-select>
+      </div>
+      <div class="top-50">
         <nl-icon name="camera"></nl-icon>
       </div>
-      <div class="margin-top: 20px;">
+      <div class="top-50">
         <nl-row gutter={[16, 24]}>
           {[1, 2, 3, 4, 5, 6].map((item, index) => (
             <nl-col
@@ -205,7 +210,7 @@ const App = defineComponent(() => {
           <nl-col span={4}>
             <div class="col-content">col-4</div>
           </nl-col>
-          <nl-tooltip content={<div>111</div>}>
+          <nl-tooltip content={<div>111</div>} trigger="hover">
             <nl-col span={4}>
               <div class="col-content">col-4</div>
             </nl-col>
@@ -215,14 +220,14 @@ const App = defineComponent(() => {
           </nl-col>
         </nl-row>
       </div>
-      <div>
-        <nl-popover>
-          <div>111</div>
+      <div class="top-20">
+        <nl-popover content={<div class="popover-children">111</div>} trigger="click">
+          <Button type="primary">我是popover 点击触发</Button>
         </nl-popover>
       </div>
-      <div>
+      <div class="top-20">
         <nl-tooltip content={<div>111</div>}>
-          <div style="width:200px;">222</div>
+          <Button type="primary">tooltip hover触发</Button>
         </nl-tooltip>
       </div>
     </div>

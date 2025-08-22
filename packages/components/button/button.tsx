@@ -6,6 +6,7 @@ import { isFunction, isString } from '../_util'
 import Icon from '../icon'
 import './style/button'
 import { generate } from 'theme/derive'
+import { formChildrenIndex } from '../_util/tab-index'
 console.log(prefix, 'prefix', generate('#fff'))
 console.log(buttonPropsDefaults, 'ButtonPropsType')
 const Button = defineComponent(
@@ -79,6 +80,7 @@ const Button = defineComponent(
       return (
         <Wave disabled={props.disabled} target={buttonRef.value as HTMLElement}>
           <button
+            tabindex={formChildrenIndex}
             ref={buttonRef}
             class={buttonClass.value}
             onClick={handleClick}

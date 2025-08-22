@@ -7,6 +7,7 @@ import Icon from './icon/index'
 import { Row, Col } from './grid/index'
 import Popover from './popover/index'
 import Tooltip from './tooltip/index'
-const components = [Button, Watermark, Input, Icon, Row, Col, Popover, Tooltip]
+import Select from './select'
+const components = [Button, Watermark, Input, Icon, Row, Col, Popover, Tooltip, Select]
 export const install = (app: App) => withInstall(app, components)
-export { Button, Watermark, Input, Icon, Row, Col, Popover }
+export { Button, Watermark, Input, Icon, Row, Col, Popover, Select }

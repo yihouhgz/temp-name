@@ -1,25 +1,46 @@
 import type { PropType, VNode } from 'vue'
 export const popoverProps = {
-  autoAdjustOverflow: {
+  showArrow: {
     type: Boolean,
-    default: true
+    default: false,
+    required: false
   },
-  arrowPointAtCenter: {
-    type: Boolean,
-    default: true
-  },
-  closeOnEsc: {
-    type: Boolean,
-    default: true
+  position: {
+    values: [
+      'top',
+      'topLeft',
+      'topRight',
+      'left',
+      'leftTop',
+      'leftBottom',
+      'right',
+      'rightTop',
+      'rightBottom',
+      'bottom',
+      'bottomLeft',
+      'bottomRight'
+    ],
+    default: 'top',
+    required: false
   },
   content: {
-    type: [String, Object, Function, null] as PropType<
-      string | VNode | (() => VNode) | null
-    >,
+    type: [String, Object, Function, null] as PropType<string | VNode | (() => VNode) | null>,
     default: undefined
   },
   getPopupContainer: {
-    type: [Function, null] as PropType<(() => HTMLElement) | null>,
-    default: null
+    type: [Function] as PropType<(el: HTMLElement) => HTMLElement>,
+    default: () => () => document.body,
+    required: false
+  },
+  trigger: {
+    values: ['hover', 'focus', 'click', 'custom', 'contextMenu'],
+    default: 'hover',
+    required: false
+  },
+  // if trigger == custom effect
+  visible: {
+    type: Boolean,
+    default: false,
+    required: false
   }
 }
