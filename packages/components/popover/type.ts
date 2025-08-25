@@ -1,5 +1,10 @@
 import type { PropType, VNode } from 'vue'
 export const popoverProps = {
+  autoAdjustOverflow: {
+    type: Boolean,
+    default: true,
+    required: false
+  },
   showArrow: {
     type: Boolean,
     default: false,

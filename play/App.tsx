@@ -221,7 +221,11 @@ const App = defineComponent(() => {
         </nl-row>
       </div>
       <div class="top-20">
-        <nl-popover content={<div class="popover-children">111</div>} trigger="click">
+        <nl-popover
+          position="bottom"
+          content={<div class="popover-children">111</div>}
+          trigger="click"
+        >
           <Button type="primary">我是popover 点击触发</Button>
         </nl-popover>
       </div>

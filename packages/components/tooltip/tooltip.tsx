@@ -1,4 +1,13 @@
-import { defineComponent, ref, computed, Fragment, watchEffect, cloneVNode, onMounted } from 'vue'
+import {
+  defineComponent,
+  ref,
+  computed,
+  Fragment,
+  watchEffect,
+  cloneVNode,
+  onMounted,
+  type StyleValue
+} from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
 import { tooltioProps } from './type'
@@ -9,9 +18,9 @@ import { useEventListener, useClickOutside } from '../_util/hooks'
 
 const Tooltip = defineComponent(
   (props, ctx) => {
-    const tooltipPortal = ref()
+    const innerRef = ref()
     const tooltipDefaultRef = ref()
-    const targetElementRef = ref()
+    const triggerElementRef = ref<HTMLElement>()
     const slotRef = ref()
     const targetElementRect = ref()
     const wrapperClass = computed(() => {
@@ -30,21 +39,25 @@ const Tooltip = defineComponent(
       }
       return props.visible
     })
-
     const triggerHnadle = () => {
-      console.log('jjasjdasd')
       show.value = true
     }
+
+    //computed portal inner box position
+    const innerStyle = computed<StyleValue>(() => {
+      return {}
+    })
+
     onMounted(() => {
       const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
-      targetElementRef.value = target
+      triggerElementRef.value = target
       targetElementRect.value = target.getBoundingClientRect()
       const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
       useEventListener(target, eventMap.enter, triggerHnadle)
       if (eventMap.enter === 'click') {
         const handleClickOutside = (event: Event) => {
-          if (!props.clickToHide) {
-            if (tooltipPortal.value.contains(event.target)) return
+          if (showTooltip.value && !props.clickToHide) {
+            if (innerRef.value.contains(event.target)) return
           }
           show.value = false
         }
@@ -66,7 +79,7 @@ const Tooltip = defineComponent(
     }
     const TooltipPortal = () => {
       return (
-        <div class={wrapperClass.value} ref={tooltipPortal}>
+        <div class={wrapperClass.value} ref={innerRef}>
           <div class="tempui-tooltip-content">
             <ContentWrapper></ContentWrapper>
           </div>
@@ -112,6 +125,9 @@ const Tooltip = defineComponent(
             <Portal
               getPopupContainer={props.getPopupContainer}
               targetElementRect={targetElementRect.value}
+              autoAdjustOverflow={props.autoAdjustOverflow}
+              triggerElementRef={triggerElementRef.value as HTMLElement}
+              innerStyle={innerStyle.value}
             >
               <TooltipPortal></TooltipPortal>
             </Portal>

@@ -1,25 +1,31 @@
 import type { PropType, VNode } from 'vue'
+const values = [
+  'top',
+  'topLeft',
+  'topRight',
+  'left',
+  'leftTop',
+  'leftBottom',
+  'right',
+  'rightTop',
+  'rightBottom',
+  'bottom',
+  'bottomLeft',
+  'bottomRight'
+] as const
 export const tooltioProps = {
+  autoAdjustOverflow: {
+    type: Boolean,
+    default: true,
+    required: false
+  },
   showArrow: {
     type: Boolean,
     default: true,
     required: false
   },
   position: {
-    values: [
-      'top',
-      'topLeft',
-      'topRight',
-      'left',
-      'leftTop',
-      'leftBottom',
-      'right',
-      'rightTop',
-      'rightBottom',
-      'bottom',
-      'bottomLeft',
-      'bottomRight'
-    ],
+    values: values,
     default: 'top',
     required: false
   },
@@ -54,3 +60,4 @@ export const tooltioProps = {
     required: false
   }
 }
+export type Position = (typeof values)[number]
