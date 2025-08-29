@@ -15,3 +15,4 @@ export const omitKeys = <T extends Record<string | symbol, unknown>, K extends k
 export const isComponentByVNode = (vnode: VNode): boolean => {
   return vnode && !!vnode.type && (isObject(vnode.type) || isFunction(vnode.type))
 }
+export const Undefined = void 0

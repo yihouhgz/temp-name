@@ -60,7 +60,7 @@ const Portal = defineComponent(
       return (
         <Teleport to={props.getPopupContainer(document.body)}>
           <div class="tempui-portal" style={style.value}>
-            <div ref={innerRef} class="tempui-portal-inner" tabindex={-1} style={props.innerStyle}>
+            <div ref={innerRef} class="tempui-portal-inner" tabindex={-1} style={innerStyle.value}>
               {ctx.slots.default?.()}
             </div>
           </div>

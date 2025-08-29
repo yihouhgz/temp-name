@@ -58,11 +58,7 @@ const Icon = defineComponent({
     }
     return () => {
       return (
-        <span
-          class={iconClass.value}
-          innerHTML={svgContent.value}
-          onClick={handleClick}
-        ></span>
+        <span class={iconClass.value} innerHTML={svgContent.value} onClick={handleClick}></span>
       )
     }
   }

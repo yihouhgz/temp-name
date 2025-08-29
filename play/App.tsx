@@ -234,6 +234,10 @@ const App = defineComponent(() => {
           <Button type="primary">tooltip hover触发</Button>
         </nl-tooltip>
       </div>
+
+      <div class="top-20">
+        <nl-hot-keys></nl-hot-keys>
+      </div>
     </div>
   )
 })

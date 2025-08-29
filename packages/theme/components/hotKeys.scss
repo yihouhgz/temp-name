@@ -1,0 +1,21 @@
+.tempui-hotKeys {
+  box-sizing: border-box;
+  position: relative;
+  user-select: none;
+  white-space: nowrap;
+  vertical-align: bottom;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  &-content {
+    border-radius: 2px;
+    height: 20px;
+    padding: 2px 8px;
+    border: 1px;
+    color: var(--tempui-color-text-2);
+    &-background {
+      background-color: var(--tempui-color-fill-0);
+    }
+  }
+}

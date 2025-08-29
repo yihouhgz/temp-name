@@ -47,7 +47,6 @@ const Tooltip = defineComponent(
     const innerStyle = computed<StyleValue>(() => {
       return {}
     })
-
     onMounted(() => {
       const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
       triggerElementRef.value = target
