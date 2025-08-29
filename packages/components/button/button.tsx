@@ -78,7 +78,11 @@ const Button = defineComponent(
 
     return () => {
       return (
-        <Wave disabled={props.disabled} target={buttonRef.value as HTMLElement}>
+        <Wave
+          disabled={props.disabled}
+          target={buttonRef.value as HTMLElement}
+          rippleSize={[10, 10]}
+        >
           <button
             tabindex={formChildrenIndex}
             ref={buttonRef}

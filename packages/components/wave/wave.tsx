@@ -1,7 +1,14 @@
 import { defineComponent, onUnmounted, watchEffect, Fragment } from 'vue'
 import { prefix } from 'constants/config'
-import { getTargetWaveColor, getWaveEffectColor } from './utils'
+import {
+  getTargetWaveColor,
+  getWaveEffectColor,
+  getTargetScaleRatio,
+  setCssPropertyVariable,
+  getBorderPositionLayout
+} from './utils'
 import './style/wave'
+import { props } from './type'
 
 const Wave = defineComponent(
   (props, { slots }) => {
@@ -10,8 +17,9 @@ const Wave = defineComponent(
       const showEffect = () => {
         const holder = document.createElement('div')
         holder.style.position = 'absolute'
-        holder.style.left = '0px'
-        holder.style.top = '0px'
+        const { top, left } = getBorderPositionLayout(props.target)
+        holder.style.left = String(top)
+        holder.style.top = String(left)
         holder.style.pointerEvents = 'none'
 
         const width = props.target?.offsetWidth
@@ -44,6 +52,14 @@ const Wave = defineComponent(
         props.target?.insertBefore(holder, props.target?.firstChild)
         wave.className = 'wave-effect'
 
+        const { scaleX, scaleY } = getTargetScaleRatio(props.target.getBoundingClientRect(), {
+          x: 10,
+          y: 10
+        })
+        setCssPropertyVariable(wave, {
+          '--scale-x': scaleX,
+          '--scale-y': scaleY
+        })
         // 动画结束后移除元素
         wave.addEventListener(
           'animationend',
@@ -55,7 +71,6 @@ const Wave = defineComponent(
       }
 
       const handleClick = () => {
-        console.log('hhh')
         showEffect()
       }
 
@@ -81,10 +96,7 @@ const Wave = defineComponent(
   },
   {
     name: `${prefix}-wave`,
-    props: {
-      disabled: { type: Boolean, default: false, required: false },
-      target: { type: HTMLElement, required: false }
-    }
+    props: props
   }
 )
 

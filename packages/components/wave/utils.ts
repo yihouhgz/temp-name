@@ -12,8 +12,7 @@ export function isValidWaveColor(color: string) {
 }
 
 export function getTargetWaveColor(node: HTMLElement) {
-  const { borderTopColor, borderColor, backgroundColor } =
-    getComputedStyle(node)
+  const { borderTopColor, borderColor, backgroundColor } = getComputedStyle(node)
   if (isValidWaveColor(borderTopColor)) {
     return borderTopColor
   }
@@ -26,19 +25,14 @@ export function getTargetWaveColor(node: HTMLElement) {
   return null
 }
 
-export function getWaveEffectColor(
-  color: string | null,
-  opacity: number = 0.2
-): string {
+export function getWaveEffectColor(color: string | null, opacity: number = 0.2): string {
   if (!color) {
     // 默认使用白色，带有透明度
     return `rgba(255, 255, 255, ${opacity})`
   }
 
   // 如果已经是rgba格式，直接修改透明度
-  const rgbaMatch = color.match(
-    /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/
-  )
+  const rgbaMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/)
   if (rgbaMatch) {
     const [, r, g, b] = rgbaMatch
     return `rgba(${r}, ${g}, ${b}, ${opacity})`
@@ -74,4 +68,46 @@ export function getWaveEffectColor(
 
   // 其他情况（如颜色名称）使用白色替代
   return `rgba(255, 255, 255, ${opacity})`
+}
+
+export const getTargetScaleRatio = (
+  targetRect: DOMRect,
+  size?: { x: number; y: number }
+): { scaleX: number; scaleY: number } => {
+  const width = targetRect.width
+  const height = targetRect.height
+  if (!size)
+    size = {
+      x: 8,
+      y: 8
+    }
+  return {
+    scaleX: size.x / width + 1,
+    scaleY: size.y / height + 1
+  }
+}
+
+export const setCssPropertyVariable = (
+  el: HTMLElement,
+  propertys: Record<string, string | number>
+) => {
+  Object.entries(propertys).forEach(([key, value]) => {
+    el.style.setProperty(key, String(value))
+  })
+}
+
+export const getBorderPositionLayout = (el: HTMLElement) => {
+  const style = getComputedStyle(el)
+  let top = '0',
+    left = '0'
+  if (style.borderLeftWidth) {
+    top = '-' + style.borderTopWidth
+  }
+  if (style.borderTopWidth) {
+    left = '-' + style.borderLeftWidth
+  }
+  return {
+    top,
+    left
+  }
 }
