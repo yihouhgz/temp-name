@@ -4,6 +4,7 @@ export const isString = (value: unknown) => typeof value === 'string'
 export const isNumber = (value: unknown) => typeof value === 'number'
 export const isArray = (value: unknown) => Array.isArray(value)
 export const isObject = (value: unknown) => value !== null && typeof value === 'object'
+export const isBoolean = (value: unknown) => typeof value === 'boolean'
 export const omitKeys = <T extends Record<string | symbol, unknown>, K extends keyof T>(
   obj: T,
   ...keys: K[]
@@ -16,3 +17,10 @@ export const isComponentByVNode = (vnode: VNode): boolean => {
   return vnode && !!vnode.type && (isObject(vnode.type) || isFunction(vnode.type))
 }
 export const Undefined = void 0
+
+export const isColorValue = (color: string) => {
+  const hexColorRegex = /^#([0-9A-F]{3}|[0-9A-F]{6})$/i
+  const rgbColorRegex = /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/
+  const rgbaColorRegex = /^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(0|0?\.\d+|1(\.0)?)\)$/
+  return hexColorRegex.test(color) || rgbColorRegex.test(color) || rgbaColorRegex.test(color)
+}

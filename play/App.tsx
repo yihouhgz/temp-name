@@ -236,7 +236,22 @@ const App = defineComponent(() => {
       </div>
 
       <div class="top-20">
-        <nl-hot-keys></nl-hot-keys>
+        <nl-hot-keys
+          background={false}
+          render={<div>111</div>}
+          hotKeys={['Control', 'q']}
+          onHotKey={() => console.log('hahsdhhasd')}
+        ></nl-hot-keys>
+      </div>
+
+      <div class="top-20">
+        {/* src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" */}
+        <nl-avatar
+          alt="beautiful cat"
+          src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
+        >
+          Duck
+        </nl-avatar>
       </div>
     </div>
   )

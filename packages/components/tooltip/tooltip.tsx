@@ -14,7 +14,7 @@ import { tooltioProps } from './type'
 import { isFunction, isComponentByVNode } from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
-import { useEventListener, useClickOutside } from '../_util/hooks'
+import { useEventListener, useClickOutside, type EventMap } from '../_util'
 
 const Tooltip = defineComponent(
   (props, ctx) => {
@@ -52,7 +52,7 @@ const Tooltip = defineComponent(
       triggerElementRef.value = target
       targetElementRect.value = target.getBoundingClientRect()
       const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
-      useEventListener(target, eventMap.enter, triggerHnadle)
+      useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
       if (eventMap.enter === 'click') {
         const handleClickOutside = (event: Event) => {
           if (showTooltip.value && !props.clickToHide) {
