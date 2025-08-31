@@ -247,11 +247,59 @@ const App = defineComponent(() => {
       <div class="top-20">
         {/* src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" */}
         <nl-avatar
+          hoverMask={
+            <div
+              style={{
+                backgroundColor: 'var(--tempui-color-overlay-bg)',
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            ></div>
+          }
           alt="beautiful cat"
           src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
         >
           Duck
         </nl-avatar>
+
+        <nl-avatar
+          alt="beautiful cat"
+          hoverMask={
+            <div
+              style={{
+                backgroundColor: 'var(--tempui-color-overlay-bg)',
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            ></div>
+          }
+        >
+          duck
+        </nl-avatar>
+        <nl-avatar
+          alt="beautiful cat"
+          src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
+          style={{ margin: 4 }}
+          size="large"
+          border={{ color: '#FE2C55', motion: true }}
+          contentMotion={true}
+          topSlot={{
+            text: '直播',
+            gradientStart: 'rgb(255,23,100)',
+            gradientEnd: 'rgb(237,52,148)'
+          }}
+          bottomSlot={{
+            shape: 'circle',
+            bgColor: '#FE2C55',
+            text: <nl-icon name="camera"></nl-icon>
+          }}
+        />
       </div>
     </div>
   )

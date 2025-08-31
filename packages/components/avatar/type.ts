@@ -80,13 +80,10 @@ export const avatarProps = {
    * @description 额外边框
    */
   border: {
-    type: [Object, Boolean] as PropType<
-      | {
-          color?: string
-          motion?: boolean
-        }
-      | boolean
-    >,
+    type: [Object, Boolean] as PropType<{
+      color?: string
+      motion?: boolean
+    }>,
     default: false,
     required: false
   },
