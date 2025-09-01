@@ -257,7 +257,9 @@ const App = defineComponent(() => {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}
-            ></div>
+            >
+              <nl-icon name="camera"></nl-icon>
+            </div>
           }
           alt="beautiful cat"
           src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
@@ -267,6 +269,9 @@ const App = defineComponent(() => {
 
         <nl-avatar
           alt="beautiful cat"
+          border={{ color: '#FE2C55', motion: true }}
+          contentMotion
+          gap={6}
           hoverMask={
             <div
               style={{
@@ -277,7 +282,9 @@ const App = defineComponent(() => {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}
-            ></div>
+            >
+              <nl-icon name="camera"></nl-icon>
+            </div>
           }
         >
           duck
@@ -285,7 +292,7 @@ const App = defineComponent(() => {
         <nl-avatar
           alt="beautiful cat"
           src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
-          style={{ margin: 4 }}
+          style={{ margin: '4px' }}
           size="large"
           border={{ color: '#FE2C55', motion: true }}
           contentMotion={true}

@@ -4,7 +4,7 @@
     &-#{$n} {
       display: block;
       box-sizing: border-box;
-      width: ($n / $cloMax) * 100%;
+      width: calc($n / $cloMax) * 100%;
       flex: 0 0 auto;
       float: left;
     }
@@ -13,7 +13,7 @@
   &-offset {
     @for $n from 1 through $cloMax {
       &-#{$n} {
-        margin-left: ($n / $cloMax) * 100%;
+        margin-left: calc($n / $cloMax) * 100%;
       }
     }
   }
@@ -23,7 +23,7 @@
       &-#{$n} {
         display: block;
         box-sizing: border-box;
-        width: ($n / $cloMax) * 100%;
+        width: calc($n / $cloMax) * 100%;
       }
     }
   }
@@ -33,7 +33,7 @@
       &-#{$n} {
         display: block;
         box-sizing: border-box;
-        width: ($n / $cloMax) * 100%;
+        width: calc($n / $cloMax) * 100%;
       }
     }
   }

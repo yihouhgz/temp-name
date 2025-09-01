@@ -24,3 +24,10 @@ export const isColorValue = (color: string) => {
   const rgbaColorRegex = /^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(0|0?\.\d+|1(\.0)?)\)$/
   return hexColorRegex.test(color) || rgbColorRegex.test(color) || rgbaColorRegex.test(color)
 }
+
+export const renderVnode = (
+  vnode: string | VNode | (() => VNode) | null | undefined
+): VNode | null | string | undefined => {
+  if (isFunction(vnode)) return vnode()
+  return vnode
+}

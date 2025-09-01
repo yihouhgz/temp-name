@@ -1,27 +1,31 @@
 import { defineComponent, computed, ref, type StyleValue } from 'vue'
 import { prefix } from 'constants/config'
-import { avatarProps, avatarEmits } from './type'
+import { avatarProps, avatarEmits, type AvatarSizeType } from './type'
 import './style/avatar'
 import { reactive } from 'vue'
-import { isFunction } from '../_util'
+import { isFunction, renderVnode } from '../_util'
+import TopSlotIcon from './top-slot-icon'
 const Avatar = defineComponent({
   setup(props, ctx) {
     const avatarData = reactive({
       showHoverMask: false
     })
     const container = ref<HTMLElement>()
-    const wrapperClass = computed(() => {
+    const baseClass = computed(() => {
       return [
         'tempui-avatar',
         `tempui-avatar-${props.shape}`,
         `tempui-avatar-${props.size}`,
-        props.src ? `tempui-avatar-img` : `tempui-avatar-${props.color}`
+        props.src ? `tempui-avatar-img` : `tempui-avatar-${props.color}`,
+        {
+          'tempui-avatar-animated': props.contentMotion
+        }
       ]
     })
     const computedScale = computed(() => {
       const gap = props.gap
       const containerEl = container.value as HTMLElement
-      const stringEl = container.value?.firstChild as HTMLSpanElement
+      const stringEl = container.value?.firstElementChild as HTMLSpanElement
       if (stringEl && containerEl && gap) {
         const [nodeWidth, stringNodeWidth] = [
           containerEl?.offsetWidth || 0,
@@ -95,19 +99,21 @@ const Avatar = defineComponent({
           </>
         )
       }
+      const showWrapper = props.border || props.topSlot || props.bottomSlot
+      const baseAttrs = showWrapper ? {} : ctx.attrs
+      const handlerAttrs = showWrapper
+        ? {}
+        : {
+            onClick: handleClick,
+            onMouseenter: handleMouseEnter,
+            onMouseleave: handleMouseLeave
+          }
       const avatarBase = (
-        <span
-          class={wrapperClass.value}
-          {...ctx.attrs}
-          ref={container}
-          onClick={handleClick}
-          onMouseenter={handleMouseEnter}
-          onMouseleave={handleMouseLeave}
-        >
+        <span class={baseClass.value} {...baseAttrs} ref={container} {...handlerAttrs}>
           {content}
         </span>
       )
-      if (props.border || props.topSlot || props.bottomSlot) {
+      if (showWrapper) {
         const style: StyleValue = { position: 'relative', margin: 'inherit' }
         const borderColor = props.border?.color
         const getBorderClass = (): string[] => {
@@ -121,8 +127,82 @@ const Avatar = defineComponent({
           style: borderColor ? { borderColor: borderColor } : null,
           class: getBorderClass()
         }
+        const renderTopSlot = () => {
+          const topSlot = props.topSlot
+          if (!topSlot) return null
+          if (topSlot?.render) return renderVnode(topSlot.render)
+          const optionStyle: StyleValue = {}
+          if (topSlot.textColor) optionStyle.color = topSlot.textColor
+
+          const slotWrapperClass = [
+            'tempui-avatar-top-slot',
+            { [topSlot.className]: Boolean(topSlot.className) },
+            { 'tempui-avatar-animated': props.contentMotion }
+          ]
+          const slotWrapperStyle: StyleValue = topSlot.style
+          const bgClass = ['tempui-avatar-top-slot-bg', `tempui-avatar-top-slot-bg-${props.size}`]
+          const bgSvgClass = [
+            'tempui-avatar-top-slot-bg-svg',
+            `tempui-avatar-top-slot-bg-svg-${props.size}`
+          ]
+          const gradientStart = topSlot.gradientStart ?? 'var(--tempui-color-primary)'
+          const gradientEnd = topSlot.gradientEnd ?? 'var(--tempui-color-primary)'
+          const exclusion = ['extra-extra-small', 'extra-small'] as AvatarSizeType[]
+
+          const contentClass = [
+            'tempui-avatar-top-slot-content',
+            `tempui-avatar-top-slot-content-${props.size}`
+          ]
+          return (
+            <div class={slotWrapperClass} style={slotWrapperStyle}>
+              {!exclusion.includes(props.size) && (
+                <div class={bgClass}>
+                  <div class={bgSvgClass}>
+                    <TopSlotIcon
+                      gradientStart={gradientStart}
+                      gradientEnd={gradientEnd}
+                    ></TopSlotIcon>
+                  </div>
+                </div>
+              )}
+              <div style={optionStyle} class="tempui-avatar-top-slot-content-wrapper">
+                <span class={contentClass}>{renderVnode(topSlot.text)}</span>
+              </div>
+            </div>
+          )
+        }
+        const renderBottomSlot = () => {
+          const bottomSlot = props.bottomSlot
+          if (!bottomSlot) return null
+          if (bottomSlot?.render) return renderVnode(bottomSlot.render)
+          const optionStyle: StyleValue = {}
+          if (bottomSlot.bgColor) optionStyle.backgroundColor = bottomSlot.bgColor
+          if (bottomSlot.textColor) optionStyle.color = bottomSlot.textColor
+          const optionClass = [
+            `tempui-avatar-bottom-slot-shape-${bottomSlot.shape ?? props.shape}`,
+            `tempui-avatar-bottom-slot-shape-circle-${props.size}`
+          ]
+          const slotWrapperClass = [
+            'tempui-avatar-bottom-slot',
+            { [bottomSlot.className]: Boolean(bottomSlot.className) }
+          ]
+          const slotWrapperStyle: StyleValue = bottomSlot.style
+          return (
+            <div class={slotWrapperClass} style={slotWrapperStyle}>
+              <span style={optionStyle} class={optionClass}>
+                {renderVnode(bottomSlot.text)}
+              </span>
+            </div>
+          )
+        }
         return (
-          <div class="tempui-avatar-wrapper" {...ctx.attrs}>
+          <div
+            class="tempui-avatar-wrapper"
+            {...ctx.attrs}
+            onClick={handleClick}
+            onMouseenter={handleMouseEnter}
+            onMouseleave={handleMouseLeave}
+          >
             <div style={style}>
               {avatarBase}
               {props.border && <span {...mergnStyle}></span>}
@@ -130,8 +210,8 @@ const Avatar = defineComponent({
                 <span {...mergnStyle} class="tempui-avatar-border-animated"></span>
               )}
             </div>
-            {props.topSlot && <div class="tempui-avatar-top">{props.topSlot.render}</div>}
-            {props.bottomSlot && <div class="tempui-avatar-bottom">{props.bottomSlot.render}</div>}
+            {props.topSlot && renderTopSlot()}
+            {props.bottomSlot && renderBottomSlot()}
           </div>
         )
       }

@@ -14,6 +14,7 @@ export type TopSlotType = {
   render?: string | VNode | (() => VNode) | null
   gradientStart?: string
   gradientEnd?: string
+  text: string | VNode | (() => VNode) | null
   textColor: string
   className: string
   style?: CSSProperties
@@ -116,7 +117,7 @@ export const avatarProps = {
    */
   contentMotion: {
     type: Boolean,
-    default: true,
+    default: false,
     required: false
   },
   /**
@@ -149,7 +150,7 @@ export const avatarProps = {
    * @description 设置头像的大小，支持 extra-extra-small、extra-small、small、default、medium、large、extra-large 和 合法的 width 属性值例如 "10px"
    */
   size: {
-    type: [String, Number] as PropType<AvatarSizeType | number>,
+    type: [String] as PropType<AvatarSizeType>,
     default: 'medium',
     required: false
   }
