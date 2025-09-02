@@ -11,13 +11,14 @@ import {
 import { prefix } from 'constants/config'
 import './style/tooltip'
 import { tooltioProps } from './type'
-import { isFunction, isComponentByVNode } from '../_util'
+import { isFunction, isComponentByVNode, domRectToObject } from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
 import { useEventListener, useClickOutside, type EventMap } from '../_util'
+import { calcPosition, type PopupContainerDOMRect } from './herps'
 
-const Tooltip = defineComponent(
-  (props, ctx) => {
+const Tooltip = defineComponent({
+  setup(props, ctx) {
     const innerRef = ref()
     const tooltipDefaultRef = ref()
     const triggerElementRef = ref<HTMLElement>()
@@ -68,6 +69,69 @@ const Tooltip = defineComponent(
           })
         }
       }
+      const options = {
+        utils: {
+          getTriggerBounding() {
+            return (triggerElementRef.value as HTMLElement).getBoundingClientRect()
+          },
+          getPopupContainerRect() {
+            const container = this.getContainer()
+            let rect: PopupContainerDOMRect | null = null
+            const boundingRect = container.getBoundingClientRect()
+            rect = {
+              ...(domRectToObject(boundingRect) as DOMRect),
+              scrollLeft: container.scrollLeft,
+              scrollTop: container.scrollTop
+            }
+            return rect
+          },
+          getWrapperBounding() {
+            const wrapper = innerRef.value as HTMLElement
+            if (wrapper) return wrapper.getBoundingClientRect()
+            return null
+          },
+          setPosition(value: unknown) {
+            console.log(value, 'setPosition')
+          },
+          getProp(name: string) {
+            return props[name as keyof typeof props]
+          },
+          getContainer() {
+            const triggerElement = triggerElementRef.value as HTMLElement
+            const container = props.getPopupContainer(triggerElement)
+            return container
+          },
+          containerIsBody() {
+            const container = this.getContainer()
+            return container === document.body
+          },
+          containerIsRelativeOrAbsolute() {
+            const container = this.getContainer()
+            const computedStyle = window.getComputedStyle(container)
+            const position = computedStyle.getPropertyValue('position')
+            document.body.setAttribute('data-position', position)
+            return ['relative', 'absolute'].includes(position)
+          },
+          getDocumentElementBounding() {
+            return document.documentElement.getBoundingClientRect()
+          },
+          getProps() {
+            return {
+              ...props,
+              arrowBounding: {
+                offsetX: 0,
+                offsetY: 2,
+                width: 24,
+                height: 7
+              }
+            }
+          }
+        }
+      }
+      setTimeout(() => {
+        console.log('asdasd')
+        console.log(calcPosition(options.utils))
+      }, 100)
     })
     watchEffect(() => {})
     const ContentWrapper = () => {
@@ -136,7 +200,7 @@ const Tooltip = defineComponent(
       )
     }
   },
-  { name: prefix + '-tooltip', props: tooltioProps }
-)
-
+  name: prefix + '-tooltip',
+  props: tooltioProps
+})
 export default Tooltip
