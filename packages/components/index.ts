@@ -9,7 +9,7 @@ import Popover from './popover/index'
 import Tooltip from './tooltip/index'
 import Select from './select'
 import HotKeys from './hot-keys'
-import { Avatar } from './avatar'
+import { Avatar, AvatarGroup } from './avatar'
 const components = [
   Button,
   Watermark,
@@ -21,7 +21,8 @@ const components = [
   Tooltip,
   Select,
   HotKeys,
-  Avatar
+  Avatar,
+  AvatarGroup
 ]
 export const install = (app: App) => withInstall(app, components)
 export { Button, Watermark, Input, Icon, Row, Col, Popover, Select, HotKeys, Avatar }

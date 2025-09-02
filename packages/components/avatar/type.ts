@@ -156,6 +156,8 @@ export const avatarProps = {
   }
 }
 
+export const avatarSlots = ['hoverMask1', 'topSlot1', 'bottomSlot1']
+
 export const avatarEmits = {
   /**
    * @description 点击回调函数
@@ -222,6 +224,14 @@ export const groupProps = {
   size: {
     type: [String, Number] as PropType<AvatarSizeType | number>,
     default: 'medium',
+    required: false
+  },
+  /**
+   * @description 是否支持展开
+   */
+  spread: {
+    type: Boolean,
+    default: false,
     required: false
   }
 }

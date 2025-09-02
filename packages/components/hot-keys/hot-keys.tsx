@@ -88,7 +88,7 @@ const HotKeys = defineComponent({
         if (preventDefault) {
           e.preventDefault()
         }
-        props.onHotKey?.(e)
+        ctx.emit('hotKey', e)
       }
     }
     return () => {
@@ -101,7 +101,7 @@ const HotKeys = defineComponent({
       }
       const hotKeys = props.content ?? props.hotKeys
       const isShowSplit = (index: number) => {
-        return index > 0 && index < hotKeys.length - 1
+        return index > 0 && index <= hotKeys.length - 1
       }
       return (
         <div {...ctx.attrs} class={wrapper.value} onClick={handleClick}>

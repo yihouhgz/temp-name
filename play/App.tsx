@@ -308,6 +308,83 @@ const App = defineComponent(() => {
           }}
         />
       </div>
+
+      <div class="top-20">
+        <nl-avatar-group>
+          <nl-avatar
+            hoverMask={
+              <div
+                style={{
+                  backgroundColor: 'var(--tempui-color-overlay-bg)',
+                  height: '100%',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <nl-icon name="camera"></nl-icon>
+              </div>
+            }
+            alt="beautiful cat"
+            src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
+          >
+            Duck
+          </nl-avatar>
+          <nl-avatar
+            hoverMask={
+              <div
+                style={{
+                  backgroundColor: 'var(--tempui-color-overlay-bg)',
+                  height: '100%',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <nl-icon name="camera"></nl-icon>
+              </div>
+            }
+            alt="beautiful cat"
+            src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
+          >
+            Duck
+          </nl-avatar>
+          <nl-avatar
+            hoverMask={
+              <div
+                style={{
+                  backgroundColor: 'var(--tempui-color-overlay-bg)',
+                  height: '100%',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <nl-icon name="camera"></nl-icon>
+              </div>
+            }
+            alt="beautiful cat"
+            src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
+          >
+            Duck
+          </nl-avatar>
+        </nl-avatar-group>
+      </div>
+      <div class="top-20">
+        <HotKeys
+          background={false}
+          hotKeys={['Control', 'q']}
+          onHotKey={() => console.log('hahsdhhasd')}
+        />
+        <nl-hot-keys
+          background={false}
+          hotKeys={['Control', 'q']}
+          onHotKey={() => console.log('hahsdhhasd')}
+        ></nl-hot-keys>
+      </div>
     </div>
   )
 })
