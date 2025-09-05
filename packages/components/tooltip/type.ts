@@ -63,6 +63,11 @@ export const tooltioProps = {
     type: [Number, Object] as PropType<number | { x: number; y: number }>,
     default: 8,
     required: false
+  },
+  motion: {
+    type: Boolean,
+    default: true,
+    required: false
   }
 }
 export type Position = (typeof values)[number]

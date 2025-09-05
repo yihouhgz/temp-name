@@ -7,6 +7,7 @@ import images from '@rollup/plugin-image'
 import copy from 'rollup-plugin-copy'
 import babel from 'rollup-plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
+import types from './plugin/rollup-plugin-types.js'
 // import { terser } from 'rollup-plugin-terser'
 // import scss from 'rollup-plugin-scss'
 
@@ -83,7 +84,8 @@ export default {
           dest: 'dist'
         }
       ]
-    })
+    }),
+    types()
     // terser()
   ]
 }

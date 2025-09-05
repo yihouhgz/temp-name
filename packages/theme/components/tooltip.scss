@@ -125,3 +125,35 @@
     }
   }
 }
+@keyframes tempui-tooltip-zoomIn {
+  from {
+    opacity: 0;
+    // transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes tempui-tooltip-zoomOut {
+  0% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 0;
+    // transform: scale(0.8);
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+.tempui-tooltip-animation-show {
+  animation: tempui-tooltip-zoomIn 0.1s cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation-fill-mode: forwards;
+}
+.tempui-tooltip-animation-hide {
+  animation: tempui-tooltip-zoomOut 0.1s cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation-fill-mode: forwards;
+}

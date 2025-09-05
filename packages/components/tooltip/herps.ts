@@ -720,7 +720,6 @@ export const calcPosStyle = (props: {
   const isTriggerNearTop = middleY - containerRect.top < containerRect.bottom - middleY
 
   const isWrapperWidthOverflow = wrapperRect.width > innerWidth
-
   const scaled = Math.abs(wrapperRect?.width - utils.getContainer()?.clientWidth) > 1
   if (scaled) {
     SPACING = (SPACING * wrapperRect.width) / utils.getContainer().clientWidth
@@ -921,19 +920,18 @@ export const calcPosStyle = (props: {
   top = top - containerRect.top
 
   if (scaled) {
-    left /= wrapperRect.width / utils.getContainer().clientWidth
-  }
-
-  if (scaled) {
-    top /= wrapperRect.height / utils.getContainer().clientHeight
+    const scaleX = wrapperRect.width / utils.getContainer().clientWidth
+    const scaleY = wrapperRect.height / utils.getContainer().clientHeight
+    left /= scaleX
+    top /= scaleY
   }
 
   /**
    * container为body时，如果position不为relative或absolute，这时trigger计算出的top/left会根据html定位（initial containing block）
-   * 此时如果body有margin，则计算出的位置相对于body会有问题 fix issue #1368
+   * 此时如果body有margin，则计算出的位置相对于body会有问题
    *
    * When container is body, if position is not relative or absolute, then the top/left calculated by trigger will be positioned according to html
-   * At this time, if the body has a margin, the calculated position will have a problem relative to the body fix issue #1368
+   * At this time, if the body has a margin, the calculated position will have a problem relative to the body
    */
   if (_containerIsBody && !utils.containerIsRelativeOrAbsolute()) {
     const documentEleRect = utils.getDocumentElementBounding()
@@ -990,7 +988,7 @@ export const calcPosStyle = (props: {
   if (transform) {
     style.transform = transform
   }
-
+  style._position = position
   return style
 }
 
@@ -1053,7 +1051,6 @@ export const calcPosition = (
     spacing,
     utils
   })
-
   if (utils.getProp('autoAdjustOverflow')) {
     // console.log('style: ', style, '\ntriggerRect: ', triggerRect, '\nwrapperRect: ', wrapperRect);
     const {
