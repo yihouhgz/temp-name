@@ -1,10 +1,4 @@
-import {
-  defineComponent,
-  provide,
-  type PropType,
-  reactive,
-  computed
-} from 'vue'
+import { defineComponent, provide, type PropType, reactive, computed } from 'vue'
 import { prefix } from 'constants/config'
 import { rowScopeKey } from './scope'
 import './style/row'
@@ -51,10 +45,10 @@ const Row = defineComponent(
     })
     const rowClass = computed(() => {
       return [
-        props.type === 'flex' ? `tempui-row-${props.type}` : 'tempui-row',
+        props.type === 'flex' ? `${prefix}-row-${props.type}` : `${prefix}-row`,
         {
-          [`tempui-row-flex-${props.justify}`]: props.justify,
-          [`tempui-row-flex-${props.align}`]: props.align
+          [`${prefix}-row-flex-${props.justify}`]: props.justify,
+          [`${prefix}-row-flex-${props.align}`]: props.align
         }
       ]
     })

@@ -45,10 +45,10 @@ const Icon = defineComponent({
     })
     const iconClass = computed(() => {
       return [
-        'tempui-icon',
+        `${prefix}-icon`,
         {
-          [`tempui-icon-${props.size}`]: props.size,
-          'tempui-icon-disabled': props.disabled
+          [`${prefix}-icon-${props.size}`]: props.size,
+          [`${prefix}-icon-disabled`]: props.disabled
         }
       ]
     })

@@ -13,12 +13,12 @@ const Avatar = defineComponent({
     const container = ref<HTMLElement>()
     const baseClass = computed(() => {
       return [
-        'tempui-avatar',
-        `tempui-avatar-${props.shape}`,
-        `tempui-avatar-${props.size}`,
-        props.src ? `tempui-avatar-img` : `tempui-avatar-${props.color}`,
+        `${prefix}-avatar`,
+        `${prefix}-avatar-${props.shape}`,
+        `${prefix}-avatar-${props.size}`,
+        props.src ? `${prefix}-avatar-img` : `${prefix}-avatar-${props.color}`,
         {
-          'tempui-avatar-animated': props.contentMotion
+          [`${prefix}-avatar-animated`]: props.contentMotion
         }
       ]
     })
@@ -75,11 +75,11 @@ const Avatar = defineComponent({
       }
       let content = (
         <>
-          <span class="tempui-avatar-content" style={computedScale.value}>
-            <span class="tempui-avatar-label">{ctx.slots.default?.()}</span>
+          <span class={`${prefix}-avatar-content`} style={computedScale.value}>
+            <span class={`${prefix}-avatar-label`}>{ctx.slots.default?.()}</span>
           </span>
           {showHoverMaskComputed.value && (
-            <span class="tempui-avatar-hover">{hoverMaskRender()}</span>
+            <span class={`${prefix}-avatar-hover`}>{hoverMaskRender()}</span>
           )}
         </>
       )
@@ -87,14 +87,14 @@ const Avatar = defineComponent({
         content = (
           <>
             <img
-              class="tempui-avatar-img"
+              class={`${prefix}-avatar-img`}
               src={props.src}
               alt={props.alt}
               {...props.imgAttr}
               style={computedScale.value}
             />
             {showHoverMaskComputed.value && (
-              <span class="tempui-avatar-hover">{hoverMaskRender()}</span>
+              <span class={`${prefix}-avatar-hover`}>{hoverMaskRender()}</span>
             )}
           </>
         )
@@ -118,9 +118,9 @@ const Avatar = defineComponent({
         const borderColor = props.border?.color
         const getBorderClass = (): string[] => {
           return [
-            'tempui-avatar-border',
-            `tempui-avatar-border-${props.size}`,
-            `tempui-avatar-${props.shape}`
+            `${prefix}-avatar-border`,
+            `${prefix}-avatar-border-${props.size}`,
+            `${prefix}-avatar-${props.shape}`
           ]
         }
         const mergnStyle = {
@@ -135,23 +135,26 @@ const Avatar = defineComponent({
           if (topSlot.textColor) optionStyle.color = topSlot.textColor
 
           const slotWrapperClass = [
-            'tempui-avatar-top-slot',
+            `${prefix}-avatar-top-slot`,
             { [topSlot.className]: Boolean(topSlot.className) },
-            { 'tempui-avatar-animated': props.contentMotion }
+            { [`${prefix}-avatar-animated`]: props.contentMotion }
           ]
           const slotWrapperStyle: StyleValue = topSlot.style
-          const bgClass = ['tempui-avatar-top-slot-bg', `tempui-avatar-top-slot-bg-${props.size}`]
-          const bgSvgClass = [
-            'tempui-avatar-top-slot-bg-svg',
-            `tempui-avatar-top-slot-bg-svg-${props.size}`
+          const bgClass = [
+            `${prefix}-avatar-top-slot-bg`,
+            `${prefix}-avatar-top-slot-bg-${props.size}`
           ]
-          const gradientStart = topSlot.gradientStart ?? 'var(--tempui-color-primary)'
-          const gradientEnd = topSlot.gradientEnd ?? 'var(--tempui-color-primary)'
+          const bgSvgClass = [
+            `${prefix}-avatar-top-slot-bg-svg`,
+            `${prefix}-avatar-top-slot-bg-svg-${props.size}`
+          ]
+          const gradientStart = topSlot.gradientStart ?? `var(--${prefix}-color-primary)`
+          const gradientEnd = topSlot.gradientEnd ?? `var(--${prefix}-color-primary)`
           const exclusion = ['extra-extra-small', 'extra-small'] as AvatarSizeType[]
 
           const contentClass = [
-            'tempui-avatar-top-slot-content',
-            `tempui-avatar-top-slot-content-${props.size}`
+            `${prefix}-avatar-top-slot-content`,
+            `${prefix}-avatar-top-slot-content-${props.size}`
           ]
           return (
             <div class={slotWrapperClass} style={slotWrapperStyle}>
@@ -165,7 +168,7 @@ const Avatar = defineComponent({
                   </div>
                 </div>
               )}
-              <div style={optionStyle} class="tempui-avatar-top-slot-content-wrapper">
+              <div style={optionStyle} class={`${prefix}-avatar-top-slot-content-wrapper`}>
                 <span class={contentClass}>{renderVnode(topSlot.text)}</span>
               </div>
             </div>
@@ -179,11 +182,11 @@ const Avatar = defineComponent({
           if (bottomSlot.bgColor) optionStyle.backgroundColor = bottomSlot.bgColor
           if (bottomSlot.textColor) optionStyle.color = bottomSlot.textColor
           const optionClass = [
-            `tempui-avatar-bottom-slot-shape-${bottomSlot.shape ?? props.shape}`,
-            `tempui-avatar-bottom-slot-shape-circle-${props.size}`
+            `${prefix}-avatar-bottom-slot-shape-${bottomSlot.shape ?? props.shape}`,
+            `${prefix}-avatar-bottom-slot-shape-circle-${props.size}`
           ]
           const slotWrapperClass = [
-            'tempui-avatar-bottom-slot',
+            `${prefix}-avatar-bottom-slot`,
             { [bottomSlot.className]: Boolean(bottomSlot.className) }
           ]
           const slotWrapperStyle: StyleValue = bottomSlot.style
@@ -197,7 +200,7 @@ const Avatar = defineComponent({
         }
         return (
           <div
-            class="tempui-avatar-wrapper"
+            class={`${prefix}-avatar-wrapper`}
             {...ctx.attrs}
             onClick={handleClick}
             onMouseenter={handleMouseEnter}
@@ -207,7 +210,7 @@ const Avatar = defineComponent({
               {avatarBase}
               {props.border && <span {...mergnStyle}></span>}
               {props.border && Boolean(props.border.motion) && (
-                <span {...mergnStyle} class="tempui-avatar-border-animated"></span>
+                <span {...mergnStyle} class={`${prefix}-avatar-border-animated`}></span>
               )}
             </div>
             {props.topSlot && renderTopSlot()}

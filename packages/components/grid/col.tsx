@@ -64,10 +64,10 @@ const Col = defineComponent(
     const colClass = computed(() => {
       const { span } = props
       return [
-        'tempui-col',
-        `tempui-col-${span}`,
+        `${prefix}-col`,
+        `${prefix}-col-${span}`,
         {
-          [`tempui-col-offset-${props.offset}`]: props.offset
+          [`${prefix}-col-offset-${props.offset}`]: props.offset
         }
       ]
     })

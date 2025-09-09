@@ -920,10 +920,10 @@ export const calcPosStyle = (props: {
   top = top - containerRect.top
 
   if (scaled) {
-    const scaleX = wrapperRect.width / utils.getContainer().clientWidth
-    const scaleY = wrapperRect.height / utils.getContainer().clientHeight
-    left /= scaleX
-    top /= scaleY
+    // const scaleX = wrapperRect.width / utils.getContainer().clientWidth
+    // const scaleY = wrapperRect.height / utils.getContainer().clientHeight
+    // left /= scaleX
+    // top /= scaleY
   }
 
   /**

@@ -1,0 +1,22 @@
+@import '../base/constant';
+
+.#{$prefix}-select {
+  box-sizing: border-box;
+  border-radius: var(--#{$prefix}-border-radius-small);
+  border: 1px solid transparent;
+  height: 32px;
+  font-weight: 400;
+  display: inline-flex;
+  vertical-align: middle;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  transition:
+    background-color var(--#{$prefix}-transition_duration-none)
+      var(--#{$prefix}-transition_function-easeIn) var(--#{$prefix}-transition_delay-none),
+    border var(--#{$prefix}-transition_duration-none) var(--#{$prefix}-transition_function-easeIn)
+      var(--#{$prefix}-transition_delay-none);
+  transform: scale(var(--#{$prefix}-transform_scale-none));
+  max-height: 300px;
+  overflow-y: auto;
+}

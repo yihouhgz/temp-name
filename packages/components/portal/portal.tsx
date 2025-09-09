@@ -1,4 +1,4 @@
-import { defineComponent, computed, Teleport, /*type StyleValue,*/ ref, Transition } from 'vue'
+import { defineComponent, computed, Teleport, /*type StyleValue,*/ ref } from 'vue'
 import { prefix } from 'constants/config'
 import { portalProps } from './type'
 // import { isNumber } from '../_util'
@@ -56,8 +56,13 @@ const Portal = defineComponent(
     return () => {
       return (
         <Teleport to={props.getPopupContainer(document.body)}>
-          <div class="tempui-portal" style={style.value}>
-            <div ref={innerRef} class="tempui-portal-inner" tabindex={-1} style={props.innerStyle}>
+          <div class={`${prefix}-portal`} style={style.value}>
+            <div
+              ref={innerRef}
+              class={`${prefix}-portal-inner`}
+              tabindex={-1}
+              style={props.innerStyle}
+            >
               {ctx.slots.default?.()}
             </div>
           </div>

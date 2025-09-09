@@ -20,24 +20,24 @@ const Input = defineComponent(
     // style handle
     const inputWrapperClass = computed(() => {
       return [
-        'tempui-input',
-        'tempui-input-' + props.size,
+        `${prefix}-input`,
+        `${prefix}-input-` + props.size,
         {
-          'tempui-input-disabled': props.disabled,
-          'tempui-input-clearable': props.showClear,
-          'tempui-input-borderless': props.borderless,
-          [`tempui-input-${props.validateStatus}`]: props.validateStatus !== 'default',
-          'tempui-input-focus': inputSelfData.focus
+          [`${prefix}-input-disabled`]: props.disabled,
+          [`${prefix}-input-clearable`]: props.showClear,
+          [`${prefix}-input-borderless`]: props.borderless,
+          [`${prefix}-input-${props.validateStatus}`]: props.validateStatus !== 'default',
+          [`${prefix}-input-focus`]: inputSelfData.focus
         }
       ]
     })
     const inputTargetClass = computed(() => {
       return [
-        'tempui-input-target',
-        'tempui-input-target-' + props.size,
+        `${prefix}-input-target`,
+        `${prefix}-input-target-` + props.size,
         {
-          'tempui-input-target-disabled': props.disabled,
-          'tempui-input-target-clearable': props.showClear
+          [`${prefix}-input-target-disabled`]: props.disabled,
+          [`${prefix}-input-target-clearable`]: props.showClear
         }
       ]
     })
@@ -143,12 +143,12 @@ const Input = defineComponent(
             {...ctx.attrs}
           />
           {showClearIconWapper.value && (
-            <div class="tempui-input-clearable-icon">
+            <div class={`${prefix}-input-clearable-icon`}>
               <Icon disabled={props.disabled} name="IconClear" onClick={handleClearInput}></Icon>
             </div>
           )}
           {props.type === 'password' && (
-            <div class="tempui-input-password-icon">
+            <div class={`${prefix}-input-password-icon`}>
               <Icon
                 disabled={props.disabled}
                 name={inputSelfData.showPassword ? 'IconEyeOpened' : 'IconEyeClosedSolid'}

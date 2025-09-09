@@ -5,19 +5,19 @@ import Tooltip from '../tooltip'
 import { isFunction } from '../_util/helps'
 import './style/popover'
 
-const Popover = defineComponent(
-  (props, ctx) => {
+const Popover = defineComponent({
+  setup(props, ctx) {
     const ContentWrapper = () => {
       if (isFunction(props.content)) {
         return (
-          <div class={`tempui-popover`}>
-            <div class="tempui-popover-content">{props.content()}</div>
+          <div class={`${prefix}-popover`}>
+            <div class={`${prefix}-popover-content`}>{props.content()}</div>
           </div>
         )
       }
       return (
-        <div class="tempui-popover">
-          <div class="tempui-popover-content">{props.content}</div>
+        <div class={`${prefix}-popover`}>
+          <div class={`${prefix}-popover-content`}>{props.content}</div>
         </div>
       )
     }
@@ -26,7 +26,7 @@ const Popover = defineComponent(
         <Tooltip
           {...props}
           content={<ContentWrapper></ContentWrapper>}
-          wrapper="tempui-popover-wrapper"
+          wrapper={`${prefix}-popover-wrapper`}
           clickToHide={false}
         >
           {ctx.slots.default?.()}
@@ -34,7 +34,8 @@ const Popover = defineComponent(
       )
     }
   },
-  { name: prefix + '-popover', props: popoverProps }
-)
+  name: prefix + '-popover',
+  props: popoverProps
+})
 
 export default Popover

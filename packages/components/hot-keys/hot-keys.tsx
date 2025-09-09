@@ -14,12 +14,14 @@ import { isBoolean, isString, isColorValue, useEventListener, isFunction } from 
 const HotKeys = defineComponent({
   setup(props, ctx) {
     const wrapper = computed(() => {
-      return ['tempui-hotKeys']
+      return [`${prefix}-hotKeys`]
     })
     const contentWrapper = computed(() => {
       return [
-        'tempui-hotKeys-content',
-        isBoolean(props.background) && props.background ? 'tempui-hotKeys-content-background' : ''
+        `${prefix}-hotKeys-content`,
+        isBoolean(props.background) && props.background
+          ? `${prefix}-hotKeys-content-background`
+          : ''
       ]
     })
     const contentBackgroundStyle = computed(() => {
@@ -108,7 +110,7 @@ const HotKeys = defineComponent({
           {hotKeys.map((key, index) => {
             return (
               <span key={index}>
-                {isShowSplit(index) && <span class="tempui-hotKeys-split">+</span>}
+                {isShowSplit(index) && <span class={`${prefix}-hotKeys-split`}>+</span>}
                 <span style={contentBackgroundStyle.value} class={contentWrapper.value}>
                   {key}
                 </span>

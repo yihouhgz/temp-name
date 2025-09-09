@@ -1,4 +1,5 @@
-.tempui-col {
+@import '../base/constant';
+.#{$prefix}-col {
   $cloMax: 24;
   @for $n from 1 through $cloMax {
     &-#{$n} {
