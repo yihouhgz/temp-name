@@ -8,7 +8,8 @@ import {
   onMounted,
   watch,
   reactive,
-  type StyleValue
+  type StyleValue,
+  type CSSProperties
 } from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
@@ -252,7 +253,11 @@ const Tooltip = defineComponent({
                 }) => {
                   return (
                     <div
-                      style={animationStyle}
+                      style={{
+                        ...(animationStyle as CSSProperties),
+                        transformOrigin: (innerStyle.value as { transformOrigin: string })
+                          .transformOrigin
+                      }}
                       class={[...wrapperClass.value, animationClassName]}
                       ref={innerRef}
                       {...animationEventsNeedBind}
