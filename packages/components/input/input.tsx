@@ -1,4 +1,12 @@
-import { defineComponent, computed, onMounted, ref, onBeforeUnmount, reactive } from 'vue'
+import {
+  defineComponent,
+  computed,
+  onMounted,
+  ref,
+  onBeforeUnmount,
+  reactive,
+  type ExtractPropTypes
+} from 'vue'
 import { prefix } from 'constants/config'
 import './style/input'
 import { inputPropsDefaults } from './type'
@@ -6,8 +14,8 @@ import Icon from '../icon'
 import consola from '../_util/console'
 import { formChildrenIndex } from '../_util/tab-index'
 
-const Input = defineComponent(
-  (props, ctx) => {
+const Input = defineComponent({
+  setup(props, ctx) {
     const inputWrapperRef = ref<HTMLDivElement>()
     const inputRef = ref<HTMLInputElement>()
     const inputSelfData = reactive({
@@ -160,11 +168,9 @@ const Input = defineComponent(
       )
     }
   },
-  {
-    name: prefix + '-input',
-    props: inputPropsDefaults,
-    emits: ['update:modelValue', 'change', 'focus', 'blur', 'clear']
-  }
-)
-
+  name: prefix + '-input',
+  props: inputPropsDefaults,
+  emits: ['update:modelValue', 'change', 'focus', 'blur', 'clear']
+})
+export type InputPropsType = ExtractPropTypes<typeof inputPropsDefaults>
 export default Input

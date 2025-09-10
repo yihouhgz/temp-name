@@ -47,5 +47,11 @@ export const popoverProps = {
     type: Boolean,
     default: false,
     required: false
+  },
+
+  zIndex: {
+    type: Number,
+    default: 1000,
+    required: false
   }
 }

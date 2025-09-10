@@ -1,5 +1,5 @@
 import type { PropType, VNode } from 'vue'
-const values = [
+export const positionValues = [
   'top',
   'topLeft',
   'topRight',
@@ -25,7 +25,7 @@ export const tooltioProps = {
     required: false
   },
   position: {
-    values: values,
+    values: positionValues,
     default: 'top',
     required: false
   },
@@ -68,6 +68,11 @@ export const tooltioProps = {
     type: Boolean,
     default: true,
     required: false
+  },
+  margin: {
+    type: Array as PropType<number[]>,
+    default: () => [0, 0, 0, 0],
+    required: false
   }
 }
-export type Position = (typeof values)[number]
+export type Position = (typeof positionValues)[number]

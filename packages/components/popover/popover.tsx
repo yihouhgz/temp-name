@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { defineComponent, type ExtractPropTypes } from 'vue'
 import { prefix } from 'constants/config'
 import { popoverProps } from './type'
 import Tooltip from '../tooltip'
@@ -37,5 +37,5 @@ const Popover = defineComponent({
   name: prefix + '-popover',
   props: popoverProps
 })
-
+export type PopoverProps = ExtractPropTypes<typeof popoverProps>
 export default Popover

@@ -9,7 +9,8 @@ import {
   watch,
   reactive,
   type StyleValue,
-  type CSSProperties
+  type CSSProperties,
+  type ExtractPropTypes
 } from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
@@ -47,19 +48,15 @@ const Tooltip = defineComponent({
       transitionState: 'enter'
     })
     const showTooltip = computed(() => {
-      if (props.trigger !== 'custom') {
+      const { trigger, visible } = props
+      if (trigger !== 'custom') {
         return show.value
       }
-      return props.visible
+      return visible
     })
     const triggerHnadle = () => {
       show.value = true
     }
-
-    //computed portal inner box position
-    // const innerStyle = computed<StyleValue>(() => {
-    //   return {}
-    // })
 
     onMounted(() => {
       const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
@@ -75,12 +72,11 @@ const Tooltip = defineComponent({
           show.value = false
         }
         useClickOutside(target, handleClickOutside)
-      } else {
-        if (eventMap.enter !== 'custom') {
-          useEventListener(target, eventMap.leave, () => {
-            show.value = false
-          })
-        }
+      }
+      if (eventMap.enter !== 'custom') {
+        useEventListener(target, eventMap.leave, () => {
+          show.value = false
+        })
       }
     })
     const options = {
@@ -114,8 +110,8 @@ const Tooltip = defineComponent({
         setPosition(value: unknown) {
           console.log(value, 'setPosition')
         },
-        getProp(name: string) {
-          return props[name as keyof typeof props]
+        getProp<T>(name: string): T {
+          return props[name as keyof typeof props] as T
         },
         containerIsBody() {
           const container = this.getPopupContainer()
@@ -271,4 +267,5 @@ const Tooltip = defineComponent({
   name: prefix + '-tooltip',
   props: tooltioProps
 })
+export type TooltipProps = ExtractPropTypes<typeof tooltioProps>
 export default Tooltip
