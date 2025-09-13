@@ -4,7 +4,7 @@ import Row from './row'
 import { prefix } from 'constants/config'
 import { omitKeys } from '../_util/helps'
 
-const flexProps: Omit<typeof rowProps, 'type'> = omitKeys(rowProps, 'type')
+const flexProps: Omit<typeof rowProps, 'type'> = omitKeys(rowProps, ['type'])
 const Flex = defineComponent(
   (props, ctx) => {
     return () => {

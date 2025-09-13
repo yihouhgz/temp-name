@@ -1,4 +1,4 @@
-import type { VNode } from 'vue'
+import { type VNode, type ComponentInternalInstance } from 'vue'
 export const isFunction = (value: unknown) => typeof value === 'function'
 export const isString = (value: unknown) => typeof value === 'string'
 export const isNumber = (value: unknown) => typeof value === 'number'
@@ -7,7 +7,7 @@ export const isObject = (value: unknown) => value !== null && typeof value === '
 export const isBoolean = (value: unknown) => typeof value === 'boolean'
 export const omitKeys = <T extends Record<string | symbol, unknown>, K extends keyof T>(
   obj: T,
-  ...keys: K[]
+  keys: K[]
 ): Omit<T, K> => {
   return Object.fromEntries(
     Object.entries(obj).filter(([key]) => !keys.includes(key as unknown as K))
@@ -25,11 +25,24 @@ export const isColorValue = (color: string) => {
   return hexColorRegex.test(color) || rgbColorRegex.test(color) || rgbaColorRegex.test(color)
 }
 
-export const renderVnode = (
-  vnode: string | VNode | (() => VNode) | null | undefined
-): VNode | null | string | undefined => {
+export type VNodeType = string | VNode | (() => VNode) | null | undefined
+export const renderVnode = (vnode: VNodeType): VNode | null | string | undefined => {
   if (isFunction(vnode)) return vnode()
   return vnode
+}
+
+export const isIncludedSlot = (slotName: string, vm: ComponentInternalInstance) => {
+  const { slots, props } = vm
+  return Boolean((props && props[slotName]) || (slots && slots[slotName]))
+}
+
+// 处理props传值或者slot的情况 props.solt 优先级高于slots.solt
+export const renderElementForPropsOrSlot = (slotName: string, vm: ComponentInternalInstance) => {
+  const { slots, props } = vm
+  if (props[slotName]) {
+    return renderVnode(props[slotName] as VNodeType)
+  }
+  return slots?.[slotName]?.(vm.proxy)
 }
 
 export const domRectToObject = (rect: DOMRect): Omit<DOMRect, 'toJSON'> => {

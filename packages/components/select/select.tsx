@@ -1,10 +1,10 @@
-import { defineComponent, computed, reactive, watch, provide } from 'vue'
+import { defineComponent, computed, reactive, watch } from 'vue'
 import { prefix } from 'constants/config'
 import './style/select'
 import Popover from '../popover'
 import { selectEmits, selectProps, type SelectRefMethods } from './type'
 import Option from './option'
-import Group from './group'
+// import Group from './group'
 
 const Select = defineComponent({
   setup(props, ctx) {
@@ -71,6 +71,7 @@ const Select = defineComponent({
       }
       return (
         <div class={dropdownClassName} style={style}>
+          asd
           {content}
         </div>
       )
@@ -97,7 +98,20 @@ const Select = defineComponent({
           content={renderPopoverContent()}
         >
           <div class={wrapperClass.value} {...ctx.attrs} onClick={handleOpenPopover}>
-            select
+            <div class={prefix + '-select-selection'}>
+              <div class={prefix + '-select-selection-wrapper'}>
+                {/* <span class={prefix + '-select-selection-text'}></span> */}
+                <div
+                  class={[
+                    prefix + '-select-selection-text',
+                    prefix + '-select-selection-placeholder'
+                  ]}
+                >
+                  请选择12
+                </div>
+              </div>
+            </div>
+            <div class={prefix + '-select-input-arrow'}></div>
           </div>
         </Popover>
       )

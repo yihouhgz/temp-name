@@ -13,6 +13,7 @@ import { inputPropsDefaults } from './type'
 import Icon from '../icon'
 import consola from '../_util/console'
 import { formChildrenIndex } from '../_util/tab-index'
+import { IconEyeOpened, IconEyeClosedSolid } from '../icon'
 
 const Input = defineComponent({
   setup(props, ctx) {
@@ -157,11 +158,22 @@ const Input = defineComponent({
           )}
           {props.type === 'password' && (
             <div class={`${prefix}-input-password-icon`}>
-              <Icon
+              {/* <Icon
                 disabled={props.disabled}
                 name={inputSelfData.showPassword ? 'IconEyeOpened' : 'IconEyeClosedSolid'}
                 onClick={triggerPasswordStatus}
-              ></Icon>
+              ></Icon> */}
+              {inputSelfData.showPassword ? (
+                <IconEyeOpened
+                  disabled={props.disabled}
+                  onClick={triggerPasswordStatus}
+                ></IconEyeOpened>
+              ) : (
+                <IconEyeClosedSolid
+                  disabled={props.disabled}
+                  onClick={triggerPasswordStatus}
+                ></IconEyeClosedSolid>
+              )}
             </div>
           )}
         </div>

@@ -470,6 +470,13 @@ export const selectProps = {
   }
 }
 
+export const selectSolts = {
+  /**
+   * @description 自定义选项
+   */
+  arrowIcon: null
+}
+
 export const selectEmits = {
   /**
    * @description 失去焦点时的回调

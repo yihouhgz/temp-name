@@ -73,6 +73,11 @@ export const tooltioProps = {
     type: Array as PropType<number[]>,
     default: () => [0, 0, 0, 0],
     required: false
+  },
+  zIndex: {
+    type: Number,
+    default: 1000,
+    required: false
   }
 }
 export type Position = (typeof positionValues)[number]
