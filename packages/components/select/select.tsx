@@ -5,6 +5,7 @@ import Popover from '../popover'
 import { selectEmits, selectProps, type SelectRefMethods } from './type'
 import Option from './option'
 // import Group from './group'
+import { IconChevronDown } from '../icon'
 
 const Select = defineComponent({
   setup(props, ctx) {
@@ -85,6 +86,9 @@ const Select = defineComponent({
         autoAdjustOverflow: props.autoAdjustOverflow
       }
     })
+    const handleVisibleChange = (visible: boolean) => {
+      state.visible = visible
+    }
     return () => {
       const popover = popoverProps.value
       return (
@@ -96,6 +100,7 @@ const Select = defineComponent({
           trigger="custom"
           visible={state.visible}
           content={renderPopoverContent()}
+          onVisibleChange={handleVisibleChange}
         >
           <div class={wrapperClass.value} {...ctx.attrs} onClick={handleOpenPopover}>
             <div class={prefix + '-select-selection'}>
@@ -111,7 +116,9 @@ const Select = defineComponent({
                 </div>
               </div>
             </div>
-            <div class={prefix + '-select-input-arrow'}></div>
+            <div class={prefix + '-select-input-arrow'}>
+              <IconChevronDown></IconChevronDown>
+            </div>
           </div>
         </Popover>
       )

@@ -1,4 +1,6 @@
-import { type VNode, type ComponentInternalInstance } from 'vue'
+import type { VNode, ComponentInternalInstance } from 'vue'
+import { createVNode } from 'vue'
+
 export const isFunction = (value: unknown) => typeof value === 'function'
 export const isString = (value: unknown) => typeof value === 'string'
 export const isNumber = (value: unknown) => typeof value === 'number'
@@ -37,12 +39,23 @@ export const isIncludedSlot = (slotName: string, vm: ComponentInternalInstance) 
 }
 
 // 处理props传值或者slot的情况 props.solt 优先级高于slots.solt
-export const renderElementForPropsOrSlot = (slotName: string, vm: ComponentInternalInstance) => {
+export const renderElementForPropsOrSlot = (
+  slotName: string | { propNmae: string; slotName: string },
+  vm: ComponentInternalInstance
+) => {
   const { slots, props } = vm
-  if (props[slotName]) {
-    return renderVnode(props[slotName] as VNodeType)
+  let pName = isString(slotName) ? slotName : '',
+    sName = isString(slotName) ? slotName : ''
+  if (typeof slotName === 'object') {
+    pName = slotName.propNmae
+    sName = slotName.slotName
   }
-  return slots?.[slotName]?.(vm.proxy)
+  if (props[pName]) {
+    console.log('props[pName]', props[pName])
+    return renderVnode(props[pName] as VNodeType)
+  }
+  const vSlots = slots?.[sName]?.()
+  return vSlots
 }
 
 export const domRectToObject = (rect: DOMRect): Omit<DOMRect, 'toJSON'> => {

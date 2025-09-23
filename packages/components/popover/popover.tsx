@@ -1,6 +1,6 @@
 import { defineComponent, type ExtractPropTypes } from 'vue'
 import { prefix } from 'constants/config'
-import { popoverProps } from './type'
+import { popoverProps, popoverEmits } from './type'
 import Tooltip from '../tooltip'
 import { isFunction } from '../_util/helps'
 import './style/popover'
@@ -21,13 +21,21 @@ const Popover = defineComponent({
         </div>
       )
     }
+    const handleTooltipClickOutSide = (e: Event) => {
+      ctx.emit('clickOutSide', e)
+    }
+    const handleTooltipVisibleChange = (visible: boolean) => {
+      ctx.emit('visibleChange', visible)
+    }
     return () => {
       return (
         <Tooltip
           {...props}
           content={<ContentWrapper></ContentWrapper>}
           wrapper={`${prefix}-popover-wrapper`}
-          clickToHide={false}
+          clickToHide={props.clickToHide}
+          onClickOutSide={handleTooltipClickOutSide}
+          onVisibleChange={handleTooltipVisibleChange}
         >
           {ctx.slots.default?.()}
         </Tooltip>
@@ -35,7 +43,8 @@ const Popover = defineComponent({
     }
   },
   name: prefix + '-popover',
-  props: popoverProps
+  props: popoverProps,
+  emits: popoverEmits
 })
 export type PopoverProps = ExtractPropTypes<typeof popoverProps>
 export default Popover

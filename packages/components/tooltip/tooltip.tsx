@@ -14,7 +14,7 @@ import {
 } from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
-import { tooltioProps } from './type'
+import { tooltioProps, tooltipEmits } from './type'
 import { isFunction, isComponentByVNode, domRectToObject, isNumber } from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
@@ -64,12 +64,16 @@ const Tooltip = defineComponent({
       targetElementRect.value = target.getBoundingClientRect()
       const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
       useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
-      if (eventMap.enter === 'click') {
+      if (eventMap.enter === 'click' || eventMap.enter === 'custom') {
         const handleClickOutside = (event: Event) => {
           if (showTooltip.value && !props.clickToHide) {
             if (innerRef.value.contains(event.target)) return
           }
+          if (eventMap.enter === 'custom') {
+            ctx.emit('visibleChange', !props.visible)
+          }
           show.value = false
+          ctx.emit('clickOutSide', event)
         }
         useClickOutside(target, handleClickOutside)
       }
@@ -265,7 +269,8 @@ const Tooltip = defineComponent({
     }
   },
   name: prefix + '-tooltip',
-  props: tooltioProps
+  props: tooltioProps,
+  emits: tooltipEmits
 })
 export type TooltipProps = ExtractPropTypes<typeof tooltioProps>
 export default Tooltip

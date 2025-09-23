@@ -10,7 +10,7 @@ import {
 import { prefix } from 'constants/config'
 import './style/input'
 import { inputPropsDefaults } from './type'
-import Icon from '../icon'
+import { Icon } from '../icon'
 import consola from '../_util/console'
 import { formChildrenIndex } from '../_util/tab-index'
 import { IconEyeOpened, IconEyeClosedSolid } from '../icon'

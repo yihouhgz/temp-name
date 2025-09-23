@@ -41,11 +41,13 @@ export const iconProps = {
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
+    required: false
   },
   name: {
     type: String,
-    required: true
+    default: '',
+    required: false
   }
 }
 

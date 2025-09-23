@@ -53,7 +53,6 @@ const Icon = defineComponent({
       ]
     })
     const handleClick = (e: MouseEvent) => {
-      // props.onClick?.(e)
       ctx.emit('click', e)
     }
     return () => {

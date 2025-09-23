@@ -1,15 +1,16 @@
 import { iconProps, iconEmits } from './types'
-import { defineComponent, computed, type CSSProperties, type VNode, type Component } from 'vue'
+import { defineComponent, computed, getCurrentInstance } from 'vue'
+import type { CSSProperties, VNode, Component, ComponentInternalInstance } from 'vue'
 import { prefix } from 'constants/config'
-import { omitKeys } from '../_util/index'
+import { omitKeys, renderElementForPropsOrSlot } from '../_util/index'
 import './style/icon'
 
-const Icon = defineComponent({
+const IconJsx = defineComponent({
   setup(props, ctx) {
     const spanClass = computed(() => {
       const { spin, size, type } = props
       return [
-        `${prefix}-icon}`,
+        `${prefix}-icon`,
         `${prefix}-icon-${size}`,
         `${prefix}-icon-${type}`,
         {
@@ -25,15 +26,19 @@ const Icon = defineComponent({
       }
       return style
     })
+    const vm = getCurrentInstance()
     return () => {
       return (
         <span class={spanClass.value} style={spanStyle.value} {...ctx.attrs}>
-          {ctx.slots.default?.()}
+          {renderElementForPropsOrSlot(
+            { propNmae: 'svg', slotName: 'default' },
+            vm as ComponentInternalInstance
+          )}
         </span>
       )
     }
   },
-  name: prefix + '-icon',
+  name: prefix + '-icon-jsx',
   props: iconProps,
   emits: iconEmits
 })
@@ -41,7 +46,7 @@ const Icon = defineComponent({
 const nameToSplit = (name: string) => {
   let str = ''
   for (const s of name) {
-    if (s === s.toLocaleUpperCase()) str += '-' + s.toLocaleLowerCase()
+    if (s === s.toLocaleUpperCase() && s !== '-') str += '-' + s.toLocaleLowerCase()
     else str += s
   }
   return str
@@ -49,15 +54,16 @@ const nameToSplit = (name: string) => {
 
 export function warpperIcon(icon: VNode | Component, name: string) {
   const innerProps = omitKeys(iconProps, ['type', 'svg'])
+  const renderIcon = () => <icon></icon>
   const InnerIcon = defineComponent({
     setup(props) {
-      return <Icon svg={icon} type={name} {...props}></Icon>
+      return () => <IconJsx svg={renderIcon} type={name} {...props}></IconJsx>
     },
     props: innerProps,
     emits: iconEmits,
-    name: prefix + '-icon' + nameToSplit(name)
+    name: prefix + '-' + nameToSplit(name)
   })
   return InnerIcon
 }
 
-export default Icon
+export default IconJsx
