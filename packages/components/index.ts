@@ -11,6 +11,7 @@ import Select from './select'
 import { SelectOption, SelectOptionGroup } from './select'
 import HotKeys from './hot-keys'
 import { Avatar, AvatarGroup } from './avatar'
+import DragMove from './drag-move'
 const components = [
   Button,
   Watermark,
@@ -26,7 +27,8 @@ const components = [
   SelectOptionGroup,
   HotKeys,
   Avatar,
-  AvatarGroup
+  AvatarGroup,
+  DragMove
 ]
 export const install = (app: App) => withInstall(app, components)
 export { Button, Watermark, Input, Icon, Row, Col, Popover, Select, HotKeys, Avatar }

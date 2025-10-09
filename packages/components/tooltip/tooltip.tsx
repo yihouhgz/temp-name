@@ -11,6 +11,7 @@ import {
   type StyleValue,
   type CSSProperties,
   type ExtractPropTypes
+  // h
 } from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
@@ -183,6 +184,7 @@ const Tooltip = defineComponent({
         return <span>{children}</span>
       }
       return <Fragment ref={tooltipDefaultRef}>{children}</Fragment>
+      // return h(() => children, { ref: tooltipDefaultRef })
     }
     if (props.showArrow && props.clickToHide) _defaultRender() //todo slot为component下的trigger foucs
 

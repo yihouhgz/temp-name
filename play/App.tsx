@@ -399,6 +399,13 @@ const App = defineComponent(() => {
           </tempui-select-option-group>
         </tempui-select>
       </div>
+      <div class={'top-20'}>
+        <tempui-drag-move>
+          <div
+            style={{ position: 'absolute', width: '40px', height: '40px', backgroundColor: 'red' }}
+          ></div>
+        </tempui-drag-move>
+      </div>
     </div>
   )
 })
