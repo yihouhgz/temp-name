@@ -1,5 +1,4 @@
 import type { PropType, VNode } from 'vue'
-import { isBoolean } from '../_util'
 export const positionValues = [
   'top',
   'topLeft',
@@ -120,9 +119,7 @@ export const tooltipEmits = {
   /**
    * @description 弹出层展示/隐藏时触发的回调
    */
-  visibleChange: (visible: boolean) => {
-    return isBoolean(visible)
-  },
+  visibleChange: (visible: boolean) => void visible,
   /**
    * @description 当弹出层处于展示状态，点击非Children、非浮层内部区域时的回调（仅trigger为custom、click时有效）
    */

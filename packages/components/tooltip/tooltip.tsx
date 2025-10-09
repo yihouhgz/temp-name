@@ -57,6 +57,9 @@ const Tooltip = defineComponent({
     const triggerHnadle = () => {
       show.value = true
     }
+    const triggerLeave = () => {
+      show.value = false
+    }
 
     onMounted(() => {
       const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
@@ -70,16 +73,15 @@ const Tooltip = defineComponent({
             if (innerRef.value.contains(event.target)) return
           }
           if (eventMap.enter === 'custom') {
-            ctx.emit('visibleChange', !props.visible)
+            ctx.emit('visibleChange', false)
           }
-          show.value = false
+          triggerLeave()
           ctx.emit('clickOutSide', event)
         }
         useClickOutside(target, handleClickOutside)
-      }
-      if (eventMap.enter !== 'custom') {
+      } else {
         useEventListener(target, eventMap.leave, () => {
-          show.value = false
+          triggerLeave()
         })
       }
     })

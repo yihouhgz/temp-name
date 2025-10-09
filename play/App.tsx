@@ -69,7 +69,7 @@ const App = defineComponent(() => {
         </tempui-tooltip>
       </div>
       <div class="top-20">
-        <tempui-select></tempui-select>
+        <tempui-select emptyContent={<span>暂无数据</span>}></tempui-select>
       </div>
       <div class="top-50">
         <tempui-icon name="camera"></tempui-icon>
@@ -382,7 +382,22 @@ const App = defineComponent(() => {
       </div>
 
       <div class="top-20">
-        <tempui-select></tempui-select>
+        <tempui-select
+          optionList={[
+            { label: '小米手机', value: '1' },
+            { label: '苹果手机', value: '2' }
+          ]}
+          defaultValue="2"
+        >
+          <tempui-select-option-group label="智能手机">
+            <tempui-select-option value="1">小米手机</tempui-select-option>
+            <tempui-select-option value="2">苹果手机</tempui-select-option>
+          </tempui-select-option-group>
+          <tempui-select-option-group label="智能手机2">
+            <tempui-select-option value="11">小米手机1</tempui-select-option>
+            <tempui-select-option value="21">苹果手机1</tempui-select-option>
+          </tempui-select-option-group>
+        </tempui-select>
       </div>
     </div>
   )

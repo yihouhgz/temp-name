@@ -8,7 +8,6 @@ import './style/button'
 import { generate } from 'theme/derive'
 import { formChildrenIndex } from '../_util/tab-index'
 console.log(prefix, 'prefix', generate('#fff'))
-console.log(buttonPropsDefaults, 'ButtonPropsType')
 const Button = defineComponent(
   (props, ctx) => {
     const buttonRef = ref<HTMLButtonElement>()

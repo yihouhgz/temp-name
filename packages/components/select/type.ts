@@ -320,7 +320,7 @@ export const selectProps = {
    */
   position: {
     values: positionValues,
-    default: 'bottomLeft',
+    default: 'bottom',
     required: false
   },
   /**

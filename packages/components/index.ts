@@ -8,6 +8,7 @@ import { Row, Col } from './grid/index'
 import Popover from './popover/index'
 import Tooltip from './tooltip/index'
 import Select from './select'
+import { SelectOption, SelectOptionGroup } from './select'
 import HotKeys from './hot-keys'
 import { Avatar, AvatarGroup } from './avatar'
 const components = [
@@ -21,6 +22,8 @@ const components = [
   Popover,
   Tooltip,
   Select,
+  SelectOption,
+  SelectOptionGroup,
   HotKeys,
   Avatar,
   AvatarGroup

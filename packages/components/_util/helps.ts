@@ -1,5 +1,4 @@
 import type { VNode, ComponentInternalInstance } from 'vue'
-import { createVNode } from 'vue'
 
 export const isFunction = (value: unknown) => typeof value === 'function'
 export const isString = (value: unknown) => typeof value === 'string'
@@ -51,7 +50,6 @@ export const renderElementForPropsOrSlot = (
     sName = slotName.slotName
   }
   if (props[pName]) {
-    console.log('props[pName]', props[pName])
     return renderVnode(props[pName] as VNodeType)
   }
   const vSlots = slots?.[sName]?.()

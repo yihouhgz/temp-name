@@ -20,6 +20,25 @@
   max-height: 300px;
   overflow-y: auto;
 
+  &-focus {
+    border: 1px solid var(--#{$prefix}-color-focus-border);
+    background-color: var(--#{$prefix}-color-fill-0);
+    outline: 0;
+  }
+  &-focus,
+  &-open {
+    border: 1px solid var(--#{$prefix}-color-focus-border);
+    outline: 0;
+    &:hover {
+      background-color: var(--#{$prefix}-color-fill-0);
+      border: 1px solid var(--#{$prefix}-color-focus-border);
+    }
+    &:active {
+      background-color: var(--#{$prefix}-color-fill-2);
+      border: 1px solid var(--#{$prefix}-color-focus-border);
+    }
+  }
+
   &-selection {
     font-size: 14px;
     line-height: 20px;
@@ -62,7 +81,8 @@
     }
   }
 
-  &-arrow {
+  // 右侧icon
+  &-input-arrow {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -70,6 +90,16 @@
     color: var(--#{$prefix}-color-text-2);
     flex-shrink: 0;
     transform: rotate(var(--#{$prefix}-transform-rotate-none));
+    &-icon {
+      transition: transform 0.2s;
+    }
+  }
+
+  // dropdown
+  &-dropdown {
+    &-wrapper {
+      padding: 4px 4px;
+    }
   }
 }
 .#{$prefix}-select,
