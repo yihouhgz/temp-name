@@ -1,67 +1,69 @@
-import { defineComponent, watchEffect, ref, computed } from 'vue'
+import { iconProps, iconEmits } from './types'
+import { defineComponent, computed, getCurrentInstance } from 'vue'
+import type { CSSProperties, VNode, Component, ComponentInternalInstance } from 'vue'
 import { prefix } from 'constants/config'
+import { omitKeys, renderElementForPropsOrSlot } from '../_util/index'
 import './style/icon'
-const iconProps = {
-  name: {
-    type: String,
-    required: true
-  },
-  size: {
-    type: String,
-    default: 'default',
-    require: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  }
-}
-const loadSvg = async (name: string) => {
-  try {
-    const module = await import(/* @vite-ignore */ `./svgs/${name}.svg`)
-    return module.default
-  } catch {
-    return null
-  }
-}
-const svgDataUriToHtml = (dataUri: string) => {
-  let svgContent = dataUri.replace('data:image/svg+xml,', '')
-  svgContent = decodeURIComponent(svgContent)
-  return svgContent
-}
-const Icon = defineComponent({
-  name: prefix + '-icon',
-  props: iconProps,
-  emits: ['click'],
+
+const IconJsx = defineComponent({
   setup(props, ctx) {
-    const svgContent = ref<string | undefined>()
-    watchEffect(async () => {
-      if (props.name) {
-        const dataUri = await loadSvg(props.name)
-        if (dataUri) {
-          svgContent.value = svgDataUriToHtml(dataUri)
-        }
-      }
-    })
-    const iconClass = computed(() => {
+    const spanClass = computed(() => {
+      const { spin, size, type } = props
       return [
-        'tempui-icon',
+        `${prefix}-icon`,
+        `${prefix}-icon-${size}`,
+        `${prefix}-icon-${type}`,
         {
-          [`tempui-icon-${props.size}`]: props.size,
-          'tempui-icon-disabled': props.disabled
+          [`${prefix}-icon-spin`]: spin
         }
       ]
     })
-    const handleClick = (e: MouseEvent) => {
-      // props.onClick?.(e)
-      ctx.emit('click', e)
-    }
+    const spanStyle = computed(() => {
+      const { rotate } = props
+      const style: CSSProperties = {}
+      if (Number.isSafeInteger(rotate)) {
+        style.transform = `rotate(${rotate}deg)`
+      }
+      return style
+    })
+    const vm = getCurrentInstance()
     return () => {
       return (
-        <span class={iconClass.value} innerHTML={svgContent.value} onClick={handleClick}></span>
+        <span class={spanClass.value} style={spanStyle.value} {...ctx.attrs}>
+          {renderElementForPropsOrSlot(
+            { propNmae: 'svg', slotName: 'default' },
+            vm as ComponentInternalInstance
+          )}
+        </span>
       )
     }
-  }
+  },
+  name: prefix + '-icon-jsx',
+  props: iconProps,
+  emits: iconEmits
 })
-export { iconProps }
-export default Icon
+
+const nameToSplit = (name: string) => {
+  let str = ''
+  for (const s of name) {
+    if (s === s.toLocaleUpperCase() && s !== '-') str += '-' + s.toLocaleLowerCase()
+    else str += s
+  }
+  return str
+}
+
+export function warpperIcon(icon: VNode | Component, name: string) {
+  const innerProps = omitKeys(iconProps, ['type', 'svg'])
+  const renderIcon = () => <icon></icon>
+  const InnerIcon = defineComponent({
+    setup(props) {
+      return () => <IconJsx svg={renderIcon} type={name} {...props}></IconJsx>
+    },
+    props: innerProps,
+    emits: iconEmits,
+    name: prefix + '-' + nameToSplit(name)
+  })
+  return InnerIcon
+}
+
+export default IconJsx

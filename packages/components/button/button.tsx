@@ -3,7 +3,7 @@ import { buttonPropsDefaults } from './type'
 import { prefix } from 'constants/config'
 import Wave from '../wave'
 import { isFunction, isString } from '../_util'
-import Icon from '../icon'
+import { Icon } from '../icon'
 import './style/button'
 import { generate } from 'theme/derive'
 import { formChildrenIndex } from '../_util/tab-index'
@@ -57,7 +57,7 @@ const Button = defineComponent(
     }
     const defaultRender = () => {
       return (
-        <span class="tempui-button-content">
+        <span class={`${prefix}-button-content`}>
           {iconRender()}
           <span>{defaultTextRender()}</span>
         </span>
@@ -65,14 +65,14 @@ const Button = defineComponent(
     }
 
     const buttonClass = computed(() => [
-      'tempui-button',
-      `tempui-button-${props.type}`,
-      `tempui-button-${props.size}`,
+      `${prefix}-button`,
+      `${prefix}-button-${props.type}`,
+      `${prefix}-button-${props.size}`,
       {
         'is-disabled': props.disabled,
-        'tempui-button-loading': props.loading && !props.disabled,
-        'tempui-button-icon': ctx.slots.icon,
-        'tempui-button-block': props.block
+        [`${prefix}-button-loading`]: props.loading && !props.disabled,
+        [`${prefix}-button-icon`]: ctx.slots.icon,
+        [`${prefix}-button-block`]: props.block
       }
     ])
 

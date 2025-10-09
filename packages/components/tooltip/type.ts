@@ -1,5 +1,6 @@
 import type { PropType, VNode } from 'vue'
-const values = [
+import { isBoolean } from '../_util'
+export const positionValues = [
   'top',
   'topLeft',
   'topRight',
@@ -14,18 +15,51 @@ const values = [
   'bottomRight'
 ] as const
 export const tooltioProps = {
+  /**
+   * @description 弹出层被遮挡时是否自动调整方向
+   */
   autoAdjustOverflow: {
     type: Boolean,
     default: true,
     required: false
   },
+  /**
+   * @description 小三角”是否指向元素中心，需要同时传入"showArrow=true
+   */
+  arrowPointAtCenter: {
+    type: Boolean,
+    default: true,
+    required: false
+  },
+  /**
+   * @description 是否显示箭头三角形
+   */
   showArrow: {
     type: Boolean,
     default: true,
     required: false
   },
+  /**
+   * @description 是否阻止弹层上的点击事件冒泡
+   */
+  stopPropagation: {
+    type: Boolean,
+    default: false,
+    required: false
+  },
+  /**
+   * @description 是否从包裹的元素水平或垂直中心处变换，该参数仅影响动效变换的 transform-origin，一般无需改动
+   */
+  transformFromCenter: {
+    type: Boolean,
+    default: true,
+    required: false
+  },
+  /**
+   * @description 弹层出现的位置
+   */
   position: {
-    values: values,
+    values: positionValues,
     default: 'top',
     required: false
   },
@@ -58,6 +92,39 @@ export const tooltioProps = {
     type: Boolean,
     default: false,
     required: false
+  },
+  spacing: {
+    type: [Number, Object] as PropType<number | { x: number; y: number }>,
+    default: 8,
+    required: false
+  },
+  motion: {
+    type: Boolean,
+    default: true,
+    required: false
+  },
+  margin: {
+    type: Array as PropType<number[]>,
+    default: () => [0, 0, 0, 0],
+    required: false
+  },
+  zIndex: {
+    type: Number,
+    default: 1000,
+    required: false
   }
 }
-export type Position = (typeof values)[number]
+export type Position = (typeof positionValues)[number]
+
+export const tooltipEmits = {
+  /**
+   * @description 弹出层展示/隐藏时触发的回调
+   */
+  visibleChange: (visible: boolean) => {
+    return isBoolean(visible)
+  },
+  /**
+   * @description 当弹出层处于展示状态，点击非Children、非浮层内部区域时的回调（仅trigger为custom、click时有效）
+   */
+  clickOutSide: (e: Event) => void e
+}

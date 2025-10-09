@@ -1,8 +1,14 @@
 {
-  "name": "components",
+  "name": "ui-vue-components",
   "version": "1.0.0",
-  "main": "ui-vue-components.esm.js",
-  "type": "module",
-  "module": "ui-vue-components.esm.js",
-  "types": "index.d.ts"
+  "main": "./ui-vue-components.common.js",
+  "module": "./ui-vue-components.esm.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./ui-vue-components.esm.js",
+      "require": "./ui-vue-components.common.js"
+    }
+  }
 }

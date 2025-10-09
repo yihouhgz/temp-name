@@ -4,7 +4,7 @@ import { prefix } from 'constants/config'
 const Form = defineComponent(
   (props, ctx) => {
     return () => {
-      return <div class="tempui-form">{ctx.slots.default?.()}</div>
+      return <div class={`${prefix}-form`}>{ctx.slots.default?.()}</div>
     }
   },
   {

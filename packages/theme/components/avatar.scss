@@ -1,0 +1,353 @@
+@use 'sass:map';
+@import '../base/constant';
+.#{$prefix}-avatar {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 3px;
+  //img
+  & > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &-wrapper {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: -moz-fit-content;
+    width: fit-content;
+  }
+  &-hover {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  @keyframes content-animated-scale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  &-animated {
+    animation: content-animated-scale 0.8s linear infinite;
+  }
+
+  &-border {
+    display: inline-block;
+    box-sizing: border-box;
+    position: absolute;
+    border: 1.5px solid var(--#{$prefix}-color-primary);
+    top: -3.5px;
+    left: -3.5px;
+
+    // 遍历边框的szie
+    $avatar-border-sizes: (
+      extra-extra-small: 27px,
+      extra-small: 31px,
+      small: 39px,
+      default: 47px,
+      medium: 55px,
+      large: 79px,
+      extra-large: 135px
+    );
+    @each $name, $size in $avatar-border-sizes {
+      &-#{'' + $name} {
+        width: $size;
+        height: $size;
+      }
+    }
+
+    //动画
+    &-animated {
+      animation: border-animated-scale 0.8s linear infinite;
+    }
+
+    @keyframes border-animated-scale {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        border-width: 0;
+        opacity: 0;
+        transform: scale(1.15);
+      }
+    }
+  }
+
+  &-content {
+    user-select: none;
+  }
+  &-label {
+    font-size: 14px;
+    line-height: 20px;
+    font-family:
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      Segoe UI,
+      PingFang SC,
+      Hiragino Sans GB,
+      Microsoft YaHei,
+      Helvetica Neue,
+      Helvetica,
+      Arial,
+      sans-serif;
+  }
+
+  // 形状
+  &-circle {
+    border-radius: var(--#{$prefix}-border-radius-circle);
+  }
+
+  // 大小size
+  $avatar-sizes: (
+    extra-extra-small: 20px,
+    extra-small: 24px,
+    small: 32px,
+    default: 40px,
+    medium: 48px,
+    large: 72px,
+    extra-large: 128px
+  );
+
+  @each $name, $size in $avatar-sizes {
+    &-#{'' + $name} {
+      width: $size;
+      height: $size;
+    }
+  }
+
+  // 为不同尺寸的avatar添加对应的label样式
+  $label-font-sizes: (
+    extra-extra-small: 10px,
+    extra-small: 10px,
+    small: 12px,
+    default: 18px,
+    medium: 20px,
+    large: 32px,
+    extra-large: 64px
+  );
+
+  $label-line-heights: (
+    extra-extra-small: 15px,
+    extra-small: 15px,
+    small: 16px,
+    default: 24px,
+    medium: 28px,
+    large: 44px,
+    extra-large: 77px
+  );
+
+  @each $name, $size in $avatar-sizes {
+    $font-size: map.get($label-font-sizes, $name);
+    $line-height: map.get($label-line-heights, $name);
+
+    @if $font-size and $line-height {
+      &-#{'' + $name} &-label {
+        font-size: $font-size;
+        line-height: $line-height;
+      }
+    }
+  }
+
+  //颜色
+  $avatar-colors: (
+    amber: var(--#{$prefix}-amber-3),
+    blue: var(--#{$prefix}-blue-3),
+    cyan: var(--#{$prefix}-cyan-3),
+    green: var(--#{$prefix}-green-3),
+    grey: var(--#{$prefix}-grey-3),
+    indigo: var(--#{$prefix}-indigo-3),
+    light-blue: var(--#{$prefix}-light-blue-3),
+    light-green: var(--#{$prefix}-light-green-3),
+    lime: var(--#{$prefix}-lime-3),
+    orange: var(--#{$prefix}-orange-3),
+    pink: var(--#{$prefix}-pink-3),
+    purple: var(--#{$prefix}-purple-3),
+    red: var(--#{$prefix}-red-3),
+    teal: var(--#{$prefix}-teal-3),
+    yellow: var(--#{$prefix}-yellow-3)
+  );
+
+  @each $name, $color in $avatar-colors {
+    &-#{'' + $name} {
+      background-color: rgba($color, 1);
+      color: rgba(var(--#{$prefix}-white), 1);
+    }
+  }
+
+  // slot
+  &-top-slot {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    &-bg {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      border-radius: 50%;
+      overflow: hidden;
+      &-small {
+        width: 32px;
+        height: 32px;
+      }
+      &-default {
+        width: 40px;
+        height: 40px;
+      }
+      &-medium {
+        width: 48px;
+        height: 48px;
+      }
+      &-large {
+        width: 72px;
+        height: 72px;
+      }
+      &-extra-large {
+        width: 128px;
+        height: 128px;
+      }
+      &-svg {
+        position: absolute;
+        &-small {
+          top: -28px;
+          scale: 0.4;
+        }
+        &-default {
+          top: -32px;
+          scale: 0.7;
+        }
+        &-medium {
+          top: -30px;
+          scale: 0.8;
+        }
+        &-large {
+          top: -30px;
+          scale: 1.1;
+        }
+        &-extra-large {
+          top: -32px;
+          scale: 1.4;
+        }
+      }
+    }
+    &-content-wrapper {
+      color: var(--#{$prefix}-color-bg-0);
+      font-weight: 600;
+    }
+    &-content {
+      user-select: none;
+      position: relative;
+      line-height: normal;
+      &-small {
+        font-size: 5px;
+        margin-top: 0;
+      }
+      &-default {
+        font-size: 6px;
+        margin-top: -2px;
+      }
+      &-medium {
+        font-size: 8px;
+        margin-top: 0;
+      }
+      &-large {
+        font-size: 14px;
+        margin-top: 0;
+      }
+      &-extra-large {
+        font-size: 16px;
+        margin-top: 0;
+      }
+    }
+  }
+  &-bottom-slot {
+    color: var(--#{$prefix}-color-bg-0);
+    position: absolute;
+    cursor: pointer;
+    bottom: 3.5px;
+    transform: translateY(50%);
+    -webkit-user-select: none;
+    user-select: none;
+
+    &-shape-circle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--#{$prefix}-color-primary);
+      border-radius: var(--#{$prefix}-border-radius-circle);
+      line-height: normal;
+      &-extra-small,
+      &-small {
+        width: 12px;
+        height: 12px;
+        font-size: 5px;
+      }
+      &-default {
+        width: 16px;
+        height: 16px;
+        font-size: 12px;
+      }
+      &-medium {
+        width: 18px;
+        height: 18px;
+        font-size: 12px;
+      }
+      &-large {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+      &-extra-large {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+      }
+    }
+    &-shape-square {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--#{$prefix}-color-primary);
+      border-radius: 4px;
+      padding: 1px 4px;
+      font-weight: 600;
+      border-style: solid;
+      border-color: var(--#{$prefix}-color-bg-0);
+      &-extra_small,
+      &-small {
+        font-size: 5px;
+        border-width: 2px;
+      }
+      &-default,
+      &-medium,
+      &-large {
+        font-size: 12px;
+        border-width: 2px;
+      }
+
+      &-extra-large {
+        font-size: 14px;
+        border-width: 2px;
+      }
+    }
+  }
+}
