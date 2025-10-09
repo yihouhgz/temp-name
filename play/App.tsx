@@ -238,6 +238,9 @@ const App = defineComponent(() => {
       <div class="top-20">
         <nl-hot-keys></nl-hot-keys>
       </div>
+      <div class="top-20">
+        <nl-tag>标签</nl-tag>
+      </div>
     </div>
   )
 })
