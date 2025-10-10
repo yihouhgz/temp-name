@@ -1,5 +1,4 @@
 import type { VNode, ComponentInternalInstance } from 'vue'
-import { createVNode } from 'vue'
 
 export const isFunction = (value: unknown) => typeof value === 'function'
 export const isString = (value: unknown) => typeof value === 'string'
@@ -41,8 +40,9 @@ export const isIncludedSlot = (slotName: string, vm: ComponentInternalInstance) 
 // 处理props传值或者slot的情况 props.solt 优先级高于slots.solt
 export const renderElementForPropsOrSlot = (
   slotName: string | { propNmae: string; slotName: string },
-  vm: ComponentInternalInstance
+  vm: ComponentInternalInstance | null
 ) => {
+  if (!vm) return null
   const { slots, props } = vm
   let pName = isString(slotName) ? slotName : '',
     sName = isString(slotName) ? slotName : ''
@@ -51,7 +51,6 @@ export const renderElementForPropsOrSlot = (
     sName = slotName.slotName
   }
   if (props[pName]) {
-    console.log('props[pName]', props[pName])
     return renderVnode(props[pName] as VNodeType)
   }
   const vSlots = slots?.[sName]?.()

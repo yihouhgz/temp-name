@@ -11,6 +11,7 @@ import {
   type StyleValue,
   type CSSProperties,
   type ExtractPropTypes
+  // h
 } from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
@@ -57,6 +58,9 @@ const Tooltip = defineComponent({
     const triggerHnadle = () => {
       show.value = true
     }
+    const triggerLeave = () => {
+      show.value = false
+    }
 
     onMounted(() => {
       const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
@@ -70,16 +74,15 @@ const Tooltip = defineComponent({
             if (innerRef.value.contains(event.target)) return
           }
           if (eventMap.enter === 'custom') {
-            ctx.emit('visibleChange', !props.visible)
+            ctx.emit('visibleChange', false)
           }
-          show.value = false
+          triggerLeave()
           ctx.emit('clickOutSide', event)
         }
         useClickOutside(target, handleClickOutside)
-      }
-      if (eventMap.enter !== 'custom') {
+      } else {
         useEventListener(target, eventMap.leave, () => {
-          show.value = false
+          triggerLeave()
         })
       }
     })
@@ -181,6 +184,7 @@ const Tooltip = defineComponent({
         return <span>{children}</span>
       }
       return <Fragment ref={tooltipDefaultRef}>{children}</Fragment>
+      // return h(() => children, { ref: tooltipDefaultRef })
     }
     if (props.showArrow && props.clickToHide) _defaultRender() //todo slot为component下的trigger foucs
 

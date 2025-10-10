@@ -1,4 +1,5 @@
 import type { PropType, VNode } from 'vue'
+import { isBoolean } from '../_util'
 export const popoverProps = {
   /**
    * @description 是否自动调整弹出层展开方向，用于边缘遮挡时自动调整展开方向
@@ -103,6 +104,6 @@ export const popoverProps = {
 }
 
 export const popoverEmits = {
-  visibleChange: (visible: boolean) => void visible,
-  clickOutSide: (e: Event) => void e
+  visibleChange: (visible: boolean) => isBoolean(visible),
+  clickOutSide: (e: Event) => e instanceof Event
 }
