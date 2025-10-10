@@ -40,8 +40,9 @@ export const isIncludedSlot = (slotName: string, vm: ComponentInternalInstance) 
 // 处理props传值或者slot的情况 props.solt 优先级高于slots.solt
 export const renderElementForPropsOrSlot = (
   slotName: string | { propNmae: string; slotName: string },
-  vm: ComponentInternalInstance
+  vm: ComponentInternalInstance | null
 ) => {
+  if (!vm) return null
   const { slots, props } = vm
   let pName = isString(slotName) ? slotName : '',
     sName = isString(slotName) ? slotName : ''

@@ -405,6 +405,62 @@ const App = defineComponent(() => {
             style={{ position: 'absolute', width: '40px', height: '40px', backgroundColor: 'red' }}
           ></div>
         </tempui-drag-move>
+        <div style={{ paddingTop: '50px' }}>
+          <div
+            style={{
+              width: '140px',
+              height: '140px',
+              backgroundColor: 'blue',
+              position: 'relative'
+            }}
+            id="drag-move-container"
+          >
+            <tempui-drag-move
+              constrainer={() => document.getElementById('drag-move-container') as HTMLElement}
+              handler={() => document.getElementById('drag-move-child') as HTMLElement}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  width: '40px',
+                  height: '40px',
+                  backgroundColor: 'red',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <div
+                  id="drag-move-child"
+                  style={{ width: '20px', height: '20px', backgroundColor: 'white' }}
+                ></div>
+              </div>
+            </tempui-drag-move>
+          </div>
+          <tempui-drag-move>
+            <input type="text" value={'hahah'} />
+          </tempui-drag-move>
+        </div>
+      </div>
+      <div class={'top-20'}>
+        <tempui-space>
+          <tempui-button type="secondary">次要</tempui-button>
+          <tempui-button type="tertiary">第三</tempui-button>
+          <tempui-button type="warning">警告</tempui-button>
+        </tempui-space>
+      </div>
+      <div class={'top-20'}>
+        <tempui-space>
+          <tempui-spin size={'small'}></tempui-spin>
+          <tempui-spin size={'middle'} tip={'加载中...'}>
+            <tempui-button type="secondary">次要</tempui-button>
+          </tempui-spin>
+          <tempui-spin size={'large'}>加载中...</tempui-spin>
+
+          <tempui-spin delay={6000} size={'large'}>
+            加载中...
+          </tempui-spin>
+        </tempui-space>
       </div>
     </div>
   )

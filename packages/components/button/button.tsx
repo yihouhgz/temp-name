@@ -7,6 +7,7 @@ import { Icon } from '../icon'
 import './style/button'
 import { generate } from 'theme/derive'
 import { formChildrenIndex } from '../_util/tab-index'
+
 console.log(prefix, 'prefix', generate('#fff'))
 const Button = defineComponent(
   (props, ctx) => {
