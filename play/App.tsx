@@ -384,9 +384,15 @@ const App = defineComponent(() => {
       <div class="top-20">
         <tempui-select></tempui-select>
       </div>
-      <div class="top-20">
-        <nl-tag>标签</nl-tag>
-      </div>
+      <div class="top-20" style="display: flex;gap: 8px;flex-wrap: wrap;">
+        <tempui-tag>标签</tempui-tag>
+        <tempui-tag type="ghost" color="blue">ghost</tempui-tag>
+        <tempui-tag type="solid" color="blue">solid</tempui-tag>
+        <tempui-tag type="light" color="red">light</tempui-tag>
+        <tempui-tag size="large" color="green">large</tempui-tag>
+        <tempui-tag closable>large</tempui-tag>
+        <tempui-tag prefixIcon="234" suffixIcon="234" avatarShape="circle" avatarSrc="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png">large</tempui-tag>
+      </div> 
     </div>
   )
 })

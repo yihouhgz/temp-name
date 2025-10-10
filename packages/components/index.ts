@@ -28,4 +28,4 @@ const components = [
   Tag
 ]
 export const install = (app: App) => withInstall(app, components)
-export { Button, Watermark, Input, Icon, Row, Col, Popover, Select, HotKeys, Avatar }
+export { Button, Watermark, Input, Icon, Row, Col, Popover, Select, HotKeys, Avatar,Tag }

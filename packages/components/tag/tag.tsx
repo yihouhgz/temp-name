@@ -2,6 +2,9 @@ import { defineComponent, computed, } from 'vue'
 import { prefix } from 'constants/config'
 import { tagEmits, tagProps } from './type'
 import type { ExtractPropTypes, ExtractPublicPropTypes } from 'vue'
+import "./style/tag.ts"
+import { IconClear } from '../icon'
+import { Avatar } from '../avatar'
 
 const Tag = defineComponent(
     {
@@ -9,18 +12,17 @@ const Tag = defineComponent(
             // 计算类名
             const classes = computed(() => [
                 `${prefix}-tag`,
-                `${prefix}-tag--${props.type}`,
-                `${prefix}-tag--${props.size}`,
-                `${prefix}-tag--${props.effect}`,
-                props.hit ? `${prefix}-tag--hit` : '',
-                props.round ? `${prefix}-tag--round` : '',
+                props.color ? `${prefix}-tag-${props.color}-${props.type}` : '',
+                `${prefix}-tag-${props.size}`,
+                `${prefix}-tag-${props.shape}`,
+                `${prefix}-tag-${props.type}`
+
             ].filter(Boolean).join(' '))
 
             // 计算样式
             const styles = computed(() => ({
-                backgroundColor: props.color || undefined,
-                borderRadius: props.round ? '999px' : undefined,
-                transition: props.disableTransitions ? 'none' : undefined,
+                ...props.style,
+                display: props.visible ? 'inline-flex' : 'none',
             }))
 
             // 关闭事件
@@ -40,12 +42,23 @@ const Tag = defineComponent(
                     style={styles.value}
                     onClick={handleClick}
                 >
+                    {props.prefixIcon && (
+                        props.prefixIcon instanceof Function ? props.prefixIcon() : props.prefixIcon
+                    )}
+                    {
+                        props.avatarSrc && (
+                            <Avatar size="extra-small" shape={props.avatarShape} src={props.avatarSrc} ></Avatar>
+                        )
+                    }
                     {slots.default ? slots.default() : 'Tag'}
+                    {props.suffixIcon && (
+                        props.suffixIcon instanceof Function ? props.suffixIcon() : props.suffixIcon
+                    )}
                     {props.closable && (
-                        <span
-                            class={`${prefix}-tag__close`}
+                        <div
+                            class={`${prefix}-tag-close`}
                             onClick={handleClose}
-                        >×</span>
+                        ><IconClear></IconClear></div>
                     )}
                 </div>
             )
