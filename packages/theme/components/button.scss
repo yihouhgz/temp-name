@@ -1,4 +1,5 @@
-.tempui-button {
+@import '../base/constant';
+.#{$prefix}-button {
   position: relative;
   // display: inline-block;
   display: inline-flex;
@@ -11,7 +12,7 @@
   height: 32px;
   padding: 6px 12px;
   font-size: 14px;
-  border-radius: var(--tempui-border-radius-small);
+  border-radius: var(--#{$prefix}-border-radius-small);
   box-sizing: border-box;
   border: 1px solid transparent;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -32,12 +33,12 @@
     }
   }
 
-  & + .tempui-button {
+  & + .#{$prefix}-button {
     margin-left: 12px;
   }
 
   // 添加 pressed 状态的过渡效果
-  &.tempui-button-pressed {
+  &.#{$prefix}-button-pressed {
     transform: scale(0.98);
     transition: transform 0.1s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
@@ -48,158 +49,158 @@
   }
 
   &-primary {
-    color: rgba(var(--tempui-white), 1);
-    background-color: var(--tempui-color-primary);
-    border-color: var(--tempui-color-primary);
+    color: rgba(var(--#{$prefix}-white), 1);
+    background-color: var(--#{$prefix}-color-primary);
+    border-color: var(--#{$prefix}-color-primary);
 
     &:hover,
     &:focus {
-      background-color: var(--tempui-color-primary-hover);
-      border-color: var(--tempui-color-primary-hover);
+      background-color: var(--#{$prefix}-color-primary-hover);
+      border-color: var(--#{$prefix}-color-primary-hover);
     }
 
     &:active,
-    &.tempui-button-pressed {
-      background-color: var(--tempui-color-primary-active);
-      border-color: var(--tempui-color-primary-active);
+    &.#{$prefix}-button-pressed {
+      background-color: var(--#{$prefix}-color-primary-active);
+      border-color: var(--#{$prefix}-color-primary-active);
     }
 
     &.is-disabled,
     &[disabled] {
-      color: rgba(var(--tempui-white), 1);
-      background-color: var(--tempui-color-primary-disabled);
-      border-color: var(--tempui-color-primary-disabled);
+      color: rgba(var(--#{$prefix}-white), 1);
+      background-color: var(--#{$prefix}-color-primary-disabled);
+      border-color: var(--#{$prefix}-color-primary-disabled);
       cursor: not-allowed;
     }
   }
 
   &-secondary {
-    color: rgba(var(--tempui-white), 1);
-    background-color: var(--tempui-color-secondary);
-    border-color: var(--tempui-color-secondary);
+    color: rgba(var(--#{$prefix}-white), 1);
+    background-color: var(--#{$prefix}-color-secondary);
+    border-color: var(--#{$prefix}-color-secondary);
 
     &:hover,
     &:focus {
-      background-color: var(--tempui-color-secondary-hover);
-      border-color: var(--tempui-color-secondary-hover);
+      background-color: var(--#{$prefix}-color-secondary-hover);
+      border-color: var(--#{$prefix}-color-secondary-hover);
     }
 
     &:active,
-    &.tempui-button-pressed {
-      background-color: var(--tempui-color-secondary-active);
-      border-color: var(--tempui-color-secondary-active);
+    &.#{$prefix}-button-pressed {
+      background-color: var(--#{$prefix}-color-secondary-active);
+      border-color: var(--#{$prefix}-color-secondary-active);
     }
 
     &.is-disabled,
     &[disabled] {
-      color: rgba(var(--tempui-white), 1);
-      background-color: var(--tempui-color-secondary-disabled);
-      border-color: var(--tempui-color-secondary-disabled);
+      color: rgba(var(--#{$prefix}-white), 1);
+      background-color: var(--#{$prefix}-color-secondary-disabled);
+      border-color: var(--#{$prefix}-color-secondary-disabled);
       cursor: not-allowed;
     }
   }
 
   &-tertiary {
-    color: var(--tempui-color-text-1);
+    color: var(--#{$prefix}-color-text-1);
     background-color: transparent;
-    border-color: var(--tempui-color-border);
+    border-color: var(--#{$prefix}-color-border);
 
     &:hover,
     &:focus {
-      color: var(--tempui-color-text-1);
-      background-color: var(--tempui-color-tertiary-light-hover);
-      border-color: var(--tempui-color-tertiary);
+      color: var(--#{$prefix}-color-text-1);
+      background-color: var(--#{$prefix}-color-tertiary-light-hover);
+      border-color: var(--#{$prefix}-color-tertiary);
     }
 
     &:active,
-    &.tempui-button-pressed {
-      color: var(--tempui-color-text-1);
-      background-color: var(--tempui-color-tertiary-light-active);
-      border-color: var(--tempui-color-tertiary);
+    &.#{$prefix}-button-pressed {
+      color: var(--#{$prefix}-color-text-1);
+      background-color: var(--#{$prefix}-color-tertiary-light-active);
+      border-color: var(--#{$prefix}-color-tertiary);
     }
 
     &.is-disabled,
     &[disabled] {
-      color: var(--tempui-color-disabled-text);
-      background-color: var(--tempui-color-disabled-fill);
-      border-color: var(--tempui-color-disabled-border);
+      color: var(--#{$prefix}-color-disabled-text);
+      background-color: var(--#{$prefix}-color-disabled-fill);
+      border-color: var(--#{$prefix}-color-disabled-border);
       cursor: not-allowed;
     }
   }
 
   &-warning {
-    color: rgba(var(--tempui-white), 1);
-    background-color: var(--tempui-color-warning);
-    border-color: var(--tempui-color-warning);
+    color: rgba(var(--#{$prefix}-white), 1);
+    background-color: var(--#{$prefix}-color-warning);
+    border-color: var(--#{$prefix}-color-warning);
 
     &:hover,
     &:focus {
-      background-color: var(--tempui-color-warning-hover);
-      border-color: var(--tempui-color-warning-hover);
+      background-color: var(--#{$prefix}-color-warning-hover);
+      border-color: var(--#{$prefix}-color-warning-hover);
     }
 
     &:active,
-    &.tempui-button-pressed {
-      background-color: var(--tempui-color-warning-active);
-      border-color: var(--tempui-color-warning-active);
+    &.#{$prefix}-button-pressed {
+      background-color: var(--#{$prefix}-color-warning-active);
+      border-color: var(--#{$prefix}-color-warning-active);
     }
 
     &.is-disabled,
     &[disabled] {
-      color: rgba(var(--tempui-white), 1);
-      background-color: var(--tempui-color-warning-light-default);
-      border-color: var(--tempui-color-warning-light-default);
+      color: rgba(var(--#{$prefix}-white), 1);
+      background-color: var(--#{$prefix}-color-warning-light-default);
+      border-color: var(--#{$prefix}-color-warning-light-default);
       cursor: not-allowed;
     }
   }
 
   &-danger {
-    color: rgba(var(--tempui-white), 1);
-    background-color: var(--tempui-color-danger);
-    border-color: var(--tempui-color-danger);
+    color: rgba(var(--#{$prefix}-white), 1);
+    background-color: var(--#{$prefix}-color-danger);
+    border-color: var(--#{$prefix}-color-danger);
 
     &:hover,
     &:focus {
-      background-color: var(--tempui-color-danger-hover);
-      border-color: var(--tempui-color-danger-hover);
+      background-color: var(--#{$prefix}-color-danger-hover);
+      border-color: var(--#{$prefix}-color-danger-hover);
     }
 
     &:active,
-    &.tempui-button-pressed {
-      background-color: var(--tempui-color-danger-active);
-      border-color: var(--tempui-color-danger-active);
+    &.#{$prefix}-button-pressed {
+      background-color: var(--#{$prefix}-color-danger-active);
+      border-color: var(--#{$prefix}-color-danger-active);
     }
 
     &.is-disabled,
     &[disabled] {
-      color: rgba(var(--tempui-white), 1);
-      background-color: var(--tempui-color-danger-light-default);
-      border-color: var(--tempui-color-danger-light-default);
+      color: rgba(var(--#{$prefix}-white), 1);
+      background-color: var(--#{$prefix}-color-danger-light-default);
+      border-color: var(--#{$prefix}-color-danger-light-default);
       cursor: not-allowed;
     }
   }
 
   &-ghost {
-    color: var(--tempui-color-text-1);
+    color: var(--#{$prefix}-color-text-1);
     background-color: transparent;
     border-color: transparent;
     box-shadow: none;
 
     &:hover,
     &:focus {
-      color: var(--tempui-color-text-1);
-      background-color: var(--tempui-color-tertiary-light-hover);
+      color: var(--#{$prefix}-color-text-1);
+      background-color: var(--#{$prefix}-color-tertiary-light-hover);
     }
 
     &:active,
-    &.tempui-button-pressed {
-      color: var(--tempui-color-text-1);
-      background-color: var(--tempui-color-tertiary-light-active);
+    &.#{$prefix}-button-pressed {
+      color: var(--#{$prefix}-color-text-1);
+      background-color: var(--#{$prefix}-color-tertiary-light-active);
     }
 
     &.is-disabled,
     &[disabled] {
-      color: var(--tempui-color-disabled-text);
+      color: var(--#{$prefix}-color-disabled-text);
       background-color: transparent;
       border-color: transparent;
       cursor: not-allowed;
@@ -207,28 +208,28 @@
   }
 
   &-link {
-    color: var(--tempui-color-link);
+    color: var(--#{$prefix}-color-link);
     background-color: transparent;
     border-color: transparent;
     box-shadow: none;
 
     &:hover,
     &:focus {
-      color: var(--tempui-color-link-hover);
+      color: var(--#{$prefix}-color-link-hover);
       border-color: transparent;
       background-color: transparent;
     }
 
     &:active,
-    &.tempui-button-pressed {
-      color: var(--tempui-color-link-active);
+    &.#{$prefix}-button-pressed {
+      color: var(--#{$prefix}-color-link-active);
       border-color: transparent;
       background-color: transparent;
     }
 
     &.is-disabled,
     &[disabled] {
-      color: var(--tempui-color-link-disabled);
+      color: var(--#{$prefix}-color-link-disabled);
       background-color: transparent;
       border-color: transparent;
       cursor: not-allowed;
@@ -240,14 +241,14 @@
     height: 24px;
     padding: 0 7px;
     font-size: 12px;
-    border-radius: var(--tempui-border-radius-small);
+    border-radius: var(--#{$prefix}-border-radius-small);
   }
 
   &-large {
     height: 40px;
     padding: 6px 15px;
     font-size: 16px;
-    border-radius: var(--tempui-border-radius-medium);
+    border-radius: var(--#{$prefix}-border-radius-medium);
   }
 
   // Status
@@ -262,7 +263,7 @@
   &-loading {
     position: relative;
     pointer-events: none;
-    opacity: var(--tempui-opacity-loading);
+    opacity: var(--#{$prefix}-opacity-loading);
     & svg {
       width: 16px;
       height: 16px;

@@ -124,11 +124,14 @@ export const adjustPosIfNeed = (
   style: Record<string, unknown>,
   triggerRect: DOMRect,
   wrapperRect: DOMRect,
-  containerRect: PopupContainerDOMRect
+  containerRect: PopupContainerDOMRect,
+  utils: UtilsType
 ) => {
   const { innerWidth, innerHeight } = window
 
-  const [marginLeft, marginTop, marginRight, marginBottom] = [0, 0, 0, 0]
+  const [marginLeft, marginTop, marginRight, marginBottom] = utils.getProp<number[]>('margin') || [
+    0, 0, 0, 0
+  ]
 
   let isHeightOverFlow = false
   let isWidthOverFlow = false
@@ -920,10 +923,10 @@ export const calcPosStyle = (props: {
   top = top - containerRect.top
 
   if (scaled) {
-    const scaleX = wrapperRect.width / utils.getContainer().clientWidth
-    const scaleY = wrapperRect.height / utils.getContainer().clientHeight
-    left /= scaleX
-    top /= scaleY
+    // const scaleX = wrapperRect.width / utils.getContainer().clientWidth
+    // const scaleY = wrapperRect.height / utils.getContainer().clientHeight
+    // left /= scaleX
+    // top /= scaleY
   }
 
   /**
@@ -1012,7 +1015,7 @@ type UtilsType = {
   getPopupContainerRect: () => PopupContainerDOMRect
   getWrapperBounding: () => DOMRect | null
   setPosition: (value: unknown) => void
-  getProp(propName: string): unknown
+  getProp<T>(propName: string): T
   getContainer(): HTMLElement
   containerIsBody(): boolean
   containerIsRelativeOrAbsolute(): boolean
@@ -1057,7 +1060,7 @@ export const calcPosition = (
       position: adjustedPos,
       isHeightOverFlow,
       isWidthOverFlow
-    } = adjustPosIfNeed(position, style, triggerRect, wrapperRect, containerRect)
+    } = adjustPosIfNeed(position, style, triggerRect, wrapperRect, containerRect, utils)
 
     if (position !== adjustedPos || isHeightOverFlow || isWidthOverFlow) {
       position = adjustedPos as Position

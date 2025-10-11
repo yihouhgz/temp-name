@@ -9,11 +9,13 @@ import {
   watch,
   reactive,
   type StyleValue,
-  type CSSProperties
+  type CSSProperties,
+  type ExtractPropTypes
+  // h
 } from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
-import { tooltioProps } from './type'
+import { tooltioProps, tooltipEmits } from './type'
 import { isFunction, isComponentByVNode, domRectToObject, isNumber } from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
@@ -30,13 +32,16 @@ const Tooltip = defineComponent({
     const targetElementRect = ref()
     const wrapperClass = computed(() => {
       return [
-        props.wrapper ? props.wrapper : 'tempui-tooltip-wrapper',
-        'tempui-tooltip-' + props.position
+        props.wrapper ? props.wrapper : `${prefix}-tooltip-wrapper`,
+        `${prefix}-tooltip-` + props.position
       ]
     })
     const arrowClass = computed(() => {
       const _position = (innerStyle.value as { _position: string })?._position
-      return ['tempui-tooltip-arrow', 'tempui-tooltip-' + (_position || props.position) + '-arrow']
+      return [
+        `${prefix}-tooltip-arrow`,
+        `${prefix}-tooltip-` + (_position || props.position) + '-arrow'
+      ]
     })
     const show = ref(false)
     const animationOptions = reactive({
@@ -44,19 +49,18 @@ const Tooltip = defineComponent({
       transitionState: 'enter'
     })
     const showTooltip = computed(() => {
-      if (props.trigger !== 'custom') {
+      const { trigger, visible } = props
+      if (trigger !== 'custom') {
         return show.value
       }
-      return props.visible
+      return visible
     })
     const triggerHnadle = () => {
       show.value = true
     }
-
-    //computed portal inner box position
-    // const innerStyle = computed<StyleValue>(() => {
-    //   return {}
-    // })
+    const triggerLeave = () => {
+      show.value = false
+    }
 
     onMounted(() => {
       const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
@@ -64,20 +68,22 @@ const Tooltip = defineComponent({
       targetElementRect.value = target.getBoundingClientRect()
       const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
       useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
-      if (eventMap.enter === 'click') {
+      if (eventMap.enter === 'click' || eventMap.enter === 'custom') {
         const handleClickOutside = (event: Event) => {
           if (showTooltip.value && !props.clickToHide) {
             if (innerRef.value.contains(event.target)) return
           }
-          show.value = false
+          if (eventMap.enter === 'custom') {
+            ctx.emit('visibleChange', false)
+          }
+          triggerLeave()
+          ctx.emit('clickOutSide', event)
         }
         useClickOutside(target, handleClickOutside)
       } else {
-        if (eventMap.enter !== 'custom') {
-          useEventListener(target, eventMap.leave, () => {
-            show.value = false
-          })
-        }
+        useEventListener(target, eventMap.leave, () => {
+          triggerLeave()
+        })
       }
     })
     const options = {
@@ -111,8 +117,8 @@ const Tooltip = defineComponent({
         setPosition(value: unknown) {
           console.log(value, 'setPosition')
         },
-        getProp(name: string) {
-          return props[name as keyof typeof props]
+        getProp<T>(name: string): T {
+          return props[name as keyof typeof props] as T
         },
         containerIsBody() {
           const container = this.getPopupContainer()
@@ -163,30 +169,6 @@ const Tooltip = defineComponent({
       }
       return <>{props.content}</>
     }
-    // const TooltipPortal = () => {
-    //   return (
-    //     <div class={wrapperClass.value} ref={innerRef}>
-    //       <div class="tempui-tooltip-content">
-    //         <ContentWrapper></ContentWrapper>
-    //       </div>
-    //       {props.showArrow && (
-    //         <svg
-    //           class={arrowClass.value}
-    //           aria-hidden="true"
-    //           width="24"
-    //           height="7"
-    //           viewBox="0 0 24 7"
-    //           fill="currentColor"
-    //           xmlns="http://www.w3.org/2000/svg"
-    //           style="fill: currentcolor;"
-    //         >
-    //           <path d="M24 0V1C20 1 18.5 2 16.5 4C14.5 6 14 7 12 7C10 7 9.5 6 7.5 4C5.5 2 4 1 0 1V0H24Z"></path>
-    //         </svg>
-    //       )}
-    //     </div>
-    //   )
-    // }
-
     const _defaultRender = () => {
       let children = ctx.slots.default?.()
       if (children && children.length) {
@@ -202,6 +184,7 @@ const Tooltip = defineComponent({
         return <span>{children}</span>
       }
       return <Fragment ref={tooltipDefaultRef}>{children}</Fragment>
+      // return h(() => children, { ref: tooltipDefaultRef })
     }
     if (props.showArrow && props.clickToHide) _defaultRender() //todo slot为component下的trigger foucs
 
@@ -210,11 +193,11 @@ const Tooltip = defineComponent({
     }
     const handleAnimationEnd = () => {
       console.log('end')
-      // const { transitionState } = animationOptions
-      // if (transitionState === 'leave') {
-      //   // 触发动画结束事件 清理Portal
-      // }
-      // animationOptions.isAnimating = false
+      const { transitionState } = animationOptions
+      if (transitionState === 'leave') {
+        // 触发动画结束事件 清理Portal
+      }
+      animationOptions.isAnimating = false
     }
     return () => {
       return (
@@ -233,8 +216,8 @@ const Tooltip = defineComponent({
                 animationState={animationOptions.transitionState as 'enter' | 'leave'}
                 startClassName={
                   animationOptions.transitionState === 'enter'
-                    ? `tempui-tooltip-animation-show`
-                    : `tempui-tooltip-animation-hide`
+                    ? `${prefix}-tooltip-animation-show`
+                    : `${prefix}-tooltip-animation-hide`
                 }
                 onAnimationStart={handleAnimationStart}
                 onAnimationEnd={handleAnimationEnd}
@@ -255,14 +238,13 @@ const Tooltip = defineComponent({
                     <div
                       style={{
                         ...(animationStyle as CSSProperties),
-                        transformOrigin: (innerStyle.value as { transformOrigin: string })
-                          .transformOrigin
+                        transformOrigin: (innerStyle.value as CSSProperties).transformOrigin
                       }}
                       class={[...wrapperClass.value, animationClassName]}
                       ref={innerRef}
                       {...animationEventsNeedBind}
                     >
-                      <div class="tempui-tooltip-content">
+                      <div class={`${prefix}-tooltip-content`}>
                         <ContentWrapper></ContentWrapper>
                       </div>
                       {props.showArrow && (
@@ -291,6 +273,8 @@ const Tooltip = defineComponent({
     }
   },
   name: prefix + '-tooltip',
-  props: tooltioProps
+  props: tooltioProps,
+  emits: tooltipEmits
 })
+export type TooltipProps = ExtractPropTypes<typeof tooltioProps>
 export default Tooltip

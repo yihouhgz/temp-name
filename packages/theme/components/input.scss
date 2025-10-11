@@ -1,27 +1,26 @@
-.tempui-input {
+@import '../base/constant';
+.#{$prefix}-input {
   display: inline-block;
   position: relative;
   vertical-align: middle;
   box-shadow: none;
-  background-color: var(--tempui-color-fill-0);
+  background-color: var(--#{$prefix}-color-fill-0);
   border: 1px solid transparent;
-  border-radius: var(--tempui-border-radius-small);
+  border-radius: var(--#{$prefix}-border-radius-small);
   width: 100%;
   outline: none;
   cursor: text;
   box-sizing: border-box;
-  color: var(--tempui-color-text-0);
+  color: var(--#{$prefix}-color-text-0);
   transition:
-    background-color var(--tempui-transition_duration-none)
-      var(--tempui-transition_function-easeIn)
-      var(--tempui-transition_delay-none),
-    border var(--tempui-transition_duration-none)
-      var(--tempui-transition_function-easeIn)
-      var(--tempui-transition_delay-none);
-  transform: scale(var(--tempui-transform_scale-none));
+    background-color var(--#{$prefix}-transition_duration-none)
+      var(--#{$prefix}-transition_function-easeIn) var(--#{$prefix}-transition_delay-none),
+    border var(--#{$prefix}-transition_duration-none) var(--#{$prefix}-transition_function-easeIn)
+      var(--#{$prefix}-transition_delay-none);
+  transform: scale(var(--#{$prefix}-transform_scale-none));
 
   &:hover {
-    background-color: var(--tempui-color-fill-1);
+    background-color: var(--#{$prefix}-color-fill-1);
     border-color: transparent;
   }
 
@@ -51,7 +50,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: var(--tempui-color-text-2);
+      color: var(--#{$prefix}-color-text-2);
       font-style: normal;
       line-height: 0;
       text-align: center;
@@ -60,7 +59,7 @@
       fill: currentColor;
       margin-right: 8px;
       &:hover {
-        color: var(--tempui-color-primary-hover);
+        color: var(--#{$prefix}-color-primary-hover);
       }
       svg {
         width: 16px;
@@ -76,51 +75,51 @@
   // -------------- status --------------
 
   &-focus {
-    background-color: var(--tempui-color-fill-0);
-    border: 1px solid var(--tempui-color-focus-border);
+    background-color: var(--#{$prefix}-color-fill-0);
+    border: 1px solid var(--#{$prefix}-color-focus-border);
     &:hover {
-      background-color: var(--tempui-color-fill-0);
-      border: 1px solid var(--tempui-color-focus-border);
+      background-color: var(--#{$prefix}-color-fill-0);
+      border: 1px solid var(--#{$prefix}-color-focus-border);
     }
   }
-  &.tempui-input-warning.tempui-input-focus {
-    background-color: var(--tempui-color-warning-light-default);
-    border-color: var(--tempui-color-warning);
+  &.#{$prefix}-input-warning.#{$prefix}-input-focus {
+    background-color: var(--#{$prefix}-color-warning-light-default);
+    border-color: var(--#{$prefix}-color-warning);
   }
-  &.tempui-input-error.tempui-input-focus {
-    background-color: var(--tempui-color-danger-light-default);
-    border-color: var(--tempui-color-danger);
-  }
-
-  &.tempui-input-error {
-    background-color: var(--tempui-color-danger-light-default);
-    border-color: var(--tempui-color-danger-light-default);
-    .tempui-input-target {
-      caret-color: var(--tempui-color-danger);
-    }
-    &:hover:not(.tempui-input-focus) {
-      background-color: var(--tempui-color-danger-light-hover);
-      border-color: var(--tempui-color-danger-light-hover);
-    }
-    &:active {
-      background-color: var(--tempui-color-danger-light-active);
-      border-color: var(--tempui-color-danger);
-    }
+  &.#{$prefix}-input-error.#{$prefix}-input-focus {
+    background-color: var(--#{$prefix}-color-danger-light-default);
+    border-color: var(--#{$prefix}-color-danger);
   }
 
-  &.tempui-input-warning {
-    background-color: var(--tempui-color-warning-light-default);
-    border-color: var(--tempui-color-warning-light-default);
-    .tempui-input-target {
-      caret-color: var(--tempui-color-warning);
+  &.#{$prefix}-input-error {
+    background-color: var(--#{$prefix}-color-danger-light-default);
+    border-color: var(--#{$prefix}-color-danger-light-default);
+    .#{$prefix}-input-target {
+      caret-color: var(--#{$prefix}-color-danger);
     }
-    &:hover:not(.tempui-input-focus) {
-      background-color: var(--tempui-color-warning-light-hover);
-      border-color: var(--tempui-color-warning-light-hover);
+    &:hover:not(.#{$prefix}-input-focus) {
+      background-color: var(--#{$prefix}-color-danger-light-hover);
+      border-color: var(--#{$prefix}-color-danger-light-hover);
     }
     &:active {
-      background-color: var(--tempui-color-warning-light-active);
-      border-color: var(--tempui-color-warning);
+      background-color: var(--#{$prefix}-color-danger-light-active);
+      border-color: var(--#{$prefix}-color-danger);
+    }
+  }
+
+  &.#{$prefix}-input-warning {
+    background-color: var(--#{$prefix}-color-warning-light-default);
+    border-color: var(--#{$prefix}-color-warning-light-default);
+    .#{$prefix}-input-target {
+      caret-color: var(--#{$prefix}-color-warning);
+    }
+    &:hover:not(.#{$prefix}-input-focus) {
+      background-color: var(--#{$prefix}-color-warning-light-hover);
+      border-color: var(--#{$prefix}-color-warning-light-hover);
+    }
+    &:active {
+      background-color: var(--#{$prefix}-color-warning-light-active);
+      border-color: var(--#{$prefix}-color-warning);
     }
   }
 
@@ -140,15 +139,13 @@
     padding-right: 12px;
     background-color: transparent;
     box-sizing: border-box;
-    caret-color: var(--tempui-color-primary);
+    caret-color: var(--#{$prefix}-color-primary);
     transition:
-      background-color var(--tempui-transition_duration-none)
-        var(--tempui-transition_function-easeIn)
-        var(--tempui-transition_delay-none),
-      border var(--tempui-transition_duration-none)
-        var(--tempui-transition_function-easeIn)
-        var(--tempui-transition_delay-none);
-    transform: scale(var(--tempui-transform_scale-none));
+      background-color var(--#{$prefix}-transition_duration-none)
+        var(--#{$prefix}-transition_function-easeIn) var(--#{$prefix}-transition_delay-none),
+      border var(--#{$prefix}-transition_duration-none) var(--#{$prefix}-transition_function-easeIn)
+        var(--#{$prefix}-transition_delay-none);
+    transform: scale(var(--#{$prefix}-transform_scale-none));
 
     &-large,
     &-default,

@@ -1,5 +1,6 @@
 @use 'sass:map';
-.tempui-avatar {
+@import '../base/constant';
+.#{$prefix}-avatar {
   position: relative;
   display: inline-flex;
   overflow: hidden;
@@ -52,7 +53,7 @@
     display: inline-block;
     box-sizing: border-box;
     position: absolute;
-    border: 1.5px solid var(--tempui-color-primary);
+    border: 1.5px solid var(--#{$prefix}-color-primary);
     top: -3.5px;
     left: -3.5px;
 
@@ -113,7 +114,7 @@
 
   // 形状
   &-circle {
-    border-radius: var(--tempui-border-radius-circle);
+    border-radius: var(--#{$prefix}-border-radius-circle);
   }
 
   // 大小size
@@ -169,27 +170,27 @@
 
   //颜色
   $avatar-colors: (
-    amber: var(--tempui-amber-3),
-    blue: var(--tempui-blue-3),
-    cyan: var(--tempui-cyan-3),
-    green: var(--tempui-green-3),
-    grey: var(--tempui-grey-3),
-    indigo: var(--tempui-indigo-3),
-    light-blue: var(--tempui-light-blue-3),
-    light-green: var(--tempui-light-green-3),
-    lime: var(--tempui-lime-3),
-    orange: var(--tempui-orange-3),
-    pink: var(--tempui-pink-3),
-    purple: var(--tempui-purple-3),
-    red: var(--tempui-red-3),
-    teal: var(--tempui-teal-3),
-    yellow: var(--tempui-yellow-3)
+    amber: var(--#{$prefix}-amber-3),
+    blue: var(--#{$prefix}-blue-3),
+    cyan: var(--#{$prefix}-cyan-3),
+    green: var(--#{$prefix}-green-3),
+    grey: var(--#{$prefix}-grey-3),
+    indigo: var(--#{$prefix}-indigo-3),
+    light-blue: var(--#{$prefix}-light-blue-3),
+    light-green: var(--#{$prefix}-light-green-3),
+    lime: var(--#{$prefix}-lime-3),
+    orange: var(--#{$prefix}-orange-3),
+    pink: var(--#{$prefix}-pink-3),
+    purple: var(--#{$prefix}-purple-3),
+    red: var(--#{$prefix}-red-3),
+    teal: var(--#{$prefix}-teal-3),
+    yellow: var(--#{$prefix}-yellow-3)
   );
 
   @each $name, $color in $avatar-colors {
     &-#{'' + $name} {
       background-color: rgba($color, 1);
-      color: rgba(var(--tempui-white), 1);
+      color: rgba(var(--#{$prefix}-white), 1);
     }
   }
 
@@ -249,7 +250,7 @@
       }
     }
     &-content-wrapper {
-      color: var(--tempui-color-bg-0);
+      color: var(--#{$prefix}-color-bg-0);
       font-weight: 600;
     }
     &-content {
@@ -279,7 +280,7 @@
     }
   }
   &-bottom-slot {
-    color: var(--tempui-color-bg-0);
+    color: var(--#{$prefix}-color-bg-0);
     position: absolute;
     cursor: pointer;
     bottom: 3.5px;
@@ -291,8 +292,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: var(--tempui-color-primary);
-      border-radius: var(--tempui-border-radius-circle);
+      background: var(--#{$prefix}-color-primary);
+      border-radius: var(--#{$prefix}-border-radius-circle);
       line-height: normal;
       &-extra-small,
       &-small {
@@ -325,12 +326,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: var(--tempui-color-primary);
+      background: var(--#{$prefix}-color-primary);
       border-radius: 4px;
       padding: 1px 4px;
       font-weight: 600;
       border-style: solid;
-      border-color: var(--tempui-color-bg-0);
+      border-color: var(--#{$prefix}-color-bg-0);
       &-extra_small,
       &-small {
         font-size: 5px;

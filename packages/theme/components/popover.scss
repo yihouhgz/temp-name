@@ -1,9 +1,10 @@
-.tempui-popover-wrapper {
+@import '../base/constant';
+.#{$prefix}-popover-wrapper {
   position: relative;
-  background-color: var(--tempui-color-bg-3);
-  box-shadow: var(--tempui-shadow-elevated);
+  background-color: var(--#{$prefix}-color-bg-3);
+  box-shadow: var(--#{$prefix}-shadow-elevated);
   z-index: 1030;
-  border-radius: var(--tempui-border-radius-medium);
+  border-radius: var(--#{$prefix}-border-radius-medium);
   font-size: 14px;
   line-height: 20px;
   font-family:

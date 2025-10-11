@@ -1,0 +1,38 @@
+@import '../base/constant';
+
+$spacings: (
+  'tight': 8px,
+  'medium': 16px,
+  'loose': 24px
+);
+
+.#{$prefix}-space {
+  display: inline-flex;
+
+  &-align-center {
+    align-items: center;
+  }
+
+  &-horizontal {
+    flex-direction: row;
+  }
+
+  &-vertical {
+    flex-direction: column;
+  }
+
+  &-warp {
+    flex-wrap: wrap;
+  }
+
+  @each $type, $size in $spacings {
+    &-#{$type} {
+      &-vertical {
+        row-gap: $size;
+      }
+      &-horizontal {
+        column-gap: $size;
+      }
+    }
+  }
+}

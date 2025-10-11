@@ -1,9 +1,10 @@
-import { defineComponent } from 'vue'
+import { defineComponent, h } from 'vue'
 import { prefix } from 'constants/config'
 import consola from '../_util/console'
 import { groupProps } from './type'
 import { isObject } from '../_util'
 import Avatar from './avatar'
+import './style/group'
 const AvatarGroup = defineComponent({
   setup(props, ctx) {
     const defaultRenderSlot = () => {
@@ -19,14 +20,14 @@ const AvatarGroup = defineComponent({
       if (showWarning) {
         consola.warn('AvatarGroup only accepts Avatar as children.')
       }
-      return vnodes
+      return vnodes?.map((item) => {
+        return h(Avatar, {
+          ...item.props
+        })
+      })
     }
     return () => {
-      return (
-        <div>
-          <div>{defaultRenderSlot()}</div>
-        </div>
-      )
+      return <div class={prefix + '-avatar-group'}>{defaultRenderSlot()}</div>
     }
   },
   name: prefix + '-avatar-group',

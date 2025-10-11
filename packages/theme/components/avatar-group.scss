@@ -1,0 +1,14 @@
+@import '../base/constant';
+
+.#{$prefix}-avatar-group {
+  display: inline-block;
+  $avatar-border-sizes: (
+    extra-extra-small: 27px,
+    extra-small: 31px,
+    small: 39px,
+    default: 47px,
+    medium: 55px,
+    large: 79px,
+    extra-large: 135px
+  );
+}
