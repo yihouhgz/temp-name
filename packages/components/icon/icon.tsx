@@ -31,7 +31,7 @@ const IconJsx = defineComponent({
       return (
         <span class={spanClass.value} style={spanStyle.value} {...ctx.attrs}>
           {renderElementForPropsOrSlot(
-            { propNmae: 'svg', slotName: 'default' },
+            { propName: 'svg', slotName: 'default' },
             vm as ComponentInternalInstance
           )}
         </span>
