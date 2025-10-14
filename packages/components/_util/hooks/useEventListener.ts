@@ -1,4 +1,4 @@
-import { onScopeDispose } from 'vue'
+import { watch, toValue, onScopeDispose, type MaybeRefOrGetter } from 'vue'
 import { isArray } from '../helps'
 
 // 定义常见事件类型映射
@@ -60,16 +60,26 @@ export interface EventMap {
 }
 
 export const useEventListener = <K extends keyof EventMap>(
-  target: HTMLElement,
+  target: HTMLElement | MaybeRefOrGetter<null | undefined>,
   eventName: K,
   handler: (event: EventMap[K]) => void,
   options?: boolean | AddEventListenerOptions
 ) => {
-  target.addEventListener(eventName, handler as EventListener, options)
-  onScopeDispose(() => {
-    target.removeEventListener(eventName, handler as EventListener, options)
-  })
-  return () => target.removeEventListener(eventName, handler as EventListener, options)
+  const stopWatch = watch(
+    () => toValue(target),
+    (node) => {
+      if (node) node.addEventListener(eventName, handler as EventListener, options)
+    },
+    {
+      immediate: true
+    }
+  )
+  const cleaup = () => {
+    stopWatch()
+    toValue(target)?.removeEventListener(eventName, handler as EventListener, options)
+  }
+  onScopeDispose(() => cleaup())
+  return cleaup
 }
 
 export const useClickOutside = (
@@ -83,7 +93,7 @@ export const useClickOutside = (
     (event: EventMap['click']) => {
       if (!isArray(target)) target = [target]
       for (const el of target) {
-        if (el.contains(event.target as Node)) {
+        if (el.contains(event.target as Node) || el === event.target) {
           return
         }
       }

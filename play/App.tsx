@@ -310,7 +310,7 @@ const App = defineComponent(() => {
       </div>
 
       <div class="top-20">
-        <tempui-avatar-group>
+        <tempui-avatar-group maxCount={2}>
           <tempui-avatar
             hoverMask={
               <div
@@ -371,6 +371,13 @@ const App = defineComponent(() => {
           >
             Duck
           </tempui-avatar>
+        </tempui-avatar-group>
+        <tempui-avatar-group maxCount={4}>
+          <tempui-avatar>d</tempui-avatar>
+          <tempui-avatar>u</tempui-avatar>
+          <tempui-avatar>c</tempui-avatar>
+          <tempui-avatar>k</tempui-avatar>
+          <tempui-avatar>h</tempui-avatar>
         </tempui-avatar-group>
       </div>
       <div class="top-20">
@@ -464,13 +471,28 @@ const App = defineComponent(() => {
       </div>
       <div class="top-20" style="display: flex;gap: 8px;flex-wrap: wrap;">
         <tempui-tag>标签</tempui-tag>
-        <tempui-tag type="ghost" color="blue">ghost</tempui-tag>
-        <tempui-tag type="solid" color="blue">solid</tempui-tag>
-        <tempui-tag type="light" color="red">light</tempui-tag>
-        <tempui-tag size="large" color="green">large</tempui-tag>
+        <tempui-tag type="ghost" color="blue">
+          ghost
+        </tempui-tag>
+        <tempui-tag type="solid" color="blue">
+          solid
+        </tempui-tag>
+        <tempui-tag type="light" color="red">
+          light
+        </tempui-tag>
+        <tempui-tag size="large" color="green">
+          large
+        </tempui-tag>
         <tempui-tag closable>large</tempui-tag>
-        <tempui-tag prefixIcon="234" suffixIcon="234" avatarShape="circle" avatarSrc="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png">large</tempui-tag>
-      </div> 
+        <tempui-tag
+          prefixIcon="234"
+          suffixIcon="234"
+          avatarShape="circle"
+          avatarSrc="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
+        >
+          large
+        </tempui-tag>
+      </div>
     </div>
   )
 })

@@ -1,4 +1,13 @@
-import { defineComponent, computed, reactive, watch, ref, onMounted, h, type Slot } from 'vue'
+import {
+  defineComponent,
+  computed,
+  reactive,
+  watch,
+  ref,
+  onMounted,
+  h,
+  getCurrentInstance
+} from 'vue'
 import { prefix } from 'constants/config'
 import './style/select'
 import Popover from '../popover'
@@ -7,7 +16,9 @@ import Option, { type SelectOptionProps } from './option'
 import SelectOptionGroup from './option-group'
 import { IconChevronDown } from '../icon'
 import { consolaWapper, isArray, isObject } from '../_util'
-import type { VNode } from 'vue'
+import type { VNode, Slot } from 'vue'
+import { hasPropsOrSlots, renderElementForPropsOrSlot } from '../_util'
+import Tag from '../tag'
 
 const Select = defineComponent({
   setup(props, ctx) {
@@ -103,7 +114,6 @@ const Select = defineComponent({
     const handleVisibleChange = (visible: boolean) => {
       state.visible = visible
     }
-
     const handleClickOption = (index: number) => {
       state.selectIndex = index
     }
@@ -118,7 +128,9 @@ const Select = defineComponent({
       if (isCustomRender) {
         //通过 Option组件传入
         content = ctx.slots.default?.()
-        let isErrorFlag = false
+        let isErrorFlag = false,
+          gIndex = 0
+        const { defaultValue } = props
         content = content?.map((item, index) => {
           if (
             isObject(item.type) &&
@@ -128,24 +140,33 @@ const Select = defineComponent({
             if ((item.type as { name: string }).name.indexOf(SelectOptionGroup.name || '') >= 0) {
               const children =
                 (item.children as { default: () => Slot<unknown> | undefined })?.default() || []
+              const _defaultRender = isArray(children)
+                ? children.map((child: VNode) => {
+                    const i = gIndex++
+                    const optionsPorps = item.props as SelectOptionProps
+                    const _selected = !!(defaultValue && optionsPorps.value === defaultValue)
+                    return h(
+                      child,
+                      {
+                        onClick: () => handleClickOption(i),
+                        onFocus_: () => handleFocusOption(i),
+                        _focused: state.focusIndex === i,
+                        _selected: state.selectIndex === -1 ? _selected : state.selectIndex === i
+                      },
+                      {
+                        default: () => (child.children as { default: () => unknown })?.default()
+                      }
+                    )
+                  })
+                : []
               return h(
                 SelectOptionGroup,
                 {
                   label: item.props?.label || ''
                 },
-                isArray(children)
-                  ? children.map((child: VNode) =>
-                      h(child, {
-                        onClick: () => handleClickOption(index),
-                        onFocus_: () => handleFocusOption(index),
-                        _focused: state.focusIndex === index,
-                        _selected: false
-                      })
-                    )
-                  : []
+                { default: () => _defaultRender }
               )
             } else {
-              const { defaultValue } = props
               const optionsPorps = item.props as SelectOptionProps
               const _selected = !!(defaultValue && optionsPorps.value === defaultValue)
               const getSelected = () => {
@@ -187,7 +208,7 @@ const Select = defineComponent({
         </div>
       )
     }
-
+    const vm = getCurrentInstance()
     return () => {
       const popover = popoverProps.value
       return (
@@ -209,15 +230,26 @@ const Select = defineComponent({
           >
             <div class={prefix + '-select-selection'}>
               <div class={prefix + '-select-selection-wrapper'}>
-                {/* <span class={prefix + '-select-selection-text'}></span> */}
-                <div
-                  class={[
-                    prefix + '-select-selection-text',
-                    prefix + '-select-selection-placeholder'
-                  ]}
-                >
-                  请选择12
-                </div>
+                {state.selfValue ? (
+                  props.multiple ? (
+                    [].map((item) => {
+                      return <Tag closable={true}>{item}</Tag>
+                    })
+                  ) : (
+                    <span class={prefix + '-select-selection-text'}>{state.selfValue}</span>
+                  )
+                ) : (
+                  <div
+                    class={[
+                      prefix + '-select-selection-text',
+                      prefix + '-select-selection-placeholder'
+                    ]}
+                  >
+                    {hasPropsOrSlots('placeholder', vm)
+                      ? renderElementForPropsOrSlot('placeholder', vm)
+                      : '请选择'}
+                  </div>
+                )}
               </div>
             </div>
             <div class={prefix + '-select-input-arrow'}>

@@ -48,17 +48,29 @@ const Tooltip = defineComponent({
       isAnimating: false,
       transitionState: 'enter'
     })
+    watch(
+      () => props.visible,
+      (res) => {
+        animationOptions.isAnimating = true
+        animationOptions.transitionState = res ? 'enter' : 'leave'
+      }
+    )
     const showTooltip = computed(() => {
       const { trigger, visible } = props
+      if (animationOptions.isAnimating) return animationOptions.isAnimating
       if (trigger !== 'custom') {
         return show.value
       }
       return visible
     })
     const triggerHnadle = () => {
+      animationOptions.isAnimating = true
+      animationOptions.transitionState = 'enter'
       show.value = true
     }
     const triggerLeave = () => {
+      animationOptions.isAnimating = true
+      animationOptions.transitionState = 'leave'
       show.value = false
     }
 
@@ -70,12 +82,15 @@ const Tooltip = defineComponent({
       useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
       if (eventMap.enter === 'click' || eventMap.enter === 'custom') {
         const handleClickOutside = (event: Event) => {
-          if (showTooltip.value && !props.clickToHide) {
-            if (innerRef.value.contains(event.target)) return
+          if (showTooltip.value) {
+            if (!props.clickToHide && innerRef.value.contains(event.target)) return
+          } else {
+            return
           }
           if (eventMap.enter === 'custom') {
             ctx.emit('visibleChange', false)
           }
+          console.log('clickOutSide', event)
           triggerLeave()
           ctx.emit('clickOutSide', event)
         }
@@ -196,6 +211,7 @@ const Tooltip = defineComponent({
       const { transitionState } = animationOptions
       if (transitionState === 'leave') {
         // 触发动画结束事件 清理Portal
+        show.value = false
       }
       animationOptions.isAnimating = false
     }

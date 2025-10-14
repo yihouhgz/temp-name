@@ -273,7 +273,7 @@ export const selectProps = {
     required: false
   },
   /**
-   * @description 默认选中项
+   * @description 多选
    */
   multiple: {
     type: Boolean,
