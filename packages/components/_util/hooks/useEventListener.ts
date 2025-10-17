@@ -60,7 +60,7 @@ export interface EventMap {
 }
 
 export const useEventListener = <K extends keyof EventMap>(
-  target: HTMLElement | MaybeRefOrGetter<null | undefined>,
+  target: HTMLElement | MaybeRefOrGetter<null | undefined> | Window,
   eventName: K,
   handler: (event: EventMap[K]) => void,
   options?: boolean | AddEventListenerOptions

@@ -3,9 +3,10 @@ import { prefix } from 'constants/config'
 import { avatarProps, avatarEmits, type AvatarSizeType } from './type'
 import './style/avatar'
 import { reactive } from 'vue'
-import { isFunction, isNumber, isString, renderVnode } from '../_util'
+import { hasPropsOrSlots, isFunction, isNumber, isString, renderVnode } from '../_util'
 import TopSlotIcon from './top-slot-icon'
 import { baseBorderZIndex, marginBorder } from './constant'
+import { getCurrentInstance } from 'vue'
 const Avatar = defineComponent({
   setup(props, ctx) {
     const avatarData = reactive({
@@ -64,6 +65,7 @@ const Avatar = defineComponent({
       }
       return false
     })
+    const vm = getCurrentInstance()
     return () => {
       const hoverMaskRender = () => {
         if (props.hoverMask) {
@@ -114,7 +116,7 @@ const Avatar = defineComponent({
         baseStyle.width = `${props.size}px`
         baseStyle.height = `${props.size}px`
       }
-      if (props.border) {
+      if (props.border && !hasPropsOrSlots('topSlot', vm)) {
         baseStyle.position = 'relative'
         baseStyle.zIndex = baseBorderZIndex
       }

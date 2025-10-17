@@ -33,9 +33,18 @@ const App = defineComponent(() => {
       </svg>
     )
   }
+  const handleSync = () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('handleSync')
+        resolve(true)
+      }, 1000)
+    })
+  }
   return () => (
     <div>
       <div>
+        <tempui-sync-button onClick={handleSync}>hello</tempui-sync-button>
         <Button type="primary">确定</Button>
         <tempui-button
           loading={loading.value}
@@ -493,6 +502,34 @@ const App = defineComponent(() => {
           large
         </tempui-tag>
       </div>
+      <tempui-layout>
+        <tempui-layout-sider style={{ width: '120px', background: 'var(--tempui-color-fill-2)' }}>
+          Sider
+        </tempui-layout-sider>
+        <tempui-layout>
+          <tempui-layout-header
+            style={{
+              height: 64,
+              lineHeight: '64px',
+              background: 'var(--tempui-color-fill-0)'
+            }}
+          >
+            Header
+          </tempui-layout-header>
+          <tempui-layout-content style={{ height: 300, lineHeight: '300px' }}>
+            Content
+          </tempui-layout-content>
+          <tempui-layout-footer
+            style={{
+              height: 64,
+              lineHeight: '64px',
+              background: 'var(--tempui-color-fill-0)'
+            }}
+          >
+            Footer
+          </tempui-layout-footer>
+        </tempui-layout>
+      </tempui-layout>
     </div>
   )
 })

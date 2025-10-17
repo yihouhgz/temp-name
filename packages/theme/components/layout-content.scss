@@ -1,0 +1,6 @@
+@import '../base/constant';
+
+.#{$prefix}-layout-content {
+  flex: auto;
+  min-height: auto;
+}

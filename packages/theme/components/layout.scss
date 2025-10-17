@@ -1,0 +1,27 @@
+@import '../base/constant';
+.#{$prefix}-layout {
+  display: flex;
+  flex: auto;
+  flex-direction: column;
+  min-height: auto;
+  &-has-sider {
+    flex-direction: row;
+  }
+}
+.#{$prefix}-layout,
+.#{$prefix}-layout-content,
+.#{$prefix}-layout-footer,
+.#{$prefix}-layout-header,
+.#{$prefix}-layout-sider,
+.#{$prefix}-layout-sider-children {
+  box-sizing: border-box;
+}
+
+.#{$prefix}-layout-footer,
+.#{$prefix}-layout-header {
+  flex: 0 0 auto;
+}
+
+.#{$prefix}-layout-has-sider > .#{$prefix}-layout-content {
+  overflow-x: hidden;
+}
