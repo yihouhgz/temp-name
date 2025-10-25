@@ -88,7 +88,7 @@ export const useClickOutside = (
   options?: boolean | AddEventListenerOptions
 ) => {
   useEventListener(
-    document.body,
+    window,
     'click',
     (event: EventMap['click']) => {
       if (!isArray(target)) target = [target]

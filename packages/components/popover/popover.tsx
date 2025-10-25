@@ -4,6 +4,7 @@ import { popoverProps, popoverEmits } from './type'
 import Tooltip from '../tooltip'
 import { isFunction } from '../_util/helps'
 import './style/popover'
+import { computed } from 'vue'
 
 const Popover = defineComponent({
   setup(props, ctx) {
@@ -27,12 +28,17 @@ const Popover = defineComponent({
     const handleTooltipVisibleChange = (visible: boolean) => {
       ctx.emit('visibleChange', visible)
     }
+    const wrapperClassNames = computed(() => {
+      return [`${prefix}-popover-wrapper`, props.showArrow ? `${prefix}-popover-with-arrow` : '']
+        .filter(Boolean)
+        .join(' ')
+    })
     return () => {
       return (
         <Tooltip
           {...props}
           content={<ContentWrapper></ContentWrapper>}
-          wrapper={`${prefix}-popover-wrapper`}
+          wrapper={wrapperClassNames.value}
           clickToHide={props.clickToHide}
           onClickOutSide={handleTooltipClickOutSide}
           onVisibleChange={handleTooltipVisibleChange}

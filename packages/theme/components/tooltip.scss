@@ -48,80 +48,98 @@
   }
   &-topLeft {
     &-arrow {
-      left: 10px;
-      bottom: -6px;
+      bottom: -7px;
+      left: 6px;
     }
   }
   &-topRight {
     &-arrow {
-      bottom: -6px;
+      bottom: -7px;
       right: 6px;
     }
   }
 
   &-left {
     &-arrow {
-      right: -6px;
+      width: 8px;
+      height: 24px;
+      right: -7px;
       top: 50%;
       transform: translateY(-50%);
     }
   }
   &-leftTop {
     &-arrow {
-      right: -6px;
-      top: 5px;
+      width: 8px;
+      height: 24px;
+      right: -7px;
+      top: 6px;
     }
   }
   &-leftBottom {
     &-arrow {
-      right: -6px;
-      bottom: 5px;
+      width: 8px;
+      height: 24px;
+      right: -7px;
+      bottom: 6px;
     }
   }
   &-leftTop {
     &-arrow {
-      right: -6px;
-      top: 5px;
+      width: 8px;
+      height: 24px;
+      left: -7px;
+      top: 6px;
+      transform: rotate(180deg);
     }
   }
 
   &-right {
     &-arrow {
-      left: -6px;
+      width: 8px;
+      height: 24px;
+      left: -7px;
       top: 50%;
       transform: translateY(-50%) rotate(180deg);
     }
   }
   &-rightTop {
     &-arrow {
-      left: -6px;
-      top: 5px;
+      width: 8px;
+      height: 24px;
+      left: -7px;
+      top: 6px;
+      transform: rotate(180deg);
     }
   }
   &-rightBottom {
     &-arrow {
-      left: -6px;
-      bottom: 5px;
+      width: 8px;
+      height: 24px;
+      left: -7px;
+      bottom: 6px;
+      transform: rotate(180deg);
     }
   }
 
   &-bottom {
     &-arrow {
-      top: -6px;
+      top: -7px;
       left: 50%;
       transform: translateX(-50%) rotate(180deg);
     }
   }
   &-bottomLeft {
     &-arrow {
-      top: -6px;
+      top: -7px;
       left: 6px;
+      transform: rotate(180deg);
     }
   }
   &-bottomRight {
     &-arrow {
-      top: -6px;
       right: 6px;
+      top: -7px;
       transform: rotate(180deg);
     }
   }

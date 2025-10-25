@@ -19,7 +19,7 @@ import { tooltioProps, tooltipEmits } from './type'
 import { isFunction, isComponentByVNode, domRectToObject, isNumber } from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
-import { useEventListener, useClickOutside, type EventMap } from '../_util'
+import { useEventListener, useClickOutside, onElementResize, type EventMap } from '../_util'
 import { calcPosition, type PopupContainerDOMRect } from './herps'
 import CssAnimation from '../css-animation'
 
@@ -78,11 +78,17 @@ const Tooltip = defineComponent({
       const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
       triggerElementRef.value = target
       targetElementRect.value = target.getBoundingClientRect()
+      onElementResize(triggerElementRef.value, () => {
+        const position = calcPosition(options.utils)
+        if (isNumber(position.top)) position.top = position.top + 'px'
+        if (isNumber(position.left)) position.left = position.left + 'px'
+        innerStyle.value = position
+      })
       const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
       useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
       if (eventMap.enter === 'click' || eventMap.enter === 'custom') {
         const handleClickOutside = (event: Event) => {
-          if (showTooltip.value) {
+          if (showTooltip.value && innerRef.value) {
             if (!props.clickToHide && innerRef.value.contains(event.target)) return
           } else {
             return
@@ -90,7 +96,6 @@ const Tooltip = defineComponent({
           if (eventMap.enter === 'custom') {
             ctx.emit('visibleChange', false)
           }
-          console.log('clickOutSide', event)
           triggerLeave()
           ctx.emit('clickOutSide', event)
         }

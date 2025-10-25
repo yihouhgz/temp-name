@@ -243,8 +243,8 @@ export const selectProps = {
    * @description 多选模式下，已选项超出 maxTagCount 时，后续选项会被渲染成+N 的形式
    */
   maxTagCount: {
-    type: [Number, null],
-    default: null,
+    type: Number,
+    default: 0,
     required: false
   },
   /**
@@ -320,7 +320,7 @@ export const selectProps = {
    */
   position: {
     values: positionValues,
-    default: 'bottom',
+    default: 'bottomLeft',
     required: false
   },
   /**
