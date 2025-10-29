@@ -31,3 +31,16 @@ body {
 .top-50 {
   margin-top: 50px;
 }
+
+vpi-sun {
+  width: 12px;
+  height: 12px;
+}
+.sun {
+  -webkit-mask: var(--icon) no-repeat;
+  mask: var(--icon) no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  background-color: currentColor;
+  color: inherit;
+}

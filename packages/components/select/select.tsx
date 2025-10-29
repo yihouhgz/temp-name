@@ -132,8 +132,6 @@ const Select = defineComponent({
           state.selectIndex.push(index)
           state.selfValue.push(current)
         }
-      } else {
-        //
       }
     }
     const handleFocusOption = (index: number) => {
@@ -249,7 +247,7 @@ const Select = defineComponent({
     }
     const isEmpty = (data: unknown) => {
       if (!data) return false
-      if (isArray(data)) return data.length
+      if (isArray(data)) return data.length > 0
       return !!data
     }
     const multipleTagTemplate = () => {

@@ -91,6 +91,7 @@ export const useClickOutside = (
     window,
     'click',
     (event: EventMap['click']) => {
+      event.stopPropagation()
       if (!isArray(target)) target = [target]
       for (const el of target) {
         if (el.contains(event.target as Node) || el === event.target) {

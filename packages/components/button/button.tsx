@@ -9,8 +9,8 @@ import { generate } from 'theme/derive'
 import { formChildrenIndex } from '../_util/tab-index'
 
 console.log(prefix, 'prefix', generate('#fff'))
-const Button = defineComponent(
-  (props, ctx) => {
+const Button = defineComponent({
+  setup(props, ctx) {
     const buttonRef = ref<HTMLButtonElement>()
     const handleClick = (event: MouseEvent) => {
       ctx.emit('click', event)
@@ -97,11 +97,9 @@ const Button = defineComponent(
       )
     }
   },
-  {
-    name: `${prefix}-button`,
-    props: buttonPropsDefaults,
-    emits: ['click']
-  }
-)
+  name: `${prefix}-button`,
+  props: buttonPropsDefaults,
+  emits: ['click']
+})
 
 export default Button

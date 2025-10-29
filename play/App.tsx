@@ -3,7 +3,17 @@ import { Button } from '../dist'
 import './styles/app.scss'
 const App = defineComponent(() => {
   const loading = ref(false)
+  const switchLoading = ref(false)
+  const switchValue = ref(false)
   const inputvalue = ref('llll')
+  const handleChange = (value: boolean) => {
+    switchLoading.value = true
+    setTimeout(() => {
+      console.log('handleChange', value)
+      switchLoading.value = false
+      switchValue.value = value
+    }, 2000)
+  }
   watchEffect(() => {
     console.log(inputvalue.value)
   })
@@ -41,6 +51,36 @@ const App = defineComponent(() => {
       }, 1000)
     })
   }
+  const sunIcon = (
+    <div style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;color:var(--tempui-color-success)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 60%;height: 60%;">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+        </g>
+      </svg>
+    </div>
+  )
+  const moonIcon = (
+    <div style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;color:var(--tempui-color-text-2)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 60%;height: 60%;">
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9"
+        />
+      </svg>
+    </div>
+  )
   return () => (
     <div>
       <div>
@@ -517,7 +557,42 @@ const App = defineComponent(() => {
             Header
           </tempui-layout-header>
           <tempui-layout-content style={{ height: 300, lineHeight: '300px' }}>
-            Content
+            <div class={'top-20'}>
+              <tempui-space>
+                <tempui-switch size="small"></tempui-switch>
+                <tempui-switch size="small" disabled></tempui-switch>
+                <tempui-switch size="small" defaultChecked></tempui-switch>
+                <tempui-switch size="small" loading></tempui-switch>
+                <tempui-switch size="small" loading defaultChecked></tempui-switch>
+              </tempui-space>
+
+              <tempui-space>
+                <tempui-switch></tempui-switch>
+                <tempui-switch disabled></tempui-switch>
+                <tempui-switch defaultChecked></tempui-switch>
+                <tempui-switch loading></tempui-switch>
+                <tempui-switch loading defaultChecked></tempui-switch>
+              </tempui-space>
+
+              <tempui-space>
+                <tempui-switch size="large"></tempui-switch>
+                <tempui-switch size="large" disabled></tempui-switch>
+                <tempui-switch size="large" defaultChecked></tempui-switch>
+                <tempui-switch size="large" loading></tempui-switch>
+                <tempui-switch size="large" loading defaultChecked></tempui-switch>
+              </tempui-space>
+
+              <tempui-space>
+                <tempui-switch checkedKnob={sunIcon} uncheckedKnob={moonIcon}></tempui-switch>
+              </tempui-space>
+              <tempui-space>
+                <tempui-switch
+                  loading={switchLoading.value}
+                  checked={switchValue.value}
+                  onChange={handleChange}
+                ></tempui-switch>
+              </tempui-space>
+            </div>
           </tempui-layout-content>
           <tempui-layout-footer
             style={{

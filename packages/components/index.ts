@@ -16,6 +16,7 @@ import DragMove from './drag-move'
 import Space from './space'
 import Spin from './spin'
 import { Layout, Header, Content, Footer, Sider } from './layout'
+import Switch from './switch'
 const components = [
   Button,
   SyncButton,
@@ -41,7 +42,8 @@ const components = [
   Header,
   Content,
   Footer,
-  Sider
+  Sider,
+  Switch
 ]
 export const install = (app: App) => withInstall(app, components)
 export { Button, Watermark, Input, Icon, Row, Col, Popover, Select, HotKeys, Avatar, Tag }

@@ -3,7 +3,7 @@ import { prefix } from 'constants/config'
 
 const Breadcrumb = defineComponent({
   setup() {},
-  name: prefix + '-breadcrumb'
+  name: prefix + '-breadcrumb-item'
 })
 
 export default Breadcrumb

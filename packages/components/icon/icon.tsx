@@ -54,7 +54,7 @@ const nameToSplit = (name: string) => {
 
 export function warpperIcon(icon: VNode | Component, name: string) {
   const innerProps = omitKeys(iconProps, ['type', 'svg'])
-  const renderIcon = () => <icon></icon>
+  const renderIcon = () => icon
   const InnerIcon = defineComponent({
     setup(props) {
       return () => <IconJsx svg={renderIcon} type={name} {...props}></IconJsx>
