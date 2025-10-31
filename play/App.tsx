@@ -86,6 +86,9 @@ const App = defineComponent(() => {
       <div>
         <tempui-sync-button onClick={handleSync}>hello</tempui-sync-button>
         <Button type="primary">确定</Button>
+        <Button type="primary" disabled>
+          确定
+        </Button>
         <tempui-button
           loading={loading.value}
           onClick={handleClick}
@@ -106,6 +109,87 @@ const App = defineComponent(() => {
         <tempui-button type="tertiary">我是按钮</tempui-button>
         <tempui-button type="warning">我是按钮</tempui-button>
         <tempui-button type="danger">商品买断</tempui-button>
+      </div>
+      <div class="top-50">
+        <div>主题</div>
+        <tempui-button theme="light" disabled type="primary" style={{ marginRight: 8 }}>
+          浅色主要 disabled
+        </tempui-button>
+        <tempui-button theme="light" type="primary" style={{ marginRight: 8 }}>
+          浅色主要
+        </tempui-button>
+        <tempui-button theme="light" type="secondary" style={{ marginRight: 8 }}>
+          浅色次要
+        </tempui-button>
+        <tempui-button theme="light" type="tertiary" style={{ marginRight: 8 }}>
+          浅色第三
+        </tempui-button>
+        <tempui-button theme="light" type="warning" style={{ marginRight: 8 }}>
+          浅色警告
+        </tempui-button>
+        <tempui-button theme="light" type="danger" style={{ marginRight: 8 }}>
+          浅色危险
+        </tempui-button>
+      </div>
+      <div class="top-50">
+        <Button theme="solid" disabled type="primary" style={{ marginRight: 8 }}>
+          深色主要 disabled
+        </Button>
+        <Button theme="solid" type="primary" style={{ marginRight: 8 }}>
+          深色主要
+        </Button>
+        <Button theme="solid" type="secondary" style={{ marginRight: 8 }}>
+          深色次要
+        </Button>
+        <Button theme="solid" type="tertiary" style={{ marginRight: 8 }}>
+          深色第三
+        </Button>
+        <Button theme="solid" type="warning" style={{ marginRight: 8 }}>
+          深色警告
+        </Button>
+        <Button theme="solid" type="danger" style={{ marginRight: 8 }}>
+          深色危险
+        </Button>
+      </div>
+      <div class="top-50">
+        <Button theme="borderless" disabled type="primary" style={{ marginRight: 8 }}>
+          无背景主要 disabled
+        </Button>
+        <Button theme="borderless" type="primary" style={{ marginRight: 8 }}>
+          无背景主要
+        </Button>
+        <Button theme="borderless" type="secondary" style={{ marginRight: 8 }}>
+          无背景次要
+        </Button>
+        <Button theme="borderless" type="tertiary" style={{ marginRight: 8 }}>
+          无背景第三
+        </Button>
+        <Button theme="borderless" type="warning" style={{ marginRight: 8 }}>
+          无背景警告
+        </Button>
+        <Button theme="borderless" type="danger" style={{ marginRight: 8 }}>
+          无背景危险
+        </Button>
+      </div>
+      <div class="top-50">
+        <Button theme="outline" disabled type="primary" style={{ marginRight: 8 }}>
+          边框主要 disabled
+        </Button>
+        <Button theme="outline" type="primary" style={{ marginRight: 8 }}>
+          边框主要
+        </Button>
+        <Button theme="outline" type="secondary" style={{ marginRight: 8 }}>
+          边框次要
+        </Button>
+        <Button theme="outline" type="tertiary" style={{ marginRight: 8 }}>
+          边框第三
+        </Button>
+        <Button theme="outline" type="warning" style={{ marginRight: 8 }}>
+          边框警告
+        </Button>
+        <Button theme="outline" type="danger" style={{ marginRight: 8 }}>
+          边框危险
+        </Button>
       </div>
       <div style="width: 300px;" class="top-50">
         <tempui-tooltip content={<div>111</div>} trigger="focus">

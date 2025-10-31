@@ -1,7 +1,13 @@
 import { defineComponent, computed, getCurrentInstance } from 'vue'
 import { prefix } from 'constants/config'
 import { toastProps, toastTypeMap } from './type'
-import { IconTickCircle, IconAlertCircle, IconAlertTriangle, IconInfoCircle } from '../icon'
+import {
+  IconTickCircle,
+  IconAlertCircle,
+  IconAlertTriangle,
+  IconInfoCircle,
+  IconClose
+} from '../icon'
 import { hasPropsOrSlots, isNumber, renderElementForPropsOrSlot } from '../_util'
 import Button from '../button'
 
@@ -20,14 +26,15 @@ const Toast = defineComponent({
       if (hasPropsOrSlots('icon', vm)) {
         return <div>{renderElementForPropsOrSlot('icon', vm)}</div>
       }
+      const size = 'large'
       return props.type === toastTypeMap.success ? (
-        <IconTickCircle />
+        <IconTickCircle size={size} />
       ) : props.type === toastTypeMap.warning ? (
-        <IconAlertTriangle />
+        <IconAlertTriangle size={size} />
       ) : props.type === toastTypeMap.error ? (
-        <IconAlertCircle />
+        <IconAlertCircle size={size} />
       ) : (
-        <IconInfoCircle />
+        <IconInfoCircle size={size} />
       )
     }
     const renderContent = () => {
@@ -52,9 +59,7 @@ const Toast = defineComponent({
             {renderContent()}
             {props.showClose && (
               <div class={`${prefix}-toast-close-button`}>
-                <Button type="info" size="small">
-                  <IconTickCircle />
-                </Button>
+                <Button type="info" size="small" icon={<IconClose />}></Button>
               </div>
             )}
           </div>

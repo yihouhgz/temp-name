@@ -55,7 +55,7 @@ $color-toast_danger_light-border: var(--#{$prefix}-color-danger);
 //通知文本字重
 $font-toast_content-fontWeight: $font-weight-bold;
 //通知圆角
-$radius-toast_content: var(--semi-border-radius-medium);
+$radius-toast_content: var(--#{$prefix}-border-radius-medium);
 
 //通知容器顶部位置
 $spacing-toast_wrapper-top: 0;
@@ -88,3 +88,49 @@ $spacing-toast-perspective: 280px;
 $width-toast_wrapper: 100%;
 //多色样式 通知描边宽度
 $width-toast_light-border: 1px;
+
+.#{$prefix}-toast-wrapper {
+  position: fixed;
+  height: 0;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: $z-toast;
+  &-inner {
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+  }
+}
+
+.#{$prefix}-toast {
+  pointer-events: none;
+  &-content {
+    pointer-events: all;
+    box-shadow: var(--#{$prefix}-shadow-elevated);
+    font-size: $font-size-regular;
+    line-height: 20px;
+    font-family: $font-family;
+    background-color: $color-toast-bg-default;
+    border-radius: $radius-toast_content;
+    padding: $spacing-toast_content-paddingY $spacing-toast_content-paddingX;
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin: $spacing-toast_content-margin;
+    font-weight: $font-weight-bold;
+    color: $color-toast-text-default;
+  }
+  &-text {
+    margin-left: $spacing-toast_content_text-marginLeft;
+    margin-right: $spacing-toast_content_text-marginRight;
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  &-close-button {
+    margin-top: $spacing-toast_content_close_btn-marginTop;
+    height: 20px;
+  }
+}

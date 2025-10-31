@@ -1,288 +1,973 @@
 @import '../base/constant';
+//主要按钮-背景色-动画持续时间
+$transition_duration-button_primary-bg: var(--#{$prefix}-transition_duration-none);
+//主要按钮-背景色-过渡曲线
+$transition_function-button_primary-bg: var(--#{$prefix}-transition_function-easeIn);
+//主要按钮-背景色-延迟时间
+$transition_delay-button_primary-bg: var(--#{$prefix}-transition_delay-none);
+//次要按钮-背景色-动画持续时间
+$transition_duration-button_secondary-bg: var(--#{$prefix}-transition_duration-none);
+//次要按钮-背景色-过渡曲线
+$transition_function-button_secondary-bg: var(--#{$prefix}-transition_function-easeIn);
+//次要按钮-背景色-延迟时间
+$transition_delay-button_secondary-bg: var(--#{$prefix}-transition_delay-none);
+//三级按钮-背景色-动画持续时间
+$transition_duration-button_tertiary-bg: var(--#{$prefix}-transition_duration-none);
+//三级按钮-背景色-过渡曲线
+$transition_function-button_tertiary-bg: var(--#{$prefix}-transition_function-easeIn);
+//三级按钮-背景色-延迟时间
+$transition_delay-button_tertiary-bg: var(--#{$prefix}-transition_delay-none);
+//浅色按钮-背景色-动画持续时间
+$transition_duration-button_light-bg: var(--#{$prefix}-transition_duration-none);
+//浅色按钮-背景色-过渡曲线
+$transition_function-button_light-bg: var(--#{$prefix}-transition_function-easeIn);
+//浅色按钮-背景色-延迟时间
+$transition_delay-button_light-bg: var(--#{$prefix}-transition_delay-none);
+//警告按钮-背景色-动画持续时间
+$transition_duration-button_warning-bg: var(--#{$prefix}-transition_duration-none);
+//警告按钮-背景色-过渡曲线
+$transition_function-button_warning-bg: var(--#{$prefix}-transition_function-easeIn);
+//警告按钮-背景色-延迟时间
+$transition_delay-button_warning-bg: var(--#{$prefix}-transition_delay-none);
+//危险按钮-背景色-动画持续时间
+$transition_duration-button_danger-bg: var(--#{$prefix}-transition_duration-none);
+//危险按钮-背景色-过渡曲线
+$transition_function-button_danger-bg: var(--#{$prefix}-transition_function-easeIn);
+//危险按钮-背景色-延迟时间
+$transition_delay-button_danger-bg: var(--#{$prefix}-transition_delay-none);
+//无边框按钮-背景色-动画持续时间
+$transition_duration-button_borderless-bg: var(--#{$prefix}-transition_duration-none);
+//无边框按钮-背景色-过渡曲线
+$transition_function-button_borderless-bg: var(--#{$prefix}-transition_function-easeIn);
+//无边框按钮-背景色-延迟时间
+$transition_delay-button_borderless-bg: var(--#{$prefix}-transition_delay-none);
+//主要按钮-边框-动画持续时间
+$transition_duration-button_primary-border: var(--#{$prefix}-transition_duration-none);
+//主要按钮-边框-过渡曲线
+$transition_function-button_primary-border: var(--#{$prefix}-transition_function-easeIn);
+//主要按钮-边框-延迟时间
+$transition_delay-button_primary-border: var(--#{$prefix}-transition_delay-none);
+//次要按钮-边框-动画持续时间
+$transition_duration-button_secondary-border: var(--#{$prefix}-transition_duration-none);
+//次要按钮-边框-过渡曲线
+$transition_function-button_secondary-border: var(--#{$prefix}-transition_function-easeIn);
+//次要按钮-边框-延迟时间
+$transition_delay-button_secondary-border: var(--#{$prefix}-transition_delay-none);
+//三级按钮-边框-动画持续时间
+$transition_duration-button_tertiary-border: var(--#{$prefix}-transition_duration-none);
+//三级按钮-边框-过渡曲线
+$transition_function-button_tertiary-border: var(--#{$prefix}-transition_function-easeIn);
+//三级按钮-边框-延迟时间
+$transition_delay-button_tertiary-border: var(--#{$prefix}-transition_delay-none);
+//浅色按钮-边框-动画持续时间
+$transition_duration-button_light-border: var(--#{$prefix}-transition_duration-none);
+//浅色按钮-边框-过渡曲线
+$transition_function-button_light-border: var(--#{$prefix}-transition_function-easeIn);
+//浅色按钮-边框-延迟时间
+$transition_delay-button_light-border: var(--#{$prefix}-transition_delay-none);
+//警告按钮-边框-动画持续时间
+$transition_duration-button_warning-border: var(--#{$prefix}-transition_duration-none);
+//警告按钮-边框-过渡曲线
+$transition_function-button_warning-border: var(--#{$prefix}-transition_function-easeIn);
+//警告按钮-边框-延迟时间
+$transition_delay-button_warning-border: var(--#{$prefix}-transition_delay-none);
+//危险按钮-边框-动画持续时间
+$transition_duration-button_danger-border: var(--#{$prefix}-transition_duration-none);
+//危险按钮-边框-过渡曲线
+$transition_function-button_danger-border: var(--#{$prefix}-transition_function-easeIn);
+//危险按钮-边框-延迟时间
+$transition_delay-button_danger-border: var(--#{$prefix}-transition_delay-none);
+//加载图标容器旋转一周时长
+$animation_duration-button_icon_loading: 600ms;
+//自定义指示器时旋转一周时长
+$animation_duration-button_icon_customIcon_loading: 1600ms;
+
+//主要按钮背景颜色
+$color-button_primary-bg-default: var(--#{$prefix}-color-primary);
+//主要按钮描边颜色
+$color-button_primary-border-default: transparent;
+//主要按钮文字颜色
+$color-button_primary-text-default: rgba(var(--#{$prefix}-white), 1);
+//主要按钮背景颜色 - 悬浮
+$color-button_primary-bg-hover: var(--#{$prefix}-color-primary-hover);
+//主要按钮描边颜色 - 悬浮
+$color-button_primary-border-hover: var(--#{$prefix}-color-primary-hover);
+//主要按钮文字颜色 - 悬浮
+$color-button_primary-text-hover: rgba(var(--#{$prefix}-white), 1);
+//主要按钮背景颜色 - 按下
+$color-button_primary-bg-active: var(--#{$prefix}-color-primary-active);
+//主要按钮描边颜色 - 按下
+$color-button_primary-border-active: var(--#{$prefix}-color-primary-active);
+//主要按钮文字颜色 - 按下
+$color-button_primary-text-active: rgba(var(--#{$prefix}-white), 1);
+//主要按钮轮廓 - 聚焦
+$color-button_primary-outline-focus: var(--#{$prefix}-color-primary-light-active);
+//边框模式下 primary 边框颜色
+$color-button_primary_outline-border-default: var(--#{$prefix}-color-border);
+//主要按钮无边框borderless文字颜色
+$color-button_primary_borderless-text-default: var(--#{$prefix}-color-primary);
+//主要按钮light文字颜色
+$color-button_primary_light-text-default: var(--#{$prefix}-color-primary);
+//主要按钮outline文字颜色
+$color-button_primary_outline-text-default: var(--#{$prefix}-color-primary);
+
+//次要按钮背景颜色
+$color-button_secondary-bg-default: var(--#{$prefix}-color-secondary);
+//次要按钮描边颜色
+$color-button_secondary-border-default: var(--#{$prefix}-color-secondary);
+//次要按钮文字颜色
+$color-button_secondary-text-default: rgba(var(--#{$prefix}-white), 1);
+//次要按钮背景颜色 - 悬浮
+$color-button_secondary-bg-hover: var(--#{$prefix}-color-secondary-hover);
+//次要按钮描边颜色 - 悬浮
+$color-button_secondary-border-hover: var(--#{$prefix}-color-secondary-hover);
+//次要按钮文字颜色 - 悬浮
+$color-button_secondary-text-hover: rgba(var(--#{$prefix}-white), 1);
+//次要按钮背景颜色 - 按下
+$color-button_secondary-bg-active: var(--#{$prefix}-color-secondary-active);
+//次要按钮描边颜色 - 按下
+$color-button_secondary-border-active: var(--#{$prefix}-color-secondary-active);
+//次要按钮文字颜色 - 按下
+$color-button_secondary-text-active: rgba(var(--#{$prefix}-white), 1);
+//次要按钮轮廓 - 聚焦
+$color-button_secondary-outline-focus: var(--#{$prefix}-color-secondary-light-active);
+//边框模式下 secondary 边框颜色
+$color-button_secondary_outline-border-default: var(--#{$prefix}-color-border);
+//次要按钮无边框文字颜色
+$color-button_secondary_borderless-text-default: var(--#{$prefix}-color-secondary);
+//主要按钮light文字颜色
+$color-button_secondary_light-text-default: var(--#{$prefix}-color-secondary);
+//主要按钮outline文字颜色
+$color-button_secondary_outline-text-default: var(--#{$prefix}-color-secondary);
+
+//危险按钮背景颜色
+$color-button_danger-bg-default: var(--#{$prefix}-color-danger);
+//危险按钮描边颜色
+$color-button_danger-border-default: var(--#{$prefix}-color-danger);
+//危险按钮文字颜色
+$color-button_danger-text-default: rgba(var(--#{$prefix}-white), 1);
+//危险按钮背景颜色 - 悬浮
+$color-button_danger-bg-hover: var(--#{$prefix}-color-danger-hover);
+//危险按钮描边颜色 - 悬浮
+$color-button_danger-border-hover: var(--#{$prefix}-color-danger);
+//危险按钮文字颜色 - 悬浮
+$color-button_danger-text-hover: rgba(var(--#{$prefix}-white), 1);
+//危险按钮背景颜色 - 按下
+$color-button_danger-bg-active: var(--#{$prefix}-color-danger-active);
+//危险按钮描边颜色 - 按下
+$color-button_danger-border-active: var(--#{$prefix}-color-danger-active);
+//危险按钮文字颜色 - 按下
+$color-button_danger-text-active: rgba(var(--#{$prefix}-white), 1);
+//危险按钮轮廓 - 聚焦
+$color-button_danger-outline-focus: var(--#{$prefix}-color-danger-light-active);
+//边框模式下 danger 边框颜色
+$color-button_danger_outline-border-default: var(--#{$prefix}-color-danger);
+//危险按钮无边框文字颜色
+$color-button_danger_borderless-text-default: var(--#{$prefix}-color-danger);
+//主要按钮light文字颜色
+$color-button_danger_light-text-default: var(--#{$prefix}-color-danger);
+//主要按钮outline文字颜色
+$color-button_danger_outline-text-default: var(--#{$prefix}-color-danger);
+
+//警告按钮背景颜色
+$color-button_warning-bg-default: var(--#{$prefix}-color-warning);
+//警告按钮描边颜色
+$color-button_warning-border-default: var(--#{$prefix}-color-warning);
+//警告按钮文字颜色
+$color-button_warning-text-default: rgba(var(--#{$prefix}-white), 1);
+//警告按钮背景颜色 - 悬浮
+$color-button_warning-bg-hover: var(--#{$prefix}-color-warning-hover);
+//警告按钮描边颜色 - 悬浮
+$color-button_warning-border-hover: var(--#{$prefix}-color-warning-hover);
+//警告按钮文字颜色 - 悬浮
+$color-button_warning-text-hover: rgba(var(--#{$prefix}-white), 1);
+//警告按钮背景颜色 - 按下
+$color-button_warning-bg-active: var(--#{$prefix}-color-warning-active);
+//警告按钮描边颜色 - 按下
+$color-button_warning-border-active: var(--#{$prefix}-color-warning-active);
+//警告按钮文字颜色 - 按下
+$color-button_warning-text-active: rgba(var(--#{$prefix}-white), 1);
+//警告按钮轮廓 - 聚焦
+$color-button_warning-outline-focus: var(--#{$prefix}-color-warning-light-active);
+//边框模式下 warning 边框颜色
+$color-button_warning_outline-border-default: var(--#{$prefix}-color-warning);
+//警告按钮无边框文字颜色
+$color-button_warning_borderless-text-default: var(--#{$prefix}-color-warning);
+//主要按钮light文字颜色
+$color-button_warning_light-text-default: var(--#{$prefix}-color-warning);
+//主要按钮outline文字颜色
+$color-button_warning_outline-text-default: var(--#{$prefix}-color-warning);
+
+//第三按钮背景颜色
+$color-button_tertiary-bg-default: var(--#{$prefix}-color-tertiary);
+//第三按钮描边颜色
+$color-button_tertiary-border-default: var(--#{$prefix}-color-tertiary);
+//第三按钮文字颜色
+$color-button_tertiary-text-default: rgba(var(--#{$prefix}-white), 1);
+//第三按钮背景颜色 - 悬浮
+$color-button_tertiary-bg-hover: var(--#{$prefix}-color-tertiary-hover);
+//第三按钮描边颜色 - 悬浮
+$color-button_tertiary-border-hover: var(--#{$prefix}-color-tertiary-hover);
+//第三按钮文字颜色 - 悬浮
+$color-button_tertiary-text-hover: rgba(var(--#{$prefix}-white), 1);
+//第三按钮背景颜色 - 按下
+$color-button_tertiary-bg-active: var(--#{$prefix}-color-tertiary-active);
+//第三按钮描边颜色 - 按下
+$color-button_tertiary-border-active: var(--#{$prefix}-color-tertiary-active);
+//第三按钮文字颜色 - 按下
+$color-button_tertiary-text-active: rgba(var(--#{$prefix}-white), 1);
+//第三按钮轮廓 - 聚焦
+$color-button_tertiary-outline-focus: var(--#{$prefix}-color-tertiary-light-active);
+//边框模式下 tertiary 边框颜色
+$color-button_tertiary_outline-border-default: var(--#{$prefix}-color-border);
+//第三按钮无边框文字颜色
+$color-button_tertiary_solid-text-default: var(--#{$prefix}-color-text-1);
+//主要按钮light文字颜色
+$color-button_tertiary_light-text-default: var(--#{$prefix}-color-text-1);
+//主要按钮outline文字颜色
+$color-button_tertiary_outline-text-default: var(--#{$prefix}-color-text-1);
+
+//禁用按钮文字颜色 - 深色主题
+$color-button_disabled_solid-text-default: var(--#{$prefix}-color-disabled-text);
+//禁用按钮文字颜色 - 浅色主题或无背景
+$color-button_disabled-text-default: var(--#{$prefix}-color-disabled-text);
+//禁用按钮文字颜色 - 边框模式
+$color-button_disabled_outline_text-default: var(--#{$prefix}-color-disabled-text);
+//禁用按钮背景颜色
+$color-button_disabled-bg-default: var(--#{$prefix}-color-disabled-bg);
+//禁用按钮文字颜色 - 深色主题 - 悬浮
+$color-button_disabled-text-hover: $color-button_disabled-text-default;
+//禁用按钮背景颜色 - 悬浮
+$color-button_disabled-bg-hover: var(--#{$prefix}-color-disabled-bg);
+//禁用 primary 按钮背景颜色
+$color-button_disabled_primary-bg-default: $color-button_disabled-bg-default;
+//禁用 secondary 按钮背景颜色
+$color-button_disabled_secondary-bg-default: $color-button_disabled-bg-default;
+//禁用 tertiary 按钮背景颜色
+$color-button_disabled_tertiary-bg-default: $color-button_disabled-bg-default;
+//禁用 warning 按钮背景颜色
+$color-button_disabled_warning-bg-default: $color-button_disabled-bg-default;
+//禁用 danger 按钮背景颜色
+$color-button_disabled_danger-bg-default: $color-button_disabled-bg-default;
+//边框模式下 disable 边框颜色
+$color-button_disabled_outline-border-default: var(--#{$prefix}-color-border);
+
+//浅色按钮背景颜色
+$color-button_light-bg-default: var(--#{$prefix}-color-fill-0);
+//浅色按钮背景颜色 - 悬浮
+$color-button_light-bg-hover: var(--#{$prefix}-color-fill-1);
+//浅色按钮背景颜色 - 按下
+$color-button_light-bg-active: var(--#{$prefix}-color-fill-2);
+//浅色按钮描边颜色
+$color-button_light-border-default: transparent;
+//浅色按钮描边颜色 - 悬浮
+$color-button_light-border-hover: $color-button_light-border-default;
+//浅色按钮描边颜色 - 按下
+$color-button_light-border-active: $color-button_light-border-hover;
+
+//禁用 light primary 按钮背景颜色
+$color-button_disabled_light_primary-bg-default: $color-button_light-bg-default;
+//禁用 light secondary 按钮背景颜色
+$color-button_disabled_light_secondary-bg-default: $color-button_light-bg-default;
+//禁用 light tertiary 按钮背景颜色
+$color-button_disabled_light_tertiary-bg-default: $color-button_light-bg-default;
+//禁用 light warning 按钮背景颜色
+$color-button_disabled_light_warning-bg-default: $color-button_light-bg-default;
+//禁用 light danger 按钮背景颜色
+$color-button_disabled_light_danger-bg-default: $color-button_light-bg-default;
+
+//无背景按钮背景颜色
+$color-button_borderless-text-default: var(--#{$prefix}-color-primary);
+//无背景按钮文字颜色 - 悬浮
+$color-button_borderless-bg-hover: var(--#{$prefix}-color-fill-0);
+//无背景按钮文字颜色 - 按下
+$color-button_borderless-bg-active: var(--#{$prefix}-color-fill-1);
+//无背景按钮描边颜色
+$color-button_borderless-border-default: transparent;
+//无背景按钮描边颜色 - 悬浮
+$color-button_borderless-border-hover: $color-button_borderless-border-default;
+//无背景按钮描边颜色 - 按下
+$color-button_borderless-border-active: $color-button_borderless-border-hover;
+//边框模式按钮背景颜色 - 悬浮
+$color-button_outline-bg-hover: var(--#{$prefix}-color-fill-0);
+//边框模式按钮背景颜色 - 按下
+$color-button_outline-bg-active: var(--#{$prefix}-color-fill-1);
+//按钮组分割线颜色
+$color-button_group-border-default: var(--#{$prefix}-color-border);
+
+//按钮文字字重 - 默认
+$font-button-fontWeight: $font-weight-bold;
+//按钮文字字号- 默认
+$font-button-fontSize: $font-size-regular;
+//按钮文字行高 - 默认
+$font-button-lineHeight: 20px;
+//按钮文字字重 - 小尺寸
+$font-button_small-fontWeight: $font-weight-bold;
+//按钮文字字号- 小尺寸
+$font-button_small-fontSize: $font-size-regular;
+//按钮文字行高 - 小尺寸
+$font-button_small-lineHeight: 20px;
+//按钮文字字重 - 大尺寸
+$font-button_large-fontWeight: $font-weight-bold;
+//按钮文字字号- 大尺寸
+$font-button_large-fontSize: $font-size-regular;
+//按钮文字行高 - 大尺寸
+$font-button_large-lineHeight: 20px;
+
+//图标按钮 height - 小尺寸
+$height-button_iconOnly_small: $height-control-small;
+//图标按钮 height - 默认
+$height-button_iconOnly_default: $height-control-default;
+//图标按钮 height - 大尺寸
+$height-button_iconOnly_large: $height-control-large;
+//按钮高度 - 大尺寸
+$height-button_large: $height-control-large;
+//按钮高度 - 小尺寸
+$height-button_small: $height-control-small;
+//按钮高度 - 默认
+$height-button_default: $height-control-default;
+//分割线高度 - 默认
+$height-button_group_line_default: 20px;
+
+//主要按钮-放大
+$transform_scale-button_primary: var(--#{$prefix}-transform_scale-none);
+//次要按钮-放大
+$transform_scale-button_secondary: var(--#{$prefix}-transform_scale-none);
+//第三按钮-放大
+$transform_scale-button_tertiary: var(--#{$prefix}-transform_scale-none);
+//警告按钮-放大
+$transform_scale-button_warning: var(--#{$prefix}-transform_scale-none);
+//危险按钮-放大
+$transform_scale-button_danger: var(--#{$prefix}-transform_scale-none);
+//无背景按钮-放大
+$transform_scale-button_borderless: var(--#{$prefix}-transform_scale-none);
+//浅色按钮-放大
+$transform_scale-button_light: var(--#{$prefix}-transform_scale-none);
+
+//按钮圆角大小
+$radius-button: var(--#{$prefix}-border-radius-small);
+//按钮组圆角大小
+$radius-button_group: $radius-button;
+//split button 左上圆角
+$radius-button_splitButtonGroup_first_topLeft: var(--#{$prefix}-border-radius-small);
+//split button 左下圆角
+$radius-button_splitButtonGroup_first_bottomLeft: var(--#{$prefix}-border-radius-small);
+//split button 右上圆角
+$radius-button_splitButtonGroup_last_topRight: var(--#{$prefix}-border-radius-small);
+//split button 右下圆角
+$radius-button_splitButtonGroup_last_bottomRight: var(--#{$prefix}-border-radius-small);
+
+//按钮顶部内边距 - 默认
+$spacing-button_default-paddingTop: 6px;
+//按钮底部内边距 - 默认
+$spacing-button_default-paddingBottom: 6px;
+//按钮左侧内边距 - 默认
+$spacing-button_default-paddingLeft: $spacing-base-tight;
+//按钮右侧内边距 - 默认
+$spacing-button_default-paddingRight: $spacing-base-tight;
+//按钮顶部内边距 - 大尺寸
+$spacing-button_large-paddingTop: 10px;
+//按钮底部内边距 - 大尺寸
+$spacing-button_large-paddingBottom: 10px;
+//按钮左侧内边距 - 大尺寸
+$spacing-button_large-paddingLeft: $spacing-base;
+//按钮右侧内边距 - 大尺寸
+$spacing-button_large-paddingRight: $spacing-base;
+//按钮顶部内边距 - 小尺寸
+$spacing-button_small-paddingTop: $spacing-super-tight;
+//按钮底部内边距 - 小尺寸
+$spacing-button_small-paddingBottom: $spacing-super-tight;
+//按钮左侧内边距 - 小尺寸
+$spacing-button_small-paddingLeft: $spacing-base-tight;
+//按钮右侧内边距 - 小尺寸
+$spacing-button_small-paddingRight: $spacing-base-tight;
+
+//图标按钮左侧内边距 - 默认
+$spacing-button_iconOnly_default-paddingLeft: $spacing-tight;
+//图标按钮右侧内边距 - 默认
+$spacing-button_iconOnly_default-paddingRight: $spacing-tight;
+//图标按钮顶部内边距 - 默认
+$spacing-button_iconOnly_default-paddingTop: $spacing-tight;
+//图标按钮底部内边距 - 默认
+$spacing-button_iconOnly_default-paddingBottom: $spacing-tight;
+
+//图标按钮左侧内边距 - 大尺寸
+$spacing-button_iconOnly_large-paddingLeft: $spacing-base-tight;
+//图标按钮右侧内边距 - 大尺寸
+$spacing-button_iconOnly_large-paddingRight: $spacing-base-tight;
+//图标按钮顶部内边距 - 大尺寸
+$spacing-button_iconOnly_large-paddingTop: $spacing-base-tight;
+//图标按钮底部内边距 - 大尺寸
+$spacing-button_iconOnly_large-paddingBottom: $spacing-base-tight;
+
+//图标按钮左侧内边距 - 小尺寸
+$spacing-button_iconOnly_small-paddingLeft: $spacing-extra-tight;
+//图标按钮右侧内边距 - 小尺寸
+$spacing-button_iconOnly_small-paddingRight: $spacing-extra-tight;
+//图标按钮顶部内边距 - 小尺寸
+$spacing-button_iconOnly_small-paddingTop: $spacing-extra-tight;
+//图标按钮底部内边距 - 小尺寸
+$spacing-button_iconOnly_small-paddingBottom: $spacing-extra-tight;
+
+//按钮左侧图标距离文字间距
+$spacing-button_iconOnly_content-marginLeft: $spacing-tight;
+//按钮右侧图标距离文字间距
+$spacing-button_iconOnly_content-marginRight: $spacing-tight;
+
+//浅色按钮描边宽度
+$width-button_light-border: 0;
+//无背景按钮描边宽度
+$width-button_borderless-border: 0;
+//边框模式按钮边框宽度
+$width-button_outline-border: 1px;
+//按钮组分割线宽度
+$width-button_group-border: $border-thickness-control;
+//图标按钮 width - 小尺寸
+$width-button_iconOnly_small: $height-control-small;
+//图标按钮 width - 默认
+$width-button_iconOnly_default: $height-control-default;
+//图标按钮 width - 大尺寸
+$width-button_iconOnly_large: $height-control-large;
+//按钮描边宽度
+$width-button-border: $border-thickness;
+//按钮轮廓宽度
+$width-button-outline: 2px;
+
+$types: (
+  'primary': (
+    bg: $color-button_primary-bg-default,
+    text: $color-button_primary-text-default,
+    duration: $transition_duration-button_primary-bg,
+    function: $transition_function-button_primary-bg,
+    delay: $transition_delay-button_primary-bg,
+    scale: $transform_scale-button_primary,
+    bg-hover: $color-button_primary-bg-hover,
+    border-hover: $color-button_primary-border-hover,
+    bg-active: $color-button_primary-bg-active,
+    border-active: $color-button_primary-border-active,
+    text-hover: $color-button_primary-text-hover,
+    text-active: $color-button_primary-text-active,
+    outline-focus: $color-button_primary-outline-focus,
+    outline-border-default: $color-button_primary_outline-border-default,
+    borderless-text-default: $color-button_primary_borderless-text-default,
+
+    disabled-bg-default: $color-button_disabled_primary-bg-default,
+
+    primary-theme-borderless-text-color: $color-button_primary_borderless-text-default,
+    primary-theme-light-text-color: $color-button_primary_light-text-default,
+    primary-theme-outline-text-color: $color-button_primary_outline-text-default
+  ),
+  'secondary': (
+    bg: $color-button_secondary-bg-default,
+    text: $color-button_secondary-text-default,
+    duration: $transition_duration-button_secondary-bg,
+    function: $transition_function-button_secondary-bg,
+    delay: $transition_delay-button_secondary-bg,
+    scale: $transform_scale-button_secondary,
+    bg-hover: $color-button_secondary-bg-hover,
+    border-hover: $color-button_secondary-border-hover,
+    bg-active: $color-button_secondary-bg-active,
+    border-active: $color-button_secondary-border-active,
+    text-hover: $color-button_secondary-text-hover,
+    text-active: $color-button_secondary-text-active,
+    outline-focus: $color-button_secondary-outline-focus,
+    outline-border-default: $color-button_secondary_outline-border-default,
+    borderless-text-default: $color-button_secondary_borderless-text-default,
+
+    disabled-bg-default: $color-button_disabled_secondary-bg-default,
+
+    secondary-theme-borderless-text-color: $color-button_secondary_borderless-text-default,
+    secondary-theme-light-text-color: $color-button_secondary_light-text-default,
+    secondary-theme-outline-text-color: $color-button_secondary_outline-text-default
+  ),
+  'tertiary': (
+    bg: $color-button_tertiary-bg-default,
+    text: $color-button_tertiary-text-default,
+    duration: $transition_duration-button_tertiary-bg,
+    function: $transition_function-button_tertiary-bg,
+    delay: $transition_delay-button_tertiary-bg,
+    scale: $transform_scale-button_tertiary,
+    bg-hover: $color-button_tertiary-bg-hover,
+    border-hover: $color-button_tertiary-border-hover,
+    bg-active: $color-button_tertiary-bg-active,
+    border-active: $color-button_tertiary-border-active,
+    text-hover: $color-button_tertiary-text-hover,
+    text-active: $color-button_tertiary-text-active,
+    outline-focus: $color-button_tertiary-outline-focus,
+    outline-border-default: $color-button_tertiary_outline-border-default,
+    borderless-text-default: $color-button_tertiary_solid-text-default,
+
+    disabled-bg-default: $color-button_disabled_tertiary-bg-default,
+
+    tertiary-theme-borderless-text-color: $color-button_tertiary_solid-text-default,
+    tertiary-theme-light-text-color: $color-button_tertiary_light-text-default,
+    tertiary-theme-outline-text-color: $color-button_tertiary_outline-text-default
+  ),
+  'warning': (
+    bg: $color-button_warning-bg-default,
+    text: $color-button_warning-text-default,
+    duration: $transition_duration-button_warning-bg,
+    function: $transition_function-button_warning-bg,
+    delay: $transition_delay-button_warning-bg,
+    scale: $transform_scale-button_warning,
+    bg-hover: $color-button_warning-bg-hover,
+    border-hover: $color-button_warning-border-hover,
+    bg-active: $color-button_warning-bg-active,
+    border-active: $color-button_warning-border-active,
+    text-hover: $color-button_warning-text-hover,
+    text-active: $color-button_warning-text-active,
+    outline-focus: $color-button_warning-outline-focus,
+    outline-border-default: $color-button_warning_outline-border-default,
+    borderless-text-default: $color-button_warning_borderless-text-default,
+
+    disabled-bg-default: $color-button_disabled_warning-bg-default,
+
+    warning-theme-borderless-text-color: $color-button_warning_borderless-text-default,
+    warning-theme-light-text-color: $color-button_warning_light-text-default,
+    warning-theme-outline-text-color: $color-button_warning_outline-text-default
+  ),
+  'danger': (
+    bg: $color-button_danger-bg-default,
+    text: $color-button_danger-text-default,
+    duration: $transition_duration-button_danger-bg,
+    function: $transition_function-button_danger-bg,
+    delay: $transition_delay-button_danger-bg,
+    scale: $transform_scale-button_danger,
+    bg-hover: $color-button_danger-bg-hover,
+    border-hover: $color-button_danger-border-hover,
+    bg-active: $color-button_danger-bg-active,
+    border-active: $color-button_danger-border-active,
+    text-hover: $color-button_danger-text-hover,
+    text-active: $color-button_danger-text-active,
+    outline-focus: $color-button_danger-outline-focus,
+    outline-border-default: $color-button_danger_outline-border-default,
+    borderless-text-default: $color-button_danger_borderless-text-default,
+
+    disabled-bg-default: $color-button_disabled_danger-bg-default,
+
+    danger-theme-borderless-text-color: $color-button_danger_borderless-text-default,
+    danger-theme-light-text-color: $color-button_danger_light-text-default,
+    danger-theme-outline-text-color: $color-button_danger_outline-text-default
+  )
+);
+$sizes: ('small', 'default', 'large');
+$themes: (
+  'solid': (
+    disabled-text-default: $color-button_disabled_solid-text-default
+  ),
+  'borderless': (
+    bg: $color-button_borderless-text-default,
+    duration: $transition_duration-button_borderless-bg,
+    function: $transition_function-button_borderless-bg,
+    delay: $transition_delay-button_borderless-bg,
+    border: $color-button_borderless-border-default,
+    bg-hover: $color-button_borderless-bg-hover,
+    bg-active: $color-button_borderless-bg-active,
+    border-hover: $color-button_borderless-border-hover,
+    border-active: $color-button_borderless-border-active,
+
+    disabled-text-default: $color-button_disabled-text-default
+  ),
+  'light': (
+    bg: $color-button_light-bg-default,
+    duration: $transition_duration-button_light-bg,
+    function: $transition_function-button_light-bg,
+    delay: $transition_delay-button_light-bg,
+    border: $color-button_light-border-default,
+    bg-hover: $color-button_light-bg-hover,
+    bg-active: $color-button_light-bg-active,
+    border-hover: $color-button_light-border-hover,
+    border-active: $color-button_light-border-active,
+
+    disabled-text-default: $color-button_disabled-text-default,
+    disabled-theme-primary-bg-default: $color-button_disabled_light_primary-bg-default,
+    disabled-theme-secondary-bg-default: $color-button_disabled_light_secondary-bg-default,
+    disabled-theme-tertiary-bg-default: $color-button_disabled_light_tertiary-bg-default,
+    disabled-theme-warning-bg-default: $color-button_disabled_light_warning-bg-default,
+    disabled-theme-danger-bg-default: $color-button_disabled_light_danger-bg-default
+  ),
+  'outline': (
+    bg: $color-button_primary_outline-border-default,
+    bg-hover: $color-button_outline-bg-hover,
+    bg-active: $color-button_outline-bg-active,
+    border-hover: transparent,
+    border-active: transparent,
+
+    disabled-text-default: $color-button_disabled_outline_text-default,
+    disabled-theme-border-default: $color-button_disabled_outline-border-default,
+    outline-theme-color-default: $color-button_disabled_outline_text-default
+  )
+);
+
 .#{$prefix}-button {
   position: relative;
-  // display: inline-block;
+  box-shadow: none;
+  height: 32px;
   display: inline-flex;
   align-items: center;
-  font-weight: 400;
-  text-align: center;
+  justify-content: center;
   cursor: pointer;
   user-select: none;
-  touch-action: manipulation;
-  height: 32px;
-  padding: 6px 12px;
-  font-size: 14px;
-  border-radius: var(--#{$prefix}-border-radius-small);
-  box-sizing: border-box;
-  border: 1px solid transparent;
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  border: 0 solid $color-button_primary-border-default;
+  border-radius: $radius-button;
+  padding: $spacing-button_default-paddingTop $spacing-button_default-paddingRight
+    $spacing-button_default-paddingBottom $spacing-button_default-paddingLeft;
+  font-size: $font-button-fontSize;
+  line-height: $font-button-lineHeight;
+  font-weight: $font-button-fontWeight;
   outline: none;
-  transform: scale(1);
-  transform-origin: center;
-  box-sizing: border-box;
   vertical-align: middle;
   white-space: nowrap;
 
-  &-content {
-    display: flex;
-    align-items: center;
-    & svg {
-      width: 16px;
-      height: 16px;
-      margin-right: 8px;
-    }
-  }
-
-  & + .#{$prefix}-button {
-    margin-left: 12px;
-  }
-
-  // 添加 pressed 状态的过渡效果
-  &.#{$prefix}-button-pressed {
-    transform: scale(0.98);
-    transition: transform 0.1s cubic-bezier(0.645, 0.045, 0.355, 1);
-  }
-
-  &::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-  }
-
-  &-primary {
-    color: rgba(var(--#{$prefix}-white), 1);
-    background-color: var(--#{$prefix}-color-primary);
-    border-color: var(--#{$prefix}-color-primary);
-
-    &:hover,
-    &:focus {
-      background-color: var(--#{$prefix}-color-primary-hover);
-      border-color: var(--#{$prefix}-color-primary-hover);
-    }
-
-    &:active,
-    &.#{$prefix}-button-pressed {
-      background-color: var(--#{$prefix}-color-primary-active);
-      border-color: var(--#{$prefix}-color-primary-active);
-    }
-
-    &.is-disabled,
-    &[disabled] {
-      color: rgba(var(--#{$prefix}-white), 1);
-      background-color: var(--#{$prefix}-color-primary-disabled);
-      border-color: var(--#{$prefix}-color-primary-disabled);
-      cursor: not-allowed;
-    }
-  }
-
-  &-secondary {
-    color: rgba(var(--#{$prefix}-white), 1);
-    background-color: var(--#{$prefix}-color-secondary);
-    border-color: var(--#{$prefix}-color-secondary);
-
-    &:hover,
-    &:focus {
-      background-color: var(--#{$prefix}-color-secondary-hover);
-      border-color: var(--#{$prefix}-color-secondary-hover);
-    }
-
-    &:active,
-    &.#{$prefix}-button-pressed {
-      background-color: var(--#{$prefix}-color-secondary-active);
-      border-color: var(--#{$prefix}-color-secondary-active);
-    }
-
-    &.is-disabled,
-    &[disabled] {
-      color: rgba(var(--#{$prefix}-white), 1);
-      background-color: var(--#{$prefix}-color-secondary-disabled);
-      border-color: var(--#{$prefix}-color-secondary-disabled);
-      cursor: not-allowed;
-    }
-  }
-
-  &-tertiary {
-    color: var(--#{$prefix}-color-text-1);
-    background-color: transparent;
-    border-color: var(--#{$prefix}-color-border);
-
-    &:hover,
-    &:focus {
-      color: var(--#{$prefix}-color-text-1);
-      background-color: var(--#{$prefix}-color-tertiary-light-hover);
-      border-color: var(--#{$prefix}-color-tertiary);
-    }
-
-    &:active,
-    &.#{$prefix}-button-pressed {
-      color: var(--#{$prefix}-color-text-1);
-      background-color: var(--#{$prefix}-color-tertiary-light-active);
-      border-color: var(--#{$prefix}-color-tertiary);
-    }
-
-    &.is-disabled,
-    &[disabled] {
-      color: var(--#{$prefix}-color-disabled-text);
-      background-color: var(--#{$prefix}-color-disabled-fill);
-      border-color: var(--#{$prefix}-color-disabled-border);
-      cursor: not-allowed;
-    }
-  }
-
-  &-warning {
-    color: rgba(var(--#{$prefix}-white), 1);
-    background-color: var(--#{$prefix}-color-warning);
-    border-color: var(--#{$prefix}-color-warning);
-
-    &:hover,
-    &:focus {
-      background-color: var(--#{$prefix}-color-warning-hover);
-      border-color: var(--#{$prefix}-color-warning-hover);
-    }
-
-    &:active,
-    &.#{$prefix}-button-pressed {
-      background-color: var(--#{$prefix}-color-warning-active);
-      border-color: var(--#{$prefix}-color-warning-active);
-    }
-
-    &.is-disabled,
-    &[disabled] {
-      color: rgba(var(--#{$prefix}-white), 1);
-      background-color: var(--#{$prefix}-color-warning-light-default);
-      border-color: var(--#{$prefix}-color-warning-light-default);
-      cursor: not-allowed;
-    }
-  }
-
-  &-danger {
-    color: rgba(var(--#{$prefix}-white), 1);
-    background-color: var(--#{$prefix}-color-danger);
-    border-color: var(--#{$prefix}-color-danger);
-
-    &:hover,
-    &:focus {
-      background-color: var(--#{$prefix}-color-danger-hover);
-      border-color: var(--#{$prefix}-color-danger-hover);
-    }
-
-    &:active,
-    &.#{$prefix}-button-pressed {
-      background-color: var(--#{$prefix}-color-danger-active);
-      border-color: var(--#{$prefix}-color-danger-active);
-    }
-
-    &.is-disabled,
-    &[disabled] {
-      color: rgba(var(--#{$prefix}-white), 1);
-      background-color: var(--#{$prefix}-color-danger-light-default);
-      border-color: var(--#{$prefix}-color-danger-light-default);
-      cursor: not-allowed;
-    }
-  }
-
-  &-ghost {
-    color: var(--#{$prefix}-color-text-1);
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
-
-    &:hover,
-    &:focus {
-      color: var(--#{$prefix}-color-text-1);
-      background-color: var(--#{$prefix}-color-tertiary-light-hover);
-    }
-
-    &:active,
-    &.#{$prefix}-button-pressed {
-      color: var(--#{$prefix}-color-text-1);
-      background-color: var(--#{$prefix}-color-tertiary-light-active);
-    }
-
-    &.is-disabled,
-    &[disabled] {
-      color: var(--#{$prefix}-color-disabled-text);
-      background-color: transparent;
-      border-color: transparent;
-      cursor: not-allowed;
-    }
-  }
-
-  &-link {
-    color: var(--#{$prefix}-color-link);
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
-
-    &:hover,
-    &:focus {
-      color: var(--#{$prefix}-color-link-hover);
-      border-color: transparent;
-      background-color: transparent;
-    }
-
-    &:active,
-    &.#{$prefix}-button-pressed {
-      color: var(--#{$prefix}-color-link-active);
-      border-color: transparent;
-      background-color: transparent;
-    }
-
-    &.is-disabled,
-    &[disabled] {
-      color: var(--#{$prefix}-color-link-disabled);
-      background-color: transparent;
-      border-color: transparent;
-      cursor: not-allowed;
-    }
-  }
-
-  // Size variants
-  &-small {
-    height: 24px;
-    padding: 0 7px;
-    font-size: 12px;
-    border-radius: var(--#{$prefix}-border-radius-small);
-  }
-
-  &-large {
-    height: 40px;
-    padding: 6px 15px;
-    font-size: 16px;
-    border-radius: var(--#{$prefix}-border-radius-medium);
-  }
-
-  // Status
-  &.is-disabled,
-  &[disabled] {
+  &-disabled {
     cursor: not-allowed;
-    > * {
-      pointer-events: none;
+  }
+
+  @each $type, $properties in $types {
+    &-#{$type} {
+      background-color: map-get($properties, 'bg');
+      color: map-get($properties, 'text');
+      transition: background-color
+        map-get($properties, 'duration')
+        map-get($properties, 'function')
+        map-get($properties, 'delay');
+      transform: map-get($properties, 'scale');
+      &:not(.#{$prefix}-button-disabled):hover {
+        background-color: map-get($properties, 'bg-hover');
+        border-color: map-get($properties, 'border-hover');
+      }
+      &:not(.#{$prefix}-button-disabled):active {
+        background-color: map-get($properties, 'bg-active');
+        border-color: map-get($properties, 'border-active');
+      }
+      &-disabled {
+        background-color: map-get($properties, 'disabled-bg-default');
+      }
+    }
+
+    $colors: ('borderless', 'light', 'outline', 'solid');
+    @each $color in $colors {
+      @if $color != 'solid' {
+        &-#{$type}.#{$prefix}-button-#{$color} {
+          color: map-get($properties, '#{$type}-theme-#{$color}-text-color');
+        }
+      }
+      &-disabled.#{$prefix}-button-#{$color} {
+        background-color: map-get($properties, 'disabled-theme-bg-default');
+        color: map-get($properties, '#{$type}-theme-#{$color}-text-default');
+      }
     }
   }
 
-  &-loading {
-    position: relative;
-    pointer-events: none;
-    opacity: var(--#{$prefix}-opacity-loading);
-    & svg {
-      width: 16px;
-      height: 16px;
-      animation: animation-rotate 0.8s linear infinite;
-      animation-fill-mode: forwards;
+  @each $theme, $properties in $themes {
+    @if $theme != 'solid' {
+      &-#{$theme} {
+        background-color: map-get($properties, 'bg');
+        transition: background-color
+          map-get($properties, 'duration')
+          map-get($properties, 'function')
+          map-get($properties, 'delay');
+        &:not(.#{$prefix}-button-disabled):hover {
+          background-color: map-get($properties, 'bg-hover');
+          border-color: map-get($properties, 'border-hover');
+        }
+        &:active {
+          background-color: map-get($properties, 'bg-active');
+          border-color: map-get($properties, 'border-active');
+        }
+      }
+      .#{$prefix}-button-disabled &-#{$theme} {
+        color: map-get($properties, 'disabled-text-default');
+      }
     }
-  }
-
-  &-icon {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  &-block {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    margin-left: 0px !important;
   }
 }
+
+// .#{$prefix}-button {
+//   position: relative;
+//   display: inline-flex;
+//   align-items: center;
+//   font-weight: 400;
+//   text-align: center;
+//   cursor: pointer;
+//   user-select: none;
+//   touch-action: manipulation;
+//   height: 32px;
+//   padding: 6px 12px;
+//   font-size: 14px;
+//   border-radius: var(--#{$prefix}-border-radius-small);
+//   box-sizing: border-box;
+//   border: 1px solid transparent;
+//   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+//   outline: none;
+//   transform: scale(1);
+//   transform-origin: center;
+//   box-sizing: border-box;
+//   vertical-align: middle;
+//   white-space: nowrap;
+
+//   &-content {
+//     display: flex;
+//     align-items: center;
+//     & svg {
+//       width: 16px;
+//       height: 16px;
+//     }
+//     &-text {
+//       margin-right: 8px;
+//     }
+//   }
+
+//   & + .#{$prefix}-button {
+//     margin-left: 12px;
+//   }
+
+//   // 添加 pressed 状态的过渡效果
+//   &.#{$prefix}-button-pressed {
+//     transform: scale(0.98);
+//     transition: transform 0.1s cubic-bezier(0.645, 0.045, 0.355, 1);
+//   }
+
+//   &::-moz-focus-inner {
+//     border: 0;
+//     padding: 0;
+//   }
+
+//   &-primary {
+//     color: rgba(var(--#{$prefix}-white), 1);
+//     background-color: var(--#{$prefix}-color-primary);
+//     border-color: var(--#{$prefix}-color-primary);
+
+//     &:hover,
+//     &:focus {
+//       background-color: var(--#{$prefix}-color-primary-hover);
+//       border-color: var(--#{$prefix}-color-primary-hover);
+//     }
+
+//     &:active,
+//     &.#{$prefix}-button-pressed {
+//       background-color: var(--#{$prefix}-color-primary-active);
+//       border-color: var(--#{$prefix}-color-primary-active);
+//     }
+
+//     &.is-disabled,
+//     &[disabled] {
+//       color: rgba(var(--#{$prefix}-white), 1);
+//       background-color: var(--#{$prefix}-color-primary-disabled);
+//       border-color: var(--#{$prefix}-color-primary-disabled);
+//       cursor: not-allowed;
+//     }
+//   }
+
+//   &-secondary {
+//     color: rgba(var(--#{$prefix}-white), 1);
+//     background-color: var(--#{$prefix}-color-secondary);
+//     border-color: var(--#{$prefix}-color-secondary);
+
+//     &:hover,
+//     &:focus {
+//       background-color: var(--#{$prefix}-color-secondary-hover);
+//       border-color: var(--#{$prefix}-color-secondary-hover);
+//     }
+
+//     &:active,
+//     &.#{$prefix}-button-pressed {
+//       background-color: var(--#{$prefix}-color-secondary-active);
+//       border-color: var(--#{$prefix}-color-secondary-active);
+//     }
+
+//     &.is-disabled,
+//     &[disabled] {
+//       color: rgba(var(--#{$prefix}-white), 1);
+//       background-color: var(--#{$prefix}-color-secondary-disabled);
+//       border-color: var(--#{$prefix}-color-secondary-disabled);
+//       cursor: not-allowed;
+//     }
+//   }
+
+//   &-tertiary {
+//     color: var(--#{$prefix}-color-text-1);
+//     background-color: transparent;
+//     border-color: var(--#{$prefix}-color-border);
+
+//     &:hover,
+//     &:focus {
+//       color: var(--#{$prefix}-color-text-1);
+//       background-color: var(--#{$prefix}-color-tertiary-light-hover);
+//       border-color: var(--#{$prefix}-color-tertiary);
+//     }
+
+//     &:active,
+//     &.#{$prefix}-button-pressed {
+//       color: var(--#{$prefix}-color-text-1);
+//       background-color: var(--#{$prefix}-color-tertiary-light-active);
+//       border-color: var(--#{$prefix}-color-tertiary);
+//     }
+
+//     &.is-disabled,
+//     &[disabled] {
+//       color: var(--#{$prefix}-color-disabled-text);
+//       background-color: var(--#{$prefix}-color-disabled-fill);
+//       border-color: var(--#{$prefix}-color-disabled-border);
+//       cursor: not-allowed;
+//     }
+//   }
+
+//   &-warning {
+//     color: rgba(var(--#{$prefix}-white), 1);
+//     background-color: var(--#{$prefix}-color-warning);
+//     border-color: var(--#{$prefix}-color-warning);
+
+//     &:hover,
+//     &:focus {
+//       background-color: var(--#{$prefix}-color-warning-hover);
+//       border-color: var(--#{$prefix}-color-warning-hover);
+//     }
+
+//     &:active,
+//     &.#{$prefix}-button-pressed {
+//       background-color: var(--#{$prefix}-color-warning-active);
+//       border-color: var(--#{$prefix}-color-warning-active);
+//     }
+
+//     &.is-disabled,
+//     &[disabled] {
+//       color: rgba(var(--#{$prefix}-white), 1);
+//       background-color: var(--#{$prefix}-color-warning-light-default);
+//       border-color: var(--#{$prefix}-color-warning-light-default);
+//       cursor: not-allowed;
+//     }
+//   }
+
+//   &-danger {
+//     color: rgba(var(--#{$prefix}-white), 1);
+//     background-color: var(--#{$prefix}-color-danger);
+//     border-color: var(--#{$prefix}-color-danger);
+
+//     &:hover,
+//     &:focus {
+//       background-color: var(--#{$prefix}-color-danger-hover);
+//       border-color: var(--#{$prefix}-color-danger-hover);
+//     }
+
+//     &:active,
+//     &.#{$prefix}-button-pressed {
+//       background-color: var(--#{$prefix}-color-danger-active);
+//       border-color: var(--#{$prefix}-color-danger-active);
+//     }
+
+//     &.is-disabled,
+//     &[disabled] {
+//       color: rgba(var(--#{$prefix}-white), 1);
+//       background-color: var(--#{$prefix}-color-danger-light-default);
+//       border-color: var(--#{$prefix}-color-danger-light-default);
+//       cursor: not-allowed;
+//     }
+//   }
+
+//   &-ghost {
+//     color: var(--#{$prefix}-color-text-1);
+//     background-color: transparent;
+//     border-color: transparent;
+//     box-shadow: none;
+
+//     &:hover,
+//     &:focus {
+//       color: var(--#{$prefix}-color-text-1);
+//       background-color: var(--#{$prefix}-color-tertiary-light-hover);
+//     }
+
+//     &:active,
+//     &.#{$prefix}-button-pressed {
+//       color: var(--#{$prefix}-color-text-1);
+//       background-color: var(--#{$prefix}-color-tertiary-light-active);
+//     }
+
+//     &.is-disabled,
+//     &[disabled] {
+//       color: var(--#{$prefix}-color-disabled-text);
+//       background-color: transparent;
+//       border-color: transparent;
+//       cursor: not-allowed;
+//     }
+//   }
+
+//   &-link {
+//     color: var(--#{$prefix}-color-link);
+//     background-color: transparent;
+//     border-color: transparent;
+//     box-shadow: none;
+
+//     &:hover,
+//     &:focus {
+//       color: var(--#{$prefix}-color-link-hover);
+//       border-color: transparent;
+//       background-color: transparent;
+//     }
+
+//     &:active,
+//     &.#{$prefix}-button-pressed {
+//       color: var(--#{$prefix}-color-link-active);
+//       border-color: transparent;
+//       background-color: transparent;
+//     }
+
+//     &.is-disabled,
+//     &[disabled] {
+//       color: var(--#{$prefix}-color-link-disabled);
+//       background-color: transparent;
+//       border-color: transparent;
+//       cursor: not-allowed;
+//     }
+//   }
+
+//   // Size variants
+//   &-small {
+//     height: 24px;
+//     padding: 0 7px;
+//     font-size: 12px;
+//     border-radius: var(--#{$prefix}-border-radius-small);
+//   }
+
+//   &-large {
+//     height: 40px;
+//     padding: 6px 15px;
+//     font-size: 16px;
+//     border-radius: var(--#{$prefix}-border-radius-medium);
+//   }
+
+//   // Status
+//   &.is-disabled,
+//   &[disabled] {
+//     cursor: not-allowed;
+//     > * {
+//       pointer-events: none;
+//     }
+//   }
+
+//   &-loading {
+//     position: relative;
+//     pointer-events: none;
+//     opacity: var(--#{$prefix}-opacity-loading);
+//     & svg {
+//       width: 16px;
+//       height: 16px;
+//       animation: animation-rotate 0.8s linear infinite;
+//       animation-fill-mode: forwards;
+//     }
+//   }
+
+//   &-icon {
+//     display: inline-flex;
+//     align-items: center;
+//   }
+
+//   &-block {
+//     width: 100%;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     box-sizing: border-box;
+//     margin-left: 0px !important;
+//   }
+// }

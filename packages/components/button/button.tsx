@@ -53,13 +53,14 @@ const Button = defineComponent({
           vnode[0].children = content[0] + ' ' + content[1]
         }
       }
-      return vnode
+      if (vnode) return <span class={`${prefix}-button-content-text`}>{vnode}</span>
+      return null
     }
     const defaultRender = () => {
       return (
         <span class={`${prefix}-button-content`}>
           {iconRender()}
-          <span>{defaultTextRender()}</span>
+          {defaultTextRender()}
         </span>
       )
     }
@@ -67,9 +68,11 @@ const Button = defineComponent({
     const buttonClass = computed(() => [
       `${prefix}-button`,
       `${prefix}-button-${props.type}`,
-      `${prefix}-button-${props.size}`,
+      `${prefix}-button-size-${props.size}`,
+      `${prefix}-button-${props.theme}`,
       {
-        'is-disabled': props.disabled,
+        [`${prefix}-button-disabled`]: props.disabled,
+        [`${prefix}-button-${props.type}-disabled`]: props.disabled,
         [`${prefix}-button-loading`]: props.loading && !props.disabled,
         [`${prefix}-button-icon`]: ctx.slots.icon,
         [`${prefix}-button-block`]: props.block
