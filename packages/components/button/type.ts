@@ -1,7 +1,7 @@
 import type { VNode, PropType } from 'vue'
 import type Button from './button.tsx'
 export interface ButtonProps {
-  type?: 'primary' | 'success' | 'warning' | 'danger' | 'info'
+  type?: 'primary' | 'warning' | 'danger' | 'tertiary' | 'secondary'
   size?: 'small' | 'default' | 'large'
   disabled?: boolean
   loading?: boolean
@@ -16,7 +16,7 @@ export const buttonPropsDefaults = {
   type: {
     type: String as PropType<ButtonProps['type']>,
     default: 'primary',
-    values: ['primary', 'success', 'warning', 'danger', 'info'],
+    values: ['primary', 'success', 'warning', 'danger', 'tertiary', 'secondary'],
     required: false
   },
   /**

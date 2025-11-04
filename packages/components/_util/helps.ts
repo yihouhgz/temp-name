@@ -76,3 +76,8 @@ export const domRectToObject = (rect: DOMRect): Omit<DOMRect, 'toJSON'> => {
     y: rect.y
   }
 }
+
+// 首字母大写
+export const toFirstLocaleUpperCase = (str: string) => {
+  return str.charAt(0).toLocaleUpperCase() + str.slice(1)
+}

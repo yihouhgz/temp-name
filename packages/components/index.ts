@@ -1,6 +1,6 @@
 import type { App } from 'vue'
 import { withInstall } from './_util/install'
-import { Button, SyncButton } from './button/index'
+import { Button, SyncButton, ButtonGroup } from './button/index'
 import Watermark from './watermark/index'
 import Input from './input/index'
 import { Icon, IconJsx } from './icon/index'
@@ -20,6 +20,7 @@ import Switch from './switch'
 import Toast from './toast'
 const components = [
   Button,
+  ButtonGroup,
   SyncButton,
   Watermark,
   Input,
