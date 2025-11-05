@@ -1,29 +1,26 @@
-import { defineComponent, computed, } from 'vue'
+import { defineComponent, computed, getCurrentInstance } from 'vue'
 import { prefix } from 'constants/config'
 import { tagEmits, tagProps } from './type'
 import type { ExtractPropTypes, ExtractPublicPropTypes } from 'vue'
 import "./style/tag.ts"
 import { IconClear } from '../icon'
 import { Avatar } from '../avatar'
+import { renderElementForPropsOrSlot } from '../_util/helps'
 
 const Tag = defineComponent(
     {
         setup(props, { emit, slots }) {
+            const instance = getCurrentInstance()
             // 计算类名
             const classes = computed(() => [
                 `${prefix}-tag`,
                 props.color ? `${prefix}-tag-${props.color}-${props.type}` : '',
                 `${prefix}-tag-${props.size}`,
                 `${prefix}-tag-${props.shape}`,
-                `${prefix}-tag-${props.type}`
+                `${prefix}-tag-${props.type}`,
+                !props.visible ? `${prefix}-tag-visible` : "",
 
             ].filter(Boolean).join(' '))
-
-            // 计算样式
-            const styles = computed(() => ({
-                ...props.style,
-                display: props.visible ? 'inline-flex' : 'none',
-            }))
 
             // 关闭事件
             const handleClose = (e: MouseEvent) => {
@@ -39,11 +36,12 @@ const Tag = defineComponent(
             return () => (
                 <div
                     class={classes.value}
-                    style={styles.value}
                     onClick={handleClick}
                 >
-                    {props.prefixIcon && (
-                        props.prefixIcon instanceof Function ? props.prefixIcon() : props.prefixIcon
+                    {renderElementForPropsOrSlot('prefixIcon', instance) || (
+                        props.prefixIcon && (
+                            props.prefixIcon instanceof Function ? props.prefixIcon() : props.prefixIcon
+                        )
                     )}
                     {
                         props.avatarSrc && (
@@ -51,8 +49,10 @@ const Tag = defineComponent(
                         )
                     }
                     {slots.default ? slots.default() : 'Tag'}
-                    {props.suffixIcon && (
-                        props.suffixIcon instanceof Function ? props.suffixIcon() : props.suffixIcon
+                    {renderElementForPropsOrSlot('suffixIcon', instance) || (
+                        props.suffixIcon && (
+                            props.suffixIcon instanceof Function ? props.suffixIcon() : props.suffixIcon
+                        )
                     )}
                     {props.closable && (
                         <div

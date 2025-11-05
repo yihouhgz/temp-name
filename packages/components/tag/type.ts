@@ -65,11 +65,6 @@ export const tagProps = {
         default: 'small',
         required: false
     },
-    style: { // 自定义样式
-        type: Object as PropType<CSSProperties>,
-        default: () => ({}),
-        required: false
-    },
     visible: { // 是否显示
         type: Boolean,
         default: true,

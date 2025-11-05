@@ -470,7 +470,14 @@ const App = defineComponent(() => {
         <tempui-tag size="large" color="green">large</tempui-tag>
         <tempui-tag closable>large</tempui-tag>
         <tempui-tag prefixIcon="234" suffixIcon="234" avatarShape="circle" avatarSrc="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png">large</tempui-tag>
-      </div> 
+        <tempui-tag visible={true}
+          v-slots={{
+            prefixIcon: () => <tempui-icon name="camera"></tempui-icon>,
+            suffixIcon: () => <tempui-icon name="camera"></tempui-icon>
+          }}>large
+
+        </tempui-tag>
+      </div>
     </div>
   )
 })
