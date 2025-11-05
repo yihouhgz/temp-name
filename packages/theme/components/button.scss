@@ -548,7 +548,8 @@ $types: (
     disabled-bg-default: $color-button_disabled_danger-bg-default,
 
     danger-theme-light-text-color: $color-button_danger_light-text-default,
-    danger-theme-outline-text-color: $color-button_danger_outline-text-default
+    danger-theme-outline-text-color: $color-button_danger_outline-text-default,
+    danger-theme-borderless-text-color: $color-button_danger-bg-default
   )
 );
 $sizes: (

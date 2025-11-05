@@ -3,7 +3,9 @@ import { h } from 'vue'
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import './style.css'
-
+import { MonacoEditor } from '../../monaco.tsx'
+import * as Components from '../../../dist'
+import '../../..//dist/ui-vue-components.esm.css'
 export default {
   extends: DefaultTheme,
   Layout: () => {
@@ -12,6 +14,7 @@ export default {
     })
   },
   enhanceApp({ app, router, siteData }) {
-    // ...
+    app.component('MonacoEditor', MonacoEditor)
+    app.use(Components)
   }
 } satisfies Theme

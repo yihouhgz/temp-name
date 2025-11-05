@@ -1,16 +1,19 @@
 import { defineConfig } from 'vitepress'
 import { projectName } from '../constant'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  lastUpdated: true,
   title: projectName,
   description: 'A VitePress Site',
   themeConfig: {
+    editLink: {
+      pattern: 'https://github.com/yihouhgz/temp-name/docs/components/:path'
+    },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: '团队成员', link: '/team-members' }
     ],
 
     sidebar: [
