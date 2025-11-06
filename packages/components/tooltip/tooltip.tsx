@@ -19,7 +19,7 @@ import { tooltioProps, tooltipEmits } from './type'
 import { isFunction, isComponentByVNode, domRectToObject, isNumber } from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
-import { useEventListener, useClickOutside, type EventMap } from '../_util'
+import { useEventListener, useClickOutside, onElementResize, type EventMap } from '../_util'
 import { calcPosition, type PopupContainerDOMRect } from './herps'
 import CssAnimation from '../css-animation'
 
@@ -48,17 +48,29 @@ const Tooltip = defineComponent({
       isAnimating: false,
       transitionState: 'enter'
     })
+    watch(
+      () => props.visible,
+      (res) => {
+        animationOptions.isAnimating = true
+        animationOptions.transitionState = res ? 'enter' : 'leave'
+      }
+    )
     const showTooltip = computed(() => {
       const { trigger, visible } = props
+      if (animationOptions.isAnimating) return animationOptions.isAnimating
       if (trigger !== 'custom') {
         return show.value
       }
       return visible
     })
     const triggerHnadle = () => {
+      animationOptions.isAnimating = true
+      animationOptions.transitionState = 'enter'
       show.value = true
     }
     const triggerLeave = () => {
+      animationOptions.isAnimating = true
+      animationOptions.transitionState = 'leave'
       show.value = false
     }
 
@@ -66,12 +78,20 @@ const Tooltip = defineComponent({
       const target = tooltipDefaultRef.value.nextElementSibling as HTMLElement
       triggerElementRef.value = target
       targetElementRect.value = target.getBoundingClientRect()
+      onElementResize(triggerElementRef.value, () => {
+        const position = calcPosition(options.utils)
+        if (isNumber(position.top)) position.top = position.top + 'px'
+        if (isNumber(position.left)) position.left = position.left + 'px'
+        innerStyle.value = position
+      })
       const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
       useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
       if (eventMap.enter === 'click' || eventMap.enter === 'custom') {
         const handleClickOutside = (event: Event) => {
-          if (showTooltip.value && !props.clickToHide) {
-            if (innerRef.value.contains(event.target)) return
+          if (showTooltip.value && innerRef.value) {
+            if (!props.clickToHide && innerRef.value.contains(event.target)) return
+          } else {
+            return
           }
           if (eventMap.enter === 'custom') {
             ctx.emit('visibleChange', false)
@@ -196,6 +216,7 @@ const Tooltip = defineComponent({
       const { transitionState } = animationOptions
       if (transitionState === 'leave') {
         // 触发动画结束事件 清理Portal
+        show.value = false
       }
       animationOptions.isAnimating = false
     }

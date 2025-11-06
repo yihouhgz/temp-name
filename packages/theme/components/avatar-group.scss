@@ -1,0 +1,45 @@
+@import '../base/constant';
+
+.#{$prefix}-avatar-group {
+  display: inline-block;
+  $avatar-border-sizes: (
+    extra-extra-small: 4px,
+    extra-small: 10px,
+    small: 12px,
+    default: 12px,
+    medium: 12px,
+    large: 18px,
+    extra-large: 32px
+  );
+  &-hover {
+    &:hover {
+      @each $name, $size in $avatar-border-sizes {
+        .#{$prefix}-avatar-#{'' + $name} {
+          margin-left: 0px;
+        }
+      }
+    }
+  }
+  @each $name, $size in $avatar-border-sizes {
+    .#{$prefix}-avatar-#{'' + $name} {
+      margin-left: #{'-' + $size};
+      border: 1px solid var(--#{$prefix}-color-bg-1);
+      transition: margin-left
+        var(--#{$prefix}-transition_duration-faster)
+        var(--#{$prefix}-transition_function-easeIn);
+    }
+  }
+  .#{$prefix}-avatar {
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  // zindex
+  &.#{$prefix}-avatar {
+    box-sizing: border-box;
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

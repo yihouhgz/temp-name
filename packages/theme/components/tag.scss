@@ -2,79 +2,78 @@
 
 // 定义变量
 $tag-sizes: (
-    'large': (height: 24px,
-        padding: 4px 8px),
-    'small': (height: 20px,
-        padding: 2px 8px)
+  'large': (height: 24px,
+    padding: 4px 8px),
+  'small': (height: 20px,
+    padding: 2px 8px)
 );
-$colors: "amber", "blue", "cyan", "green", "grey", "indigo", "light-blue", "light-green", "lime", "orange", "pink", "purple", "red", "teal", "violet", "yellow";
-$types: "ghost", "solid", "light";
-
-
+$colors: 'amber', 'blue', 'cyan', 'green', 'grey', 'indigo', 'light-blue', 'light-green', 'lime', 'orange',
+  'pink', 'purple', 'red', 'teal', 'violet', 'yellow';
+$types: 'ghost', 'solid', 'light';
 
 // 基础标签样式
 .#{$prefix}-tag {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: map-get(map-get($tag-sizes, 'small'), 'height');
-    padding: map-get(map-get($tag-sizes, 'small'), 'padding');
-    border-radius: 3px;
-    box-sizing: border-box;
-    white-space: nowrap;
-    font-size: 12px;
-    line-height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: map-get(map-get($tag-sizes, 'small'), 'height');
+  padding: map-get(map-get($tag-sizes, 'small'), 'padding');
+  border-radius: 3px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  font-size: 12px;
+  line-height: 16px;
 
-    &-visible {
-        display: none;
+  &-visible {
+    display: none;
+  }
+
+  // 尺寸变体
+  @each $size, $properties in $tag-sizes {
+    &-#{$size} {
+      height: map-get($properties, 'height');
+      padding: map-get($properties, 'padding');
     }
+  }
+}
 
-    // 尺寸变体
-    @each $size, $properties in $tag-sizes {
-        &-#{$size} {
-            height: map-get($properties, 'height');
-            padding: map-get($properties, 'padding');
-        }
+// 颜色和类型变体
+@each $c in $colors {
+  @each $t in $types {
+    &-#{$c}-#{$t} {
+      @if $t =='ghost' {
+        background-color: transparent;
+        border: 1px solid rgba(var(--#{$prefix}-#{$c}-4), 1);
+        color: rgb(var(--#{$prefix}-#{$c}-5));
+      }
+
+      @else if $t =='solid' {
+        background-color: rgb(var(--#{$prefix}-#{$c}-5));
+        color: #fff;
+      }
+
+      @else if $t =='light' {
+        background-color: rgba(var(--#{$prefix}-#{$c}-5), 0.15);
+        color: rgb(var(--#{$prefix}-#{$c}-8));
+      }
     }
-
-    // 颜色和类型变体
-    @each $c in $colors {
-        @each $t in $types {
-            &-#{$c}-#{$t} {
-                @if $t =='ghost' {
-                    background-color: transparent;
-                    border: 1px solid rgba(var(--#{$prefix}-#{$c}-4), 1);
-                    color: rgb(var(--#{$prefix}-#{$c}-5));
-                }
-
-                @else if $t =='solid' {
-                    background-color: rgb(var(--#{$prefix}-#{$c}-5));
-                    color: #fff;
-                }
-
-                @else if $t =='light' {
-                    background-color: rgba(var(--#{$prefix}-#{$c}-5), 0.15);
-                    color: rgb(var(--#{$prefix}-#{$c}-8));
-                }
-            }
-        }
-    }
+  }
 }
 
 // 关闭按钮
 .#{$prefix}-tag-close {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 4px;
-    color: var(--semi-color-text-2);
-    cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 4px;
+  color: var(--#{$prefix}-color-text-2);
+  cursor: pointer;
 
-    &:hover {
-        color: var(--semi-color-text-1);
-    }
+  &:hover {
+    color: var(--#{$prefix}-color-text-1);
+  }
 
-    &:active {
-        color: var(--semi-color-text-0);
-    }
+  &:active {
+    color: var(--#{$prefix}-color-text-0);
+  }
 }

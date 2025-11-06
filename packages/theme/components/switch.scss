@@ -1,0 +1,366 @@
+@import '../base/constant';
+
+//开关-背景色-动画持续时间
+$transition_duration-switch-bg: 200ms;
+//开关-背景色-过渡曲线
+$transition_function-switch-bg: var(--#{$prefix}-transition_function-easeIn);
+//开关-背景色-延迟时间
+$transition_delay-switch-bg: var(--#{$prefix}-transition_delay-none);
+
+//关闭态开关背景色 - 默认
+$color-switch_default-bg-default: var(--#{$prefix}-color-fill-0);
+//关闭态开关背景色 - 悬浮
+$color-switch_default-bg-hover: var(--#{$prefix}-color-fill-1);
+//关闭态开关背景色 - 按下
+$color-switch_default-bg-active: var(--#{$prefix}-color-fill-2);
+//关闭态开关描边颜色
+$color-switch_default-border-default: transparent;
+
+//开启态开关背景色 - 默认
+$color-switch_checked-bg-default: var(--#{$prefix}-color-success);
+//开启态开关背景色 - 悬浮
+$color-switch_checked-bg-hover: var(--#{$prefix}-color-success-hover);
+//开启态开关背景色 - 按下
+$color-switch_checked-bg-active: var(--#{$prefix}-color-success-active);
+
+//禁用态开关背景色
+$color-switch_disabled-bg-default: transparent;
+//禁用态开关背景色 - 悬浮
+$color-switch_disabled-bg-hover: transparent;
+//禁用态开关背景色 - 按下
+$color-switch_disabled-bg-active: transparent;
+//禁用态开关描边颜色
+$color-switch_disabled-border-default: var(--#{$prefix}-color-border);
+//禁用开启态开关背景颜色
+$color-switch_checked_disabled-bg-default: var(--#{$prefix}-color-success-disabled);
+//禁用开启态开关描边颜色
+$color-switch_checked_disabled-border-default: transparent;
+
+//开关按钮背景颜色
+$color-switch_knob-bg-default: rgba(var(--#{$prefix}-white), 1);
+//开关按钮描边颜色
+$color-switch_knob-border-default: var(--#{$prefix}-color-border);
+//开启态开关按钮文字颜色
+$color-switch_checked-text-default: var(--#{$prefix}-color-white);
+//关闭态开关按钮文字颜色
+$color-switch_unchecked-text-default: var(--#{$prefix}-color-text-2);
+//加载态开关loading图标颜色
+$color-switch_loading_spin-default: var(--#{$prefix}-color-white);
+//已开启开关加载态loading背景颜色
+$color-switch_spin_checked-bg-default: var(--#{$prefix}-color-success-hover);
+//已关闭开关加载态loading背景颜色
+$color-switch_spin_unchecked-bg-default: var(--#{$prefix}-color-fill-1);
+//开关轮廓 - 聚焦
+$color-switch_primary-outline-focus: var(--#{$prefix}-color-primary-light-active);
+
+//开关高度
+$height-switch: 24px;
+//大尺寸开关高度
+$height-switch_large: 32px;
+//小尺寸开关高度
+$height-switch_small: 16px;
+
+//开关动画时长
+$motion-switch-transitionDuration: 200ms;
+
+//开关圆角
+$radius-switch: $height-switch * 0.5;
+$radius-switch_knob: 9px;
+
+//大尺寸开关圆角
+$radius-switch_large: $height-switch_large * 0.5;
+$radius-switch_knob_large: 12px;
+
+//小尺寸开关圆角
+$radius-switch_small: $height-switch_small * 0.5;
+$radius-switch_knob_small: 6px;
+
+//未选中开关右侧偏移量
+$spacing-switch_unchecked-translateX: 2px;
+//未选中开关加载图标右侧偏移量
+$spacing-switch_spin_unchecked-translateX: 2px;
+//选中开关右侧偏移量
+$spacing-switch_checked-translateX: 18px;
+//选中开关加载图标右侧偏移量
+$spacing-switch_spin_checked-translateX: 16px;
+
+$spacing-switch_expand_large-translateX: 10px;
+//大尺寸未选中开关右侧偏移量
+$spacing-switch_unchecked_large-translateX: 3px;
+//大尺寸未选中开关加载图标右侧偏移量
+$spacing-switch_spin_unchecked_large-translateX: 2px;
+//大尺寸选中开关右侧偏移量
+$spacing-switch_checked_large-translateX: 26px;
+//大尺寸选中开关加载图标右侧偏移量
+$spacing-switch_spin_checked_large-translateX: 22px;
+
+$spacing-switch_expand_small-translateX: 2px;
+//小尺寸未选中开关右侧偏移量
+$spacing-switch_unchecked_small-translateX: 1px;
+//小尺寸未选中开关加载图标右侧偏移量
+$spacing-switch_spin_unchecked_small-translateX: 2px;
+//小尺寸选中开关右侧偏移量
+$spacing-switch_checked_small-translateX: 11px;
+//小尺寸选中开关加载图标右侧偏移量
+$spacing-switch_spin_checked_small-translateX: 10px;
+
+//开关按钮顶部边距
+$spacing-switch_knob-padding: 2px;
+//大尺寸开关按钮内边距
+$spacing-switch_knob_large-padding: 3px;
+//小尺寸开关按钮内边距
+$spacing-switch_knob_small-padding: 1px;
+
+//开关左侧偏移距离
+$spacing-switch_knob-left: 0px;
+
+//开关宽度
+$width-switch: 40px;
+//开关按钮形变宽度
+$width-switch_knob_expand: 6px;
+//开关按钮宽度
+$width-switch_knob_default: 18px;
+//开关按钮按下态宽度
+$width-switch_knob_active: $width-switch_knob_default + $width-switch_knob_expand;
+
+//小尺寸开关宽度
+$width-switch_small: 26px;
+//小尺寸开关按钮宽度
+$width-switch_knob_large_small: 12px;
+//小尺寸开关按钮按下态宽度
+$width-switch_knob_small_active: $width-switch_knob_large_small +
+  $spacing-switch_expand_small-translateX;
+
+//大尺寸开关高度
+$width-switch_large: 54px;
+//大尺寸开关按钮宽度
+$width-switch_knob_large: 24px;
+//大尺寸开关按钮按下态宽度
+$width-switch_knob_large_active: $width-switch_knob_large + $spacing-switch_expand_large-translateX;
+
+//关闭开关按钮宽度
+$width-switch_knob_disabled-border: 1px;
+//开关按钮文字宽度
+$width-switch_checked_unchecked_text: 26px;
+//小尺寸开关加载 spin 宽度
+$width-switch_spin-small: 10px;
+//默认尺寸开关加载 spin 宽度
+$width-switch_spin-default: 18px;
+//大尺寸开关加载 spin 宽度
+$width-switch_spin-large: 28px;
+
+//开关轮廓宽度
+$width-switch-outline: 2px;
+
+$spacing-switch_shape_checked_small-translateX: 9px;
+$spacing-switch_shape_checked_default-translateX: 12px;
+$spacing-switch_shape_checked_large-translateX: 16px;
+
+$sizes: (
+  'large': (
+    width: #{$width-switch_large},
+    height: #{$height-switch_large},
+    border-radius: #{$radius-switch_large},
+    knob-width: #{$width-switch_knob_large},
+    knob-height: #{$width-switch_knob_large},
+    knob-top: #{$spacing-switch_knob_large-padding},
+    knob-border-radius: #{$radius-switch_knob_large},
+    knob-transform: #{$spacing-switch_unchecked_large-translateX},
+    knob-checked-transform: #{$spacing-switch_checked_large-translateX},
+    knob-width-active: #{$width-switch_knob_large_active},
+    knob-shape-transform: #{$spacing-switch_shape_checked_large-translateX},
+    spin-transform: #{$spacing-switch_spin_unchecked_large-translateX},
+    spin-checked-transform: #{$spacing-switch_spin_checked_large-translateX},
+    spin-width: #{$width-switch_spin-large},
+    spin-height: #{$width-switch_spin-large}
+  ),
+  'small': (
+    width: #{$width-switch_small},
+    height: #{$height-switch_small},
+    border-radius: #{$radius-switch_small},
+    knob-width: #{$width-switch_knob_large_small},
+    knob-height: #{$width-switch_knob_large_small},
+    knob-top: #{$spacing-switch_knob_small-padding},
+    knob-border-radius: #{$radius-switch_knob_small},
+    knob-transform: #{$spacing-switch_unchecked_small-translateX},
+    knob-checked-transform: #{$spacing-switch_checked_small-translateX},
+    knob-width-active: #{$width-switch_knob_small_active},
+    knob-shape-transform: #{$spacing-switch_shape_checked_small-translateX},
+    spin-transform: #{$spacing-switch_spin_unchecked_small-translateX},
+    spin-checked-transform: #{$spacing-switch_spin_checked_small-translateX},
+    spin-width: #{$width-switch_spin-small},
+    spin-height: #{$width-switch_spin-small}
+  ),
+  'default': (
+    width: #{$width-switch},
+    height: #{$height-switch},
+    border-radius: #{$radius-switch},
+    knob-width: #{$width-switch_knob_default},
+    knob-height: #{$width-switch_knob_default},
+    knob-top: #{$spacing-switch_knob-padding},
+    knob-border-radius: #{$radius-switch_knob},
+    knob-transform: #{$spacing-switch_unchecked-translateX},
+    knob-checked-transform: #{$spacing-switch_checked-translateX},
+    knob-width-active: #{$width-switch_knob_active},
+    knob-shape-transform: #{$spacing-switch_shape_checked_default-translateX},
+    spin-transform: #{$spacing-switch_spin_unchecked-translateX},
+    spin-checked-transform: #{$spacing-switch_spin_checked-translateX},
+    spin-width: #{$width-switch_spin-default},
+    spin-height: #{$width-switch_spin-default}
+  )
+);
+
+.#{$prefix}-switch {
+  box-sizing: border-box;
+  display: inline-block;
+  border-radius: #{$radius-switch};
+  border: 1px solid #{$color-switch_default-border-default};
+  position: relative;
+  cursor: pointer;
+  background-color: $color-switch_default-bg-default;
+  transition: background-color #{$transition_duration-switch-bg} #{$transition_function-switch-bg}
+    #{$transition_delay-switch-bg};
+  width: #{$width-switch};
+  height: #{$height-switch};
+
+  &:hover {
+    background-color: #{$color-switch_default-bg-hover};
+  }
+  &:active {
+    background-color: #{$color-switch_default-bg-active};
+    border: 1px solid var($color-switch_default-bg-active);
+  }
+
+  &-checked {
+    background-color: #{$color-switch_checked-bg-default};
+    &:hover {
+      background-color: #{$color-switch_checked-bg-hover};
+    }
+    &:active {
+      background-color: #{$color-switch_checked-bg-active};
+    }
+  }
+  &-checked &-disabled {
+    background-color: #{$color-switch_checked_disabled-bg-default};
+    border: #{$width-switch_knob_disabled-border} solid
+      #{$color-switch_checked_disabled-border-default};
+  }
+  &-disabled {
+    cursor: not-allowed;
+    background-color: #{$color-switch_disabled-bg-default};
+    border: #{$width-switch_knob_disabled-border} solid #{$color-switch_disabled-border-default};
+    &:active {
+      background-color: #{$color-switch_disabled-bg-hover};
+    }
+    &:hover {
+      background-color: #{$color-switch_disabled-bg-active};
+    }
+    .#{$prefix}-switch-knob {
+      cursor: not-allowed;
+      box-shadow: none;
+      border: #{$width-switch_knob_disabled-border} solid #{$color-switch_disabled-border-default};
+    }
+  }
+
+  &-loading {
+    display: inline-flex;
+    align-items: center;
+    background-color: #{$color-switch_spin_unchecked-bg-default};
+    &-spin {
+      transform: translateX(#{$spacing-switch_spin_unchecked-translateX});
+
+      & > div {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      svg {
+        width: #{$width-switch_spin-default};
+        height: #{$width-switch_spin-default};
+        color: #{$color-switch_loading_spin-default};
+      }
+    }
+    .#{$prefix}-switch-checked &-spin {
+      transform: translateX(#{$spacing-switch_checked-translateX});
+    }
+  }
+  &-loading.#{$prefix}-switch-checked {
+    background-color: #{$color-switch_checked-bg-default};
+  }
+
+  //size
+  @each $size, $properties in $sizes {
+    &-#{$size} {
+      width: map-get($properties, 'width');
+      height: map-get($properties, 'height');
+      border-radius: map-get($properties, 'border-radius');
+
+      .#{$prefix}-switch-knob {
+        width: map-get($properties, 'knob-width');
+        height: map-get($properties, 'knob-height');
+        top: map-get($properties, 'knob-top');
+        border-radius: map-get($properties, 'knob-border-radius');
+        transform: translateX(map-get($properties, 'knob-transform'));
+      }
+
+      &.#{$prefix}-switch-checked .#{$prefix}-switch-knob {
+        transform: translateX(map-get($properties, 'knob-checked-transform'));
+      }
+
+      &:active:not(.#{$prefix}-switch-disabled) .#{$prefix}-switch-knob {
+        width: map-get($properties, 'knob-width-active');
+      }
+      // 形变的transform
+      &.#{$prefix}-switch-checked:active:not(.#{$prefix}-switch-disabled) .#{$prefix}-switch-knob {
+        transform: translateX(map-get($properties, 'knob-shape-transform'));
+      }
+
+      .#{$prefix}-switch-loading-spin {
+        transform: translateX(map-get($properties, 'spin-transform'));
+        svg {
+          width: map-get($properties, 'spin-width');
+          height: map-get($properties, 'spin-height');
+        }
+      }
+
+      .#{$prefix}-switch-checked .#{$prefix}-switch-loading-spin {
+        transform: translateX(map-get($properties, 'spin-checked-transform'));
+      }
+    }
+  }
+
+  //按钮样式
+  &-knob {
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.1),
+      0 0 1px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    border-radius: #{$radius-switch_knob};
+    background-color: #{$color-switch_knob-bg-default};
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    right: auto;
+    transition:
+      transform 0.2s ease-in-out,
+      width 0.2s ease-in-out;
+    width: #{$width-switch_knob_default};
+    height: #{$width-switch_knob_default};
+    top: #{$spacing-switch_knob-padding};
+    transform: translateX(#{$spacing-switch_unchecked-translateX});
+  }
+
+  &-native-control {
+    opacity: 0;
+    cursor: inherit;
+    pointer-events: auto;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  &-native-control[type='checkbox'] {
+    width: inherit;
+    height: inherit;
+  }
+}

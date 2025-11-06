@@ -1,4 +1,11 @@
 @import '../base/constant';
+$sizes: (
+  extra-small: 8px,
+  small: 12px,
+  default: 16px,
+  large: 20px,
+  extra-large: 24px
+);
 .#{$prefix}-icon {
   display: inline-block;
   font-style: normal;
@@ -7,18 +14,21 @@
   text-transform: none;
   text-rendering: optimizeLegibility;
   fill: currentColor;
-  cursor: pointer;
-  &:hover {
-    color: var(--#{$prefix}-color-primary-hover);
-  }
-  &-disabled {
-    cursor: not-allowed;
-    color: var(--#{$prefix}-color-disabled);
-    &:hover {
-      color: var(--#{$prefix}-color-disabled) !important;
+  // cursor: pointer;
+  // &:hover {
+  //   color: var(--#{$prefix}-color-primary-hover);
+  // }
+  // &-disabled {
+  //   cursor: not-allowed;
+  //   color: var(--#{$prefix}-color-disabled);
+  //   &:hover {
+  //     color: var(--#{$prefix}-color-disabled) !important;
+  //   }
+  // }
+
+  @each $name, $size in $sizes {
+    &-#{$name} {
+      font-size: $size;
     }
-  }
-  &-default {
-    font-size: 16px;
   }
 }

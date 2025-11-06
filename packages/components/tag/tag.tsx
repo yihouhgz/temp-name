@@ -2,7 +2,7 @@ import { defineComponent, computed, getCurrentInstance } from 'vue'
 import { prefix } from 'constants/config'
 import { tagEmits, tagProps } from './type'
 import type { ExtractPropTypes, ExtractPublicPropTypes } from 'vue'
-import "./style/tag.ts"
+import './style/tag.ts'
 import { IconClear } from '../icon'
 import { Avatar } from '../avatar'
 import { renderElementForPropsOrSlot } from '../_util/helps'
@@ -19,8 +19,7 @@ const Tag = defineComponent(
                 `${prefix}-tag-${props.shape}`,
                 `${prefix}-tag-${props.type}`,
                 !props.visible ? `${prefix}-tag-visible` : "",
-
-            ].filter(Boolean).join(' '))
+            ])
 
             // 关闭事件
             const handleClose = (e: MouseEvent) => {
@@ -67,7 +66,6 @@ const Tag = defineComponent(
         props: tagProps,
         emits: tagEmits,
     }
-
 )
 type TagProps = ExtractPropTypes<typeof tagProps>
 type TagPropsPublic = ExtractPublicPropTypes<typeof tagProps>

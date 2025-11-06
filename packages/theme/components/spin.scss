@@ -21,6 +21,7 @@ $animation_duration-spin_customChildren-spin: 1.2s;
     color: var(--#{$prefix}-color-primary);
     z-index: 1;
     svg {
+      fill: currentColor;
       width: 100%;
       height: 100%;
       animation: animation-rotate #{$animation_duration-spin_wrapper-spin} linear infinite;

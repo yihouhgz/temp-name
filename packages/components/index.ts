@@ -1,6 +1,6 @@
 import type { App } from 'vue'
 import { withInstall } from './_util/install'
-import Button from './button/index'
+import { Button, SyncButton, ButtonGroup } from './button/index'
 import Watermark from './watermark/index'
 import Input from './input/index'
 import { Icon, IconJsx } from './icon/index'
@@ -15,8 +15,13 @@ import { Avatar, AvatarGroup } from './avatar'
 import DragMove from './drag-move'
 import Space from './space'
 import Spin from './spin'
+import { Layout, Header, Content, Footer, Sider } from './layout'
+import Switch from './switch'
+import Toast from './toast'
 const components = [
   Button,
+  ButtonGroup,
+  SyncButton,
   Watermark,
   Input,
   Icon,
@@ -34,7 +39,14 @@ const components = [
   Tag,
   DragMove,
   Space,
-  Spin
+  Spin,
+  Layout,
+  Header,
+  Content,
+  Footer,
+  Sider,
+  Switch,
+  Toast
 ]
 export const install = (app: App) => withInstall(app, components)
-export { Button, Watermark, Input, Icon, Row, Col, Popover, Select, HotKeys, Avatar,Tag }
+export { Button, Watermark, Input, Icon, Row, Col, Popover, Select, HotKeys, Avatar, Tag }

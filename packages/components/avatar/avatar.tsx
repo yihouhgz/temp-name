@@ -3,8 +3,10 @@ import { prefix } from 'constants/config'
 import { avatarProps, avatarEmits, type AvatarSizeType } from './type'
 import './style/avatar'
 import { reactive } from 'vue'
-import { isFunction, renderVnode } from '../_util'
+import { hasPropsOrSlots, isFunction, isNumber, isString, renderVnode } from '../_util'
 import TopSlotIcon from './top-slot-icon'
+import { baseBorderZIndex, marginBorder } from './constant'
+import { getCurrentInstance } from 'vue'
 const Avatar = defineComponent({
   setup(props, ctx) {
     const avatarData = reactive({
@@ -15,7 +17,7 @@ const Avatar = defineComponent({
       return [
         `${prefix}-avatar`,
         `${prefix}-avatar-${props.shape}`,
-        `${prefix}-avatar-${props.size}`,
+        { [`${prefix}-avatar-${props.size}`]: isString(props.size) },
         props.src ? `${prefix}-avatar-img` : `${prefix}-avatar-${props.color}`,
         {
           [`${prefix}-avatar-animated`]: props.contentMotion
@@ -63,6 +65,7 @@ const Avatar = defineComponent({
       }
       return false
     })
+    const vm = getCurrentInstance()
     return () => {
       const hoverMaskRender = () => {
         if (props.hoverMask) {
@@ -108,8 +111,23 @@ const Avatar = defineComponent({
             onMouseenter: handleMouseEnter,
             onMouseleave: handleMouseLeave
           }
+      const baseStyle: StyleValue = {}
+      if (isNumber(props.size)) {
+        baseStyle.width = `${props.size}px`
+        baseStyle.height = `${props.size}px`
+      }
+      if (props.border && !hasPropsOrSlots('topSlot', vm)) {
+        baseStyle.position = 'relative'
+        baseStyle.zIndex = baseBorderZIndex
+      }
       const avatarBase = (
-        <span class={baseClass.value} {...baseAttrs} ref={container} {...handlerAttrs}>
+        <span
+          class={baseClass.value}
+          style={baseStyle}
+          {...baseAttrs}
+          ref={container}
+          {...handlerAttrs}
+        >
           {content}
         </span>
       )
@@ -119,13 +137,22 @@ const Avatar = defineComponent({
         const getBorderClass = (): string[] => {
           return [
             `${prefix}-avatar-border`,
-            `${prefix}-avatar-border-${props.size}`,
+            isString(props.size) ? `${prefix}-avatar-border-${props.size}` : '',
             `${prefix}-avatar-${props.shape}`
           ]
         }
-        const mergnStyle = {
-          style: borderColor ? { borderColor: borderColor } : null,
+        const mergnStyle: {
+          style?: { width?: string; height?: string; borderColor: string }
+          class: string[]
+        } = {
+          style: borderColor ? { borderColor: borderColor } : undefined,
           class: getBorderClass()
+        }
+        if (isNumber(props.size)) {
+          if (mergnStyle.style) {
+            mergnStyle.style.width = `${props.size + marginBorder}px`
+            mergnStyle.style.height = `${props.size + marginBorder}px`
+          }
         }
         const renderTopSlot = () => {
           const topSlot = props.topSlot
@@ -158,7 +185,7 @@ const Avatar = defineComponent({
           ]
           return (
             <div class={slotWrapperClass} style={slotWrapperStyle}>
-              {!exclusion.includes(props.size) && (
+              {!exclusion.includes(props.size as AvatarSizeType) && (
                 <div class={bgClass}>
                   <div class={bgSvgClass}>
                     <TopSlotIcon
@@ -198,6 +225,8 @@ const Avatar = defineComponent({
             </div>
           )
         }
+        const showSopSlot = props.topSlot && isString(props.size)
+        const showBottomSlot = props.bottomSlot && isString(props.size)
         return (
           <div
             class={`${prefix}-avatar-wrapper`}
@@ -213,8 +242,8 @@ const Avatar = defineComponent({
                 <span {...mergnStyle} class={`${prefix}-avatar-border-animated`}></span>
               )}
             </div>
-            {props.topSlot && renderTopSlot()}
-            {props.bottomSlot && renderBottomSlot()}
+            {showSopSlot && renderTopSlot()}
+            {showBottomSlot && renderBottomSlot()}
           </div>
         )
       }

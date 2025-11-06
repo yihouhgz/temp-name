@@ -1,30 +1,47 @@
-import { defineComponent, computed, reactive, watch, ref, onMounted, h, type Slot } from 'vue'
+import {
+  defineComponent,
+  computed,
+  reactive,
+  watch,
+  ref,
+  onMounted,
+  h,
+  getCurrentInstance
+} from 'vue'
 import { prefix } from 'constants/config'
 import './style/select'
 import Popover from '../popover'
 import { selectEmits, selectProps, type SelectRefMethods } from './type'
-import Option, { type SelectOptionProps } from './option'
+import Option from './option'
 import SelectOptionGroup from './option-group'
 import { IconChevronDown } from '../icon'
 import { consolaWapper, isArray, isObject } from '../_util'
 import type { VNode } from 'vue'
+import { hasPropsOrSlots, renderElementForPropsOrSlot } from '../_util'
+import Tag from '../tag'
+import type { RendererNode } from 'vue'
+import type { RendererElement } from 'vue'
+
+type DefaultFunType = () =>
+  | VNode<RendererNode, RendererElement, { [key: string]: unknown }>[]
+  | undefined
 
 const Select = defineComponent({
   setup(props, ctx) {
     const state = reactive<{
       visible: boolean
-      selfValue: unknown
+      selfValue: string | number | { value: string | number; label: string }[]
       triggerRect: DOMRect | undefined
       options: { _focused?: boolean; value: unknown; label: string; disabled?: boolean }[]
       focusIndex: number
-      selectIndex: number
+      selectIndex: number | number[]
     }>({
       visible: false,
-      selfValue: props.value || props.defaultValue,
+      selfValue: props.value || props.defaultValue ? [] : [],
       triggerRect: undefined,
       options: props.optionList ?? [],
       focusIndex: -1,
-      selectIndex: -1
+      selectIndex: props.multiple ? [] : -1
     })
     const triggerRef = ref<HTMLDivElement>()
 
@@ -34,7 +51,7 @@ const Select = defineComponent({
     })
     const dropdownWrapperMinWidth = computed(() => {
       let minWidth = 74
-      const margin = 8
+      const margin = 0
       if (state.triggerRect) {
         minWidth = Math.max(minWidth, state.triggerRect.width + margin)
       }
@@ -56,7 +73,6 @@ const Select = defineComponent({
       state.visible = false
     }
     const handleOpenPopover = () => {
-      console.log('open')
       state.visible = true
     }
     watch(
@@ -103,91 +119,180 @@ const Select = defineComponent({
     const handleVisibleChange = (visible: boolean) => {
       state.visible = visible
     }
-
-    const handleClickOption = (index: number) => {
-      state.selectIndex = index
+    const handleClickOption = (
+      current: { value: string | number; label: string },
+      index: number
+    ) => {
+      if (props.multiple && isArray(state.selectIndex) && isArray(state.selfValue)) {
+        const oldIndex = state.selectIndex.findIndex((item) => item == index)
+        if (oldIndex >= 0) {
+          state.selectIndex.splice(oldIndex, 1)
+          state.selfValue = state.selfValue.filter((item) => item.value !== current.value)
+        } else {
+          state.selectIndex.push(index)
+          state.selfValue.push(current)
+        }
+      }
     }
     const handleFocusOption = (index: number) => {
       state.focusIndex = index
     }
-    const renderPopoverContent = () => {
-      const { dropdownStyle, dropdownClassName } = props
+    const renderPopoverContent1 = () => {
+      const { dropdownStyle, dropdownClassName, optionList } = props
       const style = { ...dropdownStyle, minWidth: dropdownWrapperMinWidth.value }
-      const isCustomRender = !!ctx.slots.default
-      let content = null
-      if (isCustomRender) {
-        //通过 Option组件传入
-        content = ctx.slots.default?.()
-        let isErrorFlag = false
-        content = content?.map((item, index) => {
-          if (
-            isObject(item.type) &&
-            [SelectOptionGroup.name, Option.name].includes((item.type as { name: string }).name)
-          ) {
-            // 分组情况
-            if ((item.type as { name: string }).name.indexOf(SelectOptionGroup.name || '') >= 0) {
-              const children =
-                (item.children as { default: () => Slot<unknown> | undefined })?.default() || []
-              return h(
-                SelectOptionGroup,
-                {
-                  label: item.props?.label || ''
-                },
-                isArray(children)
-                  ? children.map((child: VNode) =>
-                      h(child, {
-                        onClick: () => handleClickOption(index),
-                        onFocus_: () => handleFocusOption(index),
-                        _focused: state.focusIndex === index,
-                        _selected: false
-                      })
+      let children: unknown[] = []
+      const getSelected = (option: { label: string; value: string | number }) => {
+        if (props.multiple && isArray(state.selfValue)) {
+          return !!state.selfValue.find((item) => option.value === item.value)
+        }
+        return state.selfValue == option.value
+      }
+      if (optionList?.length) {
+        children = optionList.map((child, index) => {
+          return h(Option, {
+            ...child,
+            _focused: state.focusIndex === index,
+            _selected: getSelected(child),
+            onClick: () => handleClickOption(child, index),
+            onFocus_: () => handleFocusOption(index)
+          })
+        })
+      } else {
+        const items = ctx.slots.default?.()
+        if (items?.length) {
+          const template = []
+          let childIndex = 0
+          for (const child of items) {
+            const type = child.type as { name: string }
+            if (isObject(child.type) && [SelectOptionGroup.name, Option.name].includes(type.name)) {
+              if ([SelectOptionGroup.name].includes(type.name)) {
+                // hander group
+                const optionChilds = (child.children as { default: DefaultFunType }).default() || []
+                template.push(h(child, { label: child.props?.label }))
+                for (const optionChild of optionChilds) {
+                  const currentIndex = childIndex
+                  const label =
+                    optionChild.props?.label ||
+                    (child.children as { default: DefaultFunType })?.default()?.[0]?.children
+                  const optionParams = {
+                    ...(optionChild.props as { value: string }),
+                    label: label as string
+                  }
+                  template.push(
+                    h(
+                      optionChild,
+                      {
+                        ...optionChild.props,
+                        onClick: () => handleClickOption(optionParams, currentIndex),
+                        onFocus_: () => handleFocusOption(currentIndex),
+                        _focused: state.focusIndex === currentIndex,
+                        _selected: getSelected(optionParams)
+                      },
+                      { default: () => label }
                     )
-                  : []
-              )
-            } else {
-              const { defaultValue } = props
-              const optionsPorps = item.props as SelectOptionProps
-              const _selected = !!(defaultValue && optionsPorps.value === defaultValue)
-              const getSelected = () => {
-                if (state.selectIndex === -1) return _selected
-                return state.selectIndex === index
+                  )
+                  childIndex += 1
+                }
+              } else {
+                const currentIndex = childIndex
+                const label =
+                  child.props?.label ||
+                  (child.children as { default: DefaultFunType })?.default()?.[0]?.children
+                const optionParams = {
+                  ...(child.props as { value: string }),
+                  label: label
+                }
+                template.push(
+                  h(
+                    child,
+                    {
+                      ...child.props,
+                      onClick: () => handleClickOption(optionParams, currentIndex),
+                      onFocus_: () => handleFocusOption(currentIndex),
+                      _focused: state.focusIndex === currentIndex,
+                      _selected: getSelected(optionParams)
+                    },
+                    { default: () => label }
+                  )
+                )
+                childIndex += 1
               }
-              return h(item, {
-                onClick: () => handleClickOption(index),
-                onFocus_: () => handleFocusOption(index),
-                _focused: state.focusIndex === index,
-                _selected: getSelected()
-              })
+            } else {
+              consolaWapper.error('Option or SelectOption must be used as a child of Select')
+              break
             }
           }
-          isErrorFlag = true
-        })
-        if (isErrorFlag) consolaWapper.error('Option must be used as a child of Select')
-      } else {
-        const options = props.optionList ?? []
-        content = options.map((item, index) => {
-          return (
-            <Option
-              {...item}
-              _focused={state.focusIndex === index}
-              _selected={false}
-              onClick={() => handleClickOption(index)}
-              onFocus_={() => handleFocusOption(index)}
-            />
-          )
-        })
+          children = template
+        }
       }
-      if ((!content || (isArray(content) && content.length === 0)) && props.emptyContent) {
-        content = props.emptyContent ? props.emptyContent : ctx.slots.emptyContent?.()
+      if (
+        (!children || (isArray(children) && children.length === 0)) &&
+        hasPropsOrSlots('emptyContent', vm)
+      ) {
+        children = [renderElementForPropsOrSlot('emptyContent', vm)]
       }
       const clxsNames = [`${prefix}-select-dropdown-wrapper`, dropdownClassName]
       return (
         <div class={clxsNames} style={style}>
-          {content}
+          {children}
         </div>
       )
     }
-
+    const vm = getCurrentInstance()
+    const handleMultipleCloseTag = (
+      data: { value: string | number; label: string },
+      index: number
+    ) => {
+      handleClickOption(data, index)
+    }
+    const isEmpty = (data: unknown) => {
+      if (!data) return false
+      if (isArray(data)) return data.length > 0
+      return !!data
+    }
+    const multipleTagTemplate = () => {
+      if (isArray(state.selfValue)) {
+        const resetNumber = state.selfValue.length - props.maxTagCount
+        const isShowMaxTagCount = props.maxTagCount > 0 && !state.visible && resetNumber > 0
+        const targetList = isShowMaxTagCount
+          ? state.selfValue.slice(0, props.maxTagCount)
+          : state.selfValue
+        const template = targetList.map((item, index) => {
+          return (
+            <Tag size="large" closable={true} onClose={() => handleMultipleCloseTag(item, index)}>
+              {item.label}
+            </Tag>
+          )
+        })
+        if (isShowMaxTagCount) {
+          const popover = popoverProps.value
+          const resetList = state.selfValue.slice(targetList.length, state.selfValue.length)
+          template.push(
+            <Popover
+              position={popover.position}
+              autoAdjustOverflow={popover.autoAdjustOverflow}
+              getPopupContainer={popover.getPopupContainer}
+              zIndex={popover.zIndex}
+              trigger="hover"
+              showArrow
+              content={
+                <div>
+                  {resetList.map((item) => {
+                    return <Tag>{item.label}</Tag>
+                  })}
+                </div>
+              }
+            >
+              <Tag size="large" style={{ backgroundColor: 'transparent' }}>
+                +{resetNumber}
+              </Tag>
+            </Popover>
+          )
+        }
+        return template
+      }
+      return null
+    }
     return () => {
       const popover = popoverProps.value
       return (
@@ -198,7 +303,7 @@ const Select = defineComponent({
           zIndex={popover.zIndex}
           trigger="custom"
           visible={state.visible}
-          content={renderPopoverContent()}
+          content={renderPopoverContent1()}
           onVisibleChange={handleVisibleChange}
         >
           <div
@@ -209,15 +314,24 @@ const Select = defineComponent({
           >
             <div class={prefix + '-select-selection'}>
               <div class={prefix + '-select-selection-wrapper'}>
-                {/* <span class={prefix + '-select-selection-text'}></span> */}
-                <div
-                  class={[
-                    prefix + '-select-selection-text',
-                    prefix + '-select-selection-placeholder'
-                  ]}
-                >
-                  请选择12
-                </div>
+                {isEmpty(state.selfValue) ? (
+                  props.multiple ? (
+                    multipleTagTemplate()
+                  ) : (
+                    <span class={prefix + '-select-selection-text'}>{state.selfValue}</span>
+                  )
+                ) : (
+                  <div
+                    class={[
+                      prefix + '-select-selection-text',
+                      prefix + '-select-selection-placeholder'
+                    ]}
+                  >
+                    {hasPropsOrSlots('placeholder', vm)
+                      ? renderElementForPropsOrSlot('placeholder', vm)
+                      : '请选择'}
+                  </div>
+                )}
               </div>
             </div>
             <div class={prefix + '-select-input-arrow'}>

@@ -6,6 +6,7 @@ export const isNumber = (value: unknown) => typeof value === 'number'
 export const isArray = (value: unknown) => Array.isArray(value)
 export const isObject = (value: unknown) => value !== null && typeof value === 'object'
 export const isBoolean = (value: unknown) => typeof value === 'boolean'
+export const isUndefined = (value: unknown) => typeof value === 'undefined'
 export const omitKeys = <T extends Record<string | symbol, unknown>, K extends keyof T>(
   obj: T,
   keys: K[]
@@ -37,9 +38,15 @@ export const isIncludedSlot = (slotName: string, vm: ComponentInternalInstance) 
   return Boolean((props && props[slotName]) || (slots && slots[slotName]))
 }
 
+export const hasPropsOrSlots = (slotName: string, vm: ComponentInternalInstance | null) => {
+  if (!vm) return false
+  const { slots, props } = vm
+  return Boolean(props[slotName]) || isFunction(slots?.[slotName])
+}
+
 // 处理props传值或者slot的情况 props.solt 优先级高于slots.solt
 export const renderElementForPropsOrSlot = (
-  slotName: string | { propNmae: string; slotName: string },
+  slotName: string | { propName: string; slotName: string },
   vm: ComponentInternalInstance | null
 ) => {
   if (!vm) return null
@@ -47,7 +54,7 @@ export const renderElementForPropsOrSlot = (
   let pName = isString(slotName) ? slotName : '',
     sName = isString(slotName) ? slotName : ''
   if (typeof slotName === 'object') {
-    pName = slotName.propNmae
+    pName = slotName.propName
     sName = slotName.slotName
   }
   if (props[pName]) {
@@ -68,4 +75,9 @@ export const domRectToObject = (rect: DOMRect): Omit<DOMRect, 'toJSON'> => {
     x: rect.x,
     y: rect.y
   }
+}
+
+// 首字母大写
+export const toFirstLocaleUpperCase = (str: string) => {
+  return str.charAt(0).toLocaleUpperCase() + str.slice(1)
 }

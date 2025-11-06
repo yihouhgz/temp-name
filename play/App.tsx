@@ -3,7 +3,17 @@ import { Button } from '../dist'
 import './styles/app.scss'
 const App = defineComponent(() => {
   const loading = ref(false)
+  const switchLoading = ref(false)
+  const switchValue = ref(false)
   const inputvalue = ref('llll')
+  const handleChange = (value: boolean) => {
+    switchLoading.value = true
+    setTimeout(() => {
+      console.log('handleChange', value)
+      switchLoading.value = false
+      switchValue.value = value
+    }, 2000)
+  }
   watchEffect(() => {
     console.log(inputvalue.value)
   })
@@ -33,10 +43,52 @@ const App = defineComponent(() => {
       </svg>
     )
   }
+  const handleSync = () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('handleSync')
+        resolve(true)
+      }, 1000)
+    })
+  }
+  const sunIcon = (
+    <div style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;color:var(--tempui-color-success)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 60%;height: 60%;">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+        </g>
+      </svg>
+    </div>
+  )
+  const moonIcon = (
+    <div style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;color:var(--tempui-color-text-2)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 60%;height: 60%;">
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9"
+        />
+      </svg>
+    </div>
+  )
   return () => (
     <div>
       <div>
+        <tempui-sync-button onClick={handleSync}>hello</tempui-sync-button>
         <Button type="primary">确定</Button>
+        <Button type="primary" disabled>
+          确定
+        </Button>
         <tempui-button
           loading={loading.value}
           onClick={handleClick}
@@ -57,6 +109,128 @@ const App = defineComponent(() => {
         <tempui-button type="tertiary">我是按钮</tempui-button>
         <tempui-button type="warning">我是按钮</tempui-button>
         <tempui-button type="danger">商品买断</tempui-button>
+      </div>
+      <div class="top-50">
+        <div>主题</div>
+        <tempui-button theme="light" disabled type="primary" style={{ marginRight: 8 }}>
+          浅色主要 disabled
+        </tempui-button>
+        <tempui-button
+          theme="light"
+          size="small"
+          disabled
+          type="primary"
+          style={{ marginRight: 8 }}
+        >
+          浅色主要
+        </tempui-button>
+        <tempui-button theme="light" disabled type="secondary" style={{ marginRight: 8 }}>
+          浅色次要
+        </tempui-button>
+        <tempui-button
+          theme="light"
+          size="large"
+          disabled
+          type="tertiary"
+          style={{ marginRight: 8 }}
+        >
+          浅色第三
+        </tempui-button>
+        <tempui-button theme="light" disabled type="warning" style={{ marginRight: 8 }}>
+          浅色警告
+        </tempui-button>
+        <tempui-button theme="light" disabled type="danger" style={{ marginRight: 8 }}>
+          浅色危险
+        </tempui-button>
+      </div>
+      <div class="top-50">
+        <Button theme="solid" disabled type="primary" style={{ marginRight: 8 }}>
+          深色主要 disabled
+        </Button>
+        <Button theme="solid" type="primary" style={{ marginRight: 8 }}>
+          深色主要
+        </Button>
+        <Button theme="solid" type="secondary" style={{ marginRight: 8 }}>
+          深色次要
+        </Button>
+        <Button theme="solid" type="tertiary" style={{ marginRight: 8 }}>
+          深色第三
+        </Button>
+        <Button theme="solid" type="warning" style={{ marginRight: 8 }}>
+          深色警告
+        </Button>
+        <Button theme="solid" type="danger" style={{ marginRight: 8 }}>
+          深色危险
+        </Button>
+      </div>
+      <div class="top-50">
+        <Button theme="borderless" disabled type="primary" style={{ marginRight: 8 }}>
+          无背景主要 disabled
+        </Button>
+        <Button theme="borderless" type="primary" style={{ marginRight: 8 }}>
+          无背景主要
+        </Button>
+        <Button theme="borderless" type="secondary" style={{ marginRight: 8 }}>
+          无背景次要
+        </Button>
+        <Button theme="borderless" type="tertiary" style={{ marginRight: 8 }}>
+          无背景第三
+        </Button>
+        <Button theme="borderless" type="warning" style={{ marginRight: 8 }}>
+          无背景警告
+        </Button>
+        <Button theme="borderless" type="danger" style={{ marginRight: 8 }}>
+          无背景危险
+        </Button>
+      </div>
+      <div class="top-50">
+        <Button theme="outline" disabled type="primary" style={{ marginRight: 8 }}>
+          边框主要 disabled
+        </Button>
+        <Button theme="outline" type="primary" style={{ marginRight: 8 }}>
+          边框主要
+        </Button>
+        <Button theme="outline" type="secondary" style={{ marginRight: 8 }}>
+          边框次要
+        </Button>
+        <Button theme="outline" type="tertiary" style={{ marginRight: 8 }}>
+          边框第三
+        </Button>
+        <Button theme="outline" type="warning" style={{ marginRight: 8 }}>
+          边框警告
+        </Button>
+        <Button theme="outline" type="danger" style={{ marginRight: 8 }}>
+          边框危险
+        </Button>
+      </div>
+      <div>
+        <Button type="secondary" loading icon={CameraIcon}>
+          1
+        </Button>
+      </div>
+      <div>
+        <Button disabled>禁用</Button>
+        <Button disabled theme="borderless">
+          无背景禁用
+        </Button>
+        <Button disabled theme="light">
+          浅色禁用
+        </Button>
+        <Button disabled theme="borderless" type="primary">
+          无背景主要禁用
+        </Button>
+        <Button disabled theme="solid" type="warning">
+          深色警告禁用
+        </Button>
+      </div>
+      <div>
+        <div style={{ marginRight: 10 }}>
+          <tempui-button-group type="primary">
+            <Button loading>拷贝</Button>
+            <Button>查询</Button>
+            <Button>剪切</Button>
+          </tempui-button-group>
+        </div>
       </div>
       <div style="width: 300px;" class="top-50">
         <tempui-tooltip content={<div>111</div>} trigger="focus">
@@ -310,7 +484,7 @@ const App = defineComponent(() => {
       </div>
 
       <div class="top-20">
-        <tempui-avatar-group>
+        <tempui-avatar-group maxCount={2}>
           <tempui-avatar
             hoverMask={
               <div
@@ -371,6 +545,13 @@ const App = defineComponent(() => {
           >
             Duck
           </tempui-avatar>
+        </tempui-avatar-group>
+        <tempui-avatar-group maxCount={4}>
+          <tempui-avatar>d</tempui-avatar>
+          <tempui-avatar>u</tempui-avatar>
+          <tempui-avatar>c</tempui-avatar>
+          <tempui-avatar>k</tempui-avatar>
+          <tempui-avatar>h</tempui-avatar>
         </tempui-avatar-group>
       </div>
       <div class="top-20">
@@ -464,10 +645,18 @@ const App = defineComponent(() => {
       </div>
       <div class="top-20" style="display: flex;gap: 8px;flex-wrap: wrap;">
         <tempui-tag>标签</tempui-tag>
-        <tempui-tag type="ghost" color="blue">ghost</tempui-tag>
-        <tempui-tag type="solid" color="blue">solid</tempui-tag>
-        <tempui-tag type="light" color="red">light</tempui-tag>
-        <tempui-tag size="large" color="green">large</tempui-tag>
+        <tempui-tag type="ghost" color="blue">
+          ghost
+        </tempui-tag>
+        <tempui-tag type="solid" color="blue">
+          solid
+        </tempui-tag>
+        <tempui-tag type="light" color="red">
+          light
+        </tempui-tag>
+        <tempui-tag size="large" color="green">
+          large
+        </tempui-tag>
         <tempui-tag closable>large</tempui-tag>
         <tempui-tag prefixIcon="234" suffixIcon="234" avatarShape="circle" avatarSrc="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png">large</tempui-tag>
         <tempui-tag visible={true}
@@ -477,7 +666,78 @@ const App = defineComponent(() => {
           }}>large
 
         </tempui-tag>
+        <tempui-tag
+          prefixIcon="234"
+          suffixIcon="234"
+          avatarShape="circle"
+          avatarSrc="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png"
+        >
+          large
+        </tempui-tag>
       </div>
+      <tempui-layout>
+        <tempui-layout-sider style={{ width: '120px', background: 'var(--tempui-color-fill-2)' }}>
+          Sider
+        </tempui-layout-sider>
+        <tempui-layout>
+          <tempui-layout-header
+            style={{
+              height: 64,
+              lineHeight: '64px',
+              background: 'var(--tempui-color-fill-0)'
+            }}
+          >
+            Header
+          </tempui-layout-header>
+          <tempui-layout-content style={{ height: 300, lineHeight: '300px' }}>
+            <div class={'top-20'}>
+              <tempui-space>
+                <tempui-switch size="small"></tempui-switch>
+                <tempui-switch size="small" disabled></tempui-switch>
+                <tempui-switch size="small" defaultChecked></tempui-switch>
+                <tempui-switch size="small" loading></tempui-switch>
+                <tempui-switch size="small" loading defaultChecked></tempui-switch>
+              </tempui-space>
+
+              <tempui-space>
+                <tempui-switch></tempui-switch>
+                <tempui-switch disabled></tempui-switch>
+                <tempui-switch defaultChecked></tempui-switch>
+                <tempui-switch loading></tempui-switch>
+                <tempui-switch loading defaultChecked></tempui-switch>
+              </tempui-space>
+
+              <tempui-space>
+                <tempui-switch size="large"></tempui-switch>
+                <tempui-switch size="large" disabled></tempui-switch>
+                <tempui-switch size="large" defaultChecked></tempui-switch>
+                <tempui-switch size="large" loading></tempui-switch>
+                <tempui-switch size="large" loading defaultChecked></tempui-switch>
+              </tempui-space>
+
+              <tempui-space>
+                <tempui-switch checkedKnob={sunIcon} uncheckedKnob={moonIcon}></tempui-switch>
+              </tempui-space>
+              <tempui-space>
+                <tempui-switch
+                  loading={switchLoading.value}
+                  checked={switchValue.value}
+                  onChange={handleChange}
+                ></tempui-switch>
+              </tempui-space>
+            </div>
+          </tempui-layout-content>
+          <tempui-layout-footer
+            style={{
+              height: 64,
+              lineHeight: '64px',
+              background: 'var(--tempui-color-fill-0)'
+            }}
+          >
+            Footer
+          </tempui-layout-footer>
+        </tempui-layout>
+      </tempui-layout>
     </div>
   )
 })

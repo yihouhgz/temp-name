@@ -150,7 +150,7 @@ export const avatarProps = {
    * @description 设置头像的大小，支持 extra-extra-small、extra-small、small、default、medium、large、extra-large 和 合法的 width 属性值例如 "10px"
    */
   size: {
-    type: [String] as PropType<AvatarSizeType>,
+    type: [String, Number] as PropType<AvatarSizeType | number>,
     default: 'medium',
     required: false
   }
@@ -219,7 +219,7 @@ export const groupProps = {
     required: false
   },
   /**
-   * @description 设置头像的大小，支持 extra-extra-small、extra-small、small、default、medium、large、extra-large 和 合法的 width 属性值例如 "10px"
+   * @description 设置头像的大小，支持 extra-extra-small、extra-small、small、default、medium、large、extra-large 和 合法的 width 属性值例如 "10" 单位px
    */
   size: {
     type: [String, Number] as PropType<AvatarSizeType | number>,
@@ -231,7 +231,7 @@ export const groupProps = {
    */
   spread: {
     type: Boolean,
-    default: false,
+    default: true,
     required: false
   }
 }
