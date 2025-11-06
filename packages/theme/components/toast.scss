@@ -104,8 +104,64 @@ $width-toast_light-border: 1px;
   }
 }
 
+@keyframes #{$prefix}-toast-keyframe-toast-show {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes #{$prefix}-toast-keyframe-toast-hide {
+  0% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+$types: (
+  'success': (
+    iconColor: $color-toast_success-icon
+  ),
+  'info': (
+    iconColor: $color-toast_info-icon
+  ),
+  'warning': (
+    iconColor: $color-toast_warning-icon
+  ),
+  'error': (
+    iconColor: $color-toast_danger-icon
+  )
+);
+
 .#{$prefix}-toast {
   pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.22, 0.57, 0.02, 1.2);
+  perspective-origin: center 280px;
+  perspective: 280px;
+  &-animation-show {
+    animation: #{$prefix}-toast-keyframe-toast-show 0.3s cubic-bezier(0.22, 0.57, 0.02, 1.2) 0s;
+    animation-fill-mode: forwards;
+  }
+
+  &-animation-hide {
+    animation: #{$prefix}-toast-keyframe-toast-hide 0.3s cubic-bezier(0.22, 0.57, 0.02, 1.2) 0s;
+    animation-fill-mode: forwards;
+  }
+
+  @each $type, $properties in $types {
+    &-icon-#{$type} {
+      color: map-get($properties, iconColor);
+    }
+  }
+
   &-content {
     pointer-events: all;
     box-shadow: var(--#{$prefix}-shadow-elevated);

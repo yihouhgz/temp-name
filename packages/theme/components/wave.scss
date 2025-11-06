@@ -1,9 +1,9 @@
 @keyframes playEffect {
   0% {
-    opacity: 1;
-    transform: scale(0.6);
+    opacity: 0;
+    transform: scale(1);
   }
-  50% {
+  30% {
     opacity: 1;
     transform: scale(var(--scale-x), var(--scale-y));
   }
@@ -15,6 +15,5 @@
 .wave-effect {
   transform: scale(0);
   transform-origin: center center;
-  // animation: playEffect 0.6s;
-  animation: playEffect 0.6s ease-in-out;
+  animation: playEffect 0.4s ease-in;
 }

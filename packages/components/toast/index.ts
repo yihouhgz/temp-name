@@ -1,10 +1,20 @@
 // import ToastFactory from './toast-factory'
 import Wrapper from './wrapper'
-import { createApp } from 'vue'
+import Toast from './implement'
+import { defaultConfig } from './type'
 
-const app = createApp(Wrapper)
-// app.mount(document.body)
-const div = document.createElement('div')
-document.body.appendChild(div)
-app.mount(div)
+const toast = new Toast({
+  ...defaultConfig
+})
+
+toast.info('hello info')
+setTimeout(() => {
+  toast.success('hello success')
+}, 1000)
+setTimeout(() => {
+  toast.error('hello error')
+}, 2000)
+setTimeout(() => {
+  toast.warning('hello warning')
+}, 3000)
 export default Wrapper

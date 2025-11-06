@@ -3,7 +3,7 @@
   "type": "module",
   "main": "main.ts",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "vite build"
   },
   "dependencies": {

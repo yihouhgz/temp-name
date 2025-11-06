@@ -17,6 +17,7 @@ const Wave = defineComponent(
       const showEffect = () => {
         const holder = document.createElement('div')
         holder.style.position = 'absolute'
+        holder.style.zIndex = '-1'
         const { top, left } = getBorderPositionLayout(props.target)
         holder.style.left = String(top)
         holder.style.top = String(left)
@@ -35,7 +36,7 @@ const Wave = defineComponent(
         wave.style.position = 'absolute'
         wave.style.pointerEvents = 'none'
         wave.style.backgroundColor = waveEffectColor
-        wave.style.borderRadius = '6px'
+        wave.style.borderRadius = props.target.style.borderRadius || '4px'
         wave.style.opacity = '0'
         wave.style.transform = 'scale(1)'
         wave.style.transition = 'transform 0.4s , opacity 0.4s'

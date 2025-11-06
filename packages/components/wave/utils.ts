@@ -25,7 +25,7 @@ export function getTargetWaveColor(node: HTMLElement) {
   return null
 }
 
-export function getWaveEffectColor(color: string | null, opacity: number = 0.2): string {
+export function getWaveEffectColor(color: string | null, opacity: number = 0.15): string {
   if (!color) {
     // 默认使用白色，带有透明度
     return `rgba(255, 255, 255, ${opacity})`

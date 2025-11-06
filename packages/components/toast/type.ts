@@ -1,4 +1,4 @@
-import type { PropType } from 'vue'
+import type { PropType, ComponentPublicInstance } from 'vue'
 import type { VNode } from 'vue'
 
 export type ConfigType = {
@@ -17,7 +17,7 @@ export type ConfigType = {
   //自动关闭的延时，单位 s，设为 0 时不自动关闭
   duration: number
   //指定父级 DOM，弹层将会渲染至该 DOM 中，自定义需要设置 container 和 内部的 .prefix-toast-wrapper position: relative, 这会改变浮层 DOM 树位置，但不会改变视图渲染位置。
-  getPopupContainer: () => HTMLElement | null
+  getPopupContainer: () => HTMLElement
 }
 
 export const defaultConfig: ConfigType = {
@@ -118,4 +118,11 @@ export const toastProps = {
     default: '',
     required: false
   }
+}
+
+// 添加WrapperInstance类型定义
+export type WrapperInstance = ComponentPublicInstance & {
+  add: (options: OptionsType) => void
+  remove: (id: string) => void
+  clear: () => void
 }
