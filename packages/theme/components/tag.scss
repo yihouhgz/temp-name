@@ -35,30 +35,32 @@ $types: 'ghost', 'solid', 'light';
       padding: map-get($properties, 'padding');
     }
   }
-}
 
-// 颜色和类型变体
-@each $c in $colors {
-  @each $t in $types {
-    &-#{$c}-#{$t} {
-      @if $t =='ghost' {
-        background-color: transparent;
-        border: 1px solid rgba(var(--#{$prefix}-#{$c}-4), 1);
-        color: rgb(var(--#{$prefix}-#{$c}-5));
-      }
+  // 颜色和类型变体
+  @each $c in $colors {
+    @each $t in $types {
+      &-#{$c}-#{$t} {
+        @if $t =='ghost' {
+          background-color: transparent;
+          border: 1px solid rgba(var(--#{$prefix}-#{$c}-4), 1);
+          color: rgb(var(--#{$prefix}-#{$c}-5));
+        }
 
-      @else if $t =='solid' {
-        background-color: rgb(var(--#{$prefix}-#{$c}-5));
-        color: #fff;
-      }
+        @else if $t =='solid' {
+          background-color: rgb(var(--#{$prefix}-#{$c}-5));
+          color: #fff;
+        }
 
-      @else if $t =='light' {
-        background-color: rgba(var(--#{$prefix}-#{$c}-5), 0.15);
-        color: rgb(var(--#{$prefix}-#{$c}-8));
+        @else if $t =='light' {
+          background-color: rgba(var(--#{$prefix}-#{$c}-5), 0.15);
+          color: rgb(var(--#{$prefix}-#{$c}-8));
+        }
       }
     }
   }
 }
+
+
 
 // 关闭按钮
 .#{$prefix}-tag-close {
