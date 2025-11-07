@@ -115,7 +115,11 @@ const Wrapper = defineComponent({
           <div class={`${prefix}-toast-wrapper-inner`}>
             {state.toastPool.map((item) => {
               if (state.stack) {
-                return <div class={`${prefix}-toast-zero-height-wrapper`}>{renderToast(item)}</div>
+                return (
+                  <div class={`${prefix}-toast-zero-height-wrapper`} key={item.id}>
+                    {renderToast(item)}
+                  </div>
+                )
               }
               return renderToast(item)
             })}
