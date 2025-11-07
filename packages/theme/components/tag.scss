@@ -79,3 +79,22 @@ $types: 'ghost', 'solid', 'light';
     color: var(--#{$prefix}-color-text-0);
   }
 }
+
+// 标签组样式 tag-group
+.#{$prefix}-tag-group {
+  display: block;
+  height: auto;
+
+  .#{$prefix}-tag {
+    margin-bottom: 0px;
+    margin-right: 8px;
+  }
+
+  &-max.#{$prefix}-tag-group-small {
+    height: map-get(map-get($tag-sizes, 'small'), 'height') + 2;
+  }
+
+  &-max.#{$prefix}-tag-group-large {
+    height: map-get(map-get($tag-sizes, 'large'), 'height') + 2;
+  }
+}
