@@ -1,12 +1,14 @@
-import { consolaWapper, isString, useRandomId } from '../_util'
+import { isFunction, isString, useRandomId, useSetTimeout } from '../_util'
 import type { ConfigType, OptionsType } from './type'
-import { defaultOptions, defaultConfig } from './type'
+import { defaultOptions, defaultConfig, ToastType } from './type'
 import Wrapper from './wrapper'
 import { createApp, type App } from 'vue'
 
 type WarpperInstance = {
-  add: (options: OptionsType) => void
+  add: (options: PartialOptionsType) => void
+  update: (options: PartialOptionsType) => void
   remove: (toastOption: string | number) => void
+  destroyAll: () => void
   setZIndex: (index: number) => void
   setStyle: (style: Direction) => void
 }
@@ -17,12 +19,18 @@ export type Direction = {
   right?: number
   [key: string]: unknown
 }
-export default class Toast {
+
+type PartialConfigType = Partial<ConfigType>
+type PartialOptionsType = Partial<OptionsType>
+type ToastOptions = PartialConfigType & PartialOptionsType
+
+export default class ToastImplement {
   _config
   _app: App<Element> | null = null
   wrapperInstance: unknown
   container: HTMLElement
   ids: (string | number)[] = []
+  clears: (() => void)[] = []
   constructor(config: ConfigType = defaultConfig) {
     this._config = config
     const { getPopupContainer } = config
@@ -37,22 +45,22 @@ export default class Toast {
     this.wrapperInstance = app._instance
     return app._instance
   }
-  getWarpper(options?: OptionsType & ConfigType) {
+  getWarpper(options?: ToastOptions) {
     if (this.wrapperInstance) {
       return this.wrapperInstance
     }
     if (options) {
       const { getPopupContainer } = options
-      this.container = getPopupContainer() || defaultConfig.getPopupContainer()
+      this.container = getPopupContainer?.() || defaultConfig.getPopupContainer()
     }
     return (this.wrapperInstance = this.createApp())
   }
 
-  config(options: ConfigType) {
-    console.log(options)
+  config(config: ConfigType) {
+    this._config = config
   }
 
-  _setConfig(options: ConfigType) {
+  _setConfig(options: PartialConfigType) {
     const config: { [key: string]: unknown } = {}
     const directionKeys = ['bottom', 'left', 'right', 'top']
     const style: Direction = {}
@@ -70,23 +78,22 @@ export default class Toast {
     }
     return style
   }
-  handler(options: (OptionsType & ConfigType) | string, type: string) {
+  _setDefault() {}
+  handler(options: ToastOptions | string, type: string) {
     if (isString(options)) {
       options = {
-        ...defaultConfig,
-        ...defaultOptions,
         content: options
       }
     }
+    options = {
+      ...this._config,
+      ...defaultOptions,
+      ...options
+    } as ToastOptions
     const styles = this._setConfig(options)
     if (!options.id) {
       options.id = useRandomId()
     }
-    if (this.ids.includes(options.id)) {
-      consolaWapper.error(`[Toast] The toast with id ${options.id} is already exists`)
-      return
-    }
-    this.ids.push(options.id)
     const toastOption = {
       type,
       content: options.content,
@@ -102,38 +109,69 @@ export default class Toast {
       theme: options.theme
     }
     const warpper = (this.getWarpper(options) as { exposed: WarpperInstance }).exposed
-    if (options.zIndex !== this._config.zIndex) {
+    if (options.zIndex && options.zIndex !== this._config.zIndex) {
       warpper.setZIndex(options.zIndex)
     }
     if (Object.keys(styles).length > 0) {
       warpper.setStyle(styles)
     }
-    warpper.add(toastOption)
-    if (options.duration !== 0) {
-      const duration = Math.abs(options.duration * 1000)
-      setTimeout(() => {
-        this.close(options.id)
-      }, duration)
+    if (this.ids.includes(options.id)) {
+      const index = this.ids.findIndex((id) => id === options.id)
+      this.ids.splice(index, 1, options.id)
+      warpper.update(toastOption)
+    } else {
+      this.ids.push(options.id)
+      warpper.add(toastOption)
+      if (options.duration !== 0) {
+        const duration = Math.abs(options.duration! * 1000)
+        const clearCloseCallback = useSetTimeout(() => {
+          this.close(options.id!)
+        }, duration)
+        this.clears.push(clearCloseCallback)
+      }
     }
     return options.id
   }
-  info(options: (OptionsType & ConfigType) | string) {
-    return this.handler(options, 'info')
+  info(options: ToastOptions | string) {
+    return this.handler(options, ToastType.INFO)
   }
-  success(options: (OptionsType & ConfigType) | string) {
-    return this.handler(options, 'success')
+  success(options: ToastOptions | string) {
+    return this.handler(options, ToastType.SUCCESS)
   }
-  warning(options: (OptionsType & ConfigType) | string) {
-    return this.handler(options, 'warning')
+  warning(options: ToastOptions | string) {
+    return this.handler(options, ToastType.WARNING)
   }
-  error(options: (OptionsType & ConfigType) | string) {
-    return this.handler(options, 'error')
+  error(options: ToastOptions | string) {
+    return this.handler(options, ToastType.ERROR)
   }
+
+  loading(options: ToastOptions | string) {
+    return this.handler(options, 'loading')
+  }
+
   close(toastId: string | number) {
     const warpper = this.getWarpper()
     ;(warpper as { exposed: WarpperInstance }).exposed.remove(toastId)
+    const index = this.ids.findIndex((id) => id === toastId)
+    this.ids.splice(index, 1)
+    if (isFunction(this.clears[index])) {
+      this.clears[index]()
+      this.clears.splice(index, 1)
+    }
   }
-  destroy() {
+
+  destroyAll() {
+    const warpper = this.getWarpper()
+    ;(warpper as { exposed: WarpperInstance }).exposed.destroyAll()
+    this.ids = []
+    this.clears =
+      (this.clears.map((c) => {
+        c()
+      }),
+      [])
+  }
+
+  destroyApp() {
     this._app?.unmount()
   }
 }

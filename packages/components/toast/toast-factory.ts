@@ -1,7 +1,9 @@
 import { type ConfigType, defaultConfig } from './type'
+import ToastImplement from './implement'
 
-export const ToastFactory = {
+const ToastFactory = {
   create(config: ConfigType = defaultConfig) {
-    console.log('ToastFactory create', config)
+    return new ToastImplement(config)
   }
 }
+export default ToastFactory

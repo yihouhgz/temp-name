@@ -8,7 +8,7 @@ export default defineConfig({
   description: 'A VitePress Site',
   themeConfig: {
     editLink: {
-      pattern: 'https://github.com/yihouhgz/temp-name/docs/components/:path'
+      pattern: 'https://github.com/vuejs/vitepress/edit/main/docs/:path'
     },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -33,6 +33,10 @@ export default defineConfig({
               { text: 'Button', link: '/components/button' },
               { text: 'Icon', link: '/components/input' }
             ]
+          },
+          {
+            text: '反馈类',
+            items: [{ text: 'Toast', link: '/components/toast' }]
           }
         ]
       }

@@ -21,7 +21,13 @@ const Toast = defineComponent({
       isAnimating: false
     })
     const classNames = computed(() => {
-      return [prefix + '-toast', prefix + '-toast-' + props.type]
+      return [
+        prefix + '-toast',
+        prefix + '-toast-' + props.type,
+        {
+          [prefix + '-toast-light']: props.theme === 'light'
+        }
+      ]
     })
     const vm = getCurrentInstance()
     const renderIcon = () => {

@@ -1,17 +1,19 @@
-import { defineComponent, reactive, type VNodeRef } from 'vue'
-import { wrapperPorpos, type OptionsType } from './type'
+import { defineComponent, reactive } from 'vue'
+import { wrapperPorpos, type OptionsType, type ConfigType } from './type'
 import { prefix } from 'constants/config'
 import Toast from './toast'
 import './style/toast'
-import { useRandomId } from '../_util'
+import { isFunction, useRandomId } from '../_util'
 import type { Direction } from './implement'
 
-type OptionsTypeBase = OptionsType & { type: string; ref: VNodeRef }
+type OptionsTypeBase = OptionsType & { type: string; theme: ConfigType['theme'] }
 type WrapperStateType = {
   toastPool: Array<OptionsTypeBase>
   zIndex: number
   style: object
   absorptionCloseCallbacks: { [key: string]: () => void }
+  stack: boolean
+  isHover: boolean
 }
 const Wrapper = defineComponent({
   setup(props, ctx) {
@@ -22,21 +24,42 @@ const Wrapper = defineComponent({
       toastPool: [],
       zIndex: props.zIndex,
       style: {},
-      absorptionCloseCallbacks: {}
+      absorptionCloseCallbacks: {},
+      stack: false,
+      isHover: false
     })
 
     const handleCloseToast = (data: { id: string }) => {
       const { id } = data
-      state.toastPool = state.toastPool.filter((item) => item.id !== id)
+      const index = state.toastPool.findIndex((item) => item.id === id)
+      const toast = state.toastPool[index]
+      if (isFunction(toast.onClose)) toast.onClose()
+      state.toastPool.splice(index, 1)
     }
     ctx.expose({
       add(options: OptionsTypeBase) {
+        if (options.stack !== state.stack) {
+          state.stack = options.stack
+        }
         state.toastPool.push(options)
+      },
+      update(options: OptionsTypeBase) {
+        const { id } = options
+        const index = state.toastPool.findIndex((item) => item.id === id)
+        state.toastPool[index] = options
+        if (options.stack !== state.stack) {
+          state.stack = options.stack
+        }
       },
       remove(toastId: string | number) {
         const data = state.toastPool.find((item) => item.id === toastId)
         if (data) {
           state.absorptionCloseCallbacks[data.id]?.()
+        }
+      },
+      destroyAll() {
+        for (const item in state.absorptionCloseCallbacks) {
+          state.absorptionCloseCallbacks[item]?.()
         }
       },
       setZIndex(index: number) {
@@ -55,28 +78,46 @@ const Wrapper = defineComponent({
       const { key, close } = data
       state.absorptionCloseCallbacks[key] = close
     }
+    const handleMouseenter = () => {
+      state.isHover = true
+    }
+    const handleMouseleave = () => {
+      state.isHover = false
+    }
     return () => {
+      const renderToast = (item: OptionsTypeBase) => {
+        return (
+          <Toast
+            onCloseCallback_={handleAbsorptionCloseCallback}
+            key={item.id}
+            content={item.content}
+            id={item.id}
+            type={item.type}
+            onClose={handleCloseToast}
+            icon={item.icon}
+            showClose={item.showClose}
+            textMaxWidth={item.textMaxWidth}
+            theme={item.theme}
+          ></Toast>
+        )
+      }
       return (
         <div
-          class={prefix + '-toast-wrapper'}
+          onMouseenter={handleMouseenter}
+          onMouseleave={handleMouseleave}
+          class={[
+            prefix + '-toast-wrapper',
+            { [prefix + '-toast-wrapper-hover']: state.isHover && state.stack }
+          ]}
           id={wrapperId}
           style={{ zIndex: state.zIndex, ...state.style }}
         >
-          <div class={`${prefix}-toast-wrapper-inner ${prefix}-toast-wrapper-inner-hover`}>
+          <div class={`${prefix}-toast-wrapper-inner`}>
             {state.toastPool.map((item) => {
-              return (
-                <Toast
-                  onCloseCallback_={handleAbsorptionCloseCallback}
-                  key={item.id}
-                  content={item.content}
-                  id={item.id}
-                  type={item.type}
-                  onClose={handleCloseToast}
-                  icon={item.icon}
-                  showClose={item.showClose}
-                  textMaxWidth={item.textMaxWidth}
-                ></Toast>
-              )
+              if (state.stack) {
+                return <div class={`${prefix}-toast-zero-height-wrapper`}>{renderToast(item)}</div>
+              }
+              return renderToast(item)
             })}
           </div>
         </div>

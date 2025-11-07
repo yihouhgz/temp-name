@@ -1,20 +1,46 @@
-// import ToastFactory from './toast-factory'
-import Wrapper from './wrapper'
-import Toast from './implement'
-import { defaultConfig } from './type'
+import ToastFactory from './toast-factory'
 
-const toast = new Toast({
-  ...defaultConfig
+const Toast = ToastFactory.create()
+export { Toast, ToastFactory }
+
+Toast.info({
+  content: 'hello info',
+  duration: 0,
+  theme: 'light',
+  stack: true
 })
-
-toast.info('hello info')
 setTimeout(() => {
-  toast.success('hello success')
+  Toast.success({
+    content: 'hello success',
+    duration: 0,
+    theme: 'light',
+    stack: true
+  })
 }, 1000)
 setTimeout(() => {
-  toast.error('hello error')
+  Toast.error({
+    content: 'hello error',
+    duration: 0,
+    theme: 'light',
+    stack: true
+  })
 }, 2000)
 setTimeout(() => {
-  toast.warning('hello warning')
+  const id = 'hello'
+  Toast.warning({
+    content: 'hello warning',
+    id,
+    duration: 0,
+    theme: 'light',
+    stack: true
+  })
+  setTimeout(() => {
+    Toast.success({
+      content: 'hello success',
+      duration: 0,
+      id,
+      theme: 'light',
+      stack: true
+    })
+  }, 1000)
 }, 3000)
-export default Wrapper

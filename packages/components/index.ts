@@ -17,7 +17,7 @@ import Space from './space'
 import Spin from './spin'
 import { Layout, Header, Content, Footer, Sider } from './layout'
 import Switch from './switch'
-import Toast from './toast'
+import { Toast, ToastFactory } from './toast'
 const components = [
   Button,
   ButtonGroup,
@@ -46,7 +46,8 @@ const components = [
   Footer,
   Sider,
   Switch,
-  Toast
+  Toast,
+  ToastFactory
 ]
 export const install = (app: App) => withInstall(app, components)
 export { Button, Watermark, Input, Icon, Row, Col, Popover, Select, HotKeys, Avatar, Tag }

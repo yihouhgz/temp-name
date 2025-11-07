@@ -1,6 +1,13 @@
 import type { PropType, ComponentPublicInstance } from 'vue'
 import type { VNode } from 'vue'
 
+export const ToastType = {
+  INFO: 'info',
+  SUCCESS: 'success',
+  WARNING: 'warning',
+  ERROR: 'error'
+} as const
+
 export type ConfigType = {
   //弹出位置 bottom
   bottom: number | string
@@ -89,6 +96,10 @@ export const toastTypeMap: Record<ToastType, string> = {
   error: 'error'
 }
 export const toastProps = {
+  theme: {
+    type: String as PropType<ConfigType['theme']>,
+    default: 'normal'
+  },
   type: {
     values: ['success', 'warning', 'info', 'error'],
     required: true
