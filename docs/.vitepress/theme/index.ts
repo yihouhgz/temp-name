@@ -14,6 +14,7 @@ export default {
     })
   },
   enhanceApp({ app, router, siteData }) {
+    console.log(app, router, siteData)
     app.component('MonacoEditor', MonacoEditor)
     app.use(Components)
   }

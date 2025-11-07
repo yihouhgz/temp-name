@@ -104,8 +104,76 @@ $width-toast_light-border: 1px;
   }
 }
 
+@keyframes #{$prefix}-toast-keyframe-toast-show {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes #{$prefix}-toast-keyframe-toast-hide {
+  0% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+$types: (
+  'success': (
+    iconColor: $color-toast_success-icon,
+    bg: $color-toast_success_light-bg,
+    border: $color-toast_success_light-border
+  ),
+  'info': (
+    iconColor: $color-toast_info-icon,
+    bg: $color-toast_info_light-bg,
+    border: $color-toast_info_light-border
+  ),
+  'warning': (
+    iconColor: $color-toast_warning-icon,
+    bg: $color-toast_warning_light-bg,
+    border: $color-toast_warning_light-border
+  ),
+  'error': (
+    iconColor: $color-toast_danger-icon,
+    bg: $color-toast_danger_light-bg,
+    border: $color-toast_danger_light-border
+  )
+);
+
 .#{$prefix}-toast {
   pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.22, 0.57, 0.02, 1.2);
+  perspective-origin: center 280px;
+  perspective: 280px;
+  &-animation-show {
+    animation: #{$prefix}-toast-keyframe-toast-show 0.3s cubic-bezier(0.22, 0.57, 0.02, 1.2) 0s;
+    animation-fill-mode: forwards;
+  }
+
+  &-animation-hide {
+    animation: #{$prefix}-toast-keyframe-toast-hide 0.3s cubic-bezier(0.22, 0.57, 0.02, 1.2) 0s;
+    animation-fill-mode: forwards;
+  }
+
+  @each $type, $properties in $types {
+    &-icon-#{$type} {
+      color: map-get($properties, iconColor);
+    }
+    .#{$prefix}-toast-light.#{$prefix}-toast-#{$type} &-content {
+      background-color: map-get($properties, bg);
+      border: $width-toast_light-border solid map-get($properties, border);
+    }
+  }
+
   &-content {
     pointer-events: all;
     box-shadow: var(--#{$prefix}-shadow-elevated);

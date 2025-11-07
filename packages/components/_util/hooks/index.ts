@@ -1,3 +1,6 @@
 export * from './useEventListener'
 export * from './onElementResize'
+export * from './useThrottle'
+export * from './useRandomId'
+export * from './useSetTimeout'
 // export * from './onResize'
