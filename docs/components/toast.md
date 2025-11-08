@@ -45,3 +45,5 @@ function ToastDemo() {
   )
 }
 ```
+
+<MonacoEditor></MonacoEditor>

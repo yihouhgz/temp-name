@@ -16,6 +16,8 @@
     "vitepress": "2.0.0-alpha.12"
   },
   "dependencies": {
+    "@babel/standalone": "^7.28.5",
+    "@vue/repl": "^4.7.0",
     "monaco-editor": "^0.54.0"
   }
 }
