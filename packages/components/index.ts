@@ -10,7 +10,7 @@ import Tooltip from './tooltip/index'
 import Select from './select'
 import { SelectOption, SelectOptionGroup } from './select'
 import HotKeys from './hot-keys'
-import Tag from './tag'
+import { Tag, TagGroup } from './tag'
 import { Avatar, AvatarGroup } from './avatar'
 import DragMove from './drag-move'
 import Space from './space'
@@ -37,6 +37,7 @@ const components = [
   Avatar,
   AvatarGroup,
   Tag,
+  TagGroup,
   DragMove,
   Space,
   Spin,
