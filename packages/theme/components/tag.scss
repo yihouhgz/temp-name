@@ -98,3 +98,19 @@ $types: 'ghost', 'solid', 'light';
     height: map-get(map-get($tag-sizes, 'large'), 'height') + 2;
   }
 }
+
+
+.#{$prefix}-tag-rest-group-popover {
+  &-content {
+    display: block;
+    .#{$prefix}-tag {
+      margin-bottom: 0px;
+      margin-right: 8px;
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
+
+
+}

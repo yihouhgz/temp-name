@@ -3,7 +3,7 @@ import { prefix } from 'constants/config'
 import { tagGroupEmits, tagGroupProps } from './type'
 import type { ExtractPropTypes, ExtractPublicPropTypes } from 'vue'
 import Popover from '../popover/popover'
-import Tag from './tag'
+import Tag, { type TagProps } from './tag'
 
 const TagGroup = defineComponent({
     setup(props, { emit, slots }) {
@@ -14,12 +14,10 @@ const TagGroup = defineComponent({
             props.maxTagCount ? `${prefix}-tag-group-max` : '',
         ])
 
-        // 关闭事件
-        // const handleTagClose = (e: MouseEvent) => {
-        //     e.stopPropagation()
-        //     emit('tagClose', e)
-        // }
-
+        //关闭事件
+        const handleTagClose = (tagChildren: TagProps, evt: MouseEvent, tagKey: string | number) => {
+            emit('tagClose', tagChildren, evt, tagKey)
+        }
 
         return () => (
             <div
@@ -32,6 +30,7 @@ const TagGroup = defineComponent({
                             key={tagItem.tagKey || index}
                             size={tagItem.size || props.size}
                             avatarShape={tagItem.avatarShape || props.avatarShape}
+                            onClose={(e: MouseEvent) => handleTagClose(tagItem, e, tagItem.tagKey)}
                         >
                             {tagItem.children}
                         </Tag>
@@ -42,8 +41,10 @@ const TagGroup = defineComponent({
                         <Popover
                             {...props.popoverProps}
                             visible={props.showPopover}
+                            showArrow={true}
+                            class={`${prefix}-tag-rest-group-popover`}
                             content={
-                                <div>
+                                <div class={`${prefix}-tag-rest-group-popover-content`}>
                                     {
                                         props.tagList.slice(props.maxTagCount || props.tagList.length).map((tagItem, index) => (
                                             <Tag
@@ -51,6 +52,7 @@ const TagGroup = defineComponent({
                                                 key={tagItem.tagKey || index}
                                                 size={tagItem.size || props.size}
                                                 avatarShape={tagItem.avatarShape || props.avatarShape}
+                                                onClose={(e: MouseEvent) => handleTagClose(tagItem, e, tagItem.tagKey)}
 
                                             >
                                                 {tagItem.children}
@@ -58,7 +60,6 @@ const TagGroup = defineComponent({
                                         ))
                                     }
                                 </div>
-
                             }
                         >
                             <Tag

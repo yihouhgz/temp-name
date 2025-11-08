@@ -79,19 +79,19 @@ export const tagProps = {
         required: false
     },
     children: { // 标签内容
-        type:[String, Object, Function, null] as PropType<string | VNode |(()=> VNode)| null>,
+        type: [String, Object, Function, null] as PropType<string | VNode | (() => VNode) | null>,
         default: null,
         required: false
     }
 }
 
 export const tagGroupProps = {
-     avatarShape: { // 头像形状
+    avatarShape: { // 头像形状
         type: String as PropType<TagProps["avatarShape"]>,
         default: 'square',
         required: false
     },
-    maxTagCount : { // 最大显示数量
+    maxTagCount: { // 最大显示数量
         type: Number,
         default: undefined,
         required: false
@@ -102,7 +102,7 @@ export const tagGroupProps = {
         required: false
     },
     popoverProps: { // 更多标签弹窗属性
-        type:  Object as PropType<PopoverProps>,
+        type: Object as PropType<PopoverProps>,
         default: () => ({}),
         required: false
     },
@@ -119,7 +119,7 @@ export const tagGroupProps = {
     }
 }
 export const tagGroupEmits = {
-    tagClose: (tagChildren: VNode,evt: MouseEvent,tagKey: string | number) => {},
+    tagClose: (tagChildren: TagProps, evt: MouseEvent, tagKey: string | number) => true,
 }
 
 export const tagEmits = {

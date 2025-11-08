@@ -7,16 +7,16 @@ const App = defineComponent(() => {
   const switchValue = ref(false)
   const inputvalue = ref('llll')
   const tagList = [
-        { color: 'light-blue', children: '抖音',size:"small" },
-        { color: 'cyan', children: '火山' },
-        { color: 'violet', children: '剪映' },
-        { color: 'white', children: '醒图' },
-        { tagKey: '1', color: 'light-blue', children: '抖音', closable: true, },
-        { tagKey: '3', color: 'cyan', children: '剪映', closable: true, },
-        { tagKey: '2', color: 'violet', children: '醒图', closable: true, },
-        { tagKey: '4', color: 'teal', children: '轻颜相机', closable: true, },
-        { tagKey: '5', color: 'white', children: '飞书', closable: true, },
-    ];
+    { color: 'light-blue', children: '抖音', size: "small", avatarSrc: "https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png" },
+    { color: 'cyan', children: '火山' },
+    { color: 'violet', children: '剪映' },
+    { color: 'white', children: '醒图' },
+    { tagKey: '1', color: 'light-blue', children: '抖音', closable: true, avatarSrc: "https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/dy.png" },
+    { tagKey: '3', color: 'cyan', children: '剪映', closable: true, },
+    { tagKey: '2', color: 'violet', children: '醒图', closable: true, },
+    { tagKey: '4', color: 'teal', children: '轻颜相机', closable: true, },
+    { tagKey: '5', color: 'white', children: '飞书', closable: true, },
+  ];
   const handleChange = (value: boolean) => {
     switchLoading.value = true
     setTimeout(() => {
@@ -687,9 +687,9 @@ const App = defineComponent(() => {
         </tempui-tag>
       </div>
       123123
-      <div class="top-20"> 
-        <tempui-tag-group tagList={tagList} maxTagCount={3} showPopover={true}> </tempui-tag-group>
-      </div> 
+      <div class="top-20">
+        <tempui-tag-group tagList={tagList} maxTagCount={4} showPopover={true}> </tempui-tag-group>
+      </div>
       <tempui-layout>
         <tempui-layout-sider style={{ width: '120px', background: 'var(--tempui-color-fill-2)' }}>
           Sider
