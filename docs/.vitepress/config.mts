@@ -53,6 +53,27 @@ export default defineConfig({
           }
         })
       })
+
+      // 修改规则以使用 MonacoEditor 组件
+      md.core.ruler.after('replace-project-name', 'replace-v-manaco', (state) => {
+        state.tokens.forEach((token, index) => {
+          // 修复条件判断，确保能正确识别 v-manaco 代码块
+          if (token.type === 'fence' && token.info && token.info.indexOf('v-monaco') >= 0) {
+            const componentToken = new state.Token('html_block', '', 0)
+            // 将代码内容转义并传递给 MonacoEditor 组件的 code 属性
+            const escapedContent = token.content
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;')
+              .replace(/\n/g, '&#10;')
+
+            componentToken.content = `<MonacoEditor code="${escapedContent}" />`
+            state.tokens[index] = componentToken
+          }
+        })
+      })
     }
   },
   vite: {

@@ -46,4 +46,6 @@ function ToastDemo() {
 }
 ```
 
-<MonacoEditor></MonacoEditor>
+```tsx v-monaco
+const App = <div>111</div>
+```

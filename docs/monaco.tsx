@@ -252,9 +252,8 @@ export const MonacoEditor = defineComponent(
         }
       } catch (e) {
         previewRef.value!.innerHTML = `
-        <div style="color: red; padding: 10px;">
-          <h3>编译错误:</h3>
-          <pre>${(e as Error).message || e}</pre>
+        <div style="color: red;">
+          <pre>编译错误:${(e as Error).message || e}</pre>
         </div>
       `
         console.error(e)
@@ -279,7 +278,7 @@ export const MonacoEditor = defineComponent(
     border: 1px solid rgba(28,31,35,.08);
     margin: 24px 0;
     background: rgba(255,255,255,1);
-    height: 344px;"
+    min-height: 344px;margin-bottom: 20px;"
         >
           <div
             class="monaco-editor-preview"
@@ -307,6 +306,7 @@ export const MonacoEditor = defineComponent(
   )
 }`
       }
-    }
+    },
+    name: 'MonacoEditor'
   }
 )
