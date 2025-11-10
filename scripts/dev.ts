@@ -5,6 +5,8 @@ import { join } from 'path'
 // 检查dist目录中的构建文件是否已存在
 function checkDistFiles(): Promise<void> {
   return new Promise((resolve) => {
+    let counter = 0;
+    const maxDots = 5;
     const checkInterval = setInterval(() => {
       const esmFile = join(process.cwd(), 'dist', 'index.d.ts')
 
@@ -12,7 +14,14 @@ function checkDistFiles(): Promise<void> {
       if (existsSync(esmFile)) {
         clearInterval(checkInterval)
         resolve()
+        return
       }
+      
+      // 显示加载进度
+      counter = (counter + 1) % (maxDots + 1)
+      const dots = '.'.repeat(counter)
+      const spaces = ' '.repeat(maxDots - counter)
+      process.stdout.write(`\r🔍 正在构建组件库${dots}${spaces}`)
     }, 500)
 
     setTimeout(() => {
@@ -44,7 +53,7 @@ async function startDevEnvironment() {
   // 等待构建文件生成
   console.log('⏳ 等待构建完成...')
   await checkDistFiles()
-  console.log('✅ 步骤1完成: 组件库打包完成')
+  console.log('\n✅ 步骤1完成: 组件库打包完成')
 
   // 第二步：启动play和docs任务
   console.log('🔧 步骤2: 启动文档库和play环境')
