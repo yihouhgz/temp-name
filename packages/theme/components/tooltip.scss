@@ -159,17 +159,13 @@
     opacity: 1;
   }
 
-  60% {
+  to {
     opacity: 0;
     transform: scale(0.8);
   }
-
-  to {
-    opacity: 0;
-  }
 }
 .#{$prefix}-tooltip-animation-show {
-  animation: #{$prefix}-tooltip-zoomIn 0.1s cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation: #{$prefix}-tooltip-zoomIn 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
   animation-fill-mode: forwards;
 }
 .#{$prefix}-tooltip-animation-hide {
