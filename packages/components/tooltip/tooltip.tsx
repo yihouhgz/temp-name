@@ -8,6 +8,8 @@ import {
   onMounted,
   watch,
   reactive,
+  useAttrs,
+  effectScope,
   type StyleValue,
   type CSSProperties,
   type ExtractPropTypes
@@ -16,7 +18,7 @@ import {
 import { prefix } from 'constants/config'
 import './style/tooltip'
 import { tooltioProps, tooltipEmits } from './type'
-import { isFunction, isComponentByVNode, domRectToObject, isNumber } from '../_util'
+import { isFunction, isComponentByVNode, domRectToObject, isNumber, useSetTimeout } from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
 import { useEventListener, useClickOutside, onElementResize, type EventMap } from '../_util'
@@ -101,8 +103,33 @@ const Tooltip = defineComponent({
         }
         useClickOutside(target, handleClickOutside)
       } else {
+        const scope = effectScope()
         useEventListener(target, eventMap.leave, () => {
-          triggerLeave()
+          if (eventMap.leave === 'mouseleave') {
+            scope.run(() => {
+              let hoverInInner = false
+              // 鼠标移出
+              useEventListener(innerRef.value, 'mouseenter', () => (hoverInInner = true), {
+                once: true
+              })
+              useEventListener(
+                innerRef.value,
+                'mouseleave',
+                () => {
+                  hoverInInner = false
+                  triggerLeave()
+                },
+                { once: true }
+              )
+              useSetTimeout(() => {
+                if (!hoverInInner) {
+                  triggerLeave()
+                }
+              }, 100)
+            })
+          } else {
+            triggerLeave()
+          }
         })
       }
     })
@@ -220,6 +247,7 @@ const Tooltip = defineComponent({
       }
       animationOptions.isAnimating = false
     }
+    const allAttrs = useAttrs()
     return () => {
       return (
         <>
@@ -264,6 +292,7 @@ const Tooltip = defineComponent({
                       class={[...wrapperClass.value, animationClassName]}
                       ref={innerRef}
                       {...animationEventsNeedBind}
+                      {...allAttrs}
                     >
                       <div class={`${prefix}-tooltip-content`}>
                         <ContentWrapper></ContentWrapper>
@@ -295,7 +324,8 @@ const Tooltip = defineComponent({
   },
   name: prefix + '-tooltip',
   props: tooltioProps,
-  emits: tooltipEmits
+  emits: tooltipEmits,
+  inheritAttrs: false
 })
 export type TooltipProps = ExtractPropTypes<typeof tooltioProps>
 export default Tooltip

@@ -1,4 +1,4 @@
-import { defineComponent, computed, Teleport, /*type StyleValue,*/ ref } from 'vue'
+import { defineComponent, computed, Teleport, /*type StyleValue,*/ ref, useAttrs } from 'vue'
 import { prefix } from 'constants/config'
 import { portalProps } from './type'
 // import { isNumber } from '../_util'
@@ -11,52 +11,11 @@ const Portal = defineComponent(
         zIndex: 1006
       }
     })
-    // const innerStyle = computed<StyleValue>(() => {
-    //   const targetElementRect = props.targetElementRect as DOMRect
-    //   const innerElement = innerRef.value
-    //   const autoAdjustOverflow = props.autoAdjustOverflow
-    //   const triggerElementRef = props.triggerElementRef
-    //   if (targetElementRect && isNumber(targetElementRect.width) && innerElement) {
-    //     const innerRect = innerElement.getBoundingClientRect()
-    //     const top = targetElementRect.y - innerRect.height - 6
-    //     const left = targetElementRect.x - innerRect.width / 2 + targetElementRect.width / 2
-    //     const postion: StyleValue = {
-    //       zIndex: 1006,
-    //       position: 'absolute',
-    //       top: top + 'px',
-    //       left: left + 'px'
-    //     }
-    //     if (autoAdjustOverflow) {
-    //       const bodyRect = document.body.getBoundingClientRect()
-    //       //如果 target top < inner height + 8px(边距)
-    //       if (targetElementRect.y < innerRect.height + 8) {
-    //         postion.top = triggerElementRef.offsetTop - 8 + 'px'
-    //       } else if (
-    //         -bodyRect.y - targetElementRect.y - targetElementRect.height <
-    //         innerRect.height + 8
-    //       ) {
-    //         console.log(
-    //           '-bodyRect.y - targetElementRect.y - targetElementRect.height',
-    //           -bodyRect.y - targetElementRect.y - targetElementRect.height,
-    //           innerRect.height,
-    //           8
-    //         )
-    //         postion.top = triggerElementRef.offsetTop + targetElementRect.height + 8 + 'px'
-    //       }
-    //     }
-    //     return postion
-    //   }
-    //   return {
-    //     zIndex: 1006,
-    //     position: 'absolute',
-    //     top: 0 + 'px',
-    //     left: 0 + 'px'
-    //   }
-    // })
+    const allAttrs = useAttrs()
     return () => {
       return (
         <Teleport to={props.getPopupContainer(document.body)}>
-          <div class={`${prefix}-portal`} style={style.value}>
+          <div class={`${prefix}-portal`} style={style.value} {...allAttrs}>
             <div
               ref={innerRef}
               class={`${prefix}-portal-inner`}
@@ -70,6 +29,6 @@ const Portal = defineComponent(
       )
     }
   },
-  { name: prefix + '-portal', props: portalProps }
+  { name: prefix + '-portal', props: portalProps, inheritAttrs: false }
 )
 export default Portal

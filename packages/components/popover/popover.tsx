@@ -4,20 +4,21 @@ import { popoverProps, popoverEmits } from './type'
 import Tooltip from '../tooltip'
 import { isFunction } from '../_util/helps'
 import './style/popover'
-import { computed } from 'vue'
+import { computed, useAttrs } from 'vue'
 
 const Popover = defineComponent({
   setup(props, ctx) {
+    const allAttrs = useAttrs()
     const ContentWrapper = () => {
       if (isFunction(props.content)) {
         return (
-          <div class={`${prefix}-popover`}>
+          <div class={`${prefix}-popover`} {...allAttrs}>
             <div class={`${prefix}-popover-content`}>{props.content()}</div>
           </div>
         )
       }
       return (
-        <div class={`${prefix}-popover`}>
+        <div class={`${prefix}-popover`} {...allAttrs}>
           <div class={`${prefix}-popover-content`}>{props.content}</div>
         </div>
       )
@@ -48,6 +49,7 @@ const Popover = defineComponent({
       )
     }
   },
+  inheritAttrs: false,
   name: prefix + '-popover',
   props: popoverProps,
   emits: popoverEmits
