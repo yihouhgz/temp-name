@@ -4,8 +4,18 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-import { defineComponent, onMounted, ref, onBeforeUnmount, h, createApp } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  onBeforeUnmount,
+  h,
+  createApp,
+  reactive,
+  watchEffect
+} from 'vue'
 import type { App as VueApp, VNode, Component } from 'vue'
+import { useThrottle } from '../packages/components/_util'
 
 // 导入项目组件
 import * as ProjectComponents from '../packages/components/index'
@@ -18,9 +28,10 @@ declare global {
     // 忽略类型检查，添加React到window对象
     React: unknown
     jsx: unknown
+    __IMPORT_FINISHED__?: boolean
   }
 }
-
+ProjectComponents.registerGlobalApiToDocs()
 self.MonacoEnvironment = {
   // 提供一个定义worker路径的全局变量
   getWorker(_: unknown, label: string): Worker {
@@ -54,32 +65,6 @@ function jsx(
 ): VNode {
   // 处理 children
   const normalizedChildren = children.flat()
-
-  // 如果 type 是字符串，尝试在已知组件中查找
-  if (typeof type === 'string') {
-    // 在项目组件中查找匹配的组件
-    for (const key of Object.keys(ProjectComponents)) {
-      const componentModule = ProjectComponents[key as keyof typeof ProjectComponents]
-      if (componentModule && typeof componentModule !== 'string') {
-        // 检查默认导出
-        if ((componentModule as Component).name === type) {
-          return h(componentModule as Component, props || {}, { default: () => normalizedChildren })
-        }
-        // 检查命名导出
-        if (typeof componentModule === 'object' && componentModule !== null) {
-          for (const subKey of Object.keys(componentModule)) {
-            if (subKey === '__esModule') continue
-            const subComponent = (componentModule as Record<string, Component>)[subKey]
-            if (subComponent && subComponent.name === type) {
-              return h(subComponent, props || {}, { default: () => normalizedChildren })
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // 否则直接使用 h 函数
   return h(type, props || {}, { default: () => normalizedChildren })
 }
 
@@ -87,12 +72,310 @@ function jsx(
 window.React = { createElement: jsx }
 window.jsx = jsx
 
+function hasStrictImportStatement(code: string) {
+  // 移除字符串内容，避免字符串中的 "import" 被误判
+  const withoutStrings = code.replace(/['"`](\\?.)*?['"`]/g, '""')
+
+  // 移除注释
+  const cleanedCode = withoutStrings.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
+
+  // 检测各种 import 语法
+  const importPatterns = [
+    /^import\s+{[\s\S]*?}\s+from\s+['"`]/, // import { x } from 'y'
+    /^import\s+\*\s+as\s+\w+\s+from\s+['"`]/, // import * as x from 'y'
+    /^import\s+\w+\s+from\s+['"`]/, // import x from 'y'
+    /^import\s+['"`]/, // import 'module'
+    /^import\s+[\s\S]*?,\s*from\s+['"`]/, // 混合导入
+    /import\s*\(/ // 动态导入 import()
+  ]
+
+  return importPatterns.some((pattern) => pattern.test(cleanedCode.trim()))
+}
+
+type Options = {
+  removeDynamicImports?: boolean
+  preserveComments?: boolean
+  removeTypeImports?: boolean
+}
+function clearStrictImportStatement(code: string, options?: Options): string {
+  const {
+    removeDynamicImports = false, // 是否移除动态导入
+    preserveComments = true, // 是否保留注释
+    removeTypeImports = true // 是否移除 TypeScript 类型导入
+  } = options || {}
+
+  let processedCode = code
+
+  // 如果不保留注释，先移除注释
+  if (!preserveComments) {
+    processedCode = processedCode.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
+  }
+
+  // 静态 import 模式
+  const staticPatterns = [
+    /^import\s+{[\s\S]*?}\s+from\s+['"`][^'"`]+['"`];?\s*$/gm,
+    /^import\s+\*\s+as\s+\w+\s+from\s+['"`][^'"`]+['"`];?\s*$/gm,
+    /^import\s+\w+\s+from\s+['"`][^'"`]+['"`];?\s*$/gm,
+    /^import\s+['"`][^'"`]+['"`];?\s*$/gm,
+    /^import\s+[\w*{},\s]+\s+from\s+['"`][^'"`]+['"`];?\s*$/gm
+  ]
+
+  // TypeScript 类型导入
+  if (removeTypeImports) {
+    staticPatterns.push(/^import\s+type\s+.*?from\s+['"`][^'"`]+['"`];?\s*$/gm)
+    staticPatterns.push(/^import\s+{.*?}\s+from\s+['"`][^'"`]+['"`];?\s*$/gm)
+  }
+
+  // 移除静态导入
+  staticPatterns.forEach((pattern) => {
+    processedCode = processedCode.replace(pattern, '')
+  })
+
+  // 如果需要移除动态导入
+  if (removeDynamicImports) {
+    processedCode = processedCode.replace(
+      /import\s*\(['"`][^'"`]+['"`]\)/g,
+      'Promise.resolve(null)'
+    )
+  }
+
+  return processedCode.trim()
+}
+
+function hasAppComponent(code: string) {
+  const appPatterns = [
+    // function App() { ... }
+    /function\s+App\s*\([^)]*\)\s*{/,
+    // const App = () => { ... }
+    /const\s+App\s*=\s*\([^)]*\)\s*=>/,
+    // const App = function() { ... }
+    /const\s+App\s*=\s*function\s*\([^)]*\)\s*{/,
+    // class App extends Component { ... }
+    /class\s+App\s+extends\s+\w+/,
+    // var App = ...
+    /(?:var|let)\s+App\s*=\s*\([^)]*\)\s*=>/,
+    // export default function App() { ... }
+    /export\s+default\s+function\s+App\s*\(/,
+    // export default class App { ... }
+    /export\s+default\s+class\s+App\s+/
+  ]
+
+  // 移除注释避免误判
+  const cleanedCode = code.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
+
+  return appPatterns.some((pattern) => pattern.test(cleanedCode))
+}
+interface ImportInfo {
+  statement: string
+  type: 'named' | 'default' | 'namespace' | 'mixed' | 'side-effect' | 'type' | 'type-named'
+  exports: string[]
+  module: string
+  detailedExports?: Array<{
+    original: string
+    alias: string | null
+    finalName: string
+    isType?: boolean
+  }>
+  isTypeImport?: boolean
+}
+interface ExtractImportsResult {
+  imports: string[]
+  exports: string[]
+  detailedImports: ImportInfo[]
+  summary: {
+    totalImports: number
+    totalExports: number
+    modules: string[]
+    typeImports: number
+    valueImports: number
+  }
+}
+function extractImportsDetailedTS(code: string): ExtractImportsResult {
+  // 移除注释以避免干扰
+  const cleanedCode = code.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')
+
+  // TypeScript 特有的 import 模式
+  const importPatterns = [
+    // import { A, B } from 'module'
+    /(import\s+\{([^}]+)\}\s+from\s+['"`]([^'"`]+)['"`])/g,
+    // import type { A, B } from 'module'
+    /(import\s+type\s+\{([^}]+)\}\s+from\s+['"`]([^'"`]+)['"`])/g,
+    // import * as Name from 'module'
+    /(import\s+\*\s+as\s+(\w+)\s+from\s+['"`]([^'"`]+)['"`])/g,
+    // import Default from 'module'
+    /(import\s+(\w+)\s+from\s+['"`]([^'"`]+)['"`])/g,
+    // import type Default from 'module'
+    /(import\s+type\s+(\w+)\s+from\s+['"`]([^'"`]+)['"`])/g,
+    // import Default, { Named } from 'module'
+    /(import\s+(\w+)\s*,\s*\{([^}]+)\}\s+from\s+['"`]([^'"`]+)['"`])/g,
+    // import type Default, { Named } from 'module'
+    /(import\s+type\s+(\w+)\s*,\s*\{([^}]+)\}\s+from\s+['"`]([^'"`]+)['"`])/g,
+    // 副作用导入 import 'module'
+    /(import\s+['"`]([^'"`]+)['"`])/g,
+    // 动态导入（可选）
+    /(import\s*\(\s*['"`]([^'"`]+)['"`]\s*\))/g
+  ]
+
+  const imports: string[] = []
+  const exports: string[] = []
+  const detailedImports: ImportInfo[] = []
+  let typeImportsCount = 0
+  let valueImportsCount = 0
+
+  importPatterns.forEach((pattern) => {
+    let match: RegExpExecArray | null
+    while ((match = pattern.exec(cleanedCode)) !== null) {
+      const [fullMatch, , ...groups] = match
+
+      imports.push(fullMatch)
+
+      const importInfo: ImportInfo = {
+        statement: fullMatch,
+        type: 'named',
+        exports: [],
+        module: '',
+        isTypeImport: pattern.source.includes('import\\s+type')
+      }
+
+      // 统计类型导入和值导入
+      if (importInfo.isTypeImport) {
+        typeImportsCount++
+      } else {
+        valueImportsCount++
+      }
+
+      // 根据模式类型解析
+      if (pattern.source.includes('* as')) {
+        // 命名空间导入
+        const namespace = groups[0]
+        importInfo.type = 'namespace'
+        importInfo.exports = [namespace]
+        importInfo.module = groups[1]
+        exports.push(namespace)
+      } else if (pattern.source.includes('{')) {
+        // 命名导入或混合导入
+        const isTypeImport = pattern.source.includes('import\\s+type')
+
+        if (groups.length === 2 || (isTypeImport && groups.length === 2)) {
+          // import { A, B } from 'module' 或 import type { A, B } from 'module'
+          const namedExports = groups[0].split(',').map((name) => {
+            const trimmed = name.trim()
+            const parts = trimmed.split(/\s+as\s+/)
+            const finalName = parts[parts.length - 1].trim()
+            return {
+              original: parts[0].trim(),
+              alias: parts[1] ? parts[1].trim() : null,
+              finalName,
+              isType: isTypeImport
+            }
+          })
+
+          importInfo.type = isTypeImport ? 'type-named' : 'named'
+          importInfo.exports = namedExports.map((e) => e.finalName)
+          importInfo.module = groups[1]
+          importInfo.detailedExports = namedExports
+
+          exports.push(...namedExports.map((e) => e.finalName))
+        } else if (groups.length === 3 || (isTypeImport && groups.length === 3)) {
+          // import Default, { Named } from 'module' 或 import type Default, { Named } from 'module'
+          const defaultExport = groups[0]
+          const namedExports = groups[1].split(',').map((name) => {
+            const trimmed = name.trim()
+            const parts = trimmed.split(/\s+as\s+/)
+            const finalName = parts[parts.length - 1].trim()
+            return {
+              original: parts[0].trim(),
+              alias: parts[1] ? parts[1].trim() : null,
+              finalName,
+              isType: isTypeImport
+            }
+          })
+
+          importInfo.type = 'mixed'
+          importInfo.exports = [defaultExport, ...namedExports.map((e) => e.finalName)]
+          importInfo.module = groups[2]
+          importInfo.detailedExports = [
+            { original: 'default', alias: null, finalName: defaultExport, isType: isTypeImport },
+            ...namedExports
+          ]
+
+          exports.push(defaultExport, ...namedExports.map((e) => e.finalName))
+        }
+      } else if (
+        pattern.source.includes('import\\s+\\w+\\s+from') ||
+        pattern.source.includes('import\\s+type\\s+\\w+\\s+from')
+      ) {
+        // 默认导入
+        const defaultExport = groups[0]
+        const isTypeImport = pattern.source.includes('import\\s+type')
+        importInfo.type = isTypeImport ? 'type' : 'default'
+        importInfo.exports = [defaultExport]
+        importInfo.module = groups[1]
+        exports.push(defaultExport)
+      } else if (pattern.source.includes('import\\s*\\(')) {
+        // 动态导入
+        importInfo.type = 'side-effect'
+        importInfo.module = groups[0]
+        // 动态导入没有导出名称
+      } else {
+        // 副作用导入
+        importInfo.type = 'side-effect'
+        importInfo.module = groups[0]
+        // 没有导出名称
+      }
+
+      detailedImports.push(importInfo)
+    }
+  })
+
+  return {
+    imports,
+    exports: [...new Set(exports)], // 去重
+    detailedImports,
+    summary: {
+      totalImports: imports.length,
+      totalExports: exports.length,
+      modules: [...new Set(detailedImports.map((i) => i.module))],
+      typeImports: typeImportsCount,
+      valueImports: valueImportsCount
+    }
+  }
+}
+
+const importmapScript = document.createElement('script')
+//设置code的import
+if (importmapScript.type !== 'importmap') importmapScript.type = 'importmap'
+importmapScript.innerHTML = `
+    {
+      "imports": {
+        "tempuiComponents": "../ui-vue-components.esm.js",
+        "vue": "https://unpkg.com/vue@3.5.18/dist/vue.esm-browser.js"
+      }
+    }
+  `
+document.head.appendChild(importmapScript)
+
 export const MonacoEditor = defineComponent(
   (props) => {
     const editor = ref<HTMLElement>()
     const previewRef = ref<HTMLElement>()
     let monacoEditor: MonacoCode.editor.IStandaloneCodeEditor | null = null
     let previewApp: VueApp | null = null
+
+    const codeState = reactive({
+      code: '',
+      previewCode: '',
+      originalCode: props.code, // 缓存原始代码
+      compiledCode: '',
+      notImportCode: '',
+      importMoudleScript: document.createElement('script')
+    })
+    document.head.appendChild(codeState.importMoudleScript)
+
+    watchEffect(() => {
+      codeState.code = props.code
+      codeState.previewCode = props.code
+    })
 
     onMounted(() => {
       MonacoCode.editor.defineTheme('myTheme', {
@@ -136,11 +419,11 @@ export const MonacoEditor = defineComponent(
         }
       })
 
-      // 添加内容变化监听器，实现实时预览
-      monacoEditor.onDidChangeModelContent(() => {
+      const callback = useThrottle(() => {
         updatePreview()
-      })
-
+      }, 800)
+      // 添加内容变化监听器，实现实时预览
+      monacoEditor.onDidChangeModelContent(callback)
       // 初始化预览
       updatePreview()
     })
@@ -161,48 +444,42 @@ export const MonacoEditor = defineComponent(
         // 清空预览区域
         previewRef.value.innerHTML = '<div id="preview-app"></div>'
 
-        // 收集所有项目组件
-        const componentList: Component[] = []
-        Object.keys(ProjectComponents).forEach((key) => {
-          const componentModule = ProjectComponents[key as keyof typeof ProjectComponents]
-          if (componentModule && typeof componentModule !== 'string') {
-            // 处理默认导出的组件（如 Button）
-            if (
-              Object.hasOwnProperty.call(componentModule, 'name') &&
-              (componentModule as Component).name
-            ) {
-              componentList.push(componentModule as Component)
-            }
-            // 处理命名导出的组件对象（如 { Button, ButtonGroup }）
-            else if (
-              typeof componentModule === 'object' &&
-              componentModule !== null &&
-              !Array.isArray(componentModule)
-            ) {
-              Object.keys(componentModule).forEach((subKey) => {
-                // 跳过 __esModule 等特殊属性
-                if (subKey === '__esModule') return
-
-                const subComponent = (
-                  componentModule as Record<string, Component & { name?: string }>
-                )[subKey]
-                // 确保是组件对象而不是其他属性
-                if (
-                  subComponent &&
-                  typeof subComponent === 'object' &&
-                  Object.hasOwnProperty.call(subComponent, 'name')
-                ) {
-                  componentList.push(subComponent)
-                }
-              })
-            }
-          }
-        })
+        if (!hasAppComponent(code)) {
+          return renderError('root组件App不存在 小淘皮')
+        }
 
         // 使用 Babel 编译 JSX 代码
         const compiledCode = Babel.transform(code, {
           presets: ['jsx-preset']
         }).code
+
+        codeState.compiledCode = compiledCode
+
+        let executableCode = compiledCode
+        if (hasStrictImportStatement(compiledCode)) {
+          executableCode = clearStrictImportStatement(compiledCode)
+          codeState.notImportCode = executableCode
+
+          const res = extractImportsDetailedTS(compiledCode)
+          //设置导入
+          codeState.importMoudleScript.type = 'module'
+          codeState.importMoudleScript.innerHTML = `
+              //设置导入模块
+              ${res.imports
+                .map((item) => {
+                  return item
+                })
+                .join('\n')}
+              // 手动挂载到全局
+              ${res.exports
+                .map((item) => {
+                  return `window.${item.trim()} = ${item.trim()};`
+                })
+                .join('\n')}
+              // 通知导入已完成
+              window.__IMPORT_FINISHED__ = true;
+            `
+        }
 
         // 创建函数来执行编译后的代码，包含组件注册和应用挂载逻辑
         const executeCode = new Function(
@@ -211,20 +488,12 @@ export const MonacoEditor = defineComponent(
           'createApp',
           'ProjectComponents',
           'jsx',
-          'componentList',
           'appContainer',
           `
           // 执行用户代码并获取 App 组件
-          ${compiledCode}
+          ${executableCode}
           // 在执行环境中创建 Vue 应用实例，传入 App 组件
           const app = createApp(App);
-
-          // 注册所有项目组件到当前应用实例
-          componentList.forEach(component => {
-            if (component.name) {
-              app.component(component.name, component);
-            }
-          });
 
           // 挂载应用到容器
           if (app && appContainer) {
@@ -236,28 +505,60 @@ export const MonacoEditor = defineComponent(
 
         // 执行代码获取 Vue 应用实例
         const appContainer = previewRef.value.querySelector('#preview-app')
-        const vueApp = executeCode(
-          { createElement: jsx },
-          h,
-          createApp,
-          ProjectComponents,
-          jsx,
-          componentList,
-          appContainer
-        )
 
-        // 保存应用实例用于后续销毁
-        if (vueApp) {
-          previewApp = vueApp
+        // 如果有import语句，等待import完成后再执行
+        if (hasStrictImportStatement(compiledCode)) {
+          const checkImportFinished = () => {
+            if (window.__IMPORT_FINISHED__) {
+              const vueApp = executeCode(
+                { createElement: jsx },
+                h,
+                createApp,
+                ProjectComponents,
+                jsx,
+                appContainer
+              )
+
+              // 保存应用实例用于后续销毁
+              if (vueApp) {
+                previewApp = vueApp
+              }
+            } else {
+              // 继续等待import完成
+              setTimeout(checkImportFinished, 10)
+            }
+          }
+
+          // 开始检查import是否完成
+          checkImportFinished()
+        } else {
+          // 没有import语句，直接执行
+          const vueApp = executeCode(
+            { createElement: jsx },
+            h,
+            createApp,
+            ProjectComponents,
+            jsx,
+            appContainer
+          )
+
+          // 保存应用实例用于后续销毁
+          if (vueApp) {
+            previewApp = vueApp
+          }
         }
       } catch (e) {
-        previewRef.value!.innerHTML = `
+        renderError(e as Error)
+      }
+    }
+
+    const renderError = (e: Error | string) => {
+      previewRef.value!.innerHTML = `
         <div style="color: red;">
           <pre>编译错误:${(e as Error).message || e}</pre>
         </div>
       `
-        console.error(e)
-      }
+      console.error(e)
     }
 
     onBeforeUnmount(() => {

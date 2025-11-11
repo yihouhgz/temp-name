@@ -3,14 +3,15 @@ export type ThrottleFnReturnType<T extends unknown[]> = (...args: T) => void
 
 export const useThrottle = <T extends unknown[]>(
   throttleFn: ThrottleFnType<T>,
-  delay?: number
+  delay?: number,
+  immediate?: boolean
 ): ThrottleFnReturnType<T> => {
   let timer: unknown
   return function (this: unknown, ...args: T) {
     if (timer) {
       clearTimeout(timer as number)
       timer = null
-    } else {
+    } else if (immediate) {
       throttleFn.call(this, ...args)
     }
     timer = setTimeout(

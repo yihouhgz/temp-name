@@ -5,8 +5,8 @@ import { join } from 'path'
 // 检查dist目录中的构建文件是否已存在
 function checkDistFiles(): Promise<void> {
   return new Promise((resolve) => {
-    let counter = 0;
-    const maxDots = 5;
+    let counter = 0
+    const maxDots = 5
     const checkInterval = setInterval(() => {
       const esmFile = join(process.cwd(), 'dist', 'index.d.ts')
 
@@ -16,7 +16,7 @@ function checkDistFiles(): Promise<void> {
         resolve()
         return
       }
-      
+
       // 显示加载进度
       counter = (counter + 1) % (maxDots + 1)
       const dots = '.'.repeat(counter)

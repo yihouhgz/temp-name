@@ -1,4 +1,4 @@
-import type { App } from 'vue'
+import type { App, Component } from 'vue'
 import { withInstall } from './_util/install'
 import { Button, SyncButton, ButtonGroup } from './button/index'
 import Watermark from './watermark/index'
@@ -18,7 +18,7 @@ import Spin from './spin'
 import { Layout, Header, Content, Footer, Sider } from './layout'
 import Switch from './switch'
 import { Toast, ToastFactory } from './toast'
-const components = [
+const components: Component[] = [
   Button,
   ButtonGroup,
   SyncButton,
@@ -51,4 +51,47 @@ const components = [
   ToastFactory
 ]
 export const install = (app: App) => withInstall(app, components)
-export { Button, Watermark, Input, Icon, Row, Col, Popover, Select, HotKeys, Avatar, Tag }
+export {
+  Button,
+  ButtonGroup,
+  SyncButton,
+  Watermark,
+  Input,
+  Icon,
+  IconJsx,
+  Row,
+  Col,
+  Popover,
+  Tooltip,
+  Select,
+  SelectOption,
+  SelectOptionGroup,
+  HotKeys,
+  Avatar,
+  AvatarGroup,
+  Tag,
+  TagGroup,
+  DragMove,
+  Space,
+  Spin,
+  Layout,
+  Header,
+  Content,
+  Footer,
+  Sider,
+  Switch,
+  Toast,
+  ToastFactory
+}
+
+const globalApis: { [key: string]: unknown } = {
+  Toast,
+  ToastFactory
+}
+
+type GlobalApiType = typeof globalThis & typeof globalApis
+export const registerGlobalApiToDocs = () => {
+  for (const api in globalApis) {
+    ;(globalThis as GlobalApiType)[api] = globalApis[api]
+  }
+}
