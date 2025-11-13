@@ -6,7 +6,7 @@ $animation_function-toast-show: cubic-bezier(0.22, 0.57, 0.02, 1.2);
 $animation_function-toast-hide: cubic-bezier(0.22, 0.57, 0.02, 1.2);
 $animation_delay-toast-show: 0s;
 $animation_delay-toast-hide: 0s;
-$animation_opacity-toast-show: 0;
+$animation_opacity-toast-show: 1;
 $animation_opacity-toast-hide: 0;
 $animation_transform_translateY-toast-show: -100%;
 $animation_transform_translateY-toast-hide: -100%;
@@ -106,23 +106,23 @@ $width-toast_light-border: 1px;
 
 @keyframes #{$prefix}-toast-keyframe-toast-show {
   0% {
-    opacity: 0;
-    transform: translateY(-100%);
+    opacity: $animation_opacity-toast-hide;
+    transform: translateY($animation_transform_translateY-toast-show);
   }
 
   to {
-    opacity: 1;
+    opacity: $animation_opacity-toast-show;
   }
 }
 
 @keyframes #{$prefix}-toast-keyframe-toast-hide {
   0% {
-    opacity: 1;
+    opacity: $animation_opacity-toast-show;
   }
 
   to {
-    opacity: 0;
-    transform: translateY(-100%);
+    opacity: $animation_opacity-toast-hide;
+    transform: translateY($animation_transform_translateY-toast-hide);
   }
 }
 
@@ -155,12 +155,14 @@ $types: (
   perspective-origin: center 280px;
   perspective: 280px;
   &-animation-show {
-    animation: #{$prefix}-toast-keyframe-toast-show 0.3s cubic-bezier(0.22, 0.57, 0.02, 1.2) 0s;
+    animation: #{$prefix}-toast-keyframe-toast-show $animation_duration-toast-show
+      $animation_function-toast-show $animation_delay-toast-show;
     animation-fill-mode: forwards;
   }
 
   &-animation-hide {
-    animation: #{$prefix}-toast-keyframe-toast-hide 0.3s cubic-bezier(0.22, 0.57, 0.02, 1.2) 0s;
+    animation: #{$prefix}-toast-keyframe-toast-hide $animation_duration-toast-hide
+      $animation_function-toast-hide $animation_delay-toast-hide;
     animation-fill-mode: forwards;
   }
 
@@ -172,6 +174,13 @@ $types: (
       background-color: map-get($properties, bg);
       border: $width-toast_light-border solid map-get($properties, border);
     }
+  }
+  &-zero-height-wrapper {
+    transition: all $animation_duration-toast-stack $animation_function-toast-stack;
+    perspective-origin: center 280px;
+    perspective: 280px;
+    height: 0;
+    overflow: visible;
   }
 
   &-content {

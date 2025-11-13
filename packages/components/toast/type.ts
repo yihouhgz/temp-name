@@ -7,7 +7,7 @@ export const ToastType = {
   WARNING: 'warning',
   ERROR: 'error'
 } as const
-
+export type OptionsTypeBase = OptionsType & { type: string; theme: ConfigType['theme'] }
 export type ConfigType = {
   //弹出位置 bottom
   bottom: number | string
@@ -85,6 +85,22 @@ export const wrapperPorpos = {
   getPopupContainer: {
     type: Function as PropType<() => HTMLElement | null>,
     default: () => defaultConfig.getPopupContainer
+  },
+  /**
+   * @description 私有属性
+   */
+  onStart: {
+    type: Function as PropType<(data: OptionsTypeBase) => void>,
+    default: () => {},
+    required: false
+  },
+  /**
+   * @description 私有属性
+   */
+  onStop: {
+    type: Function as PropType<(data: OptionsTypeBase) => void>,
+    default: () => {},
+    required: false
   }
 }
 

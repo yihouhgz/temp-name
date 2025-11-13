@@ -14,26 +14,34 @@ import { Toast, ToastFactory } from '{{projectName}}'
 
 ```tsx v-monaco
 import { Toast, Button } from '{{projectName}}'
-import { ref } from 'vue'
-function App() {
-  const handleShowToast = () => {
-    const ops = {
-      content: 'Hi, Toast',
-      duration: 10
+import { ref, watchEffect, defineComponent } from 'vue'
+const App = defineComponent({
+  setup() {
+    const handleShowToast = () => {
+      const ops = {
+        content: 'Hi, Toast',
+        duration: 10
+      }
+      Toast.info(ops)
+      conut.value += 1
     }
-    Toast.info(ops)
+    const conut = ref(0)
+
+    watchEffect(() => {
+      console.log('conut:', conut.value)
+    })
+    return () => (
+      <div>
+        <Button type="tertiary" onClick={handleShowToast}>
+          Display Toast {conut.value}
+        </Button>
+      </div>
+    )
   }
-  return (
-    <div>
-      <Button type="tertiary" onClick={handleShowToast}>
-        Display Toast
-      </Button>
-    </div>
-  )
-}
+})
 ```
 
-```tsx v-monaco
+<!-- ```tsx v-monaco
 import { Button } from '{{projectName}}'
 const App = () => {
   const handleShowToast = () => {
@@ -50,5 +58,8 @@ const App = () => {
       </Button>
     </div>
   )
-}
+} -->
+
+```
+
 ```

@@ -1,5 +1,5 @@
 import { isFunction, isString, useRandomId, useSetTimeout } from '../_util'
-import type { ConfigType, OptionsType } from './type'
+import type { ConfigType, OptionsType, OptionsTypeBase } from './type'
 import { defaultOptions, defaultConfig, ToastType } from './type'
 import Wrapper from './wrapper'
 import { createApp, type App } from 'vue'
@@ -30,14 +30,53 @@ export default class ToastImplement {
   wrapperInstance: unknown
   container: HTMLElement
   ids: (string | number)[] = []
-  clears: (() => void)[] = []
+  clears: {
+    [key: string]: unknown
+    id: string | number
+    close: () => void
+    start: number
+    stop: number
+    duration: number
+  }[] = []
   constructor(config: ConfigType = defaultConfig) {
     this._config = config
     const { getPopupContainer } = config
     this.container = getPopupContainer() as HTMLElement
   }
   createApp() {
-    const app = createApp(Wrapper)
+    const app = createApp(Wrapper, {
+      onStop: (data: OptionsTypeBase) => {
+        const index = this.clears.findIndex((item) => item.id === data.id)
+        if (index > -1) {
+          this.clears[index]?.close()
+          this.clears[index] = {
+            ...this.clears[index],
+            stop: Date.now()
+          }
+        }
+      },
+      onStart: (data: OptionsTypeBase) => {
+        const index = this.clears.findIndex((item) => item.id === data.id)
+        if (index > -1) {
+          const item = this.clears[index]
+          const { stop, start, duration } = item
+          const time = duration * 1000 - (stop - start)
+          if (time > 0) {
+            const clearCloseCallback = useSetTimeout(() => {
+              this.close(item.id!)
+            }, time)
+            this.clears[index] = {
+              ...this.clears[index],
+              start: Date.now(),
+              close: clearCloseCallback
+            }
+          } else {
+            this.close(item.id!)
+          }
+        }
+      },
+      getPopupContainer: () => this.container
+    })
     this._app = app
     const inner = document.createElement('div')
     this.container.appendChild(inner)
@@ -127,7 +166,13 @@ export default class ToastImplement {
         const clearCloseCallback = useSetTimeout(() => {
           this.close(options.id!)
         }, duration)
-        this.clears.push(clearCloseCallback)
+        this.clears.push({
+          id: options.id,
+          close: clearCloseCallback,
+          start: Date.now(),
+          stop: 0,
+          duration: duration / 1000
+        })
       }
     }
     return options.id
@@ -166,7 +211,7 @@ export default class ToastImplement {
     this.ids = []
     this.clears =
       (this.clears.map((c) => {
-        c()
+        c.close()
       }),
       [])
   }

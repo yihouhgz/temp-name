@@ -1,12 +1,12 @@
 import { defineComponent, reactive } from 'vue'
-import { wrapperPorpos, type OptionsType, type ConfigType } from './type'
+import { wrapperPorpos, type OptionsTypeBase } from './type'
 import { prefix } from 'constants/config'
 import Toast from './toast'
 import './style/toast'
 import { isFunction, useRandomId } from '../_util'
 import type { Direction } from './implement'
+import type { StyleValue } from 'vue'
 
-type OptionsTypeBase = OptionsType & { type: string; theme: ConfigType['theme'] }
 type WrapperStateType = {
   toastPool: Array<OptionsTypeBase>
   zIndex: number
@@ -14,6 +14,7 @@ type WrapperStateType = {
   absorptionCloseCallbacks: { [key: string]: () => void }
   stack: boolean
   isHover: boolean
+  height: { height: number; id: string | number }[]
 }
 const Wrapper = defineComponent({
   setup(props, ctx) {
@@ -26,7 +27,8 @@ const Wrapper = defineComponent({
       style: {},
       absorptionCloseCallbacks: {},
       stack: false,
-      isHover: false
+      isHover: false,
+      height: []
     })
 
     const handleCloseToast = (data: { id: string }) => {
@@ -84,10 +86,32 @@ const Wrapper = defineComponent({
     const handleMouseleave = () => {
       state.isHover = false
     }
+    const handleToastMouseenter = (data: OptionsTypeBase) => {
+      props?.onStop(data)
+    }
+    const handleToastonMouseenter = (data: OptionsTypeBase) => {
+      props?.onStart(data)
+    }
+    const handleHeightChange = ({ height, id }: { height: number; id: string | number }) => {
+      const index = state.height.findIndex((item) => item.id === id)
+      if (index >= 0) {
+        state.height[index] = { height, id }
+      } else {
+        state.height.push({ height, id })
+      }
+    }
     return () => {
-      const renderToast = (item: OptionsTypeBase) => {
+      const renderToast = (item: OptionsTypeBase, index: number) => {
+        const style: StyleValue = {}
+        if (state.stack) {
+          const length = state.toastPool.length - 1
+          const z = (length - index) * 10
+          style.transform = `translate3d(0px, 0px, -${z}px)`
+        }
         return (
           <Toast
+            onHeightChange={handleHeightChange}
+            style={style}
             onCloseCallback_={handleAbsorptionCloseCallback}
             key={item.id}
             content={item.content}
@@ -98,8 +122,18 @@ const Wrapper = defineComponent({
             showClose={item.showClose}
             textMaxWidth={item.textMaxWidth}
             theme={item.theme}
+            onMouseenter={() => handleToastMouseenter(item)}
+            onMouseleave={() => handleToastonMouseenter(item)}
           ></Toast>
         )
+      }
+      const getHeightStyle = (id: string | number) => {
+        const innerHeightStyle: StyleValue = { height: '0px' }
+        if (state.stack && state.isHover) {
+          const height = state.height.find((t) => t.id === id)
+          innerHeightStyle.height = `${height}px`
+        }
+        return innerHeightStyle
       }
       return (
         <div
@@ -113,15 +147,19 @@ const Wrapper = defineComponent({
           style={{ zIndex: state.zIndex, ...state.style }}
         >
           <div class={`${prefix}-toast-wrapper-inner`}>
-            {state.toastPool.map((item) => {
+            {state.toastPool.map((item, index) => {
               if (state.stack) {
                 return (
-                  <div class={`${prefix}-toast-zero-height-wrapper`} key={item.id}>
-                    {renderToast(item)}
+                  <div
+                    class={`${prefix}-toast-zero-height-wrapper`}
+                    key={item.id}
+                    style={getHeightStyle(item.id)}
+                  >
+                    {renderToast(item, index)}
                   </div>
                 )
               }
-              return renderToast(item)
+              return renderToast(item, index)
             })}
           </div>
         </div>

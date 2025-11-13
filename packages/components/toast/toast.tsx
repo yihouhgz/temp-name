@@ -1,4 +1,4 @@
-import { defineComponent, computed, getCurrentInstance } from 'vue'
+import { defineComponent, computed, getCurrentInstance, reactive, onMounted } from 'vue'
 import { prefix } from 'constants/config'
 import { toastProps, toastTypeMap } from './type'
 import {
@@ -12,7 +12,7 @@ import { hasPropsOrSlots, isNumber, renderElementForPropsOrSlot } from '../_util
 import Button from '../button'
 import CSSAnimation from '../css-animation'
 import type { StyleValue, CSSProperties } from 'vue'
-import { reactive } from 'vue'
+import { useTemplateRef } from '../_util'
 
 const Toast = defineComponent({
   setup(props, ctx) {
@@ -84,6 +84,18 @@ const Toast = defineComponent({
       key: props.id,
       close: handleClose
     })
+    const handleMouseenter = (e: MouseEvent) => {
+      ctx.emit('mouseenter', e)
+    }
+    const handleMouseleave = (e: MouseEvent) => {
+      ctx.emit('mouseleave', e)
+    }
+
+    const toastRef = useTemplateRef<HTMLDivElement>('toastRef')
+    onMounted(() => {
+      const rect = toastRef.value?.getBoundingClientRect()
+      ctx.emit('heightChange', rect?.height)
+    })
     return () => {
       return (
         <CSSAnimation
@@ -114,9 +126,13 @@ const Toast = defineComponent({
               <div
                 style={{ ...(animationStyle as CSSProperties) }}
                 {...animationEventsNeedBind}
+                {...ctx.attrs}
                 role="alert"
                 aria-label={`${props.type} type`}
                 class={[classNames.value, animationClassName]}
+                onMouseenter={handleMouseenter}
+                onMouseleave={handleMouseleave}
+                ref="toastRef"
               >
                 <div class={prefix + '-toast-content'}>
                   {renderIcon()}
@@ -140,8 +156,9 @@ const Toast = defineComponent({
       )
     }
   },
+  inheritAttrs: false,
   name: prefix + '-toast-interior',
   props: toastProps,
-  emits: ['close', 'closeCallback_']
+  emits: ['close', 'closeCallback_', 'mouseenter', 'mouseleave', 'heightChange']
 })
 export default Toast
