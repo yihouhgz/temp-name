@@ -14,6 +14,7 @@ import {
   reactive,
   watchEffect
 } from 'vue'
+import * as vueApi from 'vue'
 import type { App as VueApp, VNode, Component } from 'vue'
 import { useThrottle } from '../packages/components/_util'
 
@@ -63,8 +64,48 @@ function jsx(
   props: Record<string, unknown> | null,
   ...children: unknown[]
 ): VNode {
-  // 处理 children
-  const normalizedChildren = children.flat()
+  // 处理 children，展平嵌套数组并过滤null/undefined
+  const normalizedChildren = children.flat().filter((child) => child != null)
+
+  // 如果type是字符串且在ProjectComponents中存在对应的组件，则使用ProjectComponents中的组件
+  if (typeof type === 'string') {
+    // 在项目组件中查找匹配的组件
+    for (const key of Object.keys(ProjectComponents)) {
+      const componentModule = ProjectComponents[key as keyof typeof ProjectComponents]
+      if (componentModule && typeof componentModule !== 'string') {
+        // 检查默认导出
+        if ((componentModule as Component & { name?: string })?.name === type) {
+          return h(componentModule as Component, props || {}, { default: () => normalizedChildren })
+        }
+        // 检查命名导出
+        if (typeof componentModule === 'object' && componentModule !== null) {
+          for (const subKey of Object.keys(componentModule)) {
+            if (subKey === '__esModule') continue
+            const subComponent = (componentModule as Record<string, Component & { name?: string }>)[
+              subKey
+            ]
+            if (subComponent && subComponent.name === type) {
+              return h(subComponent, props || {}, { default: () => normalizedChildren })
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 处理文本节点 - 如果所有子节点都是原始值，则直接传递
+  if (
+    normalizedChildren.length > 0 &&
+    normalizedChildren.every(
+      (child) =>
+        typeof child === 'string' || typeof child === 'number' || typeof child === 'boolean'
+    )
+  ) {
+    // 对于原生元素，如果子节点都是原始值，直接传递给h函数
+    return h(type, props || {}, { default: () => normalizedChildren })
+  }
+
+  // 其他情况，使用默认插槽
   return h(type, props || {}, { default: () => normalizedChildren })
 }
 
@@ -157,7 +198,13 @@ function hasAppComponent(code: string) {
     // export default function App() { ... }
     /export\s+default\s+function\s+App\s*\(/,
     // export default class App { ... }
-    /export\s+default\s+class\s+App\s+/
+    /export\s+default\s+class\s+App\s+/,
+    // defineComponent({ setup() { ... } })
+    /defineComponent\s*\(\s*{\s*setup\s*\(\s*\)\s*{/,
+    // const App = defineComponent({ setup() { ... } })
+    /const\s+App\s*=\s*defineComponent\s*\(\s*{\s*setup\s*\(\s*\)\s*{/,
+    // const App = defineComponent({ setup: () => { ... } })
+    /const\s+App\s*=\s*defineComponent\s*\(\s*{\s*setup\s*:\s*\(\s*\)\s*=>\s*{/
   ]
 
   // 移除注释避免误判
@@ -463,22 +510,53 @@ export const MonacoEditor = defineComponent(
           const res = extractImportsDetailedTS(compiledCode)
           //设置导入
           codeState.importMoudleScript.type = 'module'
-          codeState.importMoudleScript.innerHTML = `
-              //设置导入模块
-              ${res.imports
-                .map((item) => {
-                  return item
-                })
-                .join('\n')}
-              // 手动挂载到全局
-              ${res.exports
-                .map((item) => {
-                  return `window.${item.trim()} = ${item.trim()};`
-                })
-                .join('\n')}
-              // 通知导入已完成
-              window.__IMPORT_FINISHED__ = true;
-            `
+          const importStatements = res.imports
+            .map((item) => {
+              // 特殊处理vue导入
+              if (item.includes("from 'vue'") || item.includes('from "vue"')) {
+                return "import { ref, watchEffect,defineComponent, reactive, computed, onMounted, onUnmounted } from 'vue';"
+              }
+              // 转义特殊字符
+              return item.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$')
+            })
+            .join('\n')
+
+          const exportStatements = res.exports
+            .map((item) => {
+              // 不将Vue API挂载到window，避免冲突
+              if (
+                [
+                  'ref',
+                  'watchEffect',
+                  'reactive',
+                  'computed',
+                  'defineComponent',
+                  'onMounted',
+                  'onUnmounted'
+                ].includes(item.trim())
+              ) {
+                return ''
+              }
+              return 'window.' + item.trim() + ' = ' + item.trim() + ';'
+            })
+            .filter((item) => item !== '') // 过滤掉空字符串
+            .join('\n')
+
+          // 构建完整的脚本内容
+          const scriptContent = `
+//设置导入模块
+${importStatements}
+// 手动挂载到全局
+${exportStatements}
+// 通知导入已完成
+window.__IMPORT_FINISHED__ = true;
+`
+
+          // 转义特殊字符以安全地设置innerHTML
+          codeState.importMoudleScript.innerHTML = scriptContent
+            .replace(/\\/g, '\\\\')
+            .replace(/`/g, '\\`')
+            .replace(/\$/g, '\\$')
         }
 
         // 创建函数来执行编译后的代码，包含组件注册和应用挂载逻辑
@@ -489,7 +567,11 @@ export const MonacoEditor = defineComponent(
           'ProjectComponents',
           'jsx',
           'appContainer',
+          'vueApi',
           `
+          // 从vueApi中解构出需要的API
+          const { ref, watchEffect, reactive, computed, onMounted, onUnmounted,defineComponent } = vueApi;
+
           // 执行用户代码并获取 App 组件
           ${executableCode}
           // 在执行环境中创建 Vue 应用实例，传入 App 组件
@@ -504,19 +586,20 @@ export const MonacoEditor = defineComponent(
         )
 
         // 执行代码获取 Vue 应用实例
-        const appContainer = previewRef.value.querySelector('#preview-app')
+        const appContainer = previewRef.value?.querySelector('#preview-app')
 
         // 如果有import语句，等待import完成后再执行
         if (hasStrictImportStatement(compiledCode)) {
           const checkImportFinished = () => {
-            if (window.__IMPORT_FINISHED__) {
+            if (window.__IMPORT_FINISHED__ && appContainer) {
               const vueApp = executeCode(
                 { createElement: jsx },
                 h,
                 createApp,
                 ProjectComponents,
                 jsx,
-                appContainer
+                appContainer,
+                vueApi
               )
 
               // 保存应用实例用于后续销毁
@@ -533,18 +616,21 @@ export const MonacoEditor = defineComponent(
           checkImportFinished()
         } else {
           // 没有import语句，直接执行
-          const vueApp = executeCode(
-            { createElement: jsx },
-            h,
-            createApp,
-            ProjectComponents,
-            jsx,
-            appContainer
-          )
+          if (appContainer) {
+            const vueApp = executeCode(
+              { createElement: jsx },
+              h,
+              createApp,
+              ProjectComponents,
+              jsx,
+              appContainer,
+              vueApi
+            )
 
-          // 保存应用实例用于后续销毁
-          if (vueApp) {
-            previewApp = vueApp
+            // 保存应用实例用于后续销毁
+            if (vueApp) {
+              previewApp = vueApp
+            }
           }
         }
       } catch (e) {
