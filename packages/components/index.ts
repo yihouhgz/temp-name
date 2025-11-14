@@ -18,6 +18,7 @@ import Spin from './spin'
 import { Layout, Header, Content, Footer, Sider } from './layout'
 import Switch from './switch'
 import { Toast, ToastFactory } from './toast'
+import Resizable from './resizable'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -48,7 +49,8 @@ const components: Component[] = [
   Sider,
   Switch,
   Toast,
-  ToastFactory
+  ToastFactory,
+  Resizable
 ]
 export const install = (app: App) => withInstall(app, components)
 export {

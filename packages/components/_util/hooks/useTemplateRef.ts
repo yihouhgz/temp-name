@@ -1,6 +1,6 @@
 import { getCurrentInstance, shallowRef, type ShallowRef } from 'vue'
 export const useTemplateRef = <T>(key: string): Readonly<ShallowRef<T | null>> => {
-  const templateRef = shallowRef(null)
+  const templateRef = shallowRef<T | null>(null)
   const currentInstance = getCurrentInstance()
   if (currentInstance) {
     const refs = (currentInstance.refs = { ...(currentInstance.refs || {}) })

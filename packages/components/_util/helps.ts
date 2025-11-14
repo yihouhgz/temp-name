@@ -81,3 +81,16 @@ export const domRectToObject = (rect: DOMRect): Omit<DOMRect, 'toJSON'> => {
 export const toFirstLocaleUpperCase = (str: string) => {
   return str.charAt(0).toLocaleUpperCase() + str.slice(1)
 }
+
+export const mapper = <T extends Record<string | symbol, unknown>>(
+  obj: Record<string | symbol, unknown>,
+  fn: (value: unknown, key: string | symbol) => unknown
+) => {
+  const res: { [key: string | symbol]: unknown } = {}
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      res[key] = fn(res[key], key)
+    }
+  }
+  return res as T
+}
