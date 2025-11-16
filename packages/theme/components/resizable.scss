@@ -62,14 +62,14 @@ $directions: (
     height: 20px,
     left: -10px,
     top: -10px,
-    cursor: ne-resize
+    cursor: nw-resize
   ),
   bottomRight: (
     width: 20px,
     height: 20px,
     right: -10px,
     bottom: -10px,
-    cursor: sw-resize
+    cursor: se-resize
   ),
   bottomLeft: (
     width: 20px,

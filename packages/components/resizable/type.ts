@@ -78,7 +78,13 @@ export const resizableProps = {
    */
   maxWidth: {
     type: [Number, String],
-    default: 0
+    default: 0,
+    validator: (val: number | string) => {
+      if (isString(val)) {
+        return /^(?:\d+(?:\.\d+)?|\.\d+)(?:px|vw|vh|%)?$/.test(val)
+      }
+      return true
+    }
   },
   /**
    * @description 指定伸缩框最小高度
@@ -93,6 +99,13 @@ export const resizableProps = {
   maxHeight: {
     type: [Number, String],
     default: 0
+  },
+  /**
+   * @description 拖动和实际变化的比例
+   */
+  ratio: {
+    type: Number,
+    default: 1
   },
   /**
    * @description 设置伸缩框横纵比，当为true时按照初始宽高锁定
@@ -192,15 +205,15 @@ export const resizableProps = {
   snap: {
     type: Object as PropType<Partial<Snap>>,
     default: () => ({
-      x: null,
-      y: null
+      x: [],
+      y: []
     })
   },
   /**
    * @description 指定调整大小应对齐的增量
    */
   grid: {
-    type: Array as PropType<Array<number>>,
+    type: [Array, Number] as PropType<Array<number> | number>,
     default: () => [1, 1]
   }
 }

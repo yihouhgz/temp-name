@@ -773,12 +773,29 @@ const App = defineComponent(() => {
           </tempui-layout-footer>
         </tempui-layout>
       </tempui-layout>
-      <div class={'top-20'}>
+      <div class={'top-20'} style={{ height: 500 + 'px', width: 500 + 'px' }}>
         <tempui-resizable
           style={{ backgroundColor: 'rgba(var(--tempui-grey-1), 1)' }}
           defaultSize={{
-            width: 300,
-            height: 300
+            width: 200,
+            height: (200 * 9) / 16
+          }}
+          grid={100}
+          snapGap={20}
+          handleNode={{
+            right: (
+              <div
+                style={{
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: 'fit-content'
+                }}
+              >
+                111
+                <moonIcon></moonIcon>
+              </div>
+            )
           }}
         >
           <div>hello resizable</div>
