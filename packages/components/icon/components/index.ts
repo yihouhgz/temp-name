@@ -9,6 +9,7 @@ import IconAlertCircle from './IconAlertCircle'
 import IconAlertTriangle from './IconAlertTriangle'
 import IconInfoCircle from './IconInfoCircle'
 import IconLoading from './IconLoading'
+import IconHandle from './IconHandle'
 
 export {
   Camera,
@@ -21,5 +22,6 @@ export {
   IconAlertCircle,
   IconAlertTriangle,
   IconInfoCircle,
-  IconLoading
+  IconLoading,
+  IconHandle
 }

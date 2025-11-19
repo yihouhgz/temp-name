@@ -238,3 +238,44 @@ export const resizableEmits = {
     return e instanceof Event && isString(direction)
   }
 }
+
+export type Direction = 'horizontal' | 'vertical'
+export const resizableGroupProps = {
+  /**
+   * @description 指定Group内的伸缩方向
+   */
+  direction: {
+    type: String as PropType<Direction>,
+    default: 'horizontal'
+  }
+}
+
+type DefaultSize = `${number}px` | `${number}%` | `${number}` | number
+type ItemSize = `${number}px` | `${number}%` | `${number}`
+export const resizeItemProps = {
+  /**
+   * @description 用于设置初始宽高，字符串支持%和px单位，当字符串为纯数字或直接设置数字时表示按照值的比例分配剩余空间
+   */
+  defaultSize: {
+    type: [String, Number] as PropType<DefaultSize>,
+    default: () => 0
+  },
+  /**
+   * @description 用于设置最小宽高，指定伸缩框最小尺寸（百分比或像素值）
+   */
+  min: {
+    type: String as PropType<ItemSize>,
+    default: undefined
+  },
+  /**
+   * @description 用于设置最大宽高，指定伸缩框最小尺寸（百分比或像素值）
+   */
+  max: {
+    type: String as PropType<ItemSize>,
+    default: undefined
+  }
+}
+
+export const resizeItemEmits = {
+  ...resizableEmits
+}

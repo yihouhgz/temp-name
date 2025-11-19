@@ -800,6 +800,21 @@ const App = defineComponent(() => {
         >
           <div>hello resizable</div>
         </tempui-resizable>
+        <div style={{ height: 500 + 'px', width: 800 + 'px', marginTop: 20 + 'px' }}>
+          <tempui-resize-group>
+            <tempui-resize-item>
+              <div>hello resizable</div>
+            </tempui-resize-item>
+            <tempui-resize-handler></tempui-resize-handler>
+            <tempui-resize-item>
+              <div>hello resizable</div>
+            </tempui-resize-item>
+            <tempui-resize-handler></tempui-resize-handler>
+            <tempui-resize-item>
+              <div>hello resizable</div>
+            </tempui-resize-item>
+          </tempui-resize-group>
+        </div>
       </div>
     </div>
   )
