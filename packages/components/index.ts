@@ -19,6 +19,7 @@ import { Layout, Header, Content, Footer, Sider } from './layout'
 import Switch from './switch'
 import { Toast, ToastFactory } from './toast'
 import Resizable from './resizable'
+import Typography, { Text } from './typography'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -50,7 +51,9 @@ const components: Component[] = [
   Switch,
   Toast,
   ToastFactory,
-  Resizable
+  Resizable,
+  Typography,
+  Text
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -83,7 +86,10 @@ export {
   Sider,
   Switch,
   Toast,
-  ToastFactory
+  ToastFactory,
+  Resizable,
+  Typography,
+  Text
 }
 
 const globalApis: { [key: string]: unknown } = {

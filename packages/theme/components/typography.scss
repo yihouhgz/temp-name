@@ -1,0 +1,225 @@
+@import '../base/constant';
+
+//默认文本颜色
+$color-typography_default-text-default: var(--#{$prefix}-color-text-0);
+//稍次要文本颜色
+$color-typography_secondary-text-default: var(--#{$prefix}-color-text-1);
+//次要文本颜色
+$color-typography_tertiary-text-default: var(--#{$prefix}-color-text-2);
+//最次要文本颜色
+$color-typography_quaternary-text-default: var(--#{$prefix}-color-text-3);
+//警告文本颜色
+$color-typography_warning-text-default: var(--#{$prefix}-color-warning);
+//错误文本颜色
+$color-typography_danger-text-default: var(--#{$prefix}-color-danger);
+//成功文本颜色
+$color-typography_success-text-default: var(--#{$prefix}-color-success);
+//禁用文本颜色
+$color-typography_disabled-text-default: var(--#{$prefix}-color-disabled-text);
+//标记文本bg颜色
+$color-typography_mark-bg-default: var(--#{$prefix}-color-primary-light-default);
+//代码文本背景颜色
+$color-typography_code-bg-default: var(--#{$prefix}-color-fill-1);
+//代码文本颜色
+$color-typography_code-text-default: var(--#{$prefix}-color-text-2);
+//链接文本颜色 - 默认
+$color-typography_link-text-default: var(--#{$prefix}-color-link);
+//链接文本颜色 - 已访问
+$color-typography_link-text-visited: var(--#{$prefix}-color-link-visited);
+//链接文本颜色 - 悬浮
+$color-typography_link-text-hover: var(--#{$prefix}-color-link-hover);
+//链接文本颜色 - 激活
+$color-typography_link-text-active: var(--#{$prefix}-color-link-active);
+//链接文本颜色 - 禁用
+$color-typography_link-text-disabled: var(--#{$prefix}-color-link);
+//可复制文本颜色
+$color-typography_copied-text-success: var(--#{$prefix}-color-text-2);
+//可复制文本复制成功图标颜色
+$color-typography_copied-icon-success: var(--#{$prefix}-color-success);
+//代码文本描边颜色
+$color-typography_code-border-default: var(--#{$prefix}-color-border);
+
+//代码文本圆角
+$radius-typography_code: 2px;
+//代码文本描边宽度
+$width-typography_code-border: 1px;
+//链接文本下划线宽度
+$width-typography_link-border: 1px;
+
+//带前缀文本图标右侧外边距
+$spacing-typography_iconPrefix-marginRight: 4px;
+//支持展开文本展开按钮左侧外边距
+$spacing-typography_expandText-marginLeft: 8px;
+//可复制文本复制图标左侧外边距
+$spacing-typography_copyIcon-marginLeft: 4px;
+//可复制文本复制图标内边距
+$spacing-typography_copyIcon-padding: 0;
+$spacing-typography_title_h1-margin: 0;
+$spacing-typography_title_h2-margin: 0;
+$spacing-typography_title_h3-margin: 0;
+$spacing-typography_title_h4-margin: 0;
+$spacing-typography_title_h5-margin: 0;
+$spacing-typography_title_h6-margin: 0;
+
+//标题文本字重
+$font-typography_title-fontWeight: $font-weight-bold;
+//链接文本字重
+$font-typography_link-fontWeight: $font-weight-bold;
+//强调文本字重
+$font-typography_strong-fontWeight: $font-weight-bold;
+//宽松行距段落文本行高
+$font-typography_paragraph_extended-lineHeight: 24px;
+//normal text 字重 - 正常
+$font-typography_normalText-regular-fontWeight: $font-weight-regular;
+//small text 字重 - 正常
+$font-typography_smallText-regular-fontWeight: $font-weight-regular;
+//large text 字重 - 正常
+$font-typography_largeText-regular-fontWeight: $font-weight-regular;
+//normal paragraph 字重 - 正常
+$font-typography_normalParagraph-regular-fontWeight: $font-weight-regular;
+//small paragraph 字重 - 正常
+$font-typography_smallParagraph-regular-fontWeight: $font-weight-regular;
+//一级标题文本字重
+$font-typography_title1-fontWeight: $font-typography_title-fontWeight;
+//二级标题文本字重
+$font-typography_title2-fontWeight: $font-typography_title-fontWeight;
+//三级标题文本字重
+$font-typography_title3-fontWeight: $font-typography_title-fontWeight;
+//四级标题文本字重
+$font-typography_title4-fontWeight: $font-typography_title-fontWeight;
+//五级标题文本字重
+$font-typography_title5-fontWeight: $font-typography_title-fontWeight;
+//六级标题文本字重
+$font-typography_title6-fontWeight: $font-typography_title-fontWeight;
+//一级标题文本字重 - 细
+$font-typography_title1-light-fontWeight: 200;
+//二级标题文本字重 - 细
+$font-typography_title2-light-fontWeight: 200;
+//三级标题文本字重 - 细
+$font-typography_title3-light-fontWeight: 200;
+//四级标题文本字重 - 细
+$font-typography_title4-light-fontWeight: 200;
+//五级标题文本字重 - 细
+$font-typography_title5-light-fontWeight: 200;
+//六级标题文本字重 - 细
+$font-typography_title6-light-fontWeight: 200;
+
+//一级标题文本字重 - 正常
+$font-typography_title1-regular-fontWeight: 400;
+//二级标题文本字重 - 正常
+$font-typography_title2-regular-fontWeight: 400;
+//三级标题文本字重 - 正常
+$font-typography_title3-regular-fontWeight: 400;
+//四级标题文本字重 - 正常
+$font-typography_title4-regular-fontWeight: 400;
+//五级标题文本字重 - 正常
+$font-typography_title5-regular-fontWeight: 400;
+//六级标题文本字重 - 正常
+$font-typography_title6-regular-fontWeight: 400;
+//一级标题文本字重 - 中等
+$font-typography_title1-medium-fontWeight: 500;
+//二级标题文本字重 - 中等
+$font-typography_title2-medium-fontWeight: 500;
+//三级标题文本字重 - 中等
+$font-typography_title3-medium-fontWeight: 500;
+//四级标题文本字重 - 中等
+$font-typography_title4-medium-fontWeight: 500;
+//五级标题文本字重 - 中等
+$font-typography_title5-medium-fontWeight: 500;
+//六级标题文本字重 - 中等
+$font-typography_title6-medium-fontWeight: 500;
+//一级标题文本字重 - 半粗
+$font-typography_title1-bold-fontWeight: 600;
+//二级标题文本字重 - 半粗
+$font-typography_title2-bold-fontWeight: 600;
+//三级标题文本字重 - 半粗
+$font-typography_title3-bold-fontWeight: 600;
+//三级标题文本字重 - 半粗
+$font-typography_title4-bold-fontWeight: 600;
+//三级标题文本字重 - 半粗
+$font-typography_title5-bold-fontWeight: 600;
+//三级标题文本字重 - 半粗
+$font-typography_title6-bold-fontWeight: 600;
+//一级标题文本字重 - 粗
+$font-typography_title1-bold-fontWeight: 700;
+//二级标题文本字重 - 粗
+$font-typography_title2-bold-fontWeight: 700;
+//三级标题文本字重 - 粗
+$font-typography_title3-bold-fontWeight: 700;
+//三级标题文本字重 - 粗
+$font-typography_title4-bold-fontWeight: 700;
+//三级标题文本字重 - 粗
+$font-typography_title5-bold-fontWeight: 700;
+//三级标题文本字重 - 粗
+$font-typography_title6-bold-fontWeight: 700;
+
+//段落外边距
+$spacing-typography_title_paragraph-margin: 0;
+
+$spacing-typography_size_normal-lineHeight: 20px;
+$spacing-typography_size_small-lineHeight: 16px;
+$spacing-typography_size_large-lineHeight: 24px;
+
+$sizes: (
+  'normal': (
+    fontSize: $font-size-regular,
+    lineHeight: $spacing-typography_size_normal-lineHeight,
+    fontWeight: $font-typography_normalText-regular-fontWeight
+  ),
+  'small': (
+    fontSize: $font-size-small,
+    lineHeight: $spacing-typography_size_small-lineHeight,
+    fizeWeight: $font-typography_smallText-regular-fontWeight
+  ),
+  'large': (
+    fontSize: $font-size-header-1,
+    lineHeight: $spacing-typography_size_large-lineHeight,
+    fizeWeight: $font-typography_largeText-regular-fontWeight
+  )
+);
+$colors: ('primary', 'success', 'warning', 'danger', 'secondary', 'tertiary', 'quaternary');
+.#{$prefix}-typography {
+  color: $color-typography_default-text-default;
+  font-size: $font-size-regular;
+  line-height: $spacing-typography_size_normal-lineHeight;
+  font-family: $font-family;
+
+  &-disabled {
+    color: $color-typography_disabled-text-default;
+    cursor: not-allowed;
+    user-select: none;
+  }
+  mark {
+    background-color: $color-typography_mark-bg-default;
+  }
+  code {
+    background-color: $color-typography_code-bg-default;
+    color: $color-typography_code-text-default;
+    border: $width-typography_code-border solid $color-typography_code-border-default;
+    border-radius: $radius-typography_code;
+  }
+
+  @each $size, $properties in $sizes {
+    &-#{$size} {
+      font-size: map-get($properties, 'fontSize');
+      line-height: map-get($properties, 'lineHeight');
+      font-weight: map-get($properties, 'fizeWeight');
+    }
+  }
+  $typography-colors: (
+    'default': $color-typography_default-text-default,
+    'secondary': $color-typography_secondary-text-default,
+    'tertiary': $color-typography_tertiary-text-default,
+    'quaternary': $color-typography_quaternary-text-default,
+    'warning': $color-typography_warning-text-default,
+    'danger': $color-typography_danger-text-default,
+    'success': $color-typography_success-text-default
+  );
+  @each $color in $colors {
+    @if ($color != 'primary') {
+      &-#{$color} {
+        color: map-get($typography-colors, $color);
+      }
+    }
+  }
+}
