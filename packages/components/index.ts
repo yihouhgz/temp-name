@@ -19,6 +19,7 @@ import { Layout, Header, Content, Footer, Sider } from './layout'
 import Switch from './switch'
 import { Toast, ToastFactory } from './toast'
 import Resizable, { ResizeItem, ResizableGroup, ResizeHandler } from './resizable'
+import Typography, { Text } from './typography'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -51,9 +52,14 @@ const components: Component[] = [
   Toast,
   ToastFactory,
   Resizable,
+<<<<<<< HEAD
   ResizeItem,
   ResizableGroup,
   ResizeHandler
+=======
+  Typography,
+  Text
+>>>>>>> 4572a989fb823a98e57a14e7591f35137e9f0715
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -86,7 +92,10 @@ export {
   Sider,
   Switch,
   Toast,
-  ToastFactory
+  ToastFactory,
+  Resizable,
+  Typography,
+  Text
 }
 
 const globalApis: { [key: string]: unknown } = {

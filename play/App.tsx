@@ -816,6 +816,45 @@ const App = defineComponent(() => {
           </tempui-resize-group>
         </div>
       </div>
+      <div>
+        <tempui-text size="normal">Text</tempui-text>
+        <br />
+        <br />
+        <tempui-text type="secondary">Secondary</tempui-text>
+        <br />
+        <br />
+        <tempui-text type="tertiary">{`Tertiary v>=1.2.0`}</tempui-text>
+        <br />
+        <br />
+        <tempui-text type="quaternary">{`Quaternary v>=1.2.0`}</tempui-text>
+        <br />
+        <br />
+        <tempui-text type="warning">Warning</tempui-text>
+        <br />
+        <br />
+        <tempui-text type="danger">Danger</tempui-text>
+        <br />
+        <br />
+        <tempui-text type="success">{`Success v>=1.7.0`}</tempui-text>
+        <br />
+        <br />
+        <tempui-text disabled>Disabled</tempui-text>
+        <br />
+        <br />
+        <tempui-text mark>Default Mark</tempui-text>
+        <br />
+        <br />
+        <tempui-text code>Example Code</tempui-text>
+        <br />
+        <br />
+        <tempui-text underline>Underline</tempui-text>
+        <br />
+        <br />
+        <tempui-text delete>Deleted</tempui-text>
+        <br />
+        <br />
+        <tempui-text strong>Strong</tempui-text>
+      </div>
     </div>
   )
 })
