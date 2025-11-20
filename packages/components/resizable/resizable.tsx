@@ -34,6 +34,9 @@ type StateType = {
   wrapperRef: HTMLElement | null
   aspectRatio: number
 }
+export type ResizableExpose = {
+  _updateTargetSizeWrap: (e: MouseEvent, direction: DirectionKeys) => void
+}
 const Resizable = defineComponent({
   setup(props, ctx) {
     const state = reactive<StateType>({
@@ -49,8 +52,8 @@ const Resizable = defineComponent({
         direction: null
       },
       size: {
-        width: 0,
-        height: 0
+        width: 'auto',
+        height: 'auto'
       },
       aspectRatio: 0, //lockAspectRatio true生效
       wrapperRef: null
@@ -102,6 +105,109 @@ const Resizable = defineComponent({
       return style
     })
 
+    const updateTargetSizeWrap = (e: MouseEvent, direction?: DirectionKeys) => {
+      // 根据方向调整尺寸
+      const dir = direction || state.current.direction!
+      switch (dir) {
+        case 'left':
+          // 向左拖动，宽度减少 movementX
+          updateTargetSize(
+            'left',
+            ['width'],
+            {
+              width: -e.movementX
+            },
+            e
+          )
+          break
+        case 'right':
+          // 向右拖动，宽度增加 movementX
+          updateTargetSize(
+            'right',
+            ['width'],
+            {
+              width: e.movementX
+            },
+            e
+          )
+          break
+        case 'top':
+          // 向上拖动，高度减少 movementY
+          updateTargetSize(
+            'top',
+            ['height'],
+            {
+              height: -e.movementY
+            },
+            e
+          )
+          break
+        case 'bottom':
+          // 向下拖动，高度增加 movementY
+          updateTargetSize(
+            'bottom',
+            ['height'],
+            {
+              height: +e.movementY
+            },
+            e
+          )
+          break
+        case 'bottomLeft':
+          // 向左下拖动，宽度减少 movementX，高度增加 movementY
+          updateTargetSize(
+            'bottomLeft',
+            ['width', 'height'],
+            {
+              width: -e.movementX,
+              height: e.movementY
+            },
+            e
+          )
+          // updateTargetSize('bottomLeft', ['height'], e.movementY, e)
+          break
+        case 'bottomRight':
+          // 向右下拖动，宽度增加 movementX，高度增加 movementY
+          updateTargetSize(
+            'bottomRight',
+            ['width', 'height'],
+            {
+              width: e.movementX,
+              height: e.movementY
+            },
+            e
+          )
+          // updateTargetSize('bottomRight', ['height'], e.movementY, e)
+          break
+        case 'topLeft':
+          // 向左上拖动，宽度减少 movementX，高度减少 movementY
+          updateTargetSize(
+            'topLeft',
+            ['width', 'height'],
+            {
+              width: -e.movementX,
+              height: -e.movementY
+            },
+            e
+          )
+          // updateTargetSize('topLeft', ['height'], -e.movementY, e)
+          break
+        case 'topRight':
+          // 向右上拖动，宽度增加 movementX，高度减少 movementY
+          updateTargetSize(
+            'topRight',
+            ['width', 'height'],
+            {
+              width: e.movementX,
+              height: -e.movementY
+            },
+            e
+          )
+          // updateTargetSize('topRight', ['height'], -e.movementY, e)
+          break
+      }
+    }
+
     const eventHandleScope = effectScope()
     const initEventHandle = () => {
       eventHandleScope.run(() => {
@@ -115,106 +221,7 @@ const Resizable = defineComponent({
         }
         useEventListener(window, 'mousemove', (e) => {
           if (state.current.isDrag) {
-            // 根据方向调整尺寸
-            const dir = state.current.direction!
-            switch (dir) {
-              case 'left':
-                // 向左拖动，宽度减少 movementX
-                updateTargetSize(
-                  'left',
-                  ['width'],
-                  {
-                    width: -e.movementX
-                  },
-                  e
-                )
-                break
-              case 'right':
-                // 向右拖动，宽度增加 movementX
-                updateTargetSize(
-                  'right',
-                  ['width'],
-                  {
-                    width: e.movementX
-                  },
-                  e
-                )
-                break
-              case 'top':
-                // 向上拖动，高度减少 movementY
-                updateTargetSize(
-                  'top',
-                  ['height'],
-                  {
-                    height: -e.movementY
-                  },
-                  e
-                )
-                break
-              case 'bottom':
-                // 向下拖动，高度增加 movementY
-                updateTargetSize(
-                  'bottom',
-                  ['height'],
-                  {
-                    height: +e.movementY
-                  },
-                  e
-                )
-                break
-              case 'bottomLeft':
-                // 向左下拖动，宽度减少 movementX，高度增加 movementY
-                updateTargetSize(
-                  'bottomLeft',
-                  ['width', 'height'],
-                  {
-                    width: -e.movementX,
-                    height: e.movementY
-                  },
-                  e
-                )
-                // updateTargetSize('bottomLeft', ['height'], e.movementY, e)
-                break
-              case 'bottomRight':
-                // 向右下拖动，宽度增加 movementX，高度增加 movementY
-                updateTargetSize(
-                  'bottomRight',
-                  ['width', 'height'],
-                  {
-                    width: e.movementX,
-                    height: e.movementY
-                  },
-                  e
-                )
-                // updateTargetSize('bottomRight', ['height'], e.movementY, e)
-                break
-              case 'topLeft':
-                // 向左上拖动，宽度减少 movementX，高度减少 movementY
-                updateTargetSize(
-                  'topLeft',
-                  ['width', 'height'],
-                  {
-                    width: -e.movementX,
-                    height: -e.movementY
-                  },
-                  e
-                )
-                // updateTargetSize('topLeft', ['height'], -e.movementY, e)
-                break
-              case 'topRight':
-                // 向右上拖动，宽度增加 movementX，高度减少 movementY
-                updateTargetSize(
-                  'topRight',
-                  ['width', 'height'],
-                  {
-                    width: e.movementX,
-                    height: -e.movementY
-                  },
-                  e
-                )
-                // updateTargetSize('topRight', ['height'], -e.movementY, e)
-                break
-            }
+            updateTargetSizeWrap(e)
           }
         })
         useEventListener(window, 'mouseup', (e) => {
@@ -418,12 +425,11 @@ const Resizable = defineComponent({
             state.size[changeKey] = calcValue
           }
         }
-        state.size[item.key] = item.value as Size['height']
+        state.size[item.key] = item.value as Size['height' | 'width']
       }
       ctx.emit('change', state.size, event, direction)
     }
     onMounted(() => {
-      console.log(state.handlerRefNodes, 'onMounted')
       initEventHandle()
     })
     const getEnable = (direction: DirectionKeys) => {
@@ -440,10 +446,32 @@ const Resizable = defineComponent({
         })
       } else if (hasPropsOrSlots(direction, instance)) {
         vnode = renderElementForPropsOrSlot(direction, instance)
-        console.log(vnode, 'vnode')
       }
       return vnode
     }
+    ctx.expose({
+      _updateTargetSizeWrap: updateTargetSizeWrap
+    } satisfies ResizableExpose)
+
+    const enableDirections = computed(() => {
+      const template = []
+      const { handlerRefNodes } = state
+      const { enable } = props
+      for (const node of direction) {
+        const direction = node
+        if (enable && getEnable(node)) {
+          template.push(
+            <div
+              ref={(node) => (handlerRefNodes[direction] = node as HTMLElement)}
+              class={prefix + '-resizable-handle ' + prefix + '-resizable-handle-' + direction}
+            >
+              {renderHander(direction)}
+            </div>
+          )
+        }
+      }
+      return template
+    })
     return () => {
       return (
         <div
@@ -452,22 +480,7 @@ const Resizable = defineComponent({
           ref={(node) => (state.wrapperRef = node as HTMLElement)}
         >
           {ctx.slots.default?.()}
-          <div>
-            {direction.map((direction) => {
-              if (getEnable(direction)) {
-                return (
-                  <div
-                    ref={(node) => (state.handlerRefNodes[direction] = node as HTMLElement)}
-                    class={
-                      prefix + '-resizable-handle ' + prefix + '-resizable-handle-' + direction
-                    }
-                  >
-                    {renderHander(direction)}
-                  </div>
-                )
-              }
-            })}
-          </div>
+          {enableDirections.value.length ? <div>{enableDirections.value}</div> : null}
         </div>
       )
     }

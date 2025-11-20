@@ -52,14 +52,11 @@ const components: Component[] = [
   Toast,
   ToastFactory,
   Resizable,
-<<<<<<< HEAD
   ResizeItem,
   ResizableGroup,
-  ResizeHandler
-=======
+  ResizeHandler,
   Typography,
   Text
->>>>>>> 4572a989fb823a98e57a14e7591f35137e9f0715
 ]
 export const install = (app: App) => withInstall(app, components)
 export {

@@ -773,7 +773,7 @@ const App = defineComponent(() => {
           </tempui-layout-footer>
         </tempui-layout>
       </tempui-layout>
-      <div class={'top-20'} style={{ height: 500 + 'px', width: 500 + 'px' }}>
+      <div class={'top-20'}>
         <tempui-resizable
           style={{ backgroundColor: 'rgba(var(--tempui-grey-1), 1)' }}
           defaultSize={{
@@ -800,17 +800,32 @@ const App = defineComponent(() => {
         >
           <div>hello resizable</div>
         </tempui-resizable>
-        <div style={{ height: 500 + 'px', width: 800 + 'px', marginTop: 20 + 'px' }}>
+        <div style={{ height: 300 + 'px', width: 800 + 'px', marginTop: 20 + 'px' }}>
           <tempui-resize-group>
-            <tempui-resize-item>
+            <tempui-resize-item
+              style={{
+                backgroundColor: 'rgba(var(--tempui-grey-1), 1)',
+                border: 'var(--tempui-color-border) 1px solid'
+              }}
+            >
               <div>hello resizable</div>
             </tempui-resize-item>
             <tempui-resize-handler></tempui-resize-handler>
-            <tempui-resize-item>
+            <tempui-resize-item
+              style={{
+                backgroundColor: 'rgba(var(--tempui-grey-1), 1)',
+                border: 'var(--tempui-color-border) 1px solid'
+              }}
+            >
               <div>hello resizable</div>
             </tempui-resize-item>
             <tempui-resize-handler></tempui-resize-handler>
-            <tempui-resize-item>
+            <tempui-resize-item
+              style={{
+                backgroundColor: 'rgba(var(--tempui-grey-1), 1)',
+                border: 'var(--tempui-color-border) 1px solid'
+              }}
+            >
               <div>hello resizable</div>
             </tempui-resize-item>
           </tempui-resize-group>
