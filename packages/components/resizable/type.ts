@@ -279,3 +279,13 @@ export const resizeItemProps = {
 export const resizeItemEmits = {
   ...resizableEmits
 }
+
+export const resizeHandlerProps = {
+  /**
+   * @description 拖拽方向
+   */
+  direction: {
+    type: String as PropType<Direction>,
+    default: 'horizontal'
+  }
+}
