@@ -841,7 +841,9 @@ const App = defineComponent(() => {
         <tempui-text disabled>Disabled</tempui-text>
         <br />
         <br />
-        <tempui-text mark>Default Mark</tempui-text>
+        <tempui-text mark code delete underline strong>
+          Default Mark
+        </tempui-text>
         <br />
         <br />
         <tempui-text code>Example Code</tempui-text>

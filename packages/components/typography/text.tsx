@@ -15,9 +15,7 @@ const Text = defineComponent({
         props.size && `${prefix}-typography-${props.size}`,
         props.type && `${prefix}-typography-${props.type}`,
         props.weight && `${prefix}-typography-${props.weight}`,
-        props.disabled && `${prefix}-typography-disabled`,
-        props.delete && `${prefix}-typography-delete`,
-        props.underline && `${prefix}-typography-underline`
+        props.disabled && `${prefix}-typography-disabled`
       ]
     })
     const render = () => {
@@ -38,19 +36,37 @@ const Text = defineComponent({
                   )
                 )
               }
-              if (props.mark || props.code) {
-                const tagName = props.code ? 'code' : 'mark'
-                template.push(createElement(tagName, {}, { default: () => ctx.slots.default?.() }))
-              } else {
-                template.push(ctx.slots.default?.())
+              const { delete: del, underline, code, mark, strong } = props
+              const children = ctx.slots.default?.() || []
+              const tags = [
+                { enabled: del, tag: 'del' },
+                { enabled: strong, tag: 'strong' },
+                { enabled: underline, tag: 'u' },
+                { enabled: code, tag: 'code' },
+                { enabled: mark, tag: 'mark' }
+              ]
+
+              const enabledTags = tags.filter((item) => item.enabled)
+
+              if (enabledTags.length === 0) {
+                template.push(children)
+                return template
               }
+              let content = children
+              for (let i = enabledTags.length - 1; i >= 0; i--) {
+                const { tag } = enabledTags[i]
+                const currentContent = content
+                //@ts-expect-error doc
+                content = createElement(tag, {}, { default: () => [currentContent] })
+              }
+              template.push(content)
               return template
             }
             if (props.link) {
               const attars: { [key: string]: unknown } = {}
               if (isObject(props.link)) {
-                Object.entries(([key, v]: [string, string]) => {
-                  attars[key] = v
+                Object.entries(props.link).forEach(([key, value]) => {
+                  attars[key] = value
                 })
               }
               const linkElement = createElement(

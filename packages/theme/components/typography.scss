@@ -197,6 +197,17 @@ $colors: ('primary', 'success', 'warning', 'danger', 'secondary', 'tertiary', 'q
     color: $color-typography_code-text-default;
     border: $width-typography_code-border solid $color-typography_code-border-default;
     border-radius: $radius-typography_code;
+    padding: 2px 4px;
+  }
+  u {
+    text-decoration: underline;
+    text-decoration-skip-ink: auto;
+  }
+  del {
+    text-decoration: line-through;
+  }
+  strong {
+    font-weight: $font-typography_strong-fontWeight;
   }
 
   @each $size, $properties in $sizes {
