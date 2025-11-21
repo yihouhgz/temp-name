@@ -1,8 +1,9 @@
 import { defineComponent, h, useAttrs, computed } from 'vue'
 import { prefix } from 'constants/config'
 import { textProps } from './type'
-import { hasPropsOrSlots, isObject, renderElementForPropsOrSlot } from '../_util'
+import { hasPropsOrSlots, isArray, isObject, renderElementForPropsOrSlot } from '../_util'
 import { getCurrentInstance } from 'vue'
+import Tooltip from '../tooltip'
 import './style/typography'
 const Text = defineComponent({
   setup(props, ctx) {
@@ -18,8 +19,26 @@ const Text = defineComponent({
         props.disabled && `${prefix}-typography-disabled`
       ]
     })
+    const renderPopover = (renderChildren: () => unknown) => {
+      const { ellipsis } = props
+      if (ellipsis) {
+        const template = <span>{renderChildren()}</span>
+        if (typeof ellipsis === 'object') {
+          if (typeof ellipsis.showTooltip === 'object') {
+            return (
+              <Tooltip showArrow content={ellipsis.showTooltip.opts.content}>
+                {template}
+              </Tooltip>
+            )
+          }
+        }
+        return template
+      }
+      return renderChildren()
+    }
     const render = () => {
       const component = props.component
+      console.log(props.ellipsis)
       return createElement(
         component.tagName,
         { class: getComponentClass.value, ...attar },
@@ -72,11 +91,16 @@ const Text = defineComponent({
               const linkElement = createElement(
                 'a',
                 { ...attars },
-                { default: () => renderChildren() }
+                {
+                  default: () => {
+                    return renderPopover(renderChildren)
+                  }
+                }
               )
               return linkElement
             }
-            return renderChildren()
+            const vNodes = renderPopover(renderChildren)
+            return isArray(vNodes) ? vNodes : [vNodes]
           }
         }
       )

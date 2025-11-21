@@ -1,5 +1,5 @@
 import { prefix } from 'constants/config'
-import { defineComponent, computed, reactive, getCurrentInstance, watch } from 'vue'
+import { defineComponent, computed, reactive, getCurrentInstance, watch, ref } from 'vue'
 import './style/switch'
 import { switchProps, switchEmits } from './type'
 import Spin from '../spin'
@@ -8,8 +8,10 @@ import consola from '../_util/console'
 
 const Switch = defineComponent({
   setup(props, ctx) {
+    const inputRef = ref()
     const state = reactive({
-      checked: props.defaultChecked || !!props.checked
+      checked: props.defaultChecked || !!props.checked,
+      focus: false
     })
     watch(
       () => props.checked,
@@ -21,6 +23,7 @@ const Switch = defineComponent({
       return [
         `${prefix}-switch`,
         {
+          [`${prefix}-switch-focus`]: state.focus,
           [`${prefix}-switch-checked`]: state.checked,
           [`${prefix}-switch-disabled`]: props.disabled,
           [`${prefix}-switch-loading`]: props.loading,
@@ -38,6 +41,15 @@ const Switch = defineComponent({
           return 'middle'
       }
     })
+
+    const handleSwitchFocus = () => {
+      if (inputRef.value?.matches(':focus-visible')) {
+        state.focus = true
+      }
+    }
+    const handleSwitchBlur = () => {
+      state.focus = false
+    }
     const handleClickSwitch = (e: MouseEvent) => {
       if (props.disabled || props.loading) return
       ctx.emit('click', e)
@@ -50,15 +62,6 @@ const Switch = defineComponent({
           handleUpdateModelValue(state.checked)
         }
       }
-      // else {
-      //   const stop = watch(
-      //     () => props.loading,
-      //     () => {
-      //       state.checked = !state.checked
-      //       stop()
-      //     }
-      //   )
-      // }
     }
     const handleUpdateModelValue = (value: boolean) => {
       ctx.emit('update:modelValue', value)
@@ -70,7 +73,7 @@ const Switch = defineComponent({
     const vm = getCurrentInstance()
     const renderCheckedText = () => {
       return (
-        <div class={`${prefix}-switch-checkedText-text`}>
+        <div class={`${prefix}-switch-checked-text`}>
           {renderElementForPropsOrSlot('checkedText', vm)}
         </div>
       )
@@ -114,7 +117,14 @@ const Switch = defineComponent({
           renderCheckedKnob()
         )}
         {props.size !== 'small' && renderTextSlot()}
-        <input class={`${prefix}-switch-native-control`} type="checkbox" checked={state.checked} />
+        <input
+          ref={(node) => (inputRef.value = node)}
+          class={`${prefix}-switch-native-control`}
+          type="checkbox"
+          checked
+          onFocus={handleSwitchFocus}
+          onBlur={handleSwitchBlur}
+        />
       </div>
     )
   },
