@@ -803,6 +803,7 @@ const App = defineComponent(() => {
         <div style={{ height: 300 + 'px', width: 800 + 'px', marginTop: 20 + 'px' }}>
           <tempui-resize-group>
             <tempui-resize-item
+              defaultSize={'300px'}
               style={{
                 backgroundColor: 'rgba(var(--tempui-grey-1), 1)',
                 border: 'var(--tempui-color-border) 1px solid'

@@ -273,6 +273,14 @@ export const resizeItemProps = {
   max: {
     type: String as PropType<ItemSize>,
     default: undefined
+  },
+  /**
+   * @description 方向
+   * @private
+   */
+  _direction: {
+    type: String as PropType<Direction>,
+    default: 'horizontal'
   }
 }
 

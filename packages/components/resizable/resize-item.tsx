@@ -46,8 +46,18 @@ const ResizeItem = defineComponent({
       _onResizeEnd: onResizeEnd
     })
     watchEffect(() => {
-      const { defaultSize, min, max } = props
+      const { defaultSize, min, max, _direction } = props
       console.log(defaultSize, min, max, 'defaultSize, min, max')
+      const key = _direction === 'horizontal' ? 'width' : 'height'
+      const tempPrpos = {}
+      if (defaultSize) {
+        console.log(tempPrpos)
+      }
+      resizablePropsMap.value = {
+        [key]: defaultSize,
+        ['min' + key]: min,
+        ['max' + key]: max
+      }
     })
     return () => {
       return (
