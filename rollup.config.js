@@ -36,6 +36,7 @@ export default {
     }
   ],
   external: ['vue'],
+  treeshake: true,
   plugins: [
     nodeResolve({
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', 'scss'],
@@ -49,7 +50,7 @@ export default {
       plugins: [autoprefixer()]
     }),
     typescript({
-      // tsconfig: './tsconfig.base.json',
+      tsconfig: './tsconfig.json',
       tsconfigOverride: {
         compilerOptions: {
           declaration: true,
@@ -57,7 +58,9 @@ export default {
           moduleResolution: 'node',
           emitDeclarationOnly: false,
           noEmit: false,
-          module: 'esnext'
+          module: 'esnext',
+          allowImportingTsExtensions: false,
+          noUnusedLocals: false
         },
         exclude: ['**/*.test.ts', '**/*.test.tsx']
       },

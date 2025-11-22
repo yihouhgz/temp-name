@@ -852,16 +852,19 @@ const App = defineComponent(() => {
       <div>
         <br />
         <br />
-        <tempui-text
-          ellipsis={{
-            showTooltip: {
-              opts: { content: '这是自定义要展示的内容' }
-            }
-          }}
-          style={{ width: 150 }}
-        >
-          可以自定义浮层里的展示内容试试看吧
-        </tempui-text>
+        <div style="width: 150px;padding-left:200px">
+          <tempui-text
+            ellipsis={{
+              rows: 2,
+              showTooltip: {
+                opts: { content: '可以自定义浮层里的展示内容试试看吧' }
+              }
+            }}
+            style={{ width: 150 }}
+          >
+            可以自定义浮层里的展示内容试试看吧可以自定义浮层里的展示内容试试看吧
+          </tempui-text>
+        </div>
         <br />
         <br />
         <tempui-text size="normal">Text</tempui-text>

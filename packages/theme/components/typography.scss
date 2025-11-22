@@ -210,6 +210,33 @@ $colors: ('primary', 'success', 'warning', 'danger', 'secondary', 'tertiary', 'q
     font-weight: $font-typography_strong-fontWeight;
   }
 
+  // ellipsis
+  &-ellipsis {
+    &-single-line {
+      overflow: hidden;
+    }
+    &-multiple-line {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      &-text {
+        display: -webkit-inline-box;
+      }
+    }
+    &-overflow {
+      &-ellipsis {
+        display: block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        &-text {
+          display: inline-block;
+          max-width: 100%;
+          vertical-align: top;
+        }
+      }
+    }
+  }
+
   @each $size, $properties in $sizes {
     &-#{$size} {
       font-size: map-get($properties, 'fontSize');

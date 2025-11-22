@@ -2,6 +2,7 @@ import type { PropType } from 'vue'
 import type { VueNode } from '../_util/type'
 import { omitKeys } from '../_util'
 import type { TooltipProps } from '../tooltip/tooltip'
+import type { PopoverProps } from '../popover/popover'
 export type CopyableConfigType = {
   /**
    * @description 复制出的文本
@@ -60,7 +61,7 @@ export type EllipsisConfigType = {
     | boolean
     | {
         type: 'tooltip' | 'popover'
-        opts: TooltipProps
+        opts: TooltipProps | PopoverProps
         renderTooltip: (content: VueNode, children: VueNode) => VueNode
       }
 
