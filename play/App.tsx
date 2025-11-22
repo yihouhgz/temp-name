@@ -735,7 +735,7 @@ const App = defineComponent(() => {
               </tempui-space>
 
               <tempui-space>
-                <tempui-switch></tempui-switch>
+                <tempui-switch checkedText="开" uncheckedText="关"></tempui-switch>
                 <tempui-switch disabled></tempui-switch>
                 <tempui-switch defaultChecked></tempui-switch>
                 <tempui-switch loading></tempui-switch>
@@ -833,6 +833,41 @@ const App = defineComponent(() => {
         </div>
       </div>
       <div>
+        <tempui-title style={{ margin: '8px 0' }}>h1. tempui Design</tempui-title>
+        <tempui-title heading={2} style={{ margin: '8px 0' }}>
+          h2. tempui Design
+        </tempui-title>
+        <tempui-title heading={3} style={{ margin: '8px 0' }}>
+          h3. tempui Design
+        </tempui-title>
+        <tempui-title heading={4} style={{ margin: '8px 0' }}>
+          h4. tempui Design
+        </tempui-title>
+        <tempui-title heading={5} style={{ margin: '8px 0' }}>
+          h5. tempui Design
+        </tempui-title>
+        <tempui-title heading={6} style={{ margin: '8px 0' }}>
+          h6. tempui Design
+        </tempui-title>
+      </div>
+      <div>
+        <br />
+        <br />
+        <div style="width: 150px;padding-left:200px">
+          <tempui-text
+            ellipsis={{
+              rows: 2,
+              showTooltip: {
+                opts: { content: '可以自定义浮层里的展示内容试试看吧' }
+              }
+            }}
+            style={{ width: 150 }}
+          >
+            可以自定义浮层里的展示内容试试看吧可以自定义浮层里的展示内容试试看吧
+          </tempui-text>
+        </div>
+        <br />
+        <br />
         <tempui-text size="normal">Text</tempui-text>
         <br />
         <br />

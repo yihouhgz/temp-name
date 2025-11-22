@@ -4,7 +4,9 @@ export const isFunction = (value: unknown) => typeof value === 'function'
 export const isString = (value: unknown) => typeof value === 'string'
 export const isNumber = (value: unknown) => typeof value === 'number'
 export const isArray = (value: unknown) => Array.isArray(value)
-export const isObject = (value: unknown) => value !== null && typeof value === 'object'
+// export const isObject = (value: unknown): value is object =>
+//   value !== null && typeof value === 'object'
+export const isObject = (value: unknown) => value instanceof Object
 export const isBoolean = (value: unknown) => typeof value === 'boolean'
 export const isUndefined = (value: unknown) => typeof value === 'undefined'
 export const omitKeys = <T extends Record<string | symbol, unknown>, K extends keyof T>(

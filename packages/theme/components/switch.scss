@@ -288,6 +288,29 @@ $sizes: (
     background-color: #{$color-switch_checked-bg-default};
   }
 
+  &-checked-text,
+  &-unchecked-text {
+    position: absolute;
+    font-size: 12px;
+    height: 100%;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &-checked-text {
+    color: $color-switch_checked-text-default;
+    left: 0;
+  }
+  &-unchecked-text {
+    color: $color-switch_unchecked-text-default;
+    right: 0;
+  }
+
+  &-focus {
+    outline: $width-switch-outline solid $color-switch_primary-outline-focus;
+  }
+
   //size
   @each $size, $properties in $sizes {
     &-#{$size} {
@@ -325,6 +348,14 @@ $sizes: (
 
       .#{$prefix}-switch-checked .#{$prefix}-switch-loading-spin {
         transform: translateX(map-get($properties, 'spin-checked-transform'));
+      }
+
+      @if $size == 'large' {
+        .#{$prefix}-switch-unchecked-text,
+        .#{$prefix}-switch-checked-text {
+          width: $width-switch_checked_unchecked_text;
+          font-size: 14px;
+        }
       }
     }
   }

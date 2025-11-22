@@ -94,6 +94,7 @@ const Toast = defineComponent({
     const toastRef = useTemplateRef<HTMLDivElement>('toastRef')
     onMounted(() => {
       const rect = toastRef.value?.getBoundingClientRect()
+      console.log(rect, 'kkss')
       ctx.emit('heightChange', rect?.height)
     })
     return () => {

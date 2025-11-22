@@ -1,9 +1,39 @@
 export const watermarkProps = {
-  width: 120,
-  height: 64,
-  inherit: true,
-  rotate: -22,
-  zIndex: 9,
+  /**
+   * @description 水印图片的宽度
+   */
+  width: {
+    type: Number,
+    default: 100
+  },
+  /**
+   * @description 水印图片的高度
+   */
+  height: {
+    type: Number,
+    default: 100
+  },
+  /**
+   * @description 是否继承父元素样式
+   */
+  inherit: {
+    type: Boolean,
+    default: true
+  },
+  /**
+   * @description 角度
+   */
+  rotate: {
+    type: Number,
+    default: 0
+  },
+  /**
+   * @description 角度
+   */
+  zIndex: {
+    type: Number,
+    default: 1000
+  },
   image: '',
   content: '',
   font: () => ({
