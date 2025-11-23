@@ -61,36 +61,27 @@
 
   &-left {
     &-arrow {
-      width: 8px;
+      width: 7px;
       height: 24px;
-      right: -7px;
+      right: -6px;
       top: 50%;
       transform: translateY(-50%);
     }
   }
   &-leftTop {
     &-arrow {
-      width: 8px;
+      width: 7px;
       height: 24px;
-      right: -7px;
-      top: 6px;
+      right: -6px;
+      top: 5px;
     }
   }
   &-leftBottom {
     &-arrow {
-      width: 8px;
+      width: 7px;
       height: 24px;
-      right: -7px;
-      bottom: 6px;
-    }
-  }
-  &-leftTop {
-    &-arrow {
-      width: 8px;
-      height: 24px;
-      left: -7px;
-      top: 6px;
-      transform: rotate(180deg);
+      right: -6px;
+      bottom: 5px;
     }
   }
 
@@ -105,10 +96,10 @@
   }
   &-rightTop {
     &-arrow {
-      width: 8px;
+      width: 7px;
       height: 24px;
-      left: -7px;
-      top: 6px;
+      left: -6px;
+      top: 5px;
       transform: rotate(180deg);
     }
   }
@@ -124,14 +115,14 @@
 
   &-bottom {
     &-arrow {
-      top: -7px;
+      top: -6px;
       left: 50%;
       transform: translateX(-50%) rotate(180deg);
     }
   }
   &-bottomLeft {
     &-arrow {
-      top: -7px;
+      top: -6px;
       left: 6px;
       transform: rotate(180deg);
     }
@@ -139,7 +130,7 @@
   &-bottomRight {
     &-arrow {
       right: 6px;
-      top: -7px;
+      top: -6px;
       transform: rotate(180deg);
     }
   }

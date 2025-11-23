@@ -13,17 +13,24 @@ import {
   type StyleValue,
   type CSSProperties,
   type ExtractPropTypes
-  // h
 } from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
 import { tooltioProps, tooltipEmits } from './type'
-import { isFunction, isComponentByVNode, domRectToObject, isNumber, useSetTimeout } from '../_util'
+import {
+  isFunction,
+  isComponentByVNode,
+  domRectToObject,
+  isNumber,
+  useSetTimeout,
+  useThrottle
+} from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
 import { useEventListener, useClickOutside, onElementResize, type EventMap } from '../_util'
 import { calcPosition, type PopupContainerDOMRect } from './herps'
 import CssAnimation from '../css-animation'
+import { arrowBounding } from './constant'
 
 const Tooltip = defineComponent({
   setup(props, ctx) {
@@ -66,13 +73,17 @@ const Tooltip = defineComponent({
       return visible
     })
     const triggerHnadle = () => {
-      animationOptions.isAnimating = true
-      animationOptions.transitionState = 'enter'
+      if (props.motion) {
+        animationOptions.isAnimating = true
+        animationOptions.transitionState = 'enter'
+      }
       show.value = true
     }
     const triggerLeave = () => {
-      animationOptions.isAnimating = true
-      animationOptions.transitionState = 'leave'
+      if (props.motion) {
+        animationOptions.isAnimating = true
+        animationOptions.transitionState = 'leave'
+      }
       show.value = false
     }
 
@@ -81,10 +92,12 @@ const Tooltip = defineComponent({
       triggerElementRef.value = target
       targetElementRect.value = target.getBoundingClientRect()
       onElementResize(triggerElementRef.value, () => {
-        const position = calcPosition(options.utils)
-        if (isNumber(position.top)) position.top = position.top + 'px'
-        if (isNumber(position.left)) position.left = position.left + 'px'
-        innerStyle.value = position
+        if (showTooltip.value) {
+          const position = calcPosition(options.utils)
+          if (isNumber(position.top)) position.top = position.top + 'px'
+          if (isNumber(position.left)) position.left = position.left + 'px'
+          innerStyle.value = position
+        }
       })
       const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
       useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
@@ -97,42 +110,50 @@ const Tooltip = defineComponent({
           }
           if (eventMap.enter === 'custom') {
             ctx.emit('visibleChange', false)
+          } else {
+            triggerLeave()
           }
-          triggerLeave()
           ctx.emit('clickOutSide', event)
         }
         useClickOutside(target, handleClickOutside)
       } else {
         const scope = effectScope()
-        useEventListener(target, eventMap.leave, () => {
-          if (eventMap.leave === 'mouseleave') {
-            scope.run(() => {
-              let hoverInInner = false
-              // 鼠标移出
-              useEventListener(innerRef.value, 'mouseenter', () => (hoverInInner = true), {
-                once: true
+        if (eventMap.leave !== 'contextmenu') {
+          useEventListener(target, eventMap.leave, () => {
+            if (eventMap.leave === 'mouseleave') {
+              scope.run(() => {
+                let hoverInInner = false
+                // 鼠标移出
+                useEventListener(innerRef.value, 'mouseenter', () => (hoverInInner = true), {
+                  once: true
+                })
+                useEventListener(
+                  innerRef.value,
+                  'mouseleave',
+                  () => {
+                    hoverInInner = false
+                    triggerLeave()
+                  },
+                  { once: true }
+                )
+                useSetTimeout(() => {
+                  if (!hoverInInner) {
+                    triggerLeave()
+                  }
+                }, 100)
               })
-              useEventListener(
-                innerRef.value,
-                'mouseleave',
-                () => {
-                  hoverInInner = false
-                  triggerLeave()
-                },
-                { once: true }
-              )
-              useSetTimeout(() => {
-                if (!hoverInInner) {
-                  triggerLeave()
-                }
-              }, 100)
-            })
-          } else {
-            triggerLeave()
-          }
+            } else {
+              triggerLeave()
+            }
+          })
+        }
+        const udpateCallback = useThrottle(updatePosition, 20)
+        useEventListener(window, 'scroll', () => {
+          if (showTooltip.value) udpateCallback()
         })
       }
     })
+
     const options = {
       utils: {
         getTriggerBounding() {
@@ -184,28 +205,24 @@ const Tooltip = defineComponent({
         getProps() {
           return {
             ...props,
-            arrowBounding: {
-              offsetX: 0,
-              offsetY: 2,
-              width: 24,
-              height: 7
-            }
+            arrowBounding
           }
         }
       }
     }
     const innerStyle = reactive({ value: {} })
+    const updatePosition = () => {
+      const position = calcPosition(options.utils)
+      if (isNumber(position.top)) position.top = position.top + 'px'
+      if (isNumber(position.left)) position.left = position.left + 'px'
+      innerStyle.value = position
+    }
     watch(
       () => showTooltip.value,
       (res) => {
-        console.log('res', res)
         if (res) {
           nextTick(() => {
-            const position = calcPosition(options.utils)
-            if (isNumber(position.top)) position.top = position.top + 'px'
-            if (isNumber(position.left)) position.left = position.left + 'px'
-            innerStyle.value = position
-            console.log(position, 'position')
+            updatePosition()
           })
         }
       }
@@ -247,7 +264,28 @@ const Tooltip = defineComponent({
       }
       animationOptions.isAnimating = false
     }
+    const isDirectionTopBottom = computed(() => {
+      const { position } = props
+      return position.startsWith('top') || position.startsWith('bottom')
+    })
     const allAttrs = useAttrs()
+    const render = () => {
+      let vnodes = ctx.slots.default?.()
+      if (vnodes) {
+        vnodes = vnodes.map((node) => {
+          return cloneVNode(node, {
+            onClick: () => {
+              console.log('click')
+            },
+            ref(node) {
+              console.log(node, 'node')
+            }
+          })
+        })
+      }
+
+      return vnodes
+    }
     return () => {
       return (
         <>
@@ -259,65 +297,84 @@ const Tooltip = defineComponent({
               triggerElementRef={triggerElementRef.value as HTMLElement}
               innerStyle={innerStyle.value}
             >
-              <CssAnimation
-                fillMode="forwards"
-                motion={props.motion}
-                animationState={animationOptions.transitionState as 'enter' | 'leave'}
-                startClassName={
-                  animationOptions.transitionState === 'enter'
-                    ? `${prefix}-tooltip-animation-show`
-                    : `${prefix}-tooltip-animation-hide`
-                }
-                onAnimationStart={handleAnimationStart}
-                onAnimationEnd={handleAnimationEnd}
+              <div
+                ref={innerRef}
+                class={`${prefix}-portal-inner`}
+                tabindex={-1}
+                style={innerStyle.value}
               >
-                {({
-                  animationStyle,
-                  animationClassName,
-                  animationEventsNeedBind
-                }: {
-                  animationStyle: StyleValue
-                  animationClassName: string
-                  animationEventsNeedBind: {
-                    onAnimationStart: (e: AnimationEvent) => void
-                    onAnimationend: (e: AnimationEvent) => void
+                <CssAnimation
+                  fillMode="forwards"
+                  motion={props.motion}
+                  animationState={animationOptions.transitionState as 'enter' | 'leave'}
+                  startClassName={
+                    animationOptions.transitionState === 'enter'
+                      ? `${prefix}-tooltip-animation-show`
+                      : `${prefix}-tooltip-animation-hide`
                   }
-                }) => {
-                  return (
-                    <div
-                      style={{
-                        ...(animationStyle as CSSProperties),
-                        transformOrigin: (innerStyle.value as CSSProperties).transformOrigin
-                      }}
-                      class={[...wrapperClass.value, animationClassName]}
-                      ref={innerRef}
-                      {...animationEventsNeedBind}
-                      {...allAttrs}
-                    >
-                      <div class={`${prefix}-tooltip-content`}>
-                        <ContentWrapper></ContentWrapper>
+                  onAnimationStart={handleAnimationStart}
+                  onAnimationEnd={handleAnimationEnd}
+                >
+                  {({
+                    animationStyle,
+                    animationClassName,
+                    animationEventsNeedBind
+                  }: {
+                    animationStyle: StyleValue
+                    animationClassName: string
+                    animationEventsNeedBind: {
+                      onAnimationStart: (e: AnimationEvent) => void
+                      onAnimationend: (e: AnimationEvent) => void
+                    }
+                  }) => {
+                    return (
+                      <div
+                        style={{
+                          ...(animationStyle as CSSProperties),
+                          transformOrigin: (innerStyle.value as CSSProperties).transformOrigin
+                        }}
+                        class={[...wrapperClass.value, animationClassName]}
+                        {...animationEventsNeedBind}
+                        {...allAttrs}
+                      >
+                        <div class={`${prefix}-tooltip-content`}>
+                          <ContentWrapper></ContentWrapper>
+                        </div>
+                        {props.showArrow &&
+                          (isDirectionTopBottom.value ? (
+                            <svg
+                              class={arrowClass.value}
+                              aria-hidden="true"
+                              width="24"
+                              height="7"
+                              viewBox="0 0 24 7"
+                              fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg"
+                              style="fill: currentcolor;"
+                            >
+                              <path d="M24 0V1C20 1 18.5 2 16.5 4C14.5 6 14 7 12 7C10 7 9.5 6 7.5 4C5.5 2 4 1 0 1V0H24Z"></path>
+                            </svg>
+                          ) : (
+                            <svg
+                              class={arrowClass.value}
+                              aria-hidden="true"
+                              width="7"
+                              height="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              style="fill: currentcolor;"
+                            >
+                              <path d="M0 0L1 0C1 4, 2 5.5, 4 7.5S7,10 7,12S6 14.5, 4 16.5S1,20 1,24L0 24L0 0z"></path>
+                            </svg>
+                          ))}
                       </div>
-                      {props.showArrow && (
-                        <svg
-                          class={arrowClass.value}
-                          aria-hidden="true"
-                          width="24"
-                          height="7"
-                          viewBox="0 0 24 7"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                          style="fill: currentcolor;"
-                        >
-                          <path d="M24 0V1C20 1 18.5 2 16.5 4C14.5 6 14 7 12 7C10 7 9.5 6 7.5 4C5.5 2 4 1 0 1V0H24Z"></path>
-                        </svg>
-                      )}
-                    </div>
-                  )
-                }}
-              </CssAnimation>
+                    )
+                  }}
+                </CssAnimation>
+              </div>
             </Portal>
           )}
-          <Fragment ref={tooltipDefaultRef}>{ctx.slots.default?.()}</Fragment>
+          <Fragment ref={tooltipDefaultRef}>{render()}</Fragment>
         </>
       )
     }

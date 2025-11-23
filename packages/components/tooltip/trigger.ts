@@ -14,5 +14,9 @@ export const triggerEventMap = {
   custom: {
     enter: 'custom',
     leave: 'custom'
+  },
+  contextMenu: {
+    enter: 'contextmenu',
+    leave: 'contextmenu'
   }
 } as const

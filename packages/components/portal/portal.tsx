@@ -1,29 +1,26 @@
-import { defineComponent, computed, Teleport, /*type StyleValue,*/ ref, useAttrs } from 'vue'
+import { defineComponent, computed, Teleport, useAttrs } from 'vue'
 import { prefix } from 'constants/config'
 import { portalProps } from './type'
-// import { isNumber } from '../_util'
 import './style/portal'
 const Portal = defineComponent(
   (props, ctx) => {
-    const innerRef = ref<HTMLElement>()
     const style = computed(() => {
       return {
         zIndex: 1006
       }
     })
     const allAttrs = useAttrs()
+    const targetElement = computed(() => {
+      const el = document.body
+      const dom = props.getPopupContainer(props.triggerElementRef || el)
+      if (dom) return dom
+      return el
+    })
     return () => {
       return (
-        <Teleport to={props.getPopupContainer(document.body)}>
+        <Teleport to={targetElement.value}>
           <div class={`${prefix}-portal`} style={style.value} {...allAttrs}>
-            <div
-              ref={innerRef}
-              class={`${prefix}-portal-inner`}
-              tabindex={-1}
-              style={props.innerStyle}
-            >
-              {ctx.slots.default?.()}
-            </div>
+            {ctx.slots.default?.()}
           </div>
         </Teleport>
       )

@@ -1,3 +1,4 @@
+import { isNumber } from '../_util'
 import type { Position as PropPosition } from './type'
 export type PopupContainerDOMRect = {
   scrollLeft: number
@@ -136,14 +137,16 @@ export const adjustPosIfNeed = (
   let isHeightOverFlow = false
   let isWidthOverFlow = false
 
-  const raw_spacing = { x: 8, y: 8 }
+  const raw_spacing = utils.getProp<number | { x: number; y: number }>('spacing')
   let spacing = 0
   let ano_spacing = 0
 
-  if (typeof raw_spacing !== 'number') {
+  if (!isNumber(raw_spacing)) {
     const isTopOrBottom = position.includes('top') || position.includes('bottom')
     spacing = isTopOrBottom ? raw_spacing.y : raw_spacing.x
     ano_spacing = isTopOrBottom ? raw_spacing.x : raw_spacing.y
+  } else {
+    spacing = raw_spacing
   }
 
   if (wrapperRect.width > 0 && wrapperRect.height > 0) {
@@ -923,10 +926,10 @@ export const calcPosStyle = (props: {
   top = top - containerRect.top
 
   if (scaled) {
-    // const scaleX = wrapperRect.width / utils.getContainer().clientWidth
-    // const scaleY = wrapperRect.height / utils.getContainer().clientHeight
-    // left /= scaleX
-    // top /= scaleY
+    const scaleX = wrapperRect.width / utils.getContainer().clientWidth
+    const scaleY = wrapperRect.height / utils.getContainer().clientHeight
+    left /= scaleX
+    top /= scaleY
   }
 
   /**
@@ -1007,7 +1010,7 @@ const defaultRect = {
 }
 
 const isEmpty = (value: unknown) => {
-  return value == null || value === ''
+  return value == null || value === '' || value === undefined
 }
 
 type UtilsType = {
@@ -1055,7 +1058,6 @@ export const calcPosition = (
     utils
   })
   if (utils.getProp('autoAdjustOverflow')) {
-    // console.log('style: ', style, '\ntriggerRect: ', triggerRect, '\nwrapperRect: ', wrapperRect);
     const {
       position: adjustedPos,
       isHeightOverFlow,
@@ -1078,7 +1080,7 @@ export const calcPosition = (
 
   if (shouldUpdatePos) {
     // utils.updatePlacementAttr(style.position);
-    utils.setPosition({ ...style, position })
+    utils.setPosition({ position, ...style })
   }
 
   return style

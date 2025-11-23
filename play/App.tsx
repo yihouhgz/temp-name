@@ -1,6 +1,8 @@
 import { ref, defineComponent, watchEffect } from 'vue'
 import { Button } from '../dist'
 import './styles/app.scss'
+import './styles/reset.scss'
+import TooltipDemo from './components/tooltip'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -908,6 +910,7 @@ const App = defineComponent(() => {
         <br />
         <tempui-text strong>Strong</tempui-text>
       </div>
+      <TooltipDemo></TooltipDemo>
     </div>
   )
 })
