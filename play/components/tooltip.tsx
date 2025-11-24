@@ -156,6 +156,37 @@ export default function TooltipDemo() {
           </tempui-tooltip>
         </div>
       </div>
+      <div>
+        <tempui-tooltip
+          trigger="click"
+          style={{
+            maxWidth: 320 + 'px'
+          }}
+          class="another-classname"
+          content={'hi semi semi semi semi semi semi semi'}
+        >
+          <tempui-tag style={{ marginRight: '8px' }}>Custom Style And ClassName</tempui-tag>
+        </tempui-tooltip>
+      </div>
+      <div id="tooltip-wrapper" style={{ position: 'relative' }}>
+        <tempui-tooltip
+          position="right"
+          content="浮层被渲染至#tooltip-wrapper元素中"
+          trigger="click"
+          getPopupContainer={() => document.querySelector('#tooltip-wrapper')}
+        >
+          <tempui-tag>点击此处</tempui-tag>
+        </tempui-tooltip>
+      </div>
+      <div class="top-20">
+        <tempui-popover
+          position="bottom"
+          content={<div class="popover-children">111</div>}
+          trigger="click"
+        >
+          <div>我是popover 点击触发</div>
+        </tempui-popover>
+      </div>
     </div>
   )
 }

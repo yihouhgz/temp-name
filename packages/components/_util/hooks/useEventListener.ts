@@ -87,7 +87,7 @@ export const useClickOutside = (
   handler: (event: MouseEvent) => void,
   options?: boolean | AddEventListenerOptions
 ) => {
-  useEventListener(
+  const stop = useEventListener(
     window,
     'click',
     (event: EventMap['click']) => {
@@ -102,4 +102,5 @@ export const useClickOutside = (
     },
     options
   )
+  return stop
 }

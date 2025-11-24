@@ -1,22 +1,22 @@
 export const triggerEventMap = {
   click: {
-    enter: 'click',
-    leave: 'click'
+    enter: 'onClick',
+    leave: 'onClick'
   },
   hover: {
-    enter: 'mouseenter',
-    leave: 'mouseleave'
+    enter: 'onMouseenter',
+    leave: 'onMouseleave'
   },
   focus: {
-    enter: 'focus',
-    leave: 'blur'
+    enter: 'onFocus',
+    leave: 'onBlur'
   },
   custom: {
     enter: 'custom',
     leave: 'custom'
   },
   contextMenu: {
-    enter: 'contextmenu',
-    leave: 'contextmenu'
+    enter: 'onContextmenu',
+    leave: 'onContextmenu'
   }
 } as const

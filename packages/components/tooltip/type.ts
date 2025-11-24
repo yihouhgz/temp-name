@@ -81,7 +81,7 @@ export const tooltioProps = {
     default: false
   },
   trigger: {
-    values: ['hover', 'focus', 'click', 'custom', 'contextMenu'],
+    values: ['hover', 'focus', 'click', 'custom', 'contextMenu'] as const,
     default: 'hover'
   },
   /**
@@ -94,10 +94,6 @@ export const tooltioProps = {
   // if trigger == custom effect
   visible: {
     type: Boolean,
-    default: false
-  },
-  wrapper: {
-    type: [Boolean, String],
     default: false
   },
   /**

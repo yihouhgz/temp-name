@@ -9,7 +9,6 @@ import {
   watch,
   reactive,
   useAttrs,
-  effectScope,
   type StyleValue,
   type CSSProperties,
   type ExtractPropTypes
@@ -17,33 +16,115 @@ import {
 import { prefix } from 'constants/config'
 import './style/tooltip'
 import { tooltioProps, tooltipEmits } from './type'
-import {
-  isFunction,
-  isComponentByVNode,
-  domRectToObject,
-  isNumber,
-  useSetTimeout,
-  useThrottle
-} from '../_util'
+import { isFunction, domRectToObject, isNumber, useEventListener, useSetTimeout } from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
-import { useEventListener, useClickOutside, onElementResize, type EventMap } from '../_util'
+import { useClickOutside, onElementResize } from '../_util'
 import { calcPosition, type PopupContainerDOMRect } from './herps'
 import CssAnimation from '../css-animation'
 import { arrowBounding } from './constant'
+import { watchEffect } from 'vue'
+import ArrowHorizontalIcon from './arrow-horizontal-icon'
+import ArrowVerticalIcon from './arrow-vertical-icon'
+import { effectScope } from 'vue'
 
 const Tooltip = defineComponent({
   setup(props, ctx) {
     const innerRef = ref()
     const tooltipDefaultRef = ref()
     const triggerElementRef = ref<HTMLElement>()
-    const slotRef = ref()
     const targetElementRect = ref()
+    const triggerEventSet = ref()
+    const clickOutsideStop = ref()
+    const state = reactive({
+      wrapperId: props.wrapperId
+    })
+
+    watch(
+      () => props.rePosKey,
+      () => {
+        if (showTooltip.value) {
+          updatePosition()
+        }
+      }
+    )
+    const hoverScope = effectScope()
+    watchEffect(() => {
+      const trigger = props.trigger as keyof typeof triggerEventMap
+      const targetEventMap = triggerEventMap[trigger]
+      const eventSet: { [key: string]: (e: Event) => void } = {}
+      if (trigger !== 'custom') {
+        const registerEnterEvent = () => {
+          eventSet[targetEventMap.enter] = (e: Event) => {
+            if (showTooltip.value) return
+            if (trigger === 'contextMenu') {
+              e.preventDefault()
+            }
+            triggerHnadle()
+          }
+        }
+        if (['hover'].includes(trigger)) {
+          useSetTimeout(() => {
+            registerEnterEvent()
+          }, props.mouseLeaveDelay)
+        } else {
+          registerEnterEvent()
+        }
+        if (!['click', 'contextMenu'].includes(trigger)) {
+          eventSet[targetEventMap.leave] = () => {
+            if (trigger === 'hover') {
+              hoverScope.run(() => {
+                let hoverInInner = false
+                useEventListener(innerRef.value, 'mouseenter', () => (hoverInInner = true), {
+                  once: true
+                })
+                useEventListener(
+                  innerRef.value,
+                  'mouseleave',
+                  () => {
+                    hoverInInner = false
+                    triggerLeave()
+                  },
+                  { once: true }
+                )
+                useSetTimeout(() => {
+                  if (!hoverInInner) {
+                    triggerLeave()
+                  }
+                }, props.mouseLeaveDelay)
+              })
+            } else {
+              triggerLeave()
+            }
+          }
+        }
+      }
+      triggerEventSet.value = eventSet
+    })
+    const registerClickOutside = () => {
+      const trigger = props.trigger
+      const clickOutsideSet = ['contextMenu', 'click', 'custom']
+      if (clickOutsideSet.includes(trigger)) {
+        if (clickOutsideStop.value) clickOutsideStop.value?.()
+        const stop = useClickOutside(triggerElementRef.value as HTMLElement, (event) => {
+          handleClickOutside(event)
+        })
+        clickOutsideStop.value = stop
+      }
+    }
+    const handleClickOutside = (event: Event) => {
+      if (showTooltip.value && innerRef.value) {
+        if (!props.clickToHide && innerRef.value.contains(event.target)) return
+      } else {
+        return
+      }
+      if (props.trigger !== 'custom') {
+        triggerLeave()
+      }
+      ctx.emit('clickOutSide', event)
+    }
     const wrapperClass = computed(() => {
-      return [
-        props.wrapper ? props.wrapper : `${prefix}-tooltip-wrapper`,
-        `${prefix}-tooltip-` + props.position
-      ]
+      return [`${props.prefixCls}-wrapper`, `${props.prefixCls}-` + props.position]
     })
     const arrowClass = computed(() => {
       const _position = (innerStyle.value as { _position: string })?._position
@@ -72,6 +153,20 @@ const Tooltip = defineComponent({
       }
       return visible
     })
+    const scope = effectScope()
+    watch(
+      () => showTooltip.value,
+      (show) => {
+        scope.run(() => {
+          if (show) {
+            registerClickOutside()
+          } else {
+            clickOutsideStop.value?.()
+          }
+          ctx.emit('visibleChange', showTooltip.value)
+        })
+      }
+    )
     const triggerHnadle = () => {
       if (props.motion) {
         animationOptions.isAnimating = true
@@ -99,59 +194,62 @@ const Tooltip = defineComponent({
           innerStyle.value = position
         }
       })
-      const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
-      useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
-      if (eventMap.enter === 'click' || eventMap.enter === 'custom') {
-        const handleClickOutside = (event: Event) => {
-          if (showTooltip.value && innerRef.value) {
-            if (!props.clickToHide && innerRef.value.contains(event.target)) return
-          } else {
-            return
-          }
-          if (eventMap.enter === 'custom') {
-            ctx.emit('visibleChange', false)
-          } else {
-            triggerLeave()
-          }
-          ctx.emit('clickOutSide', event)
-        }
-        useClickOutside(target, handleClickOutside)
-      } else {
-        const scope = effectScope()
-        if (eventMap.leave !== 'contextmenu') {
-          useEventListener(target, eventMap.leave, () => {
-            if (eventMap.leave === 'mouseleave') {
-              scope.run(() => {
-                let hoverInInner = false
-                // 鼠标移出
-                useEventListener(innerRef.value, 'mouseenter', () => (hoverInInner = true), {
-                  once: true
-                })
-                useEventListener(
-                  innerRef.value,
-                  'mouseleave',
-                  () => {
-                    hoverInInner = false
-                    triggerLeave()
-                  },
-                  { once: true }
-                )
-                useSetTimeout(() => {
-                  if (!hoverInInner) {
-                    triggerLeave()
-                  }
-                }, 100)
-              })
-            } else {
-              triggerLeave()
-            }
-          })
-        }
-        const udpateCallback = useThrottle(updatePosition, 20)
-        useEventListener(window, 'scroll', () => {
-          if (showTooltip.value) udpateCallback()
-        })
+      if (props.trigger === 'custom' && showTooltip.value) {
+        registerClickOutside()
       }
+      // const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
+      // useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
+      // if (eventMap.enter === 'click' || eventMap.enter === 'custom') {
+      //   const handleClickOutside = (event: Event) => {
+      //     if (showTooltip.value && innerRef.value) {
+      //       if (!props.clickToHide && innerRef.value.contains(event.target)) return
+      //     } else {
+      //       return
+      //     }
+      //     if (eventMap.enter === 'custom') {
+      //       ctx.emit('visibleChange', false)
+      //     } else {
+      //       triggerLeave()
+      //     }
+      //     ctx.emit('clickOutSide', event)
+      //   }
+      //   useClickOutside(target, handleClickOutside)
+      // } else {
+      //   const scope = effectScope()
+      //   if (eventMap.leave !== 'contextmenu') {
+      //     useEventListener(target, eventMap.leave, () => {
+      //       if (eventMap.leave === 'mouseleave') {
+      //         scope.run(() => {
+      //           let hoverInInner = false
+      //           // 鼠标移出
+      //           useEventListener(innerRef.value, 'mouseenter', () => (hoverInInner = true), {
+      //             once: true
+      //           })
+      //           useEventListener(
+      //             innerRef.value,
+      //             'mouseleave',
+      //             () => {
+      //               hoverInInner = false
+      //               triggerLeave()
+      //             },
+      //             { once: true }
+      //           )
+      //           useSetTimeout(() => {
+      //             if (!hoverInInner) {
+      //               triggerLeave()
+      //             }
+      //           }, 100)
+      //         })
+      //       } else {
+      //         triggerLeave()
+      //       }
+      //     })
+      //   }
+      //   const udpateCallback = useThrottle(updatePosition, 20)
+      //   useEventListener(window, 'scroll', () => {
+      //     if (showTooltip.value) udpateCallback()
+      //   })
+      // }
     })
 
     const options = {
@@ -233,25 +331,6 @@ const Tooltip = defineComponent({
       }
       return <>{props.content}</>
     }
-    const _defaultRender = () => {
-      let children = ctx.slots.default?.()
-      if (children && children.length) {
-        const newChildren: typeof children = []
-        children.forEach((child) => {
-          // if child solt is Component
-          console.log(child, 'kk')
-          newChildren.push(isComponentByVNode(child) ? cloneVNode(child, { ref: slotRef }) : child)
-        })
-        children = newChildren
-      }
-      if (children && children.length > 1) {
-        return <span>{children}</span>
-      }
-      return <Fragment ref={tooltipDefaultRef}>{children}</Fragment>
-      // return h(() => children, { ref: tooltipDefaultRef })
-    }
-    if (props.showArrow && props.clickToHide) _defaultRender() //todo slot为component下的trigger foucs
-
     const handleAnimationStart = () => {
       animationOptions.isAnimating = true
     }
@@ -273,17 +352,16 @@ const Tooltip = defineComponent({
       let vnodes = ctx.slots.default?.()
       if (vnodes) {
         vnodes = vnodes.map((node) => {
+          if (typeof node.type === 'symbol') {
+            return cloneVNode(node, {
+              ...triggerEventSet.value
+            })
+          }
           return cloneVNode(node, {
-            onClick: () => {
-              console.log('click')
-            },
-            ref(node) {
-              console.log(node, 'node')
-            }
+            ...triggerEventSet.value
           })
         })
       }
-
       return vnodes
     }
     return () => {
@@ -342,30 +420,9 @@ const Tooltip = defineComponent({
                         </div>
                         {props.showArrow &&
                           (isDirectionTopBottom.value ? (
-                            <svg
-                              class={arrowClass.value}
-                              aria-hidden="true"
-                              width="24"
-                              height="7"
-                              viewBox="0 0 24 7"
-                              fill="currentColor"
-                              xmlns="http://www.w3.org/2000/svg"
-                              style="fill: currentcolor;"
-                            >
-                              <path d="M24 0V1C20 1 18.5 2 16.5 4C14.5 6 14 7 12 7C10 7 9.5 6 7.5 4C5.5 2 4 1 0 1V0H24Z"></path>
-                            </svg>
+                            <ArrowVerticalIcon class={arrowClass.value}></ArrowVerticalIcon>
                           ) : (
-                            <svg
-                              class={arrowClass.value}
-                              aria-hidden="true"
-                              width="7"
-                              height="24"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="currentColor"
-                              style="fill: currentcolor;"
-                            >
-                              <path d="M0 0L1 0C1 4, 2 5.5, 4 7.5S7,10 7,12S6 14.5, 4 16.5S1,20 1,24L0 24L0 0z"></path>
-                            </svg>
+                            <ArrowHorizontalIcon class={arrowClass.value}></ArrowHorizontalIcon>
                           ))}
                       </div>
                     )
