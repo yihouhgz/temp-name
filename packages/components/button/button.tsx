@@ -16,6 +16,7 @@ import './style/button'
 import { generate } from 'theme/derive'
 import { formChildrenIndex } from '../_util/tab-index'
 import type { StyleValue } from 'vue'
+import type { ExtractPropTypes, ExtractPublicPropTypes } from 'vue'
 
 console.log(prefix, 'prefix', generate('#fff'))
 const Button = defineComponent({
@@ -153,4 +154,6 @@ const Button = defineComponent({
   emits: ['click']
 })
 
+export type ButtonPropsTypes = ExtractPropTypes<typeof buttonPropsDefaults>
+export type ButtonPublicPropTypes = ExtractPublicPropTypes<typeof buttonPropsDefaults>
 export default Button

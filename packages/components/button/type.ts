@@ -12,11 +12,19 @@ export interface ButtonProps {
   noHorizontalPadding: boolean | 'left' | 'right' | ['left', 'right']
   theme: 'solid' | 'borderless' | 'light' | 'outline'
 }
+export const buttonTypeValues = [
+  'primary',
+  'success',
+  'warning',
+  'danger',
+  'tertiary',
+  'secondary'
+] as const
 export const buttonPropsDefaults = {
   type: {
     type: String as PropType<ButtonProps['type']>,
     default: 'primary',
-    values: ['primary', 'success', 'warning', 'danger', 'tertiary', 'secondary'],
+    values: buttonTypeValues,
     required: false
   },
   /**
