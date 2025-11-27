@@ -133,11 +133,15 @@ const Text = defineComponent({
                 { ...attars },
                 {
                   default: () => {
-                    return renderPopover(renderChildren)
+                    return [
+                      <span class={`${prefix}-typography-link-text`}>
+                        {renderPopover(renderChildren)}
+                      </span>
+                    ]
                   }
                 }
               )
-              return linkElement
+              return [linkElement]
             }
             const vNodes = renderPopover(renderChildren)
             return isArray(vNodes) ? vNodes : [vNodes]

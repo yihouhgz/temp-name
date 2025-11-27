@@ -2,9 +2,22 @@ import { defineComponent } from 'vue'
 import { prefix } from 'constants/config'
 import Tooltip from '../tooltip'
 import { popconfirmProps, popconfirmEmits } from './type'
+import { useConfigProvider } from '../config-provider/utils'
+import { watchEffect } from 'vue'
+import { reactive } from 'vue'
 
 const Popconfirm = defineComponent({
   setup(props, ctx) {
+    const state = reactive({
+      props: { ...props }
+    })
+    const config = useConfigProvider()
+    watchEffect(() => {
+      if (config) {
+        state.props.cancelText = config.locale.popconfirm.cancelText
+        state.props.okText = config.locale.popconfirm.okText
+      }
+    })
     const handleVisibleChange = (visible: boolean) => {
       ctx.emit('visibleChange', visible)
     }

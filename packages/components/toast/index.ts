@@ -6,7 +6,6 @@ export { Toast, ToastFactory }
 Toast.info({
   content: 'hello info',
   duration: 0,
-  theme: 'light',
   stack: true
 })
 setTimeout(() => {
@@ -44,3 +43,11 @@ setTimeout(() => {
     })
   }, 1000)
 }, 3000)
+
+setTimeout(() => {
+  Toast.loading({
+    content: 'hello loading',
+    duration: 0,
+    stack: true
+  })
+}, 5000)

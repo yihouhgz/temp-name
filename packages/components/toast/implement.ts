@@ -191,7 +191,18 @@ export default class ToastImplement {
   }
 
   loading(options: ToastOptions | string) {
-    return this.handler(options, 'loading')
+    const id = this.handler(options, ToastType.LOADING)
+    const done = (options?: ToastOptions | string) => {
+      if (options) {
+        this.handler(options, ToastType.LOADING)
+      } else {
+        this.close(id)
+      }
+    }
+    return {
+      done,
+      id
+    }
   }
 
   close(toastId: string | number) {

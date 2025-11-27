@@ -26,6 +26,8 @@ $color-toast_success-icon: var(--#{$prefix}-color-success);
 $color-toast_info-icon: var(--#{$prefix}-color-info);
 //错误提示图标颜色
 $color-toast_danger-icon: var(--#{$prefix}-color-danger);
+//加载提示图标颜色
+$color-toast_loading-icon: var(--#{$prefix}-color-primary);
 
 //多色样式 警告提示背景颜色
 $color-toast_warning_light-bg: var(--#{$prefix}-color-warning-light-default);
@@ -209,5 +211,11 @@ $types: (
   &-close-button {
     margin-top: $spacing-toast_content_close_btn-marginTop;
     height: 20px;
+  }
+  &-icon-loading {
+    svg {
+      animation: $animation-rotate 0.6s linear infinite;
+      color: $color-toast_loading-icon;
+    }
   }
 }

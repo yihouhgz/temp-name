@@ -3,6 +3,9 @@ import type { ButtonPublicPropTypes } from '../button/button'
 import { buttonTypeValues, type ButtonProps } from '../button/type'
 import type { VueNode } from '../_util/type'
 import { isBoolean } from '../_util'
+import { getLocale, defaultLocale } from '../locale'
+
+const defaultLanguage = getLocale(defaultLocale)
 export const popconfirmProps = {
   /**
    * @description “小三角”是否指向元素中心，需要同时传入"showArrow=true"
@@ -23,7 +26,7 @@ export const popconfirmProps = {
    */
   cancelText: {
     type: String,
-    default: '取消'
+    default: defaultLanguage.popconfirm.cancelText
   },
   /**
    * @description 取消按钮的 props
@@ -45,7 +48,7 @@ export const popconfirmProps = {
    */
   okText: {
     type: String,
-    default: '确定'
+    default: defaultLanguage.popconfirm.okText
   },
   /**
    * @description 确认按钮类型

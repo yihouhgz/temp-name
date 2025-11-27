@@ -6,7 +6,8 @@ import {
   IconAlertCircle,
   IconAlertTriangle,
   IconInfoCircle,
-  IconClose
+  IconClose,
+  IconLoading
 } from '../icon'
 import { hasPropsOrSlots, isNumber, renderElementForPropsOrSlot } from '../_util'
 import Button from '../button'
@@ -36,15 +37,14 @@ const Toast = defineComponent({
       }
       const size = 'large'
       const classNames = `${prefix}-toast-icon-${props.type}`
-      return props.type === toastTypeMap.success ? (
-        <IconTickCircle class={classNames} size={size} />
-      ) : props.type === toastTypeMap.warning ? (
-        <IconAlertTriangle class={classNames} size={size} />
-      ) : props.type === toastTypeMap.error ? (
-        <IconAlertCircle class={classNames} size={size} />
-      ) : (
-        <IconInfoCircle class={classNames} size={size} />
-      )
+      const icons = {
+        [toastTypeMap.success]: <IconTickCircle class={classNames} size={size} />,
+        [toastTypeMap.warning]: <IconAlertTriangle class={classNames} size={size} />,
+        [toastTypeMap.error]: <IconAlertCircle class={classNames} size={size} />,
+        [toastTypeMap.info]: <IconInfoCircle class={classNames} size={size} />,
+        [toastTypeMap.loading]: <IconLoading class={classNames} size={size} />
+      }
+      return icons[props.type!]
     }
     const renderContent = () => {
       const template = renderElementForPropsOrSlot('content', vm)
@@ -94,7 +94,6 @@ const Toast = defineComponent({
     const toastRef = useTemplateRef<HTMLDivElement>('toastRef')
     onMounted(() => {
       const rect = toastRef.value?.getBoundingClientRect()
-      console.log(rect, 'kkss')
       ctx.emit('heightChange', rect?.height)
     })
     return () => {

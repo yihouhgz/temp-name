@@ -5,7 +5,8 @@ export const ToastType = {
   INFO: 'info',
   SUCCESS: 'success',
   WARNING: 'warning',
-  ERROR: 'error'
+  ERROR: 'error',
+  LOADING: 'loading'
 } as const
 export type OptionsTypeBase = OptionsType & { type: string; theme: ConfigType['theme'] }
 export type ConfigType = {
@@ -104,12 +105,13 @@ export const wrapperPorpos = {
   }
 }
 
-export type ToastType = 'success' | 'warning' | 'info' | 'error'
+export type ToastType = 'success' | 'warning' | 'info' | 'error' | 'loading'
 export const toastTypeMap: Record<ToastType, string> = {
   success: 'success',
   warning: 'warning',
   info: 'info',
-  error: 'error'
+  error: 'error',
+  loading: 'loading'
 }
 export const toastProps = {
   theme: {
@@ -117,7 +119,8 @@ export const toastProps = {
     default: 'normal'
   },
   type: {
-    values: ['success', 'warning', 'info', 'error'],
+    type: String as PropType<ToastType>,
+    values: ['success', 'warning', 'info', 'error', 'loading'] as const,
     required: true
   },
   content: {

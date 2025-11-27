@@ -1,5 +1,5 @@
 import { defineComponent, reactive } from 'vue'
-import { wrapperPorpos, type OptionsTypeBase } from './type'
+import { ToastType, wrapperPorpos, type OptionsTypeBase } from './type'
 import { prefix } from 'constants/config'
 import Toast from './toast'
 import './style/toast'
@@ -103,20 +103,20 @@ const Wrapper = defineComponent({
     return () => {
       const renderToast = (item: OptionsTypeBase, index: number) => {
         const style: StyleValue = {}
-        if (state.stack) {
+        if (state.stack && !state.isHover) {
           const length = state.toastPool.length - 1
           const z = (length - index) * 10
           style.transform = `translate3d(0px, 0px, -${z}px)`
         }
         return (
           <Toast
-            onHeightChange={handleHeightChange}
+            onHeightChange={(height: number) => handleHeightChange({ height, id: item.id })}
             style={style}
             onCloseCallback_={handleAbsorptionCloseCallback}
             key={item.id}
             content={item.content}
             id={item.id}
-            type={item.type}
+            type={item.type as ToastType}
             onClose={handleCloseToast}
             icon={item.icon}
             showClose={item.showClose}
@@ -130,8 +130,10 @@ const Wrapper = defineComponent({
       const getHeightStyle = (id: string | number) => {
         const innerHeightStyle: StyleValue = { height: '0px' }
         if (state.stack && state.isHover) {
-          const height = state.height.find((t) => t.id === id)
-          innerHeightStyle.height = `${height}px`
+          const data = state.height.find((t) => t.id === id)
+          if (data) {
+            innerHeightStyle.height = `${data.height}px`
+          }
         }
         return innerHeightStyle
       }

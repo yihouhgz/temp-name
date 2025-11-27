@@ -78,7 +78,10 @@ const App = defineComponent(() => {
     })
   }
   const sunIcon = (
-    <div style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;color:var(--tempui-color-success)">
+    <div
+      key={'sunIcon'}
+      style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;color:var(--tempui-color-success)"
+    >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 60%;height: 60%;">
         <g
           fill="none"
@@ -94,7 +97,10 @@ const App = defineComponent(() => {
     </div>
   )
   const moonIcon = (
-    <div style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;color:var(--tempui-color-text-2)">
+    <div
+      key={'moonIcon'}
+      style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;color:var(--tempui-color-text-2)"
+    >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 60%;height: 60%;">
         <path
           fill="none"
@@ -909,6 +915,17 @@ const App = defineComponent(() => {
         <br />
         <br />
         <tempui-text strong>Strong</tempui-text>
+        <br />
+        <br />
+        <tempui-text link={{ href: 'https://semi.design/' }}>链接文本</tempui-text>
+        <br />
+        <br />
+        <tempui-text link={{ href: 'https://semi.design/' }}>打开网站</tempui-text>
+        <br />
+        <br />
+        <tempui-text link icon={<sunIcon />} underline>
+          带下划线的网页链接
+        </tempui-text>
       </div>
       <TooltipDemo></TooltipDemo>
     </div>
