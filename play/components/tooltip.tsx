@@ -152,7 +152,12 @@ export default function TooltipDemo() {
             visible={true}
             getPopupContainer={getPopupContainer}
           >
-            <span>111</span>
+            <tempui-button theme="solid" type="secondary" style={{ marginBottom: 20 + 'px' }}>
+              开闭tooltip
+            </tempui-button>
+            <tempui-button theme="solid" type="secondary" style={{ marginBottom: 20 + 'px' }}>
+              关闭tooltip
+            </tempui-button>
           </tempui-tooltip>
         </div>
       </div>
@@ -180,12 +185,24 @@ export default function TooltipDemo() {
       </div>
       <div class="top-20">
         <tempui-popover
+          showArrow
           position="bottom"
           content={<div class="popover-children">111</div>}
           trigger="click"
         >
-          <div>我是popover 点击触发</div>
+          <tempui-button>我是popover 点击触发</tempui-button>
         </tempui-popover>
+      </div>
+      <div class="top-20">
+        <tempui-tooltip
+          showArrow
+          position="bottom"
+          content={<div class="popover-children1">111</div>}
+          keepDOM
+          trigger="click"
+        >
+          <tempui-button>我是popover 点击触发</tempui-button>
+        </tempui-tooltip>
       </div>
     </div>
   )

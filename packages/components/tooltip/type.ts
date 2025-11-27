@@ -1,6 +1,7 @@
 import type { PropType, VNode } from 'vue'
 import { prefix } from 'constants/config'
 import { isBoolean } from '../_util'
+import type { VNodeType } from '../_util'
 export const positionValues = [
   'top',
   'topLeft',
@@ -87,10 +88,10 @@ export const tooltioProps = {
   /**
    * @description trigger为hover时，不响应键盘聚焦弹出浮层事件
    */
-  disableFocusListener: {
-    type: Boolean,
-    default: false
-  },
+  // disableFocusListener: {
+  //   type: Boolean,
+  //   default: false
+  // },
   // if trigger == custom effect
   visible: {
     type: Boolean,
@@ -106,7 +107,10 @@ export const tooltioProps = {
   /**
    * @description 弹出层 wrapper 节点的 id，trigger 的 aria 属性指向此 id，若不设置组件会随机生成一个 id
    */
-  wrapperId: {},
+  wrapperId: {
+    type: String,
+    default: ''
+  },
   /**
    * @description 弹出层 wrapper div 的 className 前缀，设置该项时，弹出层将不再带 Tooltip 的样式
    */
@@ -174,6 +178,17 @@ export const tooltioProps = {
   rePosKey: {
     type: [Number, String],
     default: ''
+  },
+
+  /**
+   * @description 三角形
+   */
+  _arrow: {
+    type: Object as unknown as PropType<{
+      vertical: VNodeType
+      horzontal: VNodeType
+    }>,
+    default: () => undefined
   }
 }
 export type Position = (typeof positionValues)[number]

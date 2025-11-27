@@ -1,37 +1,213 @@
+@use 'sass:math';
 @import '../base/constant';
+
+//popover-弹出动画-动画持续时间
+$animation_duration-popover-in: 100ms;
+//popover-收起动画-动画持续时间
+$animation_duration-popover-out: 100ms;
+//popover-弹出动画-动画插值函数
+$animation_function-popover-in: cubic-bezier(0.215, 0.61, 0.355, 1);
+//popover-弹出动画-动画插值函数
+$animation_function-popover-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+//文本字号
+$font-popover-fontSize: $font-size-regular;
+
+//箭头图标
+$color-tooltip_arrow-icon-default: unset;
+//默认背景色
+$color-popover-bg-default: var(--#{$prefix}-color-bg-3);
+//默认描边颜色
+$color-popover-border-default: var(--#{$prefix}-color-border);
+//箭头描边颜色
+$color-popover-arrow-border: var(--#{$prefix}-color-border);
+//箭头默认背景色
+$color-popover-arrow-bg: var(--#{$prefix}-color-bg-3);
+
+//水平箭头高度
+$height-popover_arrow: 8px;
+//垂直箭头高度
+$height-popover_arrow_vertical: 24px;
+//暂无
+$height-tooltip_arrow: $height-popover_arrow;
+//暂无
+$height-tooltip_arrow_vertical: $height-popover_arrow_vertical;
+
+//水平方向矫正因子
+$horizontal-rate: 0.24;
+//垂直方向矫正因子
+$vertical-rate: 0;
+$filter-popover-bg: none;
+
+//气泡卡片的圆角大小
+$radius-popover: var(--#{$prefix}-border-radius-medium);
+
+//气泡卡片标题内边距
+$spacing-popover_title-padding: 8px;
+
+//水平箭头宽度
+$width-popover_arrow: 24px;
+//垂直箭头宽度
+$width-popover_arrow_vertical: 8px;
+//暂无
+$width-tooltip_arrow: $width-popover_arrow;
+//暂无
+$width-tooltip_arrow_vertical: $width-popover_arrow_vertical;
+//暂无
+$width-popover_title-border: 1px;
+
+//暂无
+$width-popover_title-border: 1px;
+
+//带箭头的气泡卡片标题内边距
+$spacing-popover_withArrow-padding: 12px;
+//垂直方向上的校正偏移量，主要修正三角形有棱角的问题
+$spacing-popover_arrow_adjusted_offset-y: 6px;
+//垂直方向上的校正偏移量，主要修正三角形有棱角的问题
+$spacing-tooltip_arrow_adjusted_offset-y: $spacing-popover_arrow_adjusted_offset-y;
+//水平方向上的校正偏移量，主要修正三角形有棱角的问题
+$spacing-tooltip_arrow_adjusted_offset-x: math.round($horizontal-rate * $width-tooltip_arrow);
+
 .#{$prefix}-popover {
   &-wrapper {
     position: relative;
-    background-color: var(--#{$prefix}-color-bg-3);
+    background-color: $color-popover-bg-default;
     box-shadow: var(--#{$prefix}-shadow-elevated);
     z-index: 1030;
-    border-radius: var(--#{$prefix}-border-radius-medium);
-    font-size: 14px;
+    border-radius: $radius-popover;
+    font-size: $font-popover-fontSize;
     line-height: 20px;
-    font-family:
-      Inter,
-      -apple-system,
-      BlinkMacSystemFont,
-      Segoe UI,
-      PingFang SC,
-      Hiragino Sans GB,
-      Microsoft YaHei,
-      Helvetica Neue,
-      Helvetica,
-      Arial,
-      sans-serif;
-  }
-  &-content {
+    font-family: $font-family;
+    backdrop-filter: $filter-popover-bg;
   }
   &-with-arrow {
-    padding: 12px;
+    padding: $spacing-popover_withArrow-padding;
     box-sizing: border-box;
+    min-width: 36px;
   }
-}
+  &-content {
+    //todo
+  }
 
-.#{$prefix}-popover-wrapper .#{$prefix}-tooltip-arrow {
-  height: 8px;
-  width: 24px;
-  position: absolute;
-  color: white;
+  &-icon-arrow {
+    color: $color-popover-arrow-bg;
+    width: $width-popover_arrow;
+    height: $height-popover_arrow;
+    position: absolute;
+    path:first-child {
+      fill: $color-popover-arrow-border;
+    }
+    path:last-child {
+      fill: $color-popover-arrow-bg;
+    }
+  }
+  &-leftTop,
+  &-left,
+  &-leftBottom,
+  &-rightTop,
+  &-right,
+  &-rightBottom {
+    .#{$prefix}-popover-icon-arrow {
+      width: $width-popover_arrow_vertical;
+      height: $height-popover_arrow_vertical;
+      position: absolute;
+      color: $color-popover-arrow-bg;
+    }
+  }
+  &-top {
+    .#{$prefix}-popover-icon-arrow {
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -7px;
+    }
+  }
+  &-topLeft {
+    .#{$prefix}-icon-arrow {
+      bottom: -7px;
+      left: 6px;
+    }
+  }
+
+  &-topRight {
+    .#{$prefix}-popover-icon-arrow {
+      bottom: -7px;
+      right: 6px;
+    }
+  }
+
+  &-leftTop {
+    .#{$prefix}-popover-icon-arrow {
+      width: 8px;
+      height: 24px;
+      right: -7px;
+      top: 6px;
+    }
+  }
+  &-left {
+    .#{$prefix}-popover-icon-arrow {
+      width: 8px;
+      height: 24px;
+      right: -7px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  &-leftBottom {
+    .#{$prefix}-popover-icon-arrow {
+      width: 8px;
+      height: 24px;
+      right: -7px;
+      bottom: 6px;
+    }
+  }
+
+  &-rightTop {
+    .#{$prefix}-popover-icon-arrow {
+      width: 8px;
+      height: 24px;
+      left: -7px;
+      top: 6px;
+      transform: rotate(180deg);
+    }
+  }
+  &-right {
+    .#{$prefix}-popover-icon-arrow {
+      width: 8px;
+      height: 24px;
+      left: -7px;
+      top: 50%;
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
+  &-rightBottom {
+    .#{$prefix}-popover-icon-arrow {
+      width: 8px;
+      height: 24px;
+      left: -7px;
+      bottom: 6px;
+      transform: rotate(180deg);
+    }
+  }
+
+  &-bottom {
+    .#{$prefix}-popover-icon-arrow {
+      top: -7px;
+      left: 50%;
+      transform: translateX(-50%) rotate(180deg);
+    }
+  }
+  &-bottomLeft {
+    .#{$prefix}-popover-icon-arrow {
+      top: -7px;
+      left: 6px;
+      transform: rotate(180deg);
+    }
+  }
+  &-bottomRight {
+    .#{$prefix}-popover-icon-arrow {
+      right: 6px;
+      top: -7px;
+      transform: rotate(180deg);
+    }
+  }
 }

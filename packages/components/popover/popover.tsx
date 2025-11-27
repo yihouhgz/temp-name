@@ -1,13 +1,22 @@
-import { defineComponent, type ExtractPropTypes } from 'vue'
+import { defineComponent, useAttrs, computed } from 'vue'
 import { prefix } from 'constants/config'
 import { popoverProps, popoverEmits } from './type'
 import Tooltip from '../tooltip'
 import { isFunction } from '../_util/helps'
 import './style/popover'
-import { useAttrs } from 'vue'
+import type { ExtractPropTypes } from 'vue'
+import ArrowHorizontalIcon from './arrow-horizontal-icon'
+import ArrowVerticalIcon from './arrow-vertical-icon'
 
 const Popover = defineComponent({
   setup(props, ctx) {
+    const spacing = computed(() => {
+      const { spacing, showArrow } = props
+      if (showArrow && spacing !== 8) {
+        return 8
+      }
+      return spacing
+    })
     const allAttrs = useAttrs()
     const ContentWrapper = () => {
       if (isFunction(props.content)) {
@@ -29,20 +38,21 @@ const Popover = defineComponent({
     const handleTooltipVisibleChange = (visible: boolean) => {
       ctx.emit('visibleChange', visible)
     }
-    // const wrapperClassNames = computed(() => {
-    //   return [`${prefix}-popover-wrapper`, props.showArrow ? `${prefix}-popover-with-arrow` : '']
-    //     .filter(Boolean)
-    //     .join(' ')
-    // })
+    // const handleEscapeKeyDown = () => {}
     return () => {
       return (
         <Tooltip
           {...props}
+          spacing={spacing.value}
           content={<ContentWrapper></ContentWrapper>}
           prefixCls={`${prefix}-popover`}
-          clickToHide={props.clickToHide}
+          class={{ [`${prefix}-popover-with-arrow`]: props.showArrow }}
           onClickOutSide={handleTooltipClickOutSide}
           onVisibleChange={handleTooltipVisibleChange}
+          _arrow={{
+            vertical: <ArrowVerticalIcon></ArrowVerticalIcon>,
+            horzontal: <ArrowHorizontalIcon></ArrowHorizontalIcon>
+          }}
         >
           {ctx.slots.default?.()}
         </Tooltip>

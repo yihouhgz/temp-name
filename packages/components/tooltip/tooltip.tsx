@@ -16,7 +16,16 @@ import {
 import { prefix } from 'constants/config'
 import './style/tooltip'
 import { tooltioProps, tooltipEmits } from './type'
-import { isFunction, domRectToObject, isNumber, useEventListener, useSetTimeout } from '../_util'
+import {
+  isFunction,
+  domRectToObject,
+  isNumber,
+  useEventListener,
+  useSetTimeout,
+  isArray,
+  useRandomId,
+  useThrottle
+} from '../_util'
 import Portal from '../portal'
 import { triggerEventMap } from './trigger'
 import { useClickOutside, onElementResize } from '../_util'
@@ -28,6 +37,12 @@ import ArrowHorizontalIcon from './arrow-horizontal-icon'
 import ArrowVerticalIcon from './arrow-vertical-icon'
 import { effectScope } from 'vue'
 
+type StateType = {
+  wrapperId: string
+  scrollStop: (() => void) | null
+  clickOutsideStop: (() => void) | null
+  fristRender: boolean
+}
 const Tooltip = defineComponent({
   setup(props, ctx) {
     const innerRef = ref()
@@ -35,9 +50,11 @@ const Tooltip = defineComponent({
     const triggerElementRef = ref<HTMLElement>()
     const targetElementRect = ref()
     const triggerEventSet = ref()
-    const clickOutsideStop = ref()
-    const state = reactive({
-      wrapperId: props.wrapperId
+    const state = reactive<StateType>({
+      wrapperId: props.wrapperId || useRandomId(),
+      scrollStop: null,
+      clickOutsideStop: null,
+      fristRender: true
     })
 
     watch(
@@ -60,16 +77,16 @@ const Tooltip = defineComponent({
             if (trigger === 'contextMenu') {
               e.preventDefault()
             }
-            triggerHnadle()
+            if (['hover'].includes(trigger) && props.mouseEnterDelay > 0) {
+              useSetTimeout(() => {
+                triggerHnadle()
+              }, props.mouseLeaveDelay)
+            } else {
+              triggerHnadle()
+            }
           }
         }
-        if (['hover'].includes(trigger)) {
-          useSetTimeout(() => {
-            registerEnterEvent()
-          }, props.mouseLeaveDelay)
-        } else {
-          registerEnterEvent()
-        }
+        registerEnterEvent()
         if (!['click', 'contextMenu'].includes(trigger)) {
           eventSet[targetEventMap.leave] = () => {
             if (trigger === 'hover') {
@@ -105,11 +122,11 @@ const Tooltip = defineComponent({
       const trigger = props.trigger
       const clickOutsideSet = ['contextMenu', 'click', 'custom']
       if (clickOutsideSet.includes(trigger)) {
-        if (clickOutsideStop.value) clickOutsideStop.value?.()
+        if (state.clickOutsideStop) state.clickOutsideStop?.()
         const stop = useClickOutside(triggerElementRef.value as HTMLElement, (event) => {
           handleClickOutside(event)
         })
-        clickOutsideStop.value = stop
+        state.clickOutsideStop = stop
       }
     }
     const handleClickOutside = (event: Event) => {
@@ -124,7 +141,8 @@ const Tooltip = defineComponent({
       ctx.emit('clickOutSide', event)
     }
     const wrapperClass = computed(() => {
-      return [`${props.prefixCls}-wrapper`, `${props.prefixCls}-` + props.position]
+      const _position = (innerStyle.value as { _position: string })?._position
+      return [`${props.prefixCls}-wrapper`, `${props.prefixCls}-` + (_position || props.position)]
     })
     const arrowClass = computed(() => {
       const _position = (innerStyle.value as { _position: string })?._position
@@ -141,8 +159,13 @@ const Tooltip = defineComponent({
     watch(
       () => props.visible,
       (res) => {
-        animationOptions.isAnimating = true
-        animationOptions.transitionState = res ? 'enter' : 'leave'
+        // animationOptions.isAnimating = true
+        // animationOptions.transitionState = res ? 'enter' : 'leave'
+        if (res) {
+          triggerHnadle()
+        } else {
+          triggerLeave()
+        }
       }
     )
     const showTooltip = computed(() => {
@@ -161,25 +184,34 @@ const Tooltip = defineComponent({
           if (show) {
             registerClickOutside()
           } else {
-            clickOutsideStop.value?.()
+            state.clickOutsideStop?.()
           }
           ctx.emit('visibleChange', showTooltip.value)
         })
       }
     )
     const triggerHnadle = () => {
-      if (props.motion) {
-        animationOptions.isAnimating = true
-        animationOptions.transitionState = 'enter'
-      }
+      if (state.fristRender) state.fristRender = false
+      animationOptions.isAnimating = true
+      animationOptions.transitionState = 'enter'
       show.value = true
+      if (state.scrollStop) state.scrollStop?.()
+      const udpateCallback = useThrottle(updatePosition, 20)
+      const stop = useEventListener(window, 'scroll', () => {
+        if (showTooltip.value) {
+          udpateCallback()
+        }
+      })
+      state.scrollStop = stop
     }
     const triggerLeave = () => {
-      if (props.motion) {
-        animationOptions.isAnimating = true
-        animationOptions.transitionState = 'leave'
-      }
+      animationOptions.isAnimating = true
+      animationOptions.transitionState = 'leave'
       show.value = false
+      state.scrollStop?.()
+      state.clickOutsideStop?.()
+      state.scrollStop = null
+      state.clickOutsideStop = null
     }
 
     onMounted(() => {
@@ -331,6 +363,11 @@ const Tooltip = defineComponent({
       }
       return <>{props.content}</>
     }
+    const handleClickInner = (e: Event) => {
+      if (props.stopPropagation) {
+        e.stopPropagation()
+      }
+    }
     const handleAnimationStart = () => {
       animationOptions.isAnimating = true
     }
@@ -353,33 +390,57 @@ const Tooltip = defineComponent({
       if (vnodes) {
         vnodes = vnodes.map((node) => {
           if (typeof node.type === 'symbol') {
-            return cloneVNode(node, {
-              ...triggerEventSet.value
-            })
+            // 处理symbol类型的节点 Fragment
+            const children = isArray(node.children) ? node.children[0] : null
+            if (
+              children &&
+              typeof children === 'object' &&
+              Object.hasOwnProperty.call(children, 'type')
+            ) {
+              return cloneVNode(children as typeof node, {
+                ...triggerEventSet.value
+              })
+            }
+            return node
           }
           return cloneVNode(node, {
             ...triggerEventSet.value
           })
         })
       }
+      if (vnodes && vnodes?.length > 1) {
+        return (
+          <span
+            aria-describedby={state.wrapperId}
+            data-popupid={state.wrapperId}
+            class={props.wrapperClassName}
+            style={{ display: 'inline-block' }}
+          >
+            {vnodes}
+          </span>
+        )
+      }
       return vnodes
     }
     return () => {
+      const shouldRenderPortal = (props.keepDOM && !state.fristRender) || showTooltip.value
       return (
         <>
-          {showTooltip.value && (
+          {shouldRenderPortal && (
             <Portal
               getPopupContainer={props.getPopupContainer}
-              targetElementRect={targetElementRect.value}
-              autoAdjustOverflow={props.autoAdjustOverflow}
               triggerElementRef={triggerElementRef.value as HTMLElement}
-              innerStyle={innerStyle.value}
+              zIndex={props.zIndex}
             >
               <div
                 ref={innerRef}
                 class={`${prefix}-portal-inner`}
                 tabindex={-1}
-                style={innerStyle.value}
+                style={{
+                  ...innerStyle.value,
+                  ...(props.keepDOM && !showTooltip.value ? { display: 'none' } : {})
+                }}
+                onClick={handleClickInner}
               >
                 <CssAnimation
                   fillMode="forwards"
@@ -409,9 +470,12 @@ const Tooltip = defineComponent({
                       <div
                         style={{
                           ...(animationStyle as CSSProperties),
-                          transformOrigin: (innerStyle.value as CSSProperties).transformOrigin
+                          transformOrigin: !props.transformFromCenter
+                            ? (innerStyle.value as CSSProperties).transformOrigin
+                            : 'center'
                         }}
                         class={[...wrapperClass.value, animationClassName]}
+                        id={state.wrapperId}
                         {...animationEventsNeedBind}
                         {...allAttrs}
                       >
@@ -420,7 +484,13 @@ const Tooltip = defineComponent({
                         </div>
                         {props.showArrow &&
                           (isDirectionTopBottom.value ? (
-                            <ArrowVerticalIcon class={arrowClass.value}></ArrowVerticalIcon>
+                            props._arrow ? (
+                              props._arrow.vertical
+                            ) : (
+                              <ArrowVerticalIcon class={arrowClass.value}></ArrowVerticalIcon>
+                            )
+                          ) : props._arrow ? (
+                            props._arrow.horzontal
                           ) : (
                             <ArrowHorizontalIcon class={arrowClass.value}></ArrowHorizontalIcon>
                           ))}

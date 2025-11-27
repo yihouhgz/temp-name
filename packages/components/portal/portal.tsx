@@ -6,7 +6,7 @@ const Portal = defineComponent(
   (props, ctx) => {
     const style = computed(() => {
       return {
-        zIndex: 1006
+        zIndex: props.zIndex
       }
     })
     const allAttrs = useAttrs()

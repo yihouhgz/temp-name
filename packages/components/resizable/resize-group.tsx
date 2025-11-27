@@ -6,10 +6,12 @@ import type { VNode, ComponentPublicInstance } from 'vue'
 import ResizeItem from './resize-item'
 import type { ResizeItemExpose } from './resize-item'
 import ResizeHandler from './resize-handler'
-import { isArray, isFunction, isString } from '../_util'
+import { isArray, isFunction, isString, onElementResize } from '../_util'
+import { onMounted } from 'vue'
 
 type ResizeGroupState = {
   children: ComponentResizeItem[]
+  wrapperRef: HTMLDivElement | null
 }
 type ComponentResizeItem = ComponentPublicInstance<ResizeItemExpose>
 
@@ -17,10 +19,17 @@ const ResizeGroup = defineComponent({
   setup(props, ctx) {
     const createElment = h
     const state = reactive<ResizeGroupState>({
-      children: []
+      children: [],
+      wrapperRef: null
     })
     const wrapperClassNames = computed(() => {
       return [`${prefix}-resizable-group`, `${prefix}-resizable-group-${props.direction}`]
+    })
+    onMounted(() => {
+      onElementResize(state.wrapperRef, () => {
+        const rect = state.wrapperRef?.getBoundingClientRect()
+        console.log(rect)
+      })
     })
     const handlerResizeStart = (index: number, event: Event) => {
       console.log(index, event)
@@ -84,7 +93,14 @@ const ResizeGroup = defineComponent({
       })
     }
     return () => {
-      return <div class={wrapperClassNames.value}>{render()}</div>
+      return (
+        <div
+          class={wrapperClassNames.value}
+          ref={(node) => (state.wrapperRef = node as HTMLDivElement)}
+        >
+          {render()}
+        </div>
+      )
     }
   },
   name: `${prefix}-resize-group`,

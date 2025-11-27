@@ -1,33 +1,91 @@
 @import '../base/constant';
+
+// tooltip-弹出动画-动画持续时间
+$animation_duration-tooltip_in: 100ms;
+//tooltip-收起动画-动画持续时间
+$animation_duration-tooltip_out: 100ms;
+//tooltip-弹出动画-动画插值函数
+$animation_function-tooltip_in: cubic-bezier(0.215, 0.61, 0.355, 1);
+//tooltip-收起动画-动画插值函数
+$animation_function-tooltip_out: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+//工具提示默认背景色
+$color-tooltip-bg-default: rgba(var(--#{$prefix}-grey-7), 1);
+//工具提示默认文字颜色
+$color-tooltip-text-default: var(--#{$prefix}-color-bg-0);
+//工具提示默认图标颜色
+$color-tooltip-icon-default: rgba(var(--#{$prefix}-grey-7), 1);
+//工具提示默认小三角箭头颜色
+$color-tooltip_arrow-icon-default: $color-tooltip-icon-default;
+
+//工具提示文本字号
+$font-tooltip-fontSize: $font-size-regular;
+
+//工具提示小三角箭头高度 - 水平
+$height-tooltip_arrow: 7px;
+//工具提示小三角箭头高度 - 垂直
+$height-tooltip_arrow_vertical: 24px;
+
+//初始缩放 - 动画用
+$motion-zoom_scale-from: 0.8;
+//初始透明度 - 动画用
+$motion-zoom_opacity-from: 0;
+//最终透明度 - 动画用
+$motion-zoom_opacity-to: 1;
+
+//工具提示默认圆角
+$radius-tooltip: var(--#{$prefix}-border-radius-medium);
+
+//水平方向矫正因子
+$horizontal-rate: 0.24;
+//垂直方向矫正因子
+$vertical-rate: 0;
+//暂无
+$filter-tooltip-bg: none;
+
+//工具提示宽度 - 默认
+$width-tooltip: 240px;
+//工具提示小三角箭头宽度 - 水平
+$width-tooltip_arrow: 24px;
+//工具提示小三角箭头宽度度 - 垂直
+$width-tooltip_arrow_vertical: 7px;
+
+//工具提示内容左侧内边距
+$spacing-tooltip_content-paddingLeft: $spacing-base-tight;
+//工具提示内容右侧内边距
+$spacing-tooltip_content-paddingRight: $spacing-base-tight;
+//工具提示内容顶部内边距
+$spacing-tooltip_content-paddingTop: $spacing-tight;
+//工具提示内容底部内边距
+$spacing-tooltip_content-paddingBottom: $spacing-tight;
+//水平方向渲染会有缝隙，所以加个偏移量
+$spacing-tooltip_arrow_offset-x: 1px;
+//垂直方向渲染会有缝隙，所以加个偏移量
+$spacing-tooltip_arrow_offset-y: 1px;
+//垂直方向上的校正偏移量，主要修正三角形有棱角的问题
+$spacing-tooltip_arrow_adjusted_offset-y: 5px;
+//水平方向上的校正偏移量，主要修正三角形有棱角的问题
+$spacing-tooltip_arrow_adjusted_offset-x: round($horizontal-rate * $width-tooltip_arrow);
+
 .#{$prefix}-tooltip {
   &-wrapper {
     transform-origin: calc(100% - 86px) 0%;
     animation-fill-mode: forwards;
     position: relative;
-    background-color: rgba(var(--#{$prefix}-grey-7), 1);
-    color: var(--#{$prefix}-color-bg-0);
-    border-radius: var(--#{$prefix}-border-radius-medium);
-    padding: 8px 12px;
+    background-color: $color-tooltip-bg-default;
+    color: $color-tooltip-text-default;
+    border-radius: $radius-tooltip;
+    padding: $spacing-tooltip_content-paddingTop $spacing-tooltip_content-paddingRight
+      $spacing-tooltip_content-paddingBottom $spacing-tooltip_content-paddingLeft;
     left: 0;
     top: 0;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    font-size: 14px;
+    font-size: $font-tooltip-fontSize;
     line-height: 20px;
-    font-family:
-      Inter,
-      -apple-system,
-      BlinkMacSystemFont,
-      Segoe UI,
-      PingFang SC,
-      Hiragino Sans GB,
-      Microsoft YaHei,
-      Helvetica Neue,
-      Helvetica,
-      Arial,
-      sans-serif;
+    font-family: $font-family;
     // opacity: 0;
-    max-width: 240px;
+    max-width: $width-tooltip;
   }
   &-content {
     min-width: 0;
@@ -36,7 +94,7 @@
     height: 7px;
     width: 24px;
     position: absolute;
-    color: rgba(var(--#{$prefix}-grey-7), 1);
+    color: $color-tooltip_arrow-icon-default;
   }
   //top, topLeft, topRight, left, leftTop, leftBottom, right, rightTop, rightBottom, bottom, bottomLeft, bottomRight
   &-top {
@@ -137,29 +195,30 @@
 }
 @keyframes #{$prefix}-tooltip-zoomIn {
   from {
-    opacity: 0;
-    transform: scale(0.8);
+    opacity: $motion-zoom_opacity-from;
+    transform: scale($motion-zoom_scale-from);
   }
 
   50% {
-    opacity: 1;
+    opacity: $motion-zoom_opacity-to;
   }
 }
 @keyframes #{$prefix}-tooltip-zoomOut {
   0% {
-    opacity: 1;
+    opacity: $motion-zoom_opacity-to;
   }
 
   to {
-    opacity: 0;
-    transform: scale(0.8);
+    opacity: $motion-zoom_opacity-from;
+    transform: scale($motion-zoom_scale-from);
   }
 }
 .#{$prefix}-tooltip-animation-show {
-  animation: #{$prefix}-tooltip-zoomIn 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation: #{$prefix}-tooltip-zoomIn $animation_duration-tooltip_in $animation_function-tooltip_in;
   animation-fill-mode: forwards;
 }
 .#{$prefix}-tooltip-animation-hide {
-  animation: #{$prefix}-tooltip-zoomOut 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation: #{$prefix}-tooltip-zoomOut $animation_duration-tooltip_out
+    $animation_function-tooltip_out;
   animation-fill-mode: forwards;
 }
