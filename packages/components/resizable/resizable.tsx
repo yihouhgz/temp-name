@@ -34,9 +34,6 @@ type StateType = {
   wrapperRef: HTMLElement | null
   aspectRatio: number
 }
-export type ResizableExpose = {
-  _updateTargetSizeWrap: (e: MouseEvent, direction: DirectionKeys) => void
-}
 const Resizable = defineComponent({
   setup(props, ctx) {
     const state = reactive<StateType>({
@@ -449,9 +446,6 @@ const Resizable = defineComponent({
       }
       return vnode
     }
-    ctx.expose({
-      _updateTargetSizeWrap: updateTargetSizeWrap
-    } satisfies ResizableExpose)
 
     const enableDirections = computed(() => {
       const template = []

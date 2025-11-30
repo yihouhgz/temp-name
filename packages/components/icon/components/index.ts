@@ -10,6 +10,8 @@ import IconAlertTriangle from './IconAlertTriangle'
 import IconInfoCircle from './IconInfoCircle'
 import IconLoading from './IconLoading'
 import IconHandle from './IconHandle'
+import IconTick from './IconTick'
+import IconCheckboxTick from './IconCheckboxTick'
 
 export {
   Camera,
@@ -23,5 +25,7 @@ export {
   IconAlertTriangle,
   IconInfoCircle,
   IconLoading,
-  IconHandle
+  IconHandle,
+  IconTick,
+  IconCheckboxTick
 }

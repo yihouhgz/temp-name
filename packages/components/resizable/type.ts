@@ -250,7 +250,7 @@ export const resizableGroupProps = {
   }
 }
 
-type DefaultSize = `${number}px` | `${number}%` | `${number}` | number
+export type DefaultSize = `${number}px` | `${number}%` | `${number}` | number
 type ItemSize = `${number}px` | `${number}%` | `${number}`
 export const resizeItemProps = {
   /**

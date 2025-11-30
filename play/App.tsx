@@ -3,6 +3,8 @@ import { Button } from '../dist'
 import './styles/app.scss'
 import './styles/reset.scss'
 import TooltipDemo from './components/tooltip'
+import ResizableDemo from './components/resizable'
+import CheckboxDemo from './components/checkbox'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -810,11 +812,16 @@ const App = defineComponent(() => {
         </tempui-resizable>
         <div style={{ height: 300 + 'px', width: 800 + 'px', marginTop: 20 + 'px' }}>
           <tempui-resize-group>
+            <div>111</div>
+            <tempui-resize-handler></tempui-resize-handler>
             <tempui-resize-item
               defaultSize={'300px'}
               style={{
                 backgroundColor: 'rgba(var(--tempui-grey-1), 1)',
                 border: 'var(--tempui-color-border) 1px solid'
+              }}
+              onChange={(size, e, direction) => {
+                console.log(size, e, direction)
               }}
             >
               <div>hello resizable</div>
@@ -928,6 +935,8 @@ const App = defineComponent(() => {
         </tempui-text>
       </div>
       <TooltipDemo></TooltipDemo>
+      <ResizableDemo></ResizableDemo>
+      <CheckboxDemo></CheckboxDemo>
     </div>
   )
 })
