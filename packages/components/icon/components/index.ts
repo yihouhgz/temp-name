@@ -12,6 +12,7 @@ import IconLoading from './IconLoading'
 import IconHandle from './IconHandle'
 import IconTick from './IconTick'
 import IconCheckboxTick from './IconCheckboxTick'
+import IconCheckboxIndeterminate from './IconCheckboxIndeterminate'
 
 export {
   Camera,
@@ -27,5 +28,6 @@ export {
   IconLoading,
   IconHandle,
   IconTick,
-  IconCheckboxTick
+  IconCheckboxTick,
+  IconCheckboxIndeterminate
 }

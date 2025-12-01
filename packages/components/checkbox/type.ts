@@ -1,6 +1,6 @@
-import type { PropType } from 'vue'
+import type { PropType, ExtractPublicPropTypes } from 'vue'
 import type { VueNode } from '../_util/type'
-import { isBoolean } from '../_util'
+import { isArray, isBoolean } from '../_util'
 
 export const checkboxType = ['default', 'card', 'pureCard'] as const
 export type CheckboxType = (typeof checkboxType)[number]
@@ -25,7 +25,7 @@ export const checkboxProps = {
    */
   checked: {
     type: Boolean,
-    default: false
+    default: undefined
   },
   /**
    * @description 设置checkbox 的样式类型，可选值为: default、card、pureCard
@@ -65,7 +65,9 @@ export const checkboxProps = {
   /**
    * @description 该checkbox在CheckboxGroup中代表的value
    */
-  value: {},
+  value: {
+    default: undefined
+  },
   /**
    * @description 设置 indeterminate 状态，只负责样式控制
    */
@@ -79,6 +81,10 @@ export const checkboxProps = {
   preventScroll: {
     type: Boolean,
     default: true
+  },
+  modelValue: {
+    type: Boolean,
+    default: false
   }
 }
 
@@ -92,4 +98,71 @@ export const checkboxEmits = {
    * @description 变化时回调函数
    */
   change: (value: boolean) => isBoolean(value)
+}
+
+export type OptionsType = ExtractPublicPropTypes<typeof checkboxProps> & { label: string }
+
+export const checkboxGroupProps = {
+  /**
+   * @description 组内默认选中的选项，会与Checkbox的value值做匹配
+   */
+  defaultValue: {
+    type: Array as PropType<unknown[]>,
+    default: () => []
+  },
+  /**
+   * @description 选项的排列方向，可选值为: vertical、horizontal
+   */
+  direction: {
+    type: String as PropType<'vertical' | 'horizontal'>,
+    values: ['vertical', 'horizontal'] as const,
+    default: 'vertical'
+  },
+  /**
+   * @description 是否禁用所有选项
+   */
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  /**
+   * @description CheckboxGroup 下所有 input[type="checkbox"] 的 name 属性
+   */
+  name: {
+    type: String,
+    default: ''
+  },
+  /**
+   * @description 是指定可选项
+   */
+  options: {
+    type: Array as PropType<OptionsType[]>,
+    default: () => []
+  },
+  /**
+   * @description 设置所有 checkbox 的样式类型，可选值为: default、card、pureCard
+   */
+  type: {
+    type: String as PropType<CheckboxType>,
+    default: checkboxType[0]
+  },
+  /**
+   * @description 组内选中的选项，会与Checkbox的value值做匹配
+   */
+  value: {
+    type: Array as PropType<unknown[]>,
+    default: () => []
+  },
+  modelValue: {
+    type: Array as PropType<unknown[]>,
+    default: () => []
+  }
+}
+
+export const checkboxGroupEmits = {
+  /**
+   * @description 选中值发生变化时触发
+   */
+  'update:modelValue': (value: unknown[]) => isArray(value),
+  change: (value: unknown[]) => isArray(value)
 }

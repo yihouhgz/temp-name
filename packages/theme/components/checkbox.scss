@@ -50,11 +50,11 @@ $color-checkbox_checked-border-active: var(--#{$prefix}-color-primary-active);
 $color-checkbox_cardType_checked-bg: var(--#{$prefix}-color-primary-light-default);
 //卡片类型复选框选中且禁用时的背景颜色 - 默认
 $color-checkbox_cardType_checked_disabled-bg: var(--#{$prefix}-color-primary-light-default);
-//卡片类型复选框选中时的背景颜色 - 悬浮
+//卡片类型复选框未选中时的背景颜色 - 悬浮
 $color-checkbox_cardType-bg-hover: var(--#{$prefix}-color-fill-0);
-//卡片类型复选框选中时的背景颜色 - 按下
+//卡片类型复选框未选中时的背景颜色 - 按下
 $color-checkbox_cardType-bg-active: var(--#{$prefix}-color-fill-1);
-//卡片类型复选框选中时的边框颜色 - 默认
+//卡片类型复选框未选中时的边框颜色 - 默认
 $color-checkbox_cardType_checked_border-default: var(--#{$prefix}-color-primary);
 //卡片类型复选框选中时的边框颜色 - 悬浮
 $color-checkbox_cardType_checked_border-hover: var(--#{$prefix}-color-primary-hover);
@@ -87,6 +87,8 @@ $color-checkbox_cardType-border-default: transparent;
 //extra 副标题文字颜色
 $color-checkbox_extra-text-default: var(--#{$prefix}-color-text-2);
 
+//文字大小
+$font-checkbox_label-size: $font-size-regular;
 //文字行高
 $font-checkbox_label-lineHeight: 20px;
 //卡片类型复选框的 addon 的文字大小
@@ -150,7 +152,7 @@ $transform_scale-checkbox: var(--#{$prefix}-transform_scale-none);
   position: relative;
   display: flex;
   align-items: flex-start;
-  font-size: $font-checkbox_cardType_addon-size;
+  font-size: $font-checkbox_label-size;
   line-height: $font-checkbox_label-lineHeight;
   font-family: $font-family;
   cursor: pointer;
@@ -160,8 +162,132 @@ $transform_scale-checkbox: var(--#{$prefix}-transform_scale-none);
     border $transition_duration-checkbox-border $transition_function-checkbox-border
       $transition_delay-checkbox-border;
   transform: scale($transform_scale-checkbox);
-  column-gap: 8px;
+  column-gap: $spacing-checkbox_label-paddingLeft;
+  width: fit-content;
 
+  &-focus {
+    outline: $width-checkbox-outline solid $color-checkbox_primary-outline-focus;
+  }
+
+  //默认hover active 样式
+  &:hover &-inner &-inner-display {
+    background-color: $color-checkbox_default-bg-hover;
+  }
+  &:hover &-inner &-inner-display {
+    box-shadow: inset 0 0 0 $size-checkbox_inner-shadow $color-checkbox_default-border-hover;
+  }
+  &:active &-inner &-inner-display {
+    background-color: $color-checkbox_default-bg-active;
+  }
+  &-checked:active &-inner &-inner-display,
+  &-checked:hover &-inner &-inner-display {
+    box-shadow: none;
+  }
+  // 选中样式
+  &-checked &-inner &-inner-display {
+    background-color: $color-checkbox_checked-bg-default;
+    color: $color-checkbox_checked-icon-default;
+    border-color: $color-checkbox_checked-border-default;
+    box-shadow: inset 0 0 0 $size-checkbox_inner-shadow
+      $color-checkbox_cardType_checked_border-default;
+  }
+  &-checked:hover &-inner &-inner-display {
+    background-color: $color-checkbox_checked-bg-hover;
+    border-color: $color-checkbox_checked-border-hover;
+    color: $color-checkbox_checked-icon-hover;
+  }
+  &-checked:active &-inner &-inner-display {
+    color: $color-checkbox_checked-icon-active;
+    border-color: $color-checkbox_checked-border-active;
+    background-color: $color-checkbox_checked-bg-active;
+  }
+  //card
+  &-cardType {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    border-radius: $radius-checkbox_cardType;
+    padding: $spacing-checkbox_cardType-paddingY $spacing-checkbox_cardType-paddingX;
+    background: $color-checkbox_default-bg-default;
+    border: $width-checkbox_cardType_checked-border solid $color-checkbox_cardType-border-default;
+  }
+  // card选中样式
+  &-cardType-checked {
+    background: $color-checkbox_cardType_checked-bg;
+    border: $width-checkbox_cardType_checked-border solid
+      $color-checkbox_cardType_checked_border-default;
+  }
+  &-cardType-checked:hover {
+    background: $color-checkbox_cardType_checked-bg;
+    border: $width-checkbox_cardType_checked-border solid
+      $color-checkbox_cardType_checked_border-default;
+  }
+  &-cardType-checked:active {
+    background: $color-checkbox_cardType_checked-bg;
+    border-color: $color-checkbox_cardType_checked_border-default;
+  }
+  // 选中且禁用样式
+  .#{$prefix}-checkbox &-cardType-checked-disabled {
+    background: $color-checkbox_cardType_checked_disabled-bg;
+    border: $width-checkbox_cardType_checked_disabled-border solid
+      $color-checkbox_cardType_checked_disabled_border-default;
+  }
+
+  // card未选中样式
+  &-cardType-unchecked:hover {
+    background: $color-checkbox_cardType-bg-hover;
+  }
+  &-cardType-unchecked:active {
+    background: $color-checkbox_cardType-bg-active;
+  }
+  &-cardType-unchecked-disabled:hover,
+  &-cardType-unchecked-disabled:active {
+    background-color: transparent;
+  }
+
+  // 禁用样式
+  &-disabled {
+    cursor: not-allowed;
+  }
+  &-disabled &-inner &-inner-display {
+    background: $color-checkbox_disabled-bg-default;
+    box-shadow: inset 0 0 0 $size-checkbox_inner-shadow $color-checkbox_disabled-border-default;
+  }
+  &-disabled &-inner-checked &-inner-display {
+    opacity: 0.75;
+    background: $color-checkbox_checked-bg-disabled;
+    box-shadow: inset 0 0 0 $size-checkbox_inner-shadow $color-checkbox_checked-bg-disabled;
+  }
+  &-disabled &-inner-checked {
+    color: $color-checkbox_checked-icon-disabled;
+  }
+
+  &-disabled:active &-inner &-inner-display,
+  &-disabled:hover &-inner &-inner-display {
+    background: $color-checkbox_disabled-bg-default;
+    box-shadow: inset 0 0 0 $size-checkbox_inner-shadow $color-checkbox_disabled-border-default;
+  }
+
+  &-disabled:active &-inner-checked &-inner-display,
+  &-disabled:hover &-inner-checked &-inner-display {
+    color: $color-checkbox_checked-icon-disabled;
+    background: $color-checkbox_checked-bg-disabled;
+    box-shadow: none;
+  }
+  // &-cardType &-inner:hover {
+  //   background-color: $color-checkbox_cardType_inner-bg-hover;
+  // }
+  // &-cardType &-inner:active {
+  //   background-color: $color-checkbox_cardType_inner-bg-active;
+  // }
+  &-cardType-pureCard {
+    column-gap: 0;
+  }
+  &-cardType-pureCard &-inner {
+    width: 0;
+    opacity: 0;
+    position: relative;
+    flex-shrink: 0;
+  }
   &-inner {
     position: relative;
     display: flex;
@@ -170,6 +296,7 @@ $transform_scale-checkbox: var(--#{$prefix}-transform_scale-none);
     height: $height-checkbox_inner;
     user-select: none;
     cursor: pointer;
+    // background-color: $color-checkbox_cardType_inner-bg-default;
     &-display {
       box-sizing: border-box;
       position: relative;
@@ -184,6 +311,12 @@ $transform_scale-checkbox: var(--#{$prefix}-transform_scale-none);
           $transition_delay-checkbox-border;
       box-shadow: inset 0 0 0 $size-checkbox_inner-shadow $color-checkbox_default-border-default;
       border-radius: $radius-checkbox_inner;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      svg {
+        font-size: $width-checkbox_inner;
+      }
     }
   }
   &-input {
@@ -198,5 +331,59 @@ $transform_scale-checkbox: var(--#{$prefix}-transform_scale-none);
 
   &-content {
     user-select: none;
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+  }
+  &-cardType &-addon {
+    font-weight: $font-checkbox_cardType_addon-fontWeight;
+    font-size: $font-checkbox_cardType_addon-size;
+    line-height: $font-checkbox_cardType_addon-lineHeight;
+    color: $color-checkbox_cardType_addon-text-default;
+  }
+  &-addon {
+    display: flex;
+    flex: 1 1;
+    align-items: center;
+    color: $color-checkbox_cardType_addon-text-default;
+    line-height: $font-checkbox_cardType_addon-lineHeight;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  &-disabled &-addon,
+  &-disabled &-extra {
+    color: $color-checkbox_label-text-disabled;
+  }
+  &-extra {
+    flex-shrink: 0;
+    flex-grow: 1;
+    flex-basis: 100%;
+    box-sizing: border-box;
+    color: $color-checkbox_extra-text-default;
+  }
+  &-cardType &-extra {
+    color: $color-checkbox_cardType_extra-text-default;
+  }
+  &-disabled &-extra,
+  &-disabled &-extra {
+    color: $color-checkbox_label-text-disabled;
+  }
+
+  // group
+  &-group {
+    font-size: $font-checkbox_label-size;
+    font-family: $font-family;
+    line-height: 14px;
+    &-vertical {
+      display: flex;
+      flex-direction: column;
+      row-gap: 12px;
+    }
+    &-horizontal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
   }
 }
