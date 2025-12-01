@@ -6,11 +6,14 @@ import { reactive } from 'vue'
 import { isArray, isString } from '../_util'
 import { watchEffect } from 'vue'
 import { useCheckboxProvider } from './checkbox-content'
+import { onMounted } from 'vue'
 
 type CheckboxGroupStateType = {
   children: unknown[]
   wrapperRef: HTMLDivElement | null
   checkedValues: unknown[]
+  checkboxIndex: number
+  collectPropsChangeMap: Map<number, (record: Record<string, unknown>) => void>
 }
 
 const CheckboxGroup = defineComponent({
@@ -18,10 +21,28 @@ const CheckboxGroup = defineComponent({
     const state = reactive<CheckboxGroupStateType>({
       children: [],
       wrapperRef: null,
-      checkedValues: props.defaultValue || props.modelValue || []
+      checkedValues: props.defaultValue || props.modelValue || [],
+      checkboxIndex: 0, //记录jsx的checkbox
+      collectPropsChangeMap: new Map<number, (record: Record<string, unknown>) => void>()
     })
     useCheckboxProvider({
-      checked: false
+      setCheckboxIndex() {
+        const number = state.checkboxIndex
+        state.checkboxIndex++
+        return number
+      },
+      setCheckboxChild(index: number, child: unknown) {
+        state.children[index] = child
+      },
+      onChnage(checked: boolean, index: number, value: unknown) {
+        if (checked) {
+          state.checkedValues.push(value)
+        } else {
+          state.checkedValues = state.checkedValues.filter((item) => item !== value)
+        }
+        emitsChange(state.checkedValues)
+      },
+      collectPropsChangeMap: state.collectPropsChangeMap
     })
     const createElment = h
     const wrapperClass = computed(() => {
@@ -30,6 +51,14 @@ const CheckboxGroup = defineComponent({
         prefix + '-checkbox-group-wrapper',
         prefix + `-checkbox-group-${props.direction}`
       ]
+    })
+    const triggerChangeProps = () => {
+      state.collectPropsChangeMap.forEach((fn) => {
+        fn(props)
+      })
+    }
+    onMounted(() => {
+      triggerChangeProps()
     })
     watchEffect(() => {
       const { name } = props
@@ -79,23 +108,24 @@ const CheckboxGroup = defineComponent({
       }
       // jsx
       const vNodes = ctx.slots.default?.()
-      let childIndex = 0
-      return vNodes?.map((item) => {
-        if (item.type === Checkbox) {
-          const itemProps = item.props || {}
-          if (disabled) itemProps.disabled = disabled
-          return createElment(item, {
-            ...itemProps,
-            type,
-            defaultChecked: defaultValue.includes(itemProps.value),
-            onChange: (checked: boolean) => handleChildChange(checked, itemProps.value),
-            ref: (node) => {
-              state.children[childIndex++] = node
-            }
-          })
-        }
-        return item
-      })
+      // let childIndex = 0
+      // return vNodes?.map((item) => {
+      //   if (item.type === Checkbox) {
+      //     const itemProps = item.props || {}
+      //     if (disabled) itemProps.disabled = disabled
+      //     return createElment(item, {
+      //       ...itemProps,
+      //       type,
+      //       defaultChecked: defaultValue.includes(itemProps.value),
+      //       onChange: (checked: boolean) => handleChildChange(checked, itemProps.value),
+      //       ref: (node) => {
+      //         state.children[childIndex++] = node
+      //       }
+      //     })
+      //   }
+      //   return item
+      // })
+      return vNodes
     }
     return () => {
       return (

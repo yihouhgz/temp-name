@@ -1,4 +1,4 @@
-import { defineComponent, computed, reactive, getCurrentInstance } from 'vue'
+import { defineComponent, computed, reactive, getCurrentInstance, watch } from 'vue'
 import { prefix } from 'constants/config'
 import { checkboxEmits, checkboxProps } from './type'
 import './styles/checkout'
@@ -6,7 +6,8 @@ import {
   hasPropsOrSlots,
   renderElementForPropsOrSlot,
   useRandomIdWithPrefix,
-  isBoolean
+  isBoolean,
+  isArray
 } from '../_util'
 import { IconCheckboxTick, IconCheckboxIndeterminate } from '../icon'
 import { useCheckboxInject } from './checkbox-content'
@@ -15,30 +16,67 @@ type CheckboxStateType = {
   checked: boolean
   inputRef: HTMLInputElement | null
   focused: boolean
+  childIndex: number
+  onCheckboxChange?: (checked: boolean, index: number, value: unknown) => void
+  type: string
+  disabled: boolean
+  defaultChecked: boolean
 }
 const Checkbox = defineComponent({
   setup(props, ctx) {
     const state = reactive<CheckboxStateType>({
       checked: props.defaultChecked || !!props.checked,
       inputRef: null,
-      focused: false
+      focused: false,
+      childIndex: 0,
+      onCheckboxChange: undefined,
+      type: props.type,
+      disabled: props.disabled,
+      defaultChecked: props.defaultChecked
     })
     const instance = getCurrentInstance()
-    useCheckboxInject()
+    const changeCheckboxProps = (groupProps: Record<string, unknown>) => {
+      const { type, disabled, defaultValue } = groupProps as {
+        type: string
+        disabled: boolean
+        defaultValue: unknown
+      }
+      state.type = type
+      state.disabled = disabled
+      if (isArray(defaultValue)) {
+        state.checked = defaultValue.includes(props.value)
+      }
+    }
+    const checkboxInject = useCheckboxInject(null)
+    if (checkboxInject) {
+      state.childIndex = checkboxInject.setCheckboxIndex()
+      state.onCheckboxChange = checkboxInject.onChnage
+      checkboxInject.collectPropsChangeMap?.set(state.childIndex, changeCheckboxProps)
+    }
+    watch(
+      () => props,
+      () => {
+        if (!checkboxInject) {
+          state.checked = !!props.checked
+          state.type = props.type
+          state.disabled = props.disabled
+        }
+      }
+    )
     const wrapperClass = computed(() => {
       return [
         'tempui-checkbox',
         state.checked ? `${prefix}-checkbox-checked` : `${prefix}-checkbox-unchecked`,
-        props.disabled ? `${prefix}-checkbox-disabled` : '',
-        ['card', 'pureCard'].includes(props.type)
+        state.disabled ? `${prefix}-checkbox-disabled` : '',
+        ['card', 'pureCard'].includes(state.type)
           ? [
               prefix + '-checkbox-cardType',
-              props.type === 'pureCard' ? `${prefix}-checkbox-cardType-pureCard` : '',
-              state.checked && props.disabled ? `${prefix}-checkbox-cardType-checked-disabled` : '',
+              state.type === 'pureCard' ? `${prefix}-checkbox-cardType-pureCard` : '',
+              state.checked && state.disabled ? `${prefix}-checkbox-cardType-checked-disabled` : '',
               state.checked
                 ? `${prefix}-checkbox-cardType-checked`
                 : `${prefix}-checkbox-cardType-unchecked`,
-              !state.checked && props.disabled
+              !state.checked && state.disabled
                 ? `${prefix}-checkbox-cardType-unchecked-disabled`
                 : ''
             ]
@@ -58,7 +96,7 @@ const Checkbox = defineComponent({
       emits('change', value)
     }
     const handleClick = (event: MouseEvent) => {
-      if (props.disabled) {
+      if (state.disabled) {
         return
       }
       ctx.emit('click', event)
@@ -68,6 +106,7 @@ const Checkbox = defineComponent({
       } else {
         state.checked = !state.checked
         emitsChange(state.checked)
+        state.onCheckboxChange?.(state.checked, state.childIndex, props.value)
       }
     }
     const handleCheckboxFocus = () => {

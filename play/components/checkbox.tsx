@@ -119,7 +119,7 @@ const CheckboxDemo = defineComponent({
             单选框标题
           </tempui-checkbox>
         </tempui-checkbox-group>
-
+        <br />
         <tempui-checkbox-group
           type="pureCard"
           defaultValue={['1', '3']}
@@ -156,6 +156,26 @@ const CheckboxDemo = defineComponent({
           >
             单选框标题
           </tempui-checkbox>
+        </tempui-checkbox-group>
+        <br />
+        <tempui-checkbox-group disabled style={{ width: '100%' }} aria-label="CheckboxGroup 示例">
+          <tempui-row>
+            <tempui-col span={8}>
+              <tempui-checkbox value="A">A</tempui-checkbox>
+            </tempui-col>
+            <tempui-col span={8}>
+              <tempui-checkbox value="B">B</tempui-checkbox>
+            </tempui-col>
+            <tempui-col span={8}>
+              <tempui-checkbox value="C">C</tempui-checkbox>
+            </tempui-col>
+            <tempui-col span={8}>
+              <tempui-checkbox value="D">D</tempui-checkbox>
+            </tempui-col>
+            <tempui-col span={8}>
+              <tempui-checkbox value="E">E</tempui-checkbox>
+            </tempui-col>
+          </tempui-row>
         </tempui-checkbox-group>
       </div>
     )

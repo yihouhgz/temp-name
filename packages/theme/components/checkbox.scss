@@ -245,7 +245,8 @@ $transform_scale-checkbox: var(--#{$prefix}-transform_scale-none);
   }
 
   // 禁用样式
-  &-disabled {
+  &-disabled,
+  &-disabled &-inner {
     cursor: not-allowed;
   }
   &-disabled &-inner &-inner-display {
