@@ -1,4 +1,6 @@
 import type { CSSProperties, PropType } from 'vue'
+import { isBoolean } from '../_util'
+import type { ExtractPublicPropTypes } from 'vue'
 
 export const radioType = ['default', 'button', 'card', 'pureCard'] as const
 export type RadioType = (typeof radioType)[number]
@@ -46,14 +48,14 @@ export const radioPorps = {
    */
   checked: {
     type: Boolean,
-    default: false
+    default: undefined
   },
   /**
    * 初始是否选中
    */
   defaultChecked: {
     type: Boolean,
-    default: false
+    default: undefined
   },
   /**
    * 是否禁用
@@ -107,6 +109,15 @@ export const radioPorps = {
     default: radioType[0]
   },
   /**
+   * type='button'的radio的尺寸大小，可选值为：small、middle、large
+   * @private
+   */
+  buttonSize: {
+    type: String as PropType<'small' | 'middle' | 'large'>,
+    values: ['small', 'middle', 'large'] as const,
+    default: 'middle'
+  },
+  /**
    * Radio 组件的值，RadioGroup下生效
    */
   value: {
@@ -122,10 +133,16 @@ export const radioEmits = {
   /**
    * @description 点击回调函数
    */
-  change: (e: Event) => e instanceof Event,
+  change: (e: {
+    stopPropagation: () => void
+    preventDefault: () => void
+    target: { checked: boolean }
+  }) => isBoolean(e.target.checked),
   mouseEnter: (e: Event) => e instanceof Event,
   mouseLeave: (e: Event) => e instanceof Event
 }
+
+export type OptionsType = ExtractPublicPropTypes<typeof radioPorps> & { label: string }
 
 export const radioGroupProps = {
   /**
@@ -183,7 +200,7 @@ export const radioGroupProps = {
    * 以配置形式设置子元素
    */
   options: {
-    type: Array as PropType<unknown[]>,
+    type: Array as PropType<OptionsType[]>,
     default: () => []
   },
   /**
@@ -206,5 +223,9 @@ export const radioGroupEmits = {
   /**
    * @description 点击回调函数
    */
-  change: (e: Event) => e instanceof Event
+  change: (e: {
+    stopPropagation: () => void
+    preventDefault: () => void
+    target: { checked: boolean }
+  }) => isBoolean(e.target.checked)
 }

@@ -34,7 +34,7 @@ const CheckboxGroup = defineComponent({
       setCheckboxChild(index: number, child: unknown) {
         state.children[index] = child
       },
-      onChnage(checked: boolean, index: number, value: unknown) {
+      onChange(checked: boolean, index: number, value: unknown) {
         if (checked) {
           state.checkedValues.push(value)
         } else {

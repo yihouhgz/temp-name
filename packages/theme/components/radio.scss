@@ -279,7 +279,7 @@ $transitionValue:
     border-color: $color-radio_checked-border-disabled;
   }
 
-  &-focus {
+  &-focused {
     outline: $width-radio-outline solid $color-radio_primary-outline-focus;
   }
 

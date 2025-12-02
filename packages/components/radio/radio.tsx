@@ -1,33 +1,81 @@
 import { defineComponent, computed, reactive, getCurrentInstance } from 'vue'
 import { prefix } from 'constants/config'
 import { radioPorps, radioEmits } from './type'
-import { hasPropsOrSlots, renderElementForPropsOrSlot, useRandomIdWithPrefix } from '../_util'
+import {
+  hasPropsOrSlots,
+  isBoolean,
+  renderElementForPropsOrSlot,
+  useRandomIdWithPrefix
+} from '../_util'
 import { IconRadio } from '../icon'
 import './style/radio'
+import { watchEffect } from 'vue'
+import { useRadioInject } from './radio-content'
 
 type RadioStateType = {
+  type: string
+  buttonSize: string
+  mode: string
+  disabled: boolean
   checked: boolean
   focused: boolean
   inputRef: HTMLInputElement | null
+  childIndex: number // group 子组件索引
+  onRadioChange?: (event: Record<string, unknown>) => void // group 子组变化时调用
 }
 
 const Radio = defineComponent({
   setup(props, ctx) {
     const state = reactive<RadioStateType>({
-      checked: props.defaultChecked || !!props.checked,
+      buttonSize: props.buttonSize,
+      mode: props.mode,
+      type: props.type,
+      disabled: props.disabled,
+      checked: !!props.defaultChecked || !!props.checked,
       focused: false,
-      inputRef: null
+      inputRef: null,
+      childIndex: -1, // group 子组件索引
+      onRadioChange: undefined // group 子组变化时调用
+    })
+    watchEffect(() => {
+      state.checked = !!props.checked
     })
     const instance = getCurrentInstance()
+    const changeRadioProps = (groupProps: Record<string, unknown>) => {
+      const { type, disabled, defaultValue, buttonSize, mode } = groupProps as {
+        type: string
+        disabled: boolean
+        defaultValue: unknown
+        buttonSize: string
+        mode: string
+      }
+      state.buttonSize = buttonSize
+      state.mode = mode
+      state.type = type
+      state.disabled = disabled
+      state.checked = defaultValue === props.value
+    }
+    const radioInject = useRadioInject(null)
+    if (radioInject) {
+      state.childIndex = radioInject.setRadioIndex()
+      state.onRadioChange = radioInject.onChange
+      radioInject.collectPropsChangeMap?.set(state.childIndex, changeRadioProps)
+    }
     const wrapperClass = computed(() => {
       return [
         prefix + '-radio',
         prefix + `-radio-${state.checked ? 'checked' : 'unchecked'}`,
-        props.disabled && prefix + '-radio-disabled'
+        props.disabled && prefix + '-radio-disabled',
+        {
+          [prefix + '-radio-focused']: state.focused
+        }
       ]
     })
     const addonId = computed(() => {
       return props.addonId || useRandomIdWithPrefix('addon', 8)
+    })
+    const extraId = computed(() => {
+      return useRandomIdWithPrefix('extra', 8)
     })
     const renderIcon = () => {
       if (state.checked) {
@@ -36,10 +84,54 @@ const Radio = defineComponent({
       return null
     }
     const handleClick = (event: MouseEvent) => {
-      event.stopPropagation()
-      event.preventDefault()
-      console.log(state.checked)
-      state.checked = !state.checked
+      if (props.disabled) {
+        return
+      }
+      if (props.mode != 'advanced' && state.checked) {
+        return
+      }
+      if (isBoolean(props.checked)) {
+        handleChange(
+          {
+            stopPropagation: event.stopPropagation,
+            preventDefault: event.preventDefault
+          },
+          !state.checked
+        )
+      } else {
+        state.checked = !state.checked
+        handleChange(
+          {
+            stopPropagation: event.stopPropagation,
+            preventDefault: event.preventDefault
+          },
+          state.checked
+        )
+      }
+    }
+    const handleChange = (
+      {
+        stopPropagation,
+        preventDefault
+      }: {
+        stopPropagation: () => void
+        preventDefault: () => void
+      },
+      checked: boolean
+    ) => {
+      const event = {
+        stopPropagation,
+        preventDefault,
+        target: {
+          checked: checked
+        }
+      }
+      ctx.emit('change', event)
+    }
+    const handleFocus = () => {
+      if (state.inputRef?.matches(':focus-visible')) {
+        state.focused = true
+      }
     }
     ctx.expose({
       focus: () => {
@@ -54,8 +146,14 @@ const Radio = defineComponent({
       }
     })
     return () => {
+      const isShowExtra = hasPropsOrSlots('extra', instance)
       return (
-        <label class={wrapperClass.value} onClick={handleClick}>
+        <label
+          class={wrapperClass.value}
+          onClick={(e: MouseEvent) => handleClick(e)}
+          onMouseenter={(e: MouseEvent) => ctx.emit('mouseEnter', e)}
+          onMouseleave={(e: MouseEvent) => ctx.emit('mouseLeave', e)}
+        >
           <span
             class={[
               prefix + '-radio-inner',
@@ -63,14 +161,16 @@ const Radio = defineComponent({
             ]}
           >
             <input
+              onClick={(e: MouseEvent) => e.stopPropagation()}
               type="radio"
               name={props.name}
               aria-label={props['aria-label']}
               aria-labelledby={addonId.value}
+              {...(isShowExtra ? { 'aria-describedby': extraId.value } : {})}
               class={prefix + '-radio-inner-input'}
               ref={(node) => (state.inputRef = node as HTMLInputElement)}
               onBlur={() => (state.focused = false)}
-              onFocus={() => (state.focused = true)}
+              onFocus={handleFocus}
             />
             <span class={prefix + '-radio-inner-display'}>{renderIcon()}</span>
           </span>
@@ -78,8 +178,8 @@ const Radio = defineComponent({
             <span class={prefix + '-radio-addon'} id={addonId.value}>
               {ctx.slots.default?.()}
             </span>
-            {hasPropsOrSlots('extra', instance) ? (
-              <span class={prefix + '-radio-extra'}>
+            {isShowExtra ? (
+              <span class={prefix + '-radio-extra'} id={extraId.value}>
                 {renderElementForPropsOrSlot('extra', instance)}
               </span>
             ) : null}

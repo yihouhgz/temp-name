@@ -3,7 +3,7 @@ import { provide, inject } from 'vue'
 export type CheckboxProvider = {
   setCheckboxIndex: () => number
   setCheckboxChild: (index: number, child: unknown) => void
-  onChnage: (checked: boolean, index: number, value: unknown) => void
+  onChange: (checked: boolean, index: number, value: unknown) => void
   collectPropsChangeMap?: Map<number, (record: Record<string, unknown>) => void>
 }
 const checkboxProviderKey = Symbol(useRandomId())

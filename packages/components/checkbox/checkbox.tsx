@@ -50,7 +50,7 @@ const Checkbox = defineComponent({
     const checkboxInject = useCheckboxInject(null)
     if (checkboxInject) {
       state.childIndex = checkboxInject.setCheckboxIndex()
-      state.onCheckboxChange = checkboxInject.onChnage
+      state.onCheckboxChange = checkboxInject.onChange
       checkboxInject.collectPropsChangeMap?.set(state.childIndex, changeCheckboxProps)
     }
     watch(
@@ -140,7 +140,7 @@ const Checkbox = defineComponent({
               aria-label={props.ariaLabel}
               aria-checked={state.checked}
               aria-labelledby={addonId.value}
-              {...(props.extra ? { 'aria-describedby': extraId.value } : {})}
+              {...(hasPropsOrSlots('extra', instance) ? { 'aria-describedby': extraId.value } : {})}
             />
             <span class={`${prefix}-checkbox-inner-display`}>
               {state.checked &&

@@ -23,6 +23,11 @@ export default defineComponent({
           <tempui-radio disabled aria-label="单选示例" name="demo-radio">
             Radio
           </tempui-radio>
+          <br />
+          <br />
+          <tempui-radio mode="advanced" aria-label="单选示例" name="demo-radio-advanced">
+            允许取消选择
+          </tempui-radio>
         </div>
       )
     }
