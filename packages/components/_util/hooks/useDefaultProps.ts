@@ -10,15 +10,22 @@ import { cloneDeep } from 'lodash'
  *  }
  *  const props = useDefaultProps(defaultProps)
  */
-export const useDefaultProps = <T extends Record<string, unknown>>(defaultProps: T) => {
-  const props: { [key in keyof T]?: T[key] } = reactive({})
+export const useDefaultProps = <T extends Record<string, unknown>>(
+  props: T,
+  defaultProps: Partial<T>
+) => {
+  const newProps: { [key in keyof T]?: T[key] } = reactive({})
   const stopWatch = watchEffect(() => {
-    for (const key in defaultProps) {
-      props[key] = cloneDeep(defaultProps[key])
+    for (const key in props) {
+      if (Object.prototype.hasOwnProperty.call(defaultProps, key)) {
+        newProps[key] = cloneDeep(defaultProps[key])
+      } else {
+        newProps[key] = cloneDeep(props[key])
+      }
     }
   })
   onScopeDispose(() => {
     stopWatch?.()
   })
-  return readonly(props)
+  return readonly(newProps)
 }
