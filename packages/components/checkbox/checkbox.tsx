@@ -117,7 +117,9 @@ const Checkbox = defineComponent({
     }
     ctx.expose({
       focus() {
-        state.inputRef?.focus()
+        state.inputRef?.focus({
+          preventScroll: props.preventScroll
+        })
       },
       blur() {
         state.inputRef?.blur()

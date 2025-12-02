@@ -158,7 +158,7 @@ const CheckboxDemo = defineComponent({
           </tempui-checkbox>
         </tempui-checkbox-group>
         <br />
-        <tempui-checkbox-group disabled style={{ width: '100%' }} aria-label="CheckboxGroup 示例">
+        <tempui-checkbox-group style={{ width: '100%' }} aria-label="CheckboxGroup 示例">
           <tempui-row>
             <tempui-col span={8}>
               <tempui-checkbox value="A">A</tempui-checkbox>

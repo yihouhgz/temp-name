@@ -21,7 +21,6 @@ const ResizeHandler = defineComponent({
       })
       useEventListener(window, 'mousemove', (e) => {
         if (isDragging) {
-          console.log(e, 'mousemove')
           ctx.emit('change', { width: 200, height: 200 }, e, props.direction)
         }
       })

@@ -21,6 +21,7 @@ import { Toast, ToastFactory } from './toast'
 import Resizable, { ResizeItem, ResizableGroup, ResizeHandler } from './resizable'
 import Typography, { Text } from './typography'
 import Checkbox, { CheckboxGroup } from './checkbox'
+import Radio from './radio'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -59,7 +60,8 @@ const components: Component[] = [
   Typography,
   Text,
   Checkbox,
-  CheckboxGroup
+  CheckboxGroup,
+  Radio
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -97,7 +99,8 @@ export {
   Typography,
   Text,
   Checkbox,
-  CheckboxGroup
+  CheckboxGroup,
+  Radio
 }
 
 const globalApis: { [key: string]: unknown } = {

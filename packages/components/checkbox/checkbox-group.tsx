@@ -61,8 +61,8 @@ const CheckboxGroup = defineComponent({
       triggerChangeProps()
     })
     watchEffect(() => {
-      const { name } = props
-      if (state.wrapperRef && name) {
+      const name = props.name || 'default'
+      if (state.wrapperRef) {
         state.wrapperRef.querySelectorAll('input[type="checkbox"]').forEach((item) => {
           item.setAttribute('name', name)
         })

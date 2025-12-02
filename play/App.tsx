@@ -5,6 +5,7 @@ import './styles/reset.scss'
 import TooltipDemo from './components/tooltip'
 import ResizableDemo from './components/resizable'
 import CheckboxDemo from './components/checkbox'
+import RadioDemo from './components/radio'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -937,6 +938,7 @@ const App = defineComponent(() => {
       <TooltipDemo></TooltipDemo>
       <ResizableDemo></ResizableDemo>
       <CheckboxDemo></CheckboxDemo>
+      <RadioDemo></RadioDemo>
     </div>
   )
 })

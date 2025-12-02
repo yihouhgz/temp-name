@@ -67,8 +67,7 @@ const ResizeGroup = defineComponent({
     })
     onMounted(() => {
       onElementResize(state.wrapperRef, () => {
-        const rect = state.wrapperRef?.getBoundingClientRect()
-        console.log(rect)
+        state.parentRect = getParentSize()
       })
       state.parentRect = getParentSize()
       handleInitSize()
@@ -204,8 +203,10 @@ const ResizeGroup = defineComponent({
       })
       state.isResizing = true
       const { clientX, clientY } = event as MouseEvent
-      const lastItem = state.allChildren[index - 1].$el,
-        nextItem = state.allChildren[index + 1].$el
+      const lastItem = state.allChildren[index - 1]?.$el,
+        nextItem = state.allChildren[index + 1]?.$el
+
+      if (!lastItem || !nextItem) return
 
       const lastStyle = window.getComputedStyle(lastItem)
       const nextStyle = window.getComputedStyle(nextItem)
@@ -251,8 +252,9 @@ const ResizeGroup = defineComponent({
       //itemIndex是 nextItem的index
       //index是节点的inxde
       const { direction } = props
-      const lastItem = state.allChildren[index - 1].$el
-      const nextItem = state.allChildren[index + 1].$el
+      const lastItem = state.allChildren[index - 1]?.$el
+      const nextItem = state.allChildren[index + 1]?.$el
+      if (!lastItem || !nextItem) return
       const lastItemProps = state.allChildren[index - 1]
       const nextItemProps = state.allChildren[index + 1]
       const {
@@ -312,14 +314,12 @@ const ResizeGroup = defineComponent({
 
       const lastItemPercent = state.itemPercentMap.get(itemIndex - 1)!,
         nextItemPercent = state.itemPercentMap.get(itemIndex)!
-      console.log(state.itemPercentMap, state.itemPercentMap, 'lastNewPercent, nextNewPercent')
 
       const lastNewPercent = (lastNewSize / parentSize) * 100
       const nextNewPercent = lastItemPercent + nextItemPercent - lastNewPercent // 消除浮点误差
       state.itemPercentMap.set(itemIndex - 1, lastNewPercent)
       state.itemPercentMap.set(itemIndex, nextNewPercent)
 
-      console.log(state.itemMinusMap, itemIndex, 'state.itemMinusMap')
       if (direction === 'horizontal') {
         lastItem.style.width = `calc(${lastNewPercent}% - ${state.itemMinusMap.get(itemIndex - 1)}px)`
         nextItem.style.width = `calc(${nextNewPercent}% - ${state.itemMinusMap.get(itemIndex)}px)`
