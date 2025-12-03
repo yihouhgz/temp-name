@@ -329,11 +329,61 @@ $buttonType: (
       &-#{$type} {
         padding: map-get($value, gPadding);
         line-height: map-get($value, lineHeight);
-        &:not(:last-child) {
-          padding-right: $spacing-radio_buttonRadioGroup-paddingRight;
-        }
+        // &:not(:last-child) {
+        //   padding-right: $spacing-radio_buttonRadioGroup-paddingRight;
+        // }
       }
     }
+  }
+
+  // type card
+  &-card {
+    flex-wrap: nowrap;
+    border-radius: $radius-radio_cardRadioGroup;
+    padding: $spacing-radio_cardRadioGroup-paddingY $spacing-radio_cardRadioGroup-paddingX;
+    background: $color-radio_cardRadioGroup-bg-default;
+    border: $width-radio_cardRadioGroup_checked-border solid
+      $color-radio_cardRadioGroup_border-default;
+    transition: $transitionValue;
+    &:not(.#{$prefix}-radio-disabled):hover {
+      background: $color-radio_cardRadioGroup-bg-hover;
+    }
+    &:not(.#{$prefix}-radio-disabled):active {
+      background: $color-radio_cardRadioGroup-bg-active;
+    }
+    &-checked {
+      background: $color-radio_cardRadioGroup-bg-checked;
+      border: $width-radio_cardRadioGroup_checked-border solid
+        $color-radio_cardRadioGroup_border-active;
+
+      &:not(.#{$prefix}-radio-disabled):hover {
+        background: $color-radio_cardRadioGroup-bg-checked;
+        border: $width-radio_cardRadioGroup_checked-border solid
+          $color-radio_cardRadioGroup_checked_border-hover;
+      }
+      &:not(.#{$prefix}-radio-disabled):active {
+        background: $color-radio_cardRadioGroup-bg-checked;
+        border: $width-radio_cardRadioGroup_checked-border solid
+          $color-radio_cardRadioGroup_checked_border-active;
+      }
+    }
+  }
+  &-disabled.#{$prefix}-radio-card-checked {
+    background: $color-radio_cardRadioGroup_disabled-bg-checked;
+    border: $width-radio_cardRadioGroup_checked_disabled-border solid
+      $color-radio_cardRadioGroup_checked_disabled-border-default;
+  }
+
+  // type == pureCard
+  &-pureCard &-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin-top: 0;
+    z-index: -1;
+    opacity: 0;
   }
 
   &-inner {
@@ -469,6 +519,12 @@ $buttonType: (
       border-radius: $radius-radio_buttonRadio;
       vertical-align: middle;
       width: fit-content;
+      label {
+        background: transparent;
+        &:not(:last-child) {
+          padding-right: $spacing-radio_buttonRadioGroup-paddingRight;
+        }
+      }
     }
   }
 }

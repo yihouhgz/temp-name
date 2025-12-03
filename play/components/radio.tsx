@@ -128,6 +128,70 @@ export default defineComponent({
               <tempui-radio value={3}>动态推送</tempui-radio>
             </tempui-radio-group>
           </tempui-space>
+          <br />
+          <br />
+
+          <tempui-radio-group
+            type="card"
+            defaultValue={1}
+            direction="vertical"
+            aria-label="单选组合示例"
+            name="demo-radio-group-card"
+          >
+            <tempui-radio
+              value={1}
+              disabled
+              extra="Semi Design 是由抖音前端团队与 UED 团队共同设计开发并维护的设计系统"
+              style={{ width: 280 + 'px' }}
+            >
+              单选框标题
+            </tempui-radio>
+            <tempui-radio
+              value={2}
+              extra="Semi Design 是由抖音前端团队与 UED 团队共同设计开发并维护的设计系统"
+              style={{ width: 280 + 'px' }}
+            >
+              单选框标题
+            </tempui-radio>
+            <tempui-radio
+              value={3}
+              extra="Semi Design 是由抖音前端团队与 UED 团队共同设计开发并维护的设计系统"
+              style={{ width: 280 + 'px' }}
+            >
+              单选框标题
+            </tempui-radio>
+          </tempui-radio-group>
+          <br />
+          <tempui-radio-group
+            type="pureCard"
+            defaultValue={2}
+            direction="vertical"
+            aria-label="单选组合示例"
+            name="demo-radio-group-pureCard"
+          >
+            <tempui-radio
+              value={1}
+              disabled={false}
+              extra="Semi Design 是由抖音前端团队与 UED 团队共同设计开发并维护的设计系统"
+              style={{ width: 280 + 'px' }}
+            >
+              单选框标题
+            </tempui-radio>
+            <tempui-radio
+              value={2}
+              extra="Semi Design 是由抖音前端团队与 UED 团队共同设计开发并维护的设计系统"
+              style={{ width: 280 + 'px' }}
+            >
+              单选框标题
+            </tempui-radio>
+            <tempui-radio
+              value={3}
+              extra="Semi Design 是由抖音前端团队与 UED 团队共同设计开发并维护的设计系统"
+              style={{ width: 280 + 'px' }}
+            >
+              单选框标题
+            </tempui-radio>
+          </tempui-radio-group>
         </div>
       )
     }

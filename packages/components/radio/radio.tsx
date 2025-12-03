@@ -1,4 +1,4 @@
-import { defineComponent, computed, reactive, getCurrentInstance } from 'vue'
+import { defineComponent, computed, reactive, getCurrentInstance, onMounted, watch } from 'vue'
 import { prefix } from 'constants/config'
 import { radioPorps, radioEmits, type RadioEvent } from './type'
 import {
@@ -9,9 +9,7 @@ import {
 } from '../_util'
 import { IconRadio } from '../icon'
 import './style/radio'
-import { watch } from 'vue'
 import { useRadioInject } from './radio-content'
-import { onMounted } from 'vue'
 
 type RadioStateType = {
   type: string
@@ -55,7 +53,9 @@ const Radio = defineComponent({
       state.buttonSize = buttonSize
       state.mode = mode
       state.type = type
-      state.disabled = disabled
+      if (!props.disabled) {
+        state.disabled = disabled
+      }
       state.checked = defaultValue === props.value || value === props.value
     }
     const radioInject = useRadioInject(null)
@@ -79,7 +79,12 @@ const Radio = defineComponent({
           [prefix + '-radio-button']: state.type === 'button',
           [prefix + '-radio-button-group']: state.type === 'button',
           [prefix + '-radio-button-' + state.buttonSize]: state.type === 'button'
-        }
+        },
+        ['card', 'pureCard'].includes(state.type) && [
+          prefix + '-radio-card',
+          state.checked && prefix + '-radio-card-checked'
+        ],
+        state.type === 'pureCard' && [prefix + '-radio-pureCard']
       ]
     })
     onMounted(() => {

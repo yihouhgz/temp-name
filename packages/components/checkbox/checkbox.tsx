@@ -42,7 +42,9 @@ const Checkbox = defineComponent({
         defaultValue: unknown
       }
       state.type = type
-      state.disabled = disabled
+      if (!props.disabled) {
+        state.disabled = disabled
+      }
       if (isArray(defaultValue)) {
         state.checked = defaultValue.includes(props.value)
       }

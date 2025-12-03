@@ -169,7 +169,7 @@ export const radioGroupProps = {
     default: undefined
   },
   /**
-   * 禁用所有子元素
+   * 禁用所有子元素 group优先级大于子元素disabled
    */
   disabled: {
     type: Boolean,
