@@ -1,6 +1,6 @@
 import { defineComponent, reactive, h } from 'vue'
 import { prefix } from 'constants/config'
-import { radioGroupEmits, radioGroupProps, type OptionsType } from './type'
+import { radioGroupEmits, radioGroupProps, type OptionsType, type RadioEvent } from './type'
 import { useRadioProvider } from './radio-content'
 import { computed } from 'vue'
 import { watchEffect } from 'vue'
@@ -10,11 +10,12 @@ import Radio from './radio'
 type RadioGroupStateType = {
   children: unknown[]
   wrapperRef: HTMLDivElement | null
-  checkedValues: unknown[]
+  checkedValues: unknown
   radioIndex: number
   collectPropsChangeMap: Map<number, (record: Record<string, unknown>) => void>
   collectStopPropagationMap: Map<number, (record: Record<string, unknown>) => void>
   collectPreventDefaultMap: Map<number, (record: Record<string, unknown>) => void>
+  collectCancelEventMap: Map<number, (checkedValue: unknown) => void>
 }
 const RadioGroup = defineComponent({
   setup(props, ctx) {
@@ -22,11 +23,16 @@ const RadioGroup = defineComponent({
     const state = reactive<RadioGroupStateType>({
       children: [],
       wrapperRef: null,
-      checkedValues: props.defaultValue || [],
+      checkedValues: props.defaultValue,
       radioIndex: 0, //记录jsx的radio
+      //收集child的change
       collectPropsChangeMap: new Map<number, (record: Record<string, unknown>) => void>(),
+      //收集child的stopPropagation
       collectStopPropagationMap: new Map<number, (record: Record<string, unknown>) => void>(),
-      collectPreventDefaultMap: new Map<number, (record: Record<string, unknown>) => void>()
+      ////收集child的preventDefault
+      collectPreventDefaultMap: new Map<number, (record: Record<string, unknown>) => void>(),
+      //收集child的cancelEvent
+      collectCancelEventMap: new Map<number, (checkedValue: unknown) => void>()
     })
     useRadioProvider({
       setRadioIndex() {
@@ -37,19 +43,31 @@ const RadioGroup = defineComponent({
       setRadioChild(index: number, child: unknown) {
         state.children[index] = child
       },
-      onChange() {
-        //
+      onChange(event: RadioEvent, value: unknown) {
+        triggerGroupChange(event, value)
+        triggerCancelEvent()
       },
       collectPropsChangeMap: state.collectPropsChangeMap,
       collectStopPropagationMap: state.collectStopPropagationMap,
-      collectPreventDefaultMap: state.collectPreventDefaultMap
+      collectPreventDefaultMap: state.collectPreventDefaultMap,
+      collectCancelEventMap: state.collectCancelEventMap
     })
     const wrapperClass = computed(() => {
       return [
         prefix + '-radio-group',
         prefix + '-radio-group-wrapper',
-        prefix + `-radio-group-${props.direction}`
+        props.type !== 'button' && prefix + `-radio-group-${props.direction}`,
+        props.type === 'button' && prefix + `-radio-group-button`
       ]
+    })
+    const triggerCollectPropsChangeMap = () => {
+      const gProps = { ...props }
+      state.collectPropsChangeMap.forEach((collectPropsChange) => {
+        collectPropsChange(gProps)
+      })
+    }
+    watchEffect(() => {
+      triggerCollectPropsChangeMap()
     })
     watchEffect(() => {
       const name = props.name || 'default'
@@ -59,9 +77,27 @@ const RadioGroup = defineComponent({
         })
       }
     })
-    const handleGroupChange = () => {}
+    const triggerCancelEvent = () => {
+      const checkedValues = state.checkedValues
+      state.collectCancelEventMap.forEach((collectCancelEvent) => {
+        collectCancelEvent(checkedValues)
+      })
+    }
+    const handleGroupChange = (e: RadioEvent, value: unknown) => {
+      triggerGroupChange(e, value)
+      triggerCancelEvent()
+    }
+    const triggerGroupChange = (event: RadioEvent, value: unknown) => {
+      state.checkedValues = value
+      ctx.emit('change', {
+        ...event,
+        target: {
+          value: value
+        }
+      })
+    }
     const render = () => {
-      const { options, disabled, defaultValue, type, mode, buttonSize } = props
+      const { options, disabled, defaultValue, type, mode, buttonSize, value } = props
       if (isArray(options) && options.length) {
         return options.map((item) => {
           if (isString(item)) {
@@ -77,8 +113,10 @@ const RadioGroup = defineComponent({
             mode,
             buttonSize,
             disabled,
-            defaultChecked: defaultValue === item.value,
-            onChange: handleGroupChange
+            defaultChecked: defaultValue === item.value || value === item.value,
+            onChange: (e: RadioEvent) => {
+              handleGroupChange(e, item.value)
+            }
           }
           return createElment(Radio, itemProps, {
             default: () => item.label

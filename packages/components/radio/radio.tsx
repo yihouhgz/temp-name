@@ -1,6 +1,6 @@
 import { defineComponent, computed, reactive, getCurrentInstance } from 'vue'
 import { prefix } from 'constants/config'
-import { radioPorps, radioEmits } from './type'
+import { radioPorps, radioEmits, type RadioEvent } from './type'
 import {
   hasPropsOrSlots,
   isBoolean,
@@ -9,8 +9,9 @@ import {
 } from '../_util'
 import { IconRadio } from '../icon'
 import './style/radio'
-import { watchEffect } from 'vue'
+import { watch } from 'vue'
 import { useRadioInject } from './radio-content'
+import { onMounted } from 'vue'
 
 type RadioStateType = {
   type: string
@@ -21,7 +22,7 @@ type RadioStateType = {
   focused: boolean
   inputRef: HTMLInputElement | null
   childIndex: number // group 子组件索引
-  onRadioChange?: (event: Record<string, unknown>) => void // group 子组变化时调用
+  onRadioChange?: (event: RadioEvent, value: unknown) => void // group 子组变化时调用
 }
 
 const Radio = defineComponent({
@@ -37,39 +38,55 @@ const Radio = defineComponent({
       childIndex: -1, // group 子组件索引
       onRadioChange: undefined // group 子组变化时调用
     })
-    watchEffect(() => {
-      state.checked = !!props.checked
-    })
+    watch(
+      () => props.checked,
+      () => (state.checked = !!props.checked)
+    )
     const instance = getCurrentInstance()
     const changeRadioProps = (groupProps: Record<string, unknown>) => {
-      const { type, disabled, defaultValue, buttonSize, mode } = groupProps as {
+      const { type, disabled, defaultValue, buttonSize, mode, value } = groupProps as {
         type: string
         disabled: boolean
         defaultValue: unknown
         buttonSize: string
         mode: string
+        value: string
       }
       state.buttonSize = buttonSize
       state.mode = mode
       state.type = type
       state.disabled = disabled
-      state.checked = defaultValue === props.value
+      state.checked = defaultValue === props.value || value === props.value
     }
     const radioInject = useRadioInject(null)
     if (radioInject) {
       state.childIndex = radioInject.setRadioIndex()
       state.onRadioChange = radioInject.onChange
+      radioInject.collectCancelEventMap?.set(state.childIndex, (checkedValue) => {
+        state.checked = checkedValue === props.value
+      })
       radioInject.collectPropsChangeMap?.set(state.childIndex, changeRadioProps)
     }
     const wrapperClass = computed(() => {
       return [
         prefix + '-radio',
         prefix + `-radio-${state.checked ? 'checked' : 'unchecked'}`,
-        props.disabled && prefix + '-radio-disabled',
+        state.disabled && prefix + '-radio-disabled',
         {
           [prefix + '-radio-focused']: state.focused
+        },
+        {
+          [prefix + '-radio-button']: state.type === 'button',
+          [prefix + '-radio-button-group']: state.type === 'button',
+          [prefix + '-radio-button-' + state.buttonSize]: state.type === 'button'
         }
       ]
+    })
+    onMounted(() => {
+      if (props.autoFocus) {
+        state.focused = true
+        state.inputRef?.focus()
+      }
     })
     const addonId = computed(() => {
       return props.addonId || useRandomIdWithPrefix('addon', 8)
@@ -78,13 +95,13 @@ const Radio = defineComponent({
       return useRandomIdWithPrefix('extra', 8)
     })
     const renderIcon = () => {
-      if (state.checked) {
+      if (state.checked && state.type !== 'button') {
         return <IconRadio />
       }
       return null
     }
     const handleClick = (event: MouseEvent) => {
-      if (props.disabled) {
+      if (state.disabled) {
         return
       }
       if (props.mode != 'advanced' && state.checked) {
@@ -127,6 +144,9 @@ const Radio = defineComponent({
         }
       }
       ctx.emit('change', event)
+      if (state.onRadioChange) {
+        state.onRadioChange(event, props.value)
+      }
     }
     const handleFocus = () => {
       if (state.inputRef?.matches(':focus-visible')) {
@@ -150,18 +170,18 @@ const Radio = defineComponent({
       return (
         <label
           class={wrapperClass.value}
-          onClick={(e: MouseEvent) => handleClick(e)}
           onMouseenter={(e: MouseEvent) => ctx.emit('mouseEnter', e)}
           onMouseleave={(e: MouseEvent) => ctx.emit('mouseLeave', e)}
         >
           <span
             class={[
               prefix + '-radio-inner',
-              prefix + `-radio-inner-${state.checked ? 'checked' : 'unchecked'}`
+              prefix + `-radio-inner-${state.checked ? 'checked' : 'unchecked'}`,
+              state.type === 'button' && prefix + '-radio-inner-button'
             ]}
           >
             <input
-              onClick={(e: MouseEvent) => e.stopPropagation()}
+              onClick={(e: MouseEvent) => handleClick(e)}
               type="radio"
               name={props.name}
               aria-label={props['aria-label']}
@@ -172,10 +192,25 @@ const Radio = defineComponent({
               onBlur={() => (state.focused = false)}
               onFocus={handleFocus}
             />
-            <span class={prefix + '-radio-inner-display'}>{renderIcon()}</span>
+            <span class={state.type !== 'button' && prefix + '-radio-inner-display'}>
+              {renderIcon()}
+            </span>
           </span>
           <div class={prefix + '-radio-content'}>
-            <span class={prefix + '-radio-addon'} id={addonId.value}>
+            <span
+              class={[
+                prefix + '-radio-addon',
+                state.type === 'button' && prefix + '-radio-addon-button',
+                state.type === 'button' && state.checked && prefix + '-radio-addon-button-checked',
+                state.type === 'button' && prefix + '-radio-addon-button-' + state.buttonSize,
+                state.type === 'button' &&
+                  state.disabled &&
+                  prefix + '-radio-addon-button-disabled',
+                props.addonClassName
+              ]}
+              style={props.addonStyle}
+              id={addonId.value}
+            >
               {ctx.slots.default?.()}
             </span>
             {isShowExtra ? (

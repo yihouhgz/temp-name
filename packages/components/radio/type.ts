@@ -1,6 +1,7 @@
 import type { CSSProperties, PropType } from 'vue'
 import { isBoolean } from '../_util'
 import type { ExtractPublicPropTypes } from 'vue'
+import { isObject } from 'lodash'
 
 export const radioType = ['default', 'button', 'card', 'pureCard'] as const
 export type RadioType = (typeof radioType)[number]
@@ -128,16 +129,17 @@ export type RadioRefMethods = {
   focus: () => void
   blur: () => void
 }
+export type RadioEvent = {
+  stopPropagation: () => void
+  preventDefault: () => void
+  target: { checked: boolean }
+}
 
 export const radioEmits = {
   /**
    * @description 点击回调函数
    */
-  change: (e: {
-    stopPropagation: () => void
-    preventDefault: () => void
-    target: { checked: boolean }
-  }) => isBoolean(e.target.checked),
+  change: (e: RadioEvent) => isBoolean(e.target.checked),
   mouseEnter: (e: Event) => e instanceof Event,
   mouseLeave: (e: Event) => e instanceof Event
 }
@@ -174,7 +176,7 @@ export const radioGroupProps = {
     default: false
   },
   /**
-   * radio 排列方向, 只对type='default'生效，可选值horizontal、vertical
+   * radio 排列方向, 不对type='button'生效，可选值horizontal、vertical
    */
   direction: {
     type: String as PropType<'horizontal' | 'vertical'>,
@@ -226,6 +228,6 @@ export const radioGroupEmits = {
   change: (e: {
     stopPropagation: () => void
     preventDefault: () => void
-    target: { checked: boolean }
-  }) => isBoolean(e.target.checked)
+    target: { value: unknown }
+  }) => isObject(e)
 }

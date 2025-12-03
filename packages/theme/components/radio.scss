@@ -114,9 +114,9 @@ $color-radio_primary-outline-focus: var(--#{$prefix}-color-primary-light-active)
 
 // 大尺寸按钮式单选标题字体大小
 $font-radio_buttonRadio_large-default-size: $font-size-regular;
-// 中尺寸按钮式单选标题字体大小
-$font-radio_buttonRadio_small-default-size: $font-size-small;
 // 小尺寸按钮式单选标题字体大小
+$font-radio_buttonRadio_small-default-size: $font-size-small;
+// 中尺寸按钮式单选标题字体大小
 $font-radio_buttonRadio_middle-default-size: $font-size-small;
 // 按钮式单选标题字重 - 默认态
 $font-radio_buttonRadio-default-fontWeight: $font-weight-bold;
@@ -207,7 +207,7 @@ $spacing-radio_buttonRadioGroup_small-paddingY: $spacing-extra-tight;
 $spacing-radio_buttonRadioGroup_middle-padding: $spacing-extra-tight;
 // 大尺寸按钮式单选组内边距
 $spacing-radio_buttonRadioGroup_large-padding: $spacing-extra-tight;
-// 中尺寸按钮式单选组右侧内边距
+// 按钮式单选组右侧内边距
 $spacing-radio_buttonRadioGroup-paddingRight: $spacing-none;
 // 卡片式单选组水平内边距
 $spacing-radio_cardRadioGroup-paddingX: $spacing-base;
@@ -221,6 +221,36 @@ $transitionValue:
     $transition_delay-radio-bg,
   border $transition_duration-radio-border $transition_function-radio-border
     $transition_delay-radio-border;
+
+$buttonType: (
+  'small': (
+    fontSize: $font-radio_buttonRadio_small-default-size,
+    padding: $spacing-radio_addon_buttonRadio_small-paddingY
+      $spacing-radio_addon_buttonRadio_small-paddingX,
+
+    gPadding: $spacing-radio_buttonRadioGroup_small-paddingY
+      $spacing-radio_buttonRadioGroup_small-paddingX,
+    lineHeight: $font-radio_buttonRadioGroup_small-lineHeight,
+
+    paddingRight: $spacing-radio_buttonRadioGroup-paddingRight
+  ),
+  'middle': (
+    fontSize: $font-radio_buttonRadio_middle-default-size,
+    padding: $spacing-radio_addon_buttonRadio_middle-paddingY
+      $spacing-radio_addon_buttonRadio_middle-paddingX,
+
+    gPadding: $spacing-radio_buttonRadioGroup_middle-padding,
+    lineHeight: $font-radio_buttonRadioGroup_middle-lineHeight
+  ),
+  'large': (
+    fontSize: $font-radio_buttonRadio_large-default-size,
+    padding: $spacing-radio_addon_buttonRadio_large-paddingY
+      $spacing-radio_addon_buttonRadio_large-paddingX,
+
+    gPadding: $spacing-radio_buttonRadioGroup_large-padding,
+    lineHeight: $font-radio_buttonRadioGroup_large-lineHeight
+  )
+);
 
 .#{$prefix}-radio {
   box-sizing: border-box;
@@ -283,6 +313,29 @@ $transitionValue:
     outline: $width-radio-outline solid $color-radio_primary-outline-focus;
   }
 
+  // type button
+  &-button {
+    padding: $spacing-radio_buttonRadio-padding;
+    background: $color-radio_buttonRadio-bg-default;
+    border-radius: $radius-radio_buttonRadio;
+    &-group {
+      position: relative;
+      padding: $spacing-radio_buttonRadio-padding;
+      border-radius: $radius-radio_buttonRadio;
+      line-height: $font-radio_buttonRadioGroup_middle-lineHeight;
+    }
+
+    @each $type, $value in $buttonType {
+      &-#{$type} {
+        padding: map-get($value, gPadding);
+        line-height: map-get($value, lineHeight);
+        &:not(:last-child) {
+          padding-right: $spacing-radio_buttonRadioGroup-paddingRight;
+        }
+      }
+    }
+  }
+
   &-inner {
     display: inline-flex;
     margin-top: 2px;
@@ -291,7 +344,19 @@ $transitionValue:
     height: 16px;
     vertical-align: sub;
     user-select: none;
-
+    cursor: pointer;
+    // type == button
+    &-button,
+    &-pureCard {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      margin-top: 0;
+      z-index: -1;
+      opacity: 0;
+    }
     &-input {
       position: absolute;
       left: 0;
@@ -337,9 +402,73 @@ $transitionValue:
     color: $color-radio_default-text-default;
     display: inline-flex;
     align-items: center;
+
+    // type == button
+    &-button {
+      text-align: center;
+      border-radius: $radius-radio_addon_buttonRadio;
+      font-weight: $font-radio_buttonRadio-default-fontWeight;
+      color: $color-radio_buttonRadio-text-default;
+      font-size: $font-radio_buttonRadio_small-default-size;
+      padding: $spacing-radio_addon_buttonRadio_middle-paddingY
+        $spacing-radio_addon_buttonRadio_middle-paddingX;
+      transition: $transitionValue;
+      margin-left: $spacing-radio_addon_buttonRadio_marginLeft;
+      @each $type, $value in $buttonType {
+        &-#{$type} {
+          font-size: map-get($value, fontSize);
+          padding: map-get($value, padding);
+        }
+      }
+      &:not(.#{$prefix}-radio-addon-button-disabled):hover {
+        background-color: $color-radio_addon_buttonRadio-bg-hover;
+      }
+
+      &-checked {
+        font-weight: $font-radio_buttonRadio-checked-fontWeight;
+        background: $color-radio_addon_buttonRadio-bg-checked;
+        color: $color-radio_addon_buttonRadio-text-checked;
+        &:not(.#{$prefix}-radio-addon-button-disabled):hover {
+          font-weight: $font-radio_buttonRadio-hover-fontWeight;
+          background: $color-radio_addon_buttonRadio-bg-checked;
+          color: $color-radio_buttonRadio-text-checked-hover;
+        }
+      }
+      &-disabled {
+        cursor: not-allowed;
+        color: $color-radio_buttonRadio-text-disabled;
+      }
+    }
   }
   &-extra {
     color: $color-radio_extra-text-default;
     box-sizing: border-box;
+  }
+
+  //radio-group
+  &-group {
+    font-size: 14px;
+    line-height: 20px;
+    font-family: $font-family;
+    &-horizontal {
+      display: inline-flex;
+      flex-wrap: wrap;
+      vertical-align: bottom;
+      gap: $spacing-radio_group_horizontal-marginRight;
+    }
+    &-vertical {
+      display: flex;
+      flex-direction: column;
+      row-gap: $spacing-radio_group_vertical-marginBottom;
+    }
+
+    // type == button
+    &-button {
+      display: inline-block;
+      background: $color-radio_buttonRadio-bg-default;
+      border-radius: $radius-radio_buttonRadio;
+      vertical-align: middle;
+      width: fit-content;
+    }
   }
 }
