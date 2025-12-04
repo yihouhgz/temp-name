@@ -7,6 +7,7 @@ import ResizableDemo from './components/resizable'
 import CheckboxDemo from './components/checkbox'
 import RadioDemo from './components/radio'
 import SkeletonDemo from './components/skeleton'
+import ProgressDemo from './components/progress'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -941,6 +942,7 @@ const App = defineComponent(() => {
       <CheckboxDemo></CheckboxDemo>
       <RadioDemo></RadioDemo>
       <SkeletonDemo></SkeletonDemo>
+      <ProgressDemo></ProgressDemo>
     </div>
   )
 })
