@@ -3,7 +3,7 @@ import { defineComponent, computed, reactive, getCurrentInstance, watch, ref } f
 import './style/switch'
 import { switchProps, switchEmits } from './type'
 import Spin from '../spin'
-import { hasPropsOrSlots, isBoolean, isUndefined, renderElementForPropsOrSlot } from '../_util'
+import { hasPropsOrSlots, isBoolean, renderElementForPropsOrSlot } from '../_util'
 import consola from '../_util/console'
 
 const Switch = defineComponent({
@@ -58,9 +58,8 @@ const Switch = defineComponent({
         ctx.emit('change', !state.checked)
       } else {
         state.checked = !state.checked
-        if (isUndefined(props.modelValue)) {
-          handleUpdateModelValue(state.checked)
-        }
+        handleUpdateModelValue(state.checked)
+        ctx.emit('change', state.checked)
       }
     }
     const handleUpdateModelValue = (value: boolean) => {

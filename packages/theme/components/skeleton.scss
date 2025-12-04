@@ -1,0 +1,145 @@
+@import '../base/constant';
+
+//骨架屏高亮动画时长
+$animation_duration-skeleton-highlight: 1400ms;
+//暂无
+$animation_function-skeleton-highlight: ease;
+
+//骨架屏背景色 - 默认
+$color-skeleton_default-bg-default: var(--#{$prefix}-color-fill-0);
+//骨架屏背景色 - 动画开启后
+$color-skeleton_loading-gradient-bg-active: var(--#{$prefix}-color-fill-1);
+
+//段落骨架屏高度
+$height-skeleton_li: 16px;
+//标题骨架屏高度
+$height-skeleton_title: $height-control-small;
+//按钮骨架屏高度
+$height-skeleton_button: $height-control-default;
+
+//骨架屏圆角
+$radius-skeleton_item: var(--#{$prefix}-border-radius-small);
+//骨架屏圆角
+$radius-skeleton_li: var(--#{$prefix}-border-radius-small);
+
+// /按钮骨架屏高度
+$spacing-skeleton_li-marginBottom: 10px;
+
+//头像骨架屏尺寸 - 极小
+$width-skeleton_avatar_extra_extra_small: 20px;
+//头像骨架屏尺寸 - 超小
+$width-skeleton_avatar_extra_small: 24px;
+//头像骨架屏尺寸 - 小
+$width-skeleton_avatar_small: 32px;
+//头像骨架屏尺寸 - 中
+$width-skeleton_avatar_medium: 48px;
+//头像骨架屏尺寸 - 大
+$width-skeleton_avatar_large: 72px;
+//头像骨架屏尺寸 - 超大
+$width-skeleton_avatar_extra_large: 128px;
+//按钮骨架屏宽度
+$width-skeleton_button: 115px;
+
+$childs: (image, avatar, title, button, paragraph);
+$avatarSizes: (
+  extra-small: (
+    width: $width-skeleton_avatar_extra_extra_small,
+    height: $width-skeleton_avatar_extra_extra_small
+  ),
+  small: (
+    width: $width-skeleton_avatar_small,
+    height: $width-skeleton_avatar_small
+  ),
+  medium: (
+    width: $width-skeleton_avatar_medium,
+    height: $width-skeleton_avatar_medium
+  ),
+  large: (
+    width: $width-skeleton_avatar_large,
+    height: $width-skeleton_avatar_large
+  ),
+  extra-large: (
+    width: $width-skeleton_avatar_extra_large,
+    height: $width-skeleton_avatar_extra_large
+  )
+);
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+@mixin animationGroup {
+  background: linear-gradient(
+    90deg,
+    $color-skeleton_default-bg-default 25%,
+    $color-skeleton_loading-gradient-bg-active 44%,
+    $color-skeleton_default-bg-default 88%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-loading $animation_duration-skeleton-highlight
+    $animation_function-skeleton-highlight infinite;
+  animation-fill-mode: forwards;
+}
+.#{$prefix}-skeleton {
+  @each $child in $childs {
+    .#{$prefix}-skeleton &-#{$child}-active {
+      @if ($child == 'paragraph') {
+        li {
+          @include animationGroup;
+        }
+      } @else {
+        @include animationGroup;
+      }
+    }
+  }
+  @each $child in $childs {
+    &-#{$child} {
+      background: $color-skeleton_default-bg-default;
+      border-radius: $radius-skeleton_item;
+      @if ($child == avatar) {
+        @each $size, $sizeProps in $avatarSizes {
+          &-#{$size} {
+            width: map-get($sizeProps, 'width');
+            height: map-get($sizeProps, 'height');
+          }
+        }
+        &-circle {
+          border-radius: 50%;
+        }
+      }
+      @if ($child == image) {
+        width: 100%;
+        height: 100%;
+      }
+      @if ($child == title) {
+        width: 100%;
+        height: $height-skeleton_title;
+      }
+      @if ($child == paragraph) {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        background-color: transparent;
+        border-radius: 0;
+        li {
+          background: $color-skeleton_default-bg-default;
+          border-radius: $radius-skeleton_li;
+          width: 100%;
+          height: $height-skeleton_li;
+          margin-bottom: $spacing-skeleton_li-marginBottom;
+          &:last-child {
+            width: 60%;
+            margin-bottom: 0;
+          }
+        }
+      }
+      @if ($child == button) {
+        width: $width-skeleton_button;
+        height: $height-skeleton_button;
+      }
+    }
+  }
+}

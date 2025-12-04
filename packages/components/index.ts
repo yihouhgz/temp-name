@@ -22,6 +22,13 @@ import Resizable, { ResizeItem, ResizableGroup, ResizeHandler } from './resizabl
 import Typography, { Text } from './typography'
 import Checkbox, { CheckboxGroup } from './checkbox'
 import Radio, { RadioGroup } from './radio'
+import Skeleton, {
+  SkeletonAvatar,
+  SkeletonButton,
+  SkeletonParagraph,
+  SkeletonTitle,
+  SkeletonImage
+} from './skeleton'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -62,7 +69,13 @@ const components: Component[] = [
   Checkbox,
   CheckboxGroup,
   Radio,
-  RadioGroup
+  RadioGroup,
+  Skeleton,
+  SkeletonAvatar,
+  SkeletonButton,
+  SkeletonParagraph,
+  SkeletonTitle,
+  SkeletonImage
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -102,7 +115,13 @@ export {
   Checkbox,
   CheckboxGroup,
   Radio,
-  RadioGroup
+  RadioGroup,
+  Skeleton,
+  SkeletonAvatar,
+  SkeletonButton,
+  SkeletonParagraph,
+  SkeletonTitle,
+  SkeletonImage
 }
 
 const globalApis: { [key: string]: unknown } = {

@@ -6,6 +6,7 @@ import TooltipDemo from './components/tooltip'
 import ResizableDemo from './components/resizable'
 import CheckboxDemo from './components/checkbox'
 import RadioDemo from './components/radio'
+import SkeletonDemo from './components/skeleton'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -939,6 +940,7 @@ const App = defineComponent(() => {
       <ResizableDemo></ResizableDemo>
       <CheckboxDemo></CheckboxDemo>
       <RadioDemo></RadioDemo>
+      <SkeletonDemo></SkeletonDemo>
     </div>
   )
 })
