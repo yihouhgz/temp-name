@@ -44,7 +44,7 @@ const Progress = defineComponent({
         return DEFAULT_COLOR
       }
       for (let i = 0; i < backgroundColor.length; i++) {
-        if (state.percent < backgroundColor[i + 1]?.percent) {
+        if (state.percent >= backgroundColor[i + 1]?.percent) {
           return backgroundColor[i].color
         }
       }
