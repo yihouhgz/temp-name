@@ -4,6 +4,7 @@ import { prefix } from 'constants/config'
 
 export const directions = ['horizontal', 'vertical'] as const
 export type StrokeArray = Array<{ percent: number; color: string }>
+export const DEFAULT_COLOR = `var(--${prefix}-color-success)`
 export const progressProps = {
   /**
    * aria-label属性，用来给当前元素加上的标签描述, 用于提升可访问性
@@ -39,7 +40,7 @@ export const progressProps = {
    */
   format: {
     type: Function as PropType<(percent: number) => VueNode>,
-    default: () => (percent: number) => percent + '%'
+    default: (percent: number) => percent + '%'
   },
   /**
    * 进度条 id
@@ -49,7 +50,7 @@ export const progressProps = {
     default: ''
   },
   /**
-   * 进度条轨道宽度
+   * 进度条轨道填充色
    */
   orbitStroke: {
     type: String,
@@ -60,6 +61,7 @@ export const progressProps = {
    */
   percent: {
     type: Number,
+    validator: (val: number) => val >= 0 && val <= 100,
     default: 0
   },
   /**
@@ -81,7 +83,7 @@ export const progressProps = {
    */
   stroke: {
     type: [String, Array] as PropType<string | StrokeArray>,
-    default: () => `var(--${prefix}-color-success)`
+    default: () => DEFAULT_COLOR
   },
   /**
    * 是否自动生成渐变色补齐区间颜色，需要 stroke 设置至少一个颜色区间
@@ -116,6 +118,6 @@ export const progressProps = {
    */
   width: {
     type: Number,
-    default: 72
+    default: undefined
   }
 }

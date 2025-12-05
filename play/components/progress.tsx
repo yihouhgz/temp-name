@@ -1,7 +1,14 @@
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 const ProgressDemo = defineComponent({
   setup() {
+    const percent = ref(20)
+    const strokeArr = [
+      { percent: 20, color: 'red' },
+      { percent: 40, color: 'orange-9' },
+      { percent: 60, color: 'light-green-8' },
+      { percent: 80, color: 'hsla(125, 50%, 46% / 1)' }
+    ]
     return () => (
       <div style="margin-top:20px">
         <div style={{ width: 200 + 'px' }}>
@@ -39,7 +46,7 @@ const ProgressDemo = defineComponent({
             aria-label="disk usage"
           />
         </div>
-        <div>
+        <div style={{ display: 'flex' }}>
           <tempui-progress
             percent={10}
             type="circle"
@@ -64,6 +71,61 @@ const ProgressDemo = defineComponent({
             style={{ margin: 5 + 'px' }}
             aria-label="disk usage"
           />
+        </div>
+        <div style={{ width: 200 + 'px' }}>
+          <tempui-progress percent={percent.value} showInfo aria-label="disk usage" />
+          <tempui-progress
+            size="small"
+            showInfo
+            type="circle"
+            percent={percent.value}
+            aria-label="disk usage"
+          />
+          <tempui-button
+            onClick={() => {
+              percent.value = percent.value - 10
+            }}
+          >
+            -
+          </tempui-button>
+          <tempui-button
+            onClick={() => {
+              percent.value = percent.value + 10
+            }}
+          >
+            +
+          </tempui-button>
+        </div>
+        <div style={{ width: 200 + 'px' }}>
+          <tempui-progress
+            percent={percent.value}
+            stroke={strokeArr}
+            showInfo
+            type="circle"
+            width={100}
+            aria-label="disk usage"
+          />
+          <tempui-progress
+            percent={percent.value}
+            stroke={strokeArr}
+            showInfo
+            style={{ margin: '20px 0 10px' }}
+            aria-label="disk usage"
+          />
+          <tempui-button
+            onClick={() => {
+              percent.value = percent.value - 10
+            }}
+          >
+            -
+          </tempui-button>
+          <tempui-button
+            onClick={() => {
+              percent.value = percent.value + 10
+            }}
+          >
+            + {percent.value}
+          </tempui-button>
         </div>
       </div>
     )
