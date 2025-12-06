@@ -30,6 +30,7 @@ import Skeleton, {
   SkeletonImage
 } from './skeleton'
 import Progress from './progress'
+import Banner from './banner'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -77,7 +78,8 @@ const components: Component[] = [
   SkeletonParagraph,
   SkeletonTitle,
   SkeletonImage,
-  Progress
+  Progress,
+  Banner
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -112,6 +114,9 @@ export {
   Toast,
   ToastFactory,
   Resizable,
+  ResizeItem,
+  ResizableGroup,
+  ResizeHandler,
   Typography,
   Text,
   Checkbox,
@@ -124,7 +129,8 @@ export {
   SkeletonParagraph,
   SkeletonTitle,
   SkeletonImage,
-  Progress
+  Progress,
+  Banner
 }
 
 const globalApis: { [key: string]: unknown } = {

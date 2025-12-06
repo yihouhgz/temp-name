@@ -8,6 +8,7 @@ import CheckboxDemo from './components/checkbox'
 import RadioDemo from './components/radio'
 import SkeletonDemo from './components/skeleton'
 import ProgressDemo from './components/progress'
+import BannerDemo from './components/banner'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -943,6 +944,7 @@ const App = defineComponent(() => {
       <RadioDemo></RadioDemo>
       <SkeletonDemo></SkeletonDemo>
       <ProgressDemo></ProgressDemo>
+      <BannerDemo></BannerDemo>
     </div>
   )
 })

@@ -43,7 +43,8 @@ export const isIncludedSlot = (slotName: string, vm: ComponentInternalInstance) 
 export const hasPropsOrSlots = (slotName: string, vm: ComponentInternalInstance | null) => {
   if (!vm) return false
   const { slots, props } = vm
-  return Boolean(props[slotName]) || isFunction(slots?.[slotName])
+  // return Boolean(props[slotName]) || isFunction(slots?.[slotName])
+  return !isUndefined(props[slotName]) || isFunction(slots?.[slotName])
 }
 
 // 处理props传值或者slot的情况 props.solt 优先级高于slots.solt
