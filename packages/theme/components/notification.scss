@@ -1,0 +1,102 @@
+@import '../base/constant';
+
+// 出现时-动画持续时间
+$animation_duration-notification-show: 300ms;
+// 出现时-过渡曲线
+$animation_function-notification-show: cubic-bezier(0.62, 0.63, 0, 1.13);
+// 出现时-延迟时间
+$animation_delay-notification-show: 0ms;
+// 出现时-初始透明度
+$animation_opacity-notification-show: 0;
+
+// 消失时-动画持续时间
+$animation_duration-notification-hide: 300ms;
+// 消失时-过渡曲线
+$animation_function-notification-hide: cubic-bezier(0.62, 0.63, 0, 1.13);
+// 消失时-延迟时间
+$animation_delay-notification-hide: 0ms;
+// 消失时-结束透明度
+$animation_opacity-notification-hide: 0;
+
+// 通知背景色
+$color-notification-bg-default: var(--#{$prefix}-color-bg-3);
+
+// 通知 信息 图标颜色
+$color-notification_info-icon: var(--#{$prefix}-color-info);
+// 通知 警告 图标颜色
+$color-notification_warning-icon: var(--#{$prefix}-color-warning);
+// 通知 危险 图标颜色
+$color-notification_danger-icon: var(--#{$prefix}-color-danger);
+// 通知 成功 图标颜色
+$color-notification_success-icon: var(--#{$prefix}-color-success);
+
+// 通知 标题 文本颜色
+$color-notification_title-text: var(--#{$prefix}-color-text-0);
+// 通知 内容 文本颜色
+$color-notification_content-text: var(--#{$prefix}-color-text-1);
+// 通知 关闭按钮 图标颜色
+$color-notification_closeBtn-icon: var(--#{$prefix}-color-text-2);
+
+// 彩色通知警告背景色
+$color-notification_warning_light-bg: var(--#{$prefix}-color-warning-light-default);
+// 彩色通知警告描边色
+$color-notification_warning_light-border: var(--#{$prefix}-color-warning);
+
+// 彩色通知成功背景色
+$color-notification_success_light-bg: var(--#{$prefix}-color-success-light-default);
+// 彩色通知成功描边色
+$color-notification_success_light-border: var(--#{$prefix}-color-success);
+
+// 彩色通知信息背景色
+$color-notification_info_light-bg: var(--#{$prefix}-color-info-light-default);
+// 彩色通知信息描边色
+$color-notification_info_light-border: var(--#{$prefix}-color-info);
+
+// 彩色通知危险背景色
+$color-notification_danger_light-bg: var(--#{$prefix}-color-danger-light-default);
+// 彩色通知危险描边色
+$color-notification_danger_light-border: var(--#{$prefix}-color-danger);
+
+// 透明背景色叠加层(与bg0保持一致不建议修改)
+$color-notification_ambient-bg: var(--#{$prefix}-color-bg-0);
+
+// 通知卡片标题字重
+$font-notification_notice_title-fontWeight: $font-weight-bold;
+// 通知卡片内容字重
+$font-notification_notice_content-fontWeight: $font-weight-regular;
+
+// 通知卡片圆角大小
+$radius-notification_notice: var(--#{$prefix}-border-radius-medium);
+
+// 通知列表外边距
+$spacing-notification_list-margin: 0;
+// 通知列表内边距
+$spacing-notification_list-padding: 0;
+
+// 通知卡片顶部内边距
+$spacing-notification_notice-paddingTop: $spacing-base;
+// 通知卡片右侧内边距
+$spacing-notification_notice-paddingRight: $spacing-base-tight;
+// 通知卡片底部内边距
+$spacing-notification_notice-paddingBottom: $spacing-base;
+// 通知卡片左侧内边距
+$spacing-notification_notice-paddingLeft: $spacing-base-loose;
+// 通知卡片外边距
+$spacing-notification_notice-margin: $spacing-base-loose;
+// 通知卡片右侧外边距
+$spacing-notification_notice-marginRight: $spacing-base-tight;
+// 通知卡片标题底部外边距
+$spacing-notification_notice_title-marginBottom: $spacing-extra-tight;
+// 通知卡片内容右侧外边距
+$spacing-notification_notice_content_wrapper-marginRight: 8px;
+// 通知卡片图标右侧外边距
+$spacing-notification_notice_icon-marginRight: $spacing-base-tight;
+
+// 通知宽度
+$width-notification_notice: auto;
+// 通知最小宽度
+$width-notification_notice_minWidth: 320px;
+// 通知图标宽度
+$width-notification_notice-icon: $width-icon-extra-large;
+// 通知描边宽度
+$width-notification_notice-border: 1px;

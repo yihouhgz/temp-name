@@ -17,20 +17,28 @@ import { Text } from '../typography'
 const Banner = defineComponent({
   setup(props, ctx) {
     const state = reactive({
-      visible: true
+      visible: true,
+      focus: false
     })
     const wrapperClass = computed(() => {
       return [
         `${prefix}-banner`,
         `${prefix}-banner-${props.type}`,
-        props.bordered && `${prefix}-banner-${props.type}-border`,
-        props.fullMode && `${prefix}-banner-full`
+        props.bordered && !props.fullMode && `${prefix}-banner-${props.type}-bordered`,
+        props.fullMode && `${prefix}-banner-full`,
+        !props.fullMode && `${prefix}-banner-in-container`
       ]
     })
     const instance = getCurrentInstance()
-    const handleClose = (event: MouseEvent) => {
+    const handleClose = (event: Event) => {
       state.visible = false
       ctx.emit('close', event)
+    }
+    const handleFocus = () => {
+      state.focus = true
+    }
+    const handleBlur = () => {
+      state.focus = true
     }
     const renderIcon = () => {
       let icon = null
@@ -51,9 +59,23 @@ const Banner = defineComponent({
       }
       return <div class={`${prefix}-banner-icon`}>{icon}</div>
     }
+    const renderTitle = () => {
+      if (hasPropsOrSlots('title', instance)) {
+        return (
+          <Text component={document.createElement('div')} class={`${prefix}-banner-title`}>
+            {renderElementForPropsOrSlot('title', instance)}
+          </Text>
+        )
+      }
+      return null
+    }
     const renderDescription = () => {
       if (hasPropsOrSlots('description', instance)) {
-        return <Text>{renderElementForPropsOrSlot('description', instance)}</Text>
+        return (
+          <Text component={document.createElement('div')} class={`${prefix}-banner-description`}>
+            {renderElementForPropsOrSlot('description', instance)}
+          </Text>
+        )
       }
       return null
     }
@@ -73,6 +95,8 @@ const Banner = defineComponent({
       }
       return (
         <Button
+          onBlur={handleBlur}
+          onFocus={handleFocus}
           class={`${prefix}-banner-close-icon`}
           onClick={handleClose}
           aria-label="close"
@@ -85,15 +109,20 @@ const Banner = defineComponent({
       )
     }
     const renderBanner = () => {
+      const template = ctx.slots.default?.()
       return (
         <div class={wrapperClass.value} role="alert">
           <div class={`${prefix}-banner-content-wrapper`}>
             <div class={`${prefix}-banner-content`}>
               {renderIcon()}
-              <div class={`${prefix}-banner-content-body`}>{renderDescription()}</div>
+              <div class={`${prefix}-banner-content-body`}>
+                {renderTitle()}
+                {renderDescription()}
+              </div>
             </div>
             {renderCloseIcon()}
           </div>
+          {template && <div class={`${prefix}-banner-extra`}>{template}</div>}
         </div>
       )
     }

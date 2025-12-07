@@ -123,7 +123,9 @@ export const buttonEmits = {
   click: (e: Event) => e instanceof Event,
   mouseenter: (e: Event) => e instanceof Event,
   mouseleave: (e: Event) => e instanceof Event,
-  mousedown: (e: Event) => e instanceof Event
+  mousedown: (e: Event) => e instanceof Event,
+  focus: (e: Event) => e instanceof Event,
+  blur: (e: Event) => e instanceof Event
 }
 
 export const buttonGroupProps = {

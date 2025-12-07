@@ -92,12 +92,24 @@ $width-banner-border: 1px;
       flex-direction: row;
     }
   }
+  &-title + &-description {
+    margin-top: $spacing-banner_title_description-marginTop;
+  }
   &-close-icon {
     width: $width-banner_closeBtn;
     height: $height-banner_closeBtn;
+    margin-left: $spacing-banner_closeBtn-marginLeft;
+  }
+  &-full &-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
   }
   &-icon {
     display: flex;
     margin-right: 12px;
+  }
+  &-in-container {
+    border-radius: $radius-banner;
   }
 }

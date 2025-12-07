@@ -759,6 +759,10 @@ $themes: (
         background-color: map-get($properties, 'bg-active');
         border-color: map-get($properties, 'border-active');
       }
+      &:focus-visible {
+        // outline: $width-button-outline solid map-get($properties, 'outline-focus');
+        outline: $width-button-outline solid $color-button_primary-outline-focus;
+      }
       &-disabled {
         background-color: map-get($properties, 'disabled-bg-default');
       }

@@ -4,7 +4,7 @@ import { strings } from './constant'
 const types = Object.values(strings.type)
 export const brannerProps = {
   /**
-   * @property 是否有边框
+   * @property 是否有边框 非全屏模式下生效
    */
   bordered: {
     type: Boolean,

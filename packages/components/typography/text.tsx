@@ -13,6 +13,7 @@ import Tooltip from '../tooltip'
 import Popover from '../popover'
 import './style/typography'
 import type { StyleValue } from 'vue'
+import type { VueNode } from '../_util/type'
 const Text = defineComponent({
   setup(props, ctx) {
     const createElement = h
@@ -39,11 +40,12 @@ const Text = defineComponent({
         props.size && `${prefix}-typography-${props.size}`,
         props.type && `${prefix}-typography-${props.type}`,
         props.weight && `${prefix}-typography-${props.weight}`,
-        props.disabled && `${prefix}-typography-disabled`
+        props.disabled && `${prefix}-typography-disabled`,
+        attar.class
       ]
     })
     const getComponentStyle = computed<StyleValue>(() => {
-      const style: { [key: string]: string | number } = {}
+      const style: { [key: string]: string | number } = Object.assign({}, attar.style)
       if (
         props.ellipsis &&
         !isBoolean(props.ellipsis) &&
@@ -164,7 +166,7 @@ const Text = defineComponent({
               } = showTooltip
               if (type === 'tooltip') {
                 return (
-                  <Tooltip showArrow content={opts.content} position="top">
+                  <Tooltip showArrow content={opts.content as VueNode} position="top">
                     {render()}
                   </Tooltip>
                 )
