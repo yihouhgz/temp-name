@@ -35,6 +35,13 @@ export default {
       format: 'commonjs'
     }
   ],
+  watch: {
+    include: ['packages/**/*'],
+    chokidar: {
+      ignoreInitial: true,
+      ignored: ['**/node_modules/**', '**/dist/**']
+    }
+  },
   external: ['vue'],
   treeshake: true,
   plugins: [

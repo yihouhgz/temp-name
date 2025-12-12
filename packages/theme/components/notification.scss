@@ -100,3 +100,228 @@ $width-notification_notice_minWidth: 320px;
 $width-notification_notice-icon: $width-icon-extra-large;
 // 通知描边宽度
 $width-notification_notice-border: 1px;
+
+$notification-animations: (
+  top: (
+    show: (
+      translateY(-100%),
+      translateY(0)
+    ),
+    hide: (
+      translateY(0),
+      translateY(-100%)
+    )
+  ),
+  topLeft: (
+    show: (
+      translateX(-100%),
+      translateX(0)
+    ),
+    hide: (
+      translateX(0),
+      translateX(-100%)
+    )
+  ),
+  topRight: (
+    show: (
+      translateX(100%),
+      translateX(0)
+    ),
+    hide: (
+      translateX(0),
+      translateX(100%)
+    )
+  ),
+  bottom: (
+    show: (
+      translateY(100%),
+      translateY(0)
+    ),
+    hide: (
+      translateY(0),
+      translateY(100%)
+    )
+  ),
+  bottomLeft: (
+    show: (
+      translateX(-100%),
+      translateX(0)
+    ),
+    hide: (
+      translateX(0),
+      translateX(-100%)
+    )
+  ),
+  bottomRight: (
+    show: (
+      translateX(100%),
+      translateX(0)
+    ),
+    hide: (
+      translateX(0),
+      translateX(100%)
+    )
+  )
+);
+
+// 循环生成动画关键帧
+@each $position, $animations in $notification-animations {
+  $show-transforms: nth(map-get($animations, show), 1);
+  $show-end-transforms: nth(map-get($animations, show), 2);
+
+  @keyframes #{$prefix}-notification-slideShow_#{$position} {
+    0% {
+      opacity: 0;
+      transform: #{$show-transforms};
+    }
+
+    to {
+      opacity: 1;
+      transform: #{$show-end-transforms};
+    }
+  }
+
+  .#{$prefix}-notification-notice-placement-#{$position}-show {
+    animation: #{$prefix}-notification-slideShow_#{$position}
+      $animation_duration-notification-show
+      $animation_delay-notification-show
+      $animation_function-notification-show;
+  }
+
+  $hide-transforms: nth(map-get($animations, hide), 1);
+  $hide-end-transforms: nth(map-get($animations, hide), 2);
+
+  @keyframes #{$prefix}-notification-slideHide_#{$position} {
+    0% {
+      opacity: 1;
+      transform: #{$hide-transforms};
+    }
+
+    to {
+      opacity: 0;
+      transform: #{$hide-end-transforms};
+    }
+  }
+
+  .#{$prefix}-notification-notice-placement-#{$position}-hide {
+    animation: #{$prefix}-notification-slideHide_#{$position}
+      $animation_duration-notification-hide
+      $animation_delay-notification-hide
+      $animation_function-notification-hide;
+  }
+}
+
+$types: (
+  warning: (
+    bg: $color-notification_warning_light-bg,
+    icon: $color-notification_warning-icon,
+    border: $color-notification_warning_light-border
+  ),
+  success: (
+    bg: $color-notification_success_light-bg,
+    icon: $color-notification_success-icon,
+    border: $color-notification_success_light-border
+  ),
+  info: (
+    bg: $color-notification_info_light-bg,
+    icon: $color-notification_info-icon,
+    border: $color-notification_info_light-border
+  ),
+  error: (
+    bg: $color-notification_danger_light-bg,
+    icon: $color-notification_danger-icon,
+    border: $color-notification_danger_light-border
+  )
+);
+
+.#{$prefix}-notification {
+  &-wrapper {
+    position: fixed;
+  }
+  &-list {
+    position: fixed;
+    box-sizing: border-box;
+    margin: $spacing-notification_list-margin;
+    padding: $spacing-notification_list-padding;
+    z-index: 1010;
+    pointer-events: none;
+    &-placement {
+      &-topRight {
+        right: 0;
+        top: 0;
+      }
+    }
+  }
+
+  //通知
+  &-notice {
+    box-shadow: var(--#{$prefix}-shadow-elevated);
+    border-radius: $radius-notification_notice;
+    padding: $spacing-notification_notice-paddingTop $spacing-notification_notice-paddingRight
+      $spacing-notification_notice-paddingBottom $spacing-notification_notice-paddingLeft;
+    margin: $spacing-notification_notice-margin $spacing-notification_notice-marginRight;
+    width: $width-notification_notice;
+    min-width: $width-notification_notice_minWidth;
+    background-color: $color-notification-bg-default;
+    position: relative;
+    display: flex;
+    pointer-events: auto;
+
+    //theme light
+    @each $type, $styles in $types {
+      &-light.#{$prefix}-notification-notice-#{$type} {
+        background-color: map-get($styles, bg);
+        border: $width-notification_notice-border solid map-get($styles, border);
+      }
+    }
+
+    &-inner {
+      display: flex;
+      width: 100%;
+      min-width: 0;
+    }
+    &-icon {
+      width: $width-notification_notice-icon;
+      font-size: 16px;
+      line-height: 22px;
+      font-family: $font-family;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      height: 100%;
+      margin-right: $spacing-notification_notice_icon-marginRight;
+      @each $type, $styles in $types {
+        &-#{$type} {
+          color: map-get($styles, icon);
+        }
+      }
+    }
+    &-content {
+      font-size: 14px;
+      line-height: 20px;
+      font-family: $font-family;
+      font-weight: $font-notification_notice_content-fontWeight;
+      color: $color-notification_content-text;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      &-wrapper {
+        flex: 1 1 auto;
+        margin-right: $spacing-notification_notice_content_wrapper-marginRight;
+        min-width: 0;
+      }
+    }
+    &-title {
+      font-size: 16px;
+      line-height: 22px;
+      font-family: $font-family;
+      font-weight: $font-notification_notice_title-fontWeight;
+      color: $color-notification_title-text;
+      margin-bottom: $spacing-notification_notice_title-marginBottom;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    &-icon-close .#{$prefix}-icon {
+      color: $color-notification_closeBtn-icon;
+    }
+  }
+}

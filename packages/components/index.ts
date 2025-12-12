@@ -31,6 +31,7 @@ import Skeleton, {
 } from './skeleton'
 import Progress from './progress'
 import Banner from './banner'
+import Notification from './notification'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -79,7 +80,8 @@ const components: Component[] = [
   SkeletonTitle,
   SkeletonImage,
   Progress,
-  Banner
+  Banner,
+  Notification
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -130,7 +132,8 @@ export {
   SkeletonTitle,
   SkeletonImage,
   Progress,
-  Banner
+  Banner,
+  Notification
 }
 
 const globalApis: { [key: string]: unknown } = {

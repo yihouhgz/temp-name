@@ -4,7 +4,8 @@ export const strings = {
     success: 'success',
     info: 'info',
     warning: 'warning',
-    error: 'error'
+    error: 'error',
+    loading: 'loading'
   },
   position: {
     top: 'top',
@@ -17,5 +18,10 @@ export const strings = {
   theme: {
     light: 'light',
     normal: 'normal'
+  },
+  defaultOptions: {
+    defaultDuration: 3,
+    defaultPosition: 'topRight',
+    defaultZIndex: 1010
   }
 } as const

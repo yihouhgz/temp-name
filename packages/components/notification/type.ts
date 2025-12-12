@@ -2,19 +2,21 @@ import type { PropType } from 'vue'
 import { strings } from './constants'
 import type { VueNode } from '../_util/type'
 import { isNumber, isString } from '../_util'
-type NotificationType = (typeof strings.notificationType)[keyof typeof strings.notificationType]
-type Position = (typeof strings.position)[keyof typeof strings.position]
+
+export type NotificationType =
+  (typeof strings.notificationType)[keyof typeof strings.notificationType]
+export type Position = (typeof strings.position)[keyof typeof strings.position]
 
 export type OptionsType = {
-  content: string | VueNode | (() => VueNode) | null
+  content: VueNode
   duration?: number
   getPopupContainer?: () => HTMLElement
-  icon?: string | VueNode | (() => VueNode) | null
+  icon?: VueNode
   id?: string | number
   position?: Position
   showClose?: boolean
   theme?: (typeof strings.theme)[keyof typeof strings.theme]
-  title?: string | VueNode | (() => VueNode) | null
+  title?: VueNode
   zIndex?: number
   onClick?: (e: Event) => void
   onClose?: () => void
@@ -32,7 +34,7 @@ export type ConfigOptiosnType = {
   zIndex?: number
 }
 
-export const NotificationProps = {
+export const notificationProps = {
   /**
    * @property 通知类型
    */
@@ -53,7 +55,7 @@ export const NotificationProps = {
    */
   duration: {
     type: Number,
-    default: 3
+    default: strings.defaultOptions.defaultDuration
   },
   /**
    * @property 指定父级 DOM，弹层将会渲染至该 DOM 中，自定义需要设置 position: relative 这会改变浮层 DOM 树位置，但不会改变视图渲染位置。
