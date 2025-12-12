@@ -32,6 +32,8 @@ import Skeleton, {
 import Progress from './progress'
 import Banner from './banner'
 import Notification from './notification'
+import Feedback from './feedback'
+import SideSheet from './side-sheet'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -81,7 +83,9 @@ const components: Component[] = [
   SkeletonImage,
   Progress,
   Banner,
-  Notification
+  Notification,
+  Feedback,
+  SideSheet
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -133,7 +137,9 @@ export {
   SkeletonImage,
   Progress,
   Banner,
-  Notification
+  Notification,
+  Feedback,
+  SideSheet
 }
 
 const globalApis: { [key: string]: unknown } = {
