@@ -1,8 +1,8 @@
-import { defineComponent, getCurrentInstance, computed } from 'vue'
+import { defineComponent, getCurrentInstance, computed, reactive, useAttrs } from 'vue'
 import type { StyleValue } from 'vue'
 import { prefix } from 'constants/config'
 import { notificationProps, notificationEmits } from './type'
-import { hasPropsOrSlots, renderElementForPropsOrSlot, useRandomId } from '../_util'
+import { hasPropsOrSlots, renderElementForPropsOrSlot, useRandomId, useSetTimeout } from '../_util'
 import Button from '../button'
 import {
   IconTickCircle,
@@ -14,17 +14,27 @@ import {
 } from '../icon'
 import { strings } from './constants'
 import CSSAnimation from '../css-animation'
-import { reactive } from 'vue'
+import { useNotification } from './content'
+import { onMounted } from 'vue'
 
 type StateType = {
   animationState: 'enter' | 'leave'
+  isAnimating: boolean
 }
 
 const Notification = defineComponent({
-  setup(props) {
+  setup(props, ctx) {
     const state = reactive<StateType>({
-      animationState: 'enter'
+      animationState: 'enter',
+      isAnimating: false
     })
+    const attrs = useAttrs()
+    const content = useNotification()
+    if (content) {
+      content.closeMap.set(props.closeId, () => {
+        state.animationState = 'leave'
+      })
+    }
     const wrapperClass = computed(() => {
       const { type, theme } = props
       return [
@@ -36,12 +46,58 @@ const Notification = defineComponent({
     })
     const instance = getCurrentInstance()
     const labelledbyId = useRandomId()
+    onMounted(() => {
+      triggerSetTimeout()
+    })
+    const triggerSetTimeout = () => {
+      if (props.duration !== 0) {
+        const cleaup = useSetTimeout(() => {
+          state.animationState = 'leave'
+        }, props.duration * 1000)
+        if (content) {
+          content.setTimeOutMap.set(props.closeId, {
+            triggerSetTimeout: () => {
+              cleaup()
+              triggerSetTimeout()
+            },
+            clear: cleaup
+          })
+        }
+      }
+    }
 
-    const handleAnimationStart = () => {}
-    const handleAnimationEnd = () => {}
+    const handleAnimationStart = () => {
+      state.isAnimating = true
+    }
+    const handleAnimationEnd = () => {
+      if (!state.isAnimating) return
+      if (state.animationState === 'leave') {
+        triggerClose()
+      } else {
+        //todo
+      }
+      state.isAnimating = false
+    }
+
+    const handleClose = () => {
+      if (state.isAnimating) {
+        return
+      }
+      state.animationState = 'leave'
+      ctx.emit('closeClick', props.closeId)
+    }
+    const triggerClose = () => {
+      ctx.emit('close')
+    }
     const renderIcon = () => {
       if (hasPropsOrSlots('icon', instance)) {
-        return <div>{renderElementForPropsOrSlot('icon', instance)}</div>
+        return (
+          <div
+            class={`${prefix}-notification-notice-icon ${prefix}-notification-notice-icon-${props.type}`}
+          >
+            {renderElementForPropsOrSlot('icon', instance)}
+          </div>
+        )
       }
       let icon = null
       switch (props.type) {
@@ -61,7 +117,6 @@ const Notification = defineComponent({
           icon = <IconLoading size="large" />
           break
       }
-      console.log(icon, props.type)
       if (icon) {
         return (
           <div
@@ -101,6 +156,7 @@ const Notification = defineComponent({
           }) => {
             return (
               <div
+                {...attrs}
                 style={animationStyle}
                 class={[wrapperClass.value, animationClassName]}
                 {...animationEventsNeedBind}
@@ -117,15 +173,18 @@ const Notification = defineComponent({
                       {renderElementForPropsOrSlot('content', instance)}
                     </div>
                   </div>
-                  <Button
-                    class={`${prefix}-notification-notice-icon-close`}
-                    aria-label="close"
-                    aria-disabled="false"
-                    type="tertiary"
-                    theme="borderless"
-                    size="small"
-                    icon={<IconClose aria-label="close" aria-hidden="true"></IconClose>}
-                  ></Button>
+                  {props.showClose && (
+                    <Button
+                      onClick={handleClose}
+                      class={`${prefix}-notification-notice-icon-close`}
+                      aria-label="close"
+                      aria-disabled="false"
+                      type="tertiary"
+                      theme="borderless"
+                      size="small"
+                      icon={<IconClose aria-label="close" aria-hidden="true"></IconClose>}
+                    ></Button>
+                  )}
                 </div>
               </div>
             )
@@ -134,6 +193,7 @@ const Notification = defineComponent({
       )
     }
   },
+  inheritAttrs: false,
   props: notificationProps,
   emits: notificationEmits,
   name: `${prefix}-notification`

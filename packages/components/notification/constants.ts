@@ -20,8 +20,16 @@ export const strings = {
     normal: 'normal'
   },
   defaultOptions: {
-    defaultDuration: 3,
-    defaultPosition: 'topRight',
-    defaultZIndex: 1010
+    duration: 3,
+    position: 'topRight',
+    zIndex: 1010,
+    content: undefined,
+    getPopupContainer: () => document.body,
+    icon: undefined,
+    id: undefined,
+    showClose: true,
+    title: '',
+    type: 'default',
+    theme: 'normal'
   }
 } as const

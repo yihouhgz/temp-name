@@ -20,6 +20,8 @@ $animation_opacity-notification-hide: 0;
 
 // 通知背景色
 $color-notification-bg-default: var(--#{$prefix}-color-bg-3);
+// 通知边框色
+$color-notification_border-default: transparent;
 
 // 通知 信息 图标颜色
 $color-notification_info-icon: var(--#{$prefix}-color-info);
@@ -263,6 +265,7 @@ $types: (
     width: $width-notification_notice;
     min-width: $width-notification_notice_minWidth;
     background-color: $color-notification-bg-default;
+    border: $width-notification_notice-border solid $color-notification_border-default;
     position: relative;
     display: flex;
     pointer-events: auto;

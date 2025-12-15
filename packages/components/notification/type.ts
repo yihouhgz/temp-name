@@ -21,6 +21,10 @@ export type OptionsType = {
   onClick?: (e: Event) => void
   onClose?: () => void
   onCloseClick?: (id: string | number) => void
+  bottom?: number | string
+  left?: number | string
+  top?: number | string
+  right?: number | string
 }
 
 //全局配置在调用前提前配置，全局一次生效
@@ -35,6 +39,10 @@ export type ConfigOptiosnType = {
 }
 
 export const notificationProps = {
+  closeId: {
+    type: [String, Number],
+    default: ''
+  },
   /**
    * @property 通知类型
    */
@@ -48,28 +56,28 @@ export const notificationProps = {
    */
   content: {
     type: [String, Object, Function, null] as PropType<VueNode>,
-    default: ''
+    default: strings.defaultOptions.content
   },
   /**
    * @property 自动关闭的延时，单位 s，设为 0 时不自动关闭
    */
   duration: {
     type: Number,
-    default: strings.defaultOptions.defaultDuration
+    default: strings.defaultOptions.duration
   },
   /**
    * @property 指定父级 DOM，弹层将会渲染至该 DOM 中，自定义需要设置 position: relative 这会改变浮层 DOM 树位置，但不会改变视图渲染位置。
    */
   getPopupContainer: {
     type: Function as PropType<() => HTMLElement>,
-    default: () => () => document.body
+    default: strings.defaultOptions.getPopupContainer
   },
   /**
    * @property 左上角 icon
    */
   icon: {
     type: [String, Object, Function, null] as PropType<VueNode>,
-    default: undefined
+    default: strings.defaultOptions.icon
   },
   /**
    * @property 弹出位置，可选 top、bottom、topLeft、topRight、bottomLeft、bottomRight
@@ -77,14 +85,14 @@ export const notificationProps = {
   position: {
     type: String as PropType<Position>,
     values: Object.values(strings.position),
-    default: strings.position.topRight
+    default: strings.defaultOptions.position
   },
   /**
    * @property 是否显示关闭按钮
    */
   showClose: {
     type: Boolean,
-    default: true
+    default: strings.defaultOptions.showClose
   },
   /**
    * @property 主题，可选 light、normal
@@ -99,14 +107,14 @@ export const notificationProps = {
    */
   title: {
     type: [String, Object, Function, null] as PropType<VueNode>,
-    default: ''
+    default: strings.defaultOptions.title
   },
   /**
    * @property 弹层 z-index 值
    */
   zIndex: {
     type: Number,
-    default: 1010
+    default: strings.defaultOptions.zIndex
   }
 }
 export const notificationEmits = {
@@ -117,7 +125,9 @@ export const notificationEmits = {
   /**
    * @description 通知关闭的回调函数(主动关闭、延时到达关闭都会触发)
    */
-  close: () => {},
+  close: () => {
+    return true
+  },
   /**
    * @description 点击关闭按钮的回调函数
    */
