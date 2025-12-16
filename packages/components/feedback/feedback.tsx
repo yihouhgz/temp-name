@@ -1,70 +1,33 @@
-import { defineComponent, reactive, computed, type StyleValue } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { prefix } from 'constants/config'
-import Portal from '../portal'
 import { feefbackProps } from './type'
-import CssAnimation from '../css-animation'
+import SideSheet from '../side-sheet'
+import { sideSheetProps } from '../side-sheet/type'
 
-type StateType = {
-  triggerElementRef: HTMLDivElement | null
-  animationState: 'enter' | 'leave'
-}
 const Feedback = defineComponent({
   setup(props) {
-    const state = reactive<StateType>({
-      triggerElementRef: null,
-      animationState: 'enter'
+    const sideSheetPropsRest = computed(() => {
+      const result: Record<string, unknown> = {}
+      const allProps: Record<string, unknown> = { ...props }
+      for (const key in props) {
+        if (Object.hasOwnProperty.call(sideSheetProps, key)) {
+          result[key] = allProps[key]
+        }
+      }
+      return result
     })
     const wrapperClass = computed(() => {
       return [prefix + '-feedback', prefix + '-feedback-' + props.type]
     })
-    const handleAnimationStart = () => {}
-    const handleAnimationEnd = () => {}
     return () => {
       return (
-        <Portal
-          zIndex={1010}
-          getPopupContainer={() => document.body}
-          triggerElementRef={state.triggerElementRef as HTMLDivElement}
-        >
-          <CssAnimation
-            fillMode="forwards"
-            motion={true}
-            animationState={state.animationState}
-            startClassName={
-              state.animationState === 'enter'
-                ? `${prefix}-toast-animation-show`
-                : `${prefix}-toast-animation-hide`
-            }
-            onAnimationStart={handleAnimationStart}
-            onAnimationEnd={handleAnimationEnd}
-          >
-            {({
-              animationStyle,
-              animationClassName,
-              animationEventsNeedBind
-            }: {
-              animationStyle: StyleValue
-              animationClassName: string
-              animationEventsNeedBind: {
-                onAnimationStart: (e: AnimationEvent) => void
-                onAnimationend: (e: AnimationEvent) => void
-              }
-            }) => {
-              return (
-                <div
-                  style={animationStyle}
-                  {...animationEventsNeedBind}
-                  class={[wrapperClass.value, animationClassName]}
-                  ref={(node) => (state.triggerElementRef = node as HTMLDivElement)}
-                ></div>
-              )
-            }}
-          </CssAnimation>
-        </Portal>
+        <SideSheet class={wrapperClass.value} visible={props.visible} {...sideSheetPropsRest.value}>
+          <div></div>
+        </SideSheet>
       )
     }
   },
-  props: feefbackProps,
+  props: { ...feefbackProps, ...sideSheetProps },
   name: prefix + '-feedback'
 })
 export default Feedback
