@@ -43,23 +43,23 @@ $animation_opacity-modal_mask-open: 0;
 $animation_opacity-modal_mask-close: 0;
 
 // 模态框背景颜色
-$color-modal-bg: var(--semi-color-bg-2);
+$color-modal-bg: var(--#{$prefix}-color-bg-2);
 // 模态框蒙层颜色
-$color-modal_mask-bg: var(--semi-color-overlay-bg);
+$color-modal_mask-bg: var(--#{$prefix}-color-overlay-bg);
 // 模态框文字颜色
-$color-modal_main-text: var(--semi-color-text-0);
+$color-modal_main-text: var(--#{$prefix}-color-text-0);
 // 模态框信息图标颜色
-$color-modal_info-icon: var(--semi-color-info);
+$color-modal_info-icon: var(--#{$prefix}-color-info);
 // 模态框主要图标颜色
-$color-modal_primary-icon: var(--semi-color-primary);
+$color-modal_primary-icon: var(--#{$prefix}-color-primary);
 // 模态框成功图标颜色
-$color-modal_success-icon: var(--semi-color-success);
+$color-modal_success-icon: var(--#{$prefix}-color-success);
 // 模态框危险图标颜色
-$color-modal_danger-icon: var(--semi-color-danger);
+$color-modal_danger-icon: var(--#{$prefix}-color-danger);
 // 模态框警告图标颜色
-$color-modal_warning-icon: var(--semi-color-warning);
+$color-modal_warning-icon: var(--#{$prefix}-color-warning);
 // 模态框描边颜色
-$color-modal_content-border: var(--semi-color-border);
+$color-modal_content-border: var(--#{$prefix}-color-border);
 // 模态框 header 背景填充色
 $color-modal_header-bg: transparent;
 // 模态框 footer 背景填充色
@@ -76,14 +76,14 @@ $font-modal_header-fontWeight: $font-weight-bold;
 // 模态框内容高度
 $height-modal_content: max-content;
 // 暂无
-$shadow-modal_content: var(--semi-shadow-elevated);
+$shadow-modal_content: var(--#{$prefix}-shadow-elevated);
 // 暂无
 $filter-modal_mask-bg: none;
 // 暂无
 $filter-modal_content-bg: none;
 
 // 模态框圆角大小
-$radius-modal_content: var(--semi-border-radius-large);
+$radius-modal_content: var(--#{$prefix}-border-radius-large);
 // 模态框圆角大小 - 全屏
 $radius-modal_content_fullscreen: 0;
 // 模态框 footer 圆角大小
@@ -173,3 +173,102 @@ $width-modal_full_width: calc(100vw - 64px);
 $width-modal_header-border: 0;
 // 模态框 footer 顶部描边宽度
 $width-modal_footer-border: 0;
+
+.#{$prefix}-modal {
+  font-size: $font-size-regular;
+  line-height: 20px;
+  font-family: $font-family;
+  position: relative;
+  margin: $spacing-modal-marginY $spacing-modal-marginX;
+  color: $color-modal_main-text;
+  &-small {
+    width: $width-modal_small;
+  }
+  &-medium {
+    width: $width-modal_medium;
+  }
+  &-large {
+    width: $width-modal_large;
+  }
+  &-fullscreen {
+    width: $width-modal_full_width;
+  }
+  //mask
+  &-wrap {
+    position: fixed;
+    overflow: auto;
+    top: $spacing-modal_wrap-top;
+    right: $spacing-modal_wrap-right;
+    bottom: $spacing-modal_wrap-bottom;
+    left: $spacing-modal_wrap-left;
+    z-index: 1000;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+  }
+  &-mask {
+    position: fixed;
+    top: $spacing-modal_mask-top;
+    right: $spacing-modal_mask-right;
+    left: $spacing-modal_mask-left;
+    bottom: $spacing-modal_mask-bottom;
+    background-color: $color-modal_mask-bg;
+    backdrop-filter: none;
+    height: 100%;
+    z-index: 1000;
+  }
+
+  &-content {
+    position: relative;
+    display: flex;
+    height: max-content;
+    width: $width-modal_content;
+    box-sizing: border-box;
+    flex-direction: column;
+    background-color: $color-modal-bg;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: $width-modal_content-border solid $color-modal_content-border;
+    border-radius: $radius-modal_content;
+    padding: $spacing-modal_content-paddingY $spacing-modal_content-paddingX;
+    background-clip: padding-box;
+    overflow: hidden;
+    box-shadow: $shadow-modal_content;
+  }
+  &-header {
+    padding: $spacing-modal_header-paddingY $spacing-modal_header-paddingX;
+    font-size: $font-modal_header-fontSize;
+    font-weight: $font-modal_header-fontWeight;
+    background-color: $color-modal_header-bg;
+    color: $color-modal_main-text;
+    border-bottom: $width-modal_header-border solid $color-modal_header-border;
+    display: flex;
+    align-items: flex-start;
+    margin: $spacing-modal_header-marginY $spacing-modal_header-marginX;
+  }
+  &-title {
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: $width-modal_title;
+    margin: $spacing-modal_title-margin;
+  }
+
+  &-body {
+    flex: 1 1 auto;
+    margin: $spacing-modal_body-margin;
+    padding: $spacing-modal_body-padding;
+  }
+
+  &-footer {
+    margin: $spacing-modal_footer-marginY $spacing-modal_footer-marginX;
+    padding: $spacing-modal_footer-paddingY $spacing-modal_footer-paddingX;
+    text-align: right;
+    border-radius: $radius-modal_footer;
+    border-top: $width-modal_footer-border solid $color-modal_footer-border;
+    background-color: $color-modal_footer-bg;
+  }
+  &-footer .#{$prefix}-button {
+    margin-left: 12px;
+    margin-right: 0;
+  }
+}

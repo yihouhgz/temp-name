@@ -135,6 +135,7 @@ const Button = defineComponent({
           rippleSize={[10, 10]}
         >
           <button
+            type="button"
             tabindex={formChildrenIndex}
             ref={buttonRef}
             class={classNames}

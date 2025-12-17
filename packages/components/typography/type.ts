@@ -81,8 +81,8 @@ export const textProps = {
    * @description 自定义渲染元素
    */
   component: {
-    type: Object as PropType<HTMLElement>,
-    default: () => document.createElement('span')
+    type: String as PropType<keyof HTMLElementTagNameMap>,
+    default: 'span'
   },
   /**
    * @description 是否被 code 元素包裹
@@ -189,8 +189,8 @@ export const titleProps = Object.assign(
      * @description 自定义渲染元素，默认由 heading 决定
      */
     component: {
-      type: Object as PropType<HTMLElement>,
-      default: () => document.createElement('h1')
+      type: String as PropType<keyof HTMLElementTagNameMap>,
+      default: null
     },
     /**
      * @description 标题级别，可选1， 2， 3，4，5，6，对应相应的标题

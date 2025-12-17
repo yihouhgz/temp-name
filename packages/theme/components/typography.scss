@@ -160,6 +160,14 @@ $spacing-typography_size_normal-lineHeight: 20px;
 $spacing-typography_size_small-lineHeight: 16px;
 $spacing-typography_size_large-lineHeight: 24px;
 
+$h-title: (
+  h1: (
+    fontSize: 32px,
+    lineHeight: 44px,
+    fontWeight: $font-typography_title1-fontWeight
+  )
+);
+
 $sizes: (
   'normal': (
     fontSize: $font-size-regular,
@@ -259,5 +267,14 @@ $colors: ('primary', 'success', 'warning', 'danger', 'secondary', 'tertiary', 'q
         color: map-get($typography-colors, $color);
       }
     }
+  }
+
+  //title h
+  &-h1 {
+    font-size: 32px;
+    line-height: 44px;
+    font-family: $font-family;
+    font-weight: 600;
+    margin: 0;
   }
 }

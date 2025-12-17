@@ -24,7 +24,7 @@ export const modalProps = {
    * @property 取消按钮的文字
    */
   cancelText: {
-    type: [String, Object, Function, null] as PropType<VueNode>,
+    type: String,
     default: null
   },
   /**
@@ -179,7 +179,7 @@ export const modalProps = {
     default: () => ({})
   },
   okText: {
-    type: [String, Object, Function, null] as PropType<VueNode>,
+    type: String,
     default: null
   },
   /**

@@ -82,7 +82,7 @@ const Text = defineComponent({
     const render = () => {
       const component = props.component
       return createElement(
-        component.tagName,
+        component,
         { ...attar, class: getComponentClass.value, style: getComponentStyle.value },
         {
           default: () => {

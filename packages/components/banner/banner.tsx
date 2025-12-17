@@ -62,7 +62,7 @@ const Banner = defineComponent({
     const renderTitle = () => {
       if (hasPropsOrSlots('title', instance)) {
         return (
-          <Text component={document.createElement('div')} class={`${prefix}-banner-title`}>
+          <Text component={'div'} class={`${prefix}-banner-title`}>
             {renderElementForPropsOrSlot('title', instance)}
           </Text>
         )
@@ -72,7 +72,7 @@ const Banner = defineComponent({
     const renderDescription = () => {
       if (hasPropsOrSlots('description', instance)) {
         return (
-          <Text component={document.createElement('div')} class={`${prefix}-banner-description`}>
+          <Text component={'div'} class={`${prefix}-banner-description`}>
             {renderElementForPropsOrSlot('description', instance)}
           </Text>
         )

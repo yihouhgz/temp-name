@@ -1,19 +1,25 @@
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { prefix } from 'constants/config'
-import { useLocaleInject } from '../locale/content'
+import { modalProps } from './type'
+import ModalBase from './base'
+import Portal from '../portal'
 
 const Modal = defineComponent({
-  setup() {
-    const lang = useLocaleInject()
-    console.log(lang)
+  setup(props, ctx) {
+    const triggerElementRef = ref<HTMLElement>()
     return () => {
       return (
-        <div>
-          <div class={prefix + '-modal'}></div>
-        </div>
+        <Portal
+          getPopupContainer={props.getPopupContainer}
+          triggerElementRef={triggerElementRef.value as HTMLElement}
+          zIndex={props.zIndex}
+        >
+          <ModalBase {...props}>{ctx.slots?.default?.()}</ModalBase>
+        </Portal>
       )
     }
   },
+  props: modalProps,
   name: prefix + '-modal'
 })
 export default Modal
