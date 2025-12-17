@@ -11,6 +11,7 @@ import ProgressDemo from './components/progress'
 import BannerDemo from './components/banner'
 import FeedbackDemo from './components/feedback'
 import SideSheetDemo from './components/sideSheet'
+import ModalDemo from './components/modal'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -949,6 +950,7 @@ const App = defineComponent(() => {
       <BannerDemo></BannerDemo>
       <FeedbackDemo></FeedbackDemo>
       <SideSheetDemo></SideSheetDemo>
+      <ModalDemo></ModalDemo>
     </div>
   )
 })

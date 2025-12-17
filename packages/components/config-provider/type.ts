@@ -1,15 +1,23 @@
 import type { PropType } from 'vue'
-import type { LocaleName, Locale } from '../locale'
+import type { Locale, LocaleName } from '../locale'
 import { defaultLocale } from '../locale'
 
-export type ConfigProviderData = {
-  localeName: LocaleName
-  locale: Locale
-}
+export type Direction = 'ltr' | 'rtl'
 
 export const configProviderProps = {
-  localeName: {
-    type: String as PropType<LocaleName>,
+  locale: {
+    type: [Object, String] as PropType<Locale | LocaleName>,
     default: defaultLocale
+  },
+  direction: {
+    type: String as PropType<Direction>,
+    default: 'ltr'
+  },
+  getPopupContainer: {
+    type: Function as PropType<(node: HTMLElement) => HTMLElement>,
+    default: () => document.body
+  },
+  timeZone: {
+    type: [String, Number]
   }
 }

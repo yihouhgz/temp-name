@@ -4,5 +4,9 @@ export default {
   popconfirm: {
     okText: '确定',
     cancelText: '取消'
+  },
+  modal: {
+    okText: '确定',
+    cancelText: '取消'
   }
 }

@@ -4,7 +4,7 @@ import en_US from './language/en_US'
 
 export type LocaleName = 'en_US' | 'zh_CN' | 'zh_TW'
 export type Locale = typeof zh_CN
-export const defaultLocale = zh_CN.locale as LocaleName
+export const defaultLocale = zh_CN
 
 export const getLocale = (localeName: LocaleName) => {
   switch (localeName) {

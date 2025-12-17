@@ -34,6 +34,8 @@ import Banner from './banner'
 import Notification from './notification'
 import Feedback from './feedback'
 import SideSheet from './side-sheet'
+import LocaleProvider from './locale/locale-provider'
+import Modal from './modal'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -85,7 +87,9 @@ const components: Component[] = [
   Banner,
   Notification,
   Feedback,
-  SideSheet
+  SideSheet,
+  LocaleProvider,
+  Modal
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -139,7 +143,9 @@ export {
   Banner,
   Notification,
   Feedback,
-  SideSheet
+  SideSheet,
+  LocaleProvider,
+  Modal
 }
 
 const globalApis: { [key: string]: unknown } = {
