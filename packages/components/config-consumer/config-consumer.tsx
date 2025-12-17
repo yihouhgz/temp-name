@@ -3,7 +3,7 @@ import { prefix } from 'constants/config'
 import { useConfigInject } from '../config-provider/content'
 import { defaultConfig } from '../config-provider/type'
 
-const configConsumer = defineComponent({
+const ConfigConsumer = defineComponent({
   name: `${prefix}-config-consumer`,
   setup(props, ctx) {
     const value = useConfigInject(defaultConfig)
@@ -12,4 +12,4 @@ const configConsumer = defineComponent({
     }
   }
 })
-export default configConsumer
+export default ConfigConsumer
