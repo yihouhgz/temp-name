@@ -162,9 +162,40 @@ $spacing-typography_size_large-lineHeight: 24px;
 
 $h-title: (
   h1: (
-    fontSize: 32px,
+    fontSize: $font-size-header-1,
     lineHeight: 44px,
-    fontWeight: $font-typography_title1-fontWeight
+    fontWeight: $font-typography_title1-fontWeight,
+    margin: $spacing-typography_title_h1-margin
+  ),
+  h2: (
+    fontSize: $font-size-header-2,
+    lineHeight: 40px,
+    fontWeight: $font-typography_title2-fontWeight,
+    margin: $spacing-typography_title_h2-margin
+  ),
+  h3: (
+    fontSize: $font-size-header-3,
+    lineHeight: 32px,
+    fontWeight: $font-typography_title3-fontWeight,
+    margin: $spacing-typography_title_h3-margin
+  ),
+  h4: (
+    fontSize: $font-size-header-4,
+    lineHeight: 28px,
+    fontWeight: $font-typography_title4-fontWeight,
+    margin: $spacing-typography_title_h4-margin
+  ),
+  h5: (
+    fontSize: $font-size-header-5,
+    lineHeight: 18px,
+    fontWeight: $font-typography_title5-fontWeight,
+    margin: $spacing-typography_title_h5-margin
+  ),
+  h6: (
+    fontSize: $font-size-header-6,
+    lineHeight: 16px,
+    fontWeight: $font-typography_title6-fontWeight,
+    margin: $spacing-typography_title_h6-margin
   )
 );
 
@@ -268,13 +299,25 @@ $colors: ('primary', 'success', 'warning', 'danger', 'secondary', 'tertiary', 'q
       }
     }
   }
+}
 
-  //title h
-  &-h1 {
-    font-size: 32px;
-    line-height: 44px;
+//title h
+@each $h, $properties in $h-title {
+  .#{$prefix}-typography-#{$h},
+  #{$h}.#{$prefix}-typography {
+    font-size: map-get($properties, 'fontSize');
     font-family: $font-family;
-    font-weight: 600;
-    margin: 0;
+    line-height: map-get($properties, 'lineHeight');
+    font-weight: map-get($properties, 'fontWeight');
+    margin: map-get($properties, 'margin');
   }
+}
+
+//paragraph
+.#{$prefix}-typography-paragraph {
+  margin: $spacing-typography_title_paragraph-margin;
+}
+.#{$prefix}-typography-extended {
+  line-height: $font-typography_paragraph_extended-lineHeight;
+  font-weight: $font-weight-regular;
 }

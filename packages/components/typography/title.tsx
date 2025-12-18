@@ -16,7 +16,7 @@ const Title = defineComponent({
     })
     return () => {
       return (
-        <Text component={component.value} class={wrapperClass.value}>
+        <Text {...props} component={component.value} class={wrapperClass.value}>
           {ctx.slots.default?.()}
         </Text>
       )

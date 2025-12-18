@@ -12,7 +12,6 @@ export default defineComponent({
   setup(props, ctx) {
     const instance = getCurrentInstance()
     const lang = useLocaleInject()
-    console.log(lang)
     const modal = 'dialog-' + useRandomId(5)
     const wrapperClass = computed(() => {
       const { size } = props

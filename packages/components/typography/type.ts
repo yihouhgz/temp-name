@@ -207,8 +207,8 @@ export const paragraphProps = Object.assign(omitKeys(textProps, ['component', 'i
    * @description 自定义渲染元素
    */
   component: {
-    type: Object as PropType<HTMLElement>,
-    default: () => document.createElement('p')
+    type: String as PropType<keyof HTMLElementTagNameMap>,
+    default: 'p'
   },
   /**
    * @description 行距大小，可选normal，extended
@@ -246,6 +246,7 @@ export const numeralProps = Object.assign(textProps, {
    * @description 小数点后保留位截段取整方式，可选 ceil, floor, round，作用与 Math.ceil、Math.floor、Math.round 对齐
    */
   truncate: {
+    type: String as PropType<'ceil' | 'floor' | 'round'>,
     values: ['ceil', 'floor', 'round'] as const,
     default: 'round'
   },

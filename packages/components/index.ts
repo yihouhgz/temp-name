@@ -19,7 +19,7 @@ import { Layout, Header, Content, Footer, Sider } from './layout'
 import Switch from './switch'
 import { Toast, ToastFactory } from './toast'
 import Resizable, { ResizeItem, ResizableGroup, ResizeHandler } from './resizable'
-import Typography, { Text } from './typography'
+import Typography, { Text, Title, Paragraph, Numeral } from './typography'
 import Checkbox, { CheckboxGroup } from './checkbox'
 import Radio, { RadioGroup } from './radio'
 import Skeleton, {
@@ -73,6 +73,9 @@ const components: Component[] = [
   ResizeHandler,
   Typography,
   Text,
+  Title,
+  Paragraph,
+  Numeral,
   Checkbox,
   CheckboxGroup,
   Radio,
@@ -129,6 +132,9 @@ export {
   ResizeHandler,
   Typography,
   Text,
+  Title,
+  Paragraph,
+  Numeral,
   Checkbox,
   CheckboxGroup,
   Radio,
