@@ -41,7 +41,8 @@ const Text = defineComponent({
         props.type && `${prefix}-typography-${props.type}`,
         props.weight && `${prefix}-typography-${props.weight}`,
         props.disabled && `${prefix}-typography-disabled`,
-        attar.class
+        attar.class,
+        props.link && `${prefix}-typography-link`
       ]
     })
     const getComponentStyle = computed<StyleValue>(() => {
@@ -79,6 +80,15 @@ const Text = defineComponent({
       }
       return renderChildren()
     }
+    const renderIcon = () => {
+      if (hasPropsOrSlots('icon', vm)) {
+        return createElement(
+          'span',
+          { class: [`${prefix}-typography-icon`] },
+          { default: () => renderElementForPropsOrSlot('icon', vm) }
+        )
+      }
+    }
     const render = () => {
       const component = props.component
       return createElement(
@@ -88,21 +98,22 @@ const Text = defineComponent({
           default: () => {
             const renderChildren = () => {
               const template = []
-              if (hasPropsOrSlots('icon', vm)) {
-                template.push(
-                  createElement(
-                    'span',
-                    { class: [`${prefix}-typography-icon`] },
-                    { default: () => renderElementForPropsOrSlot('icon', vm) }
-                  )
-                )
-              }
+              // if (hasPropsOrSlots('icon', vm)) {
+              //   template.push(
+              //     createElement(
+              //       'span',
+              //       { class: [`${prefix}-typography-icon`] },
+              //       { default: () => renderElementForPropsOrSlot('icon', vm) }
+              //     )
+              //   )
+              // }
+              if (!props.link && hasPropsOrSlots('icon', vm)) template.push(renderIcon())
               const { delete: del, underline, code, mark, strong } = props
               const children = ctx.slots.default?.() || []
               const tags = [
                 { enabled: del, tag: 'del' },
                 { enabled: strong, tag: 'strong' },
-                { enabled: underline, tag: 'u' },
+                { enabled: underline && !props.link, tag: 'u' },
                 { enabled: code, tag: 'code' },
                 { enabled: mark, tag: 'mark' }
               ]
@@ -130,13 +141,17 @@ const Text = defineComponent({
                   attars[key] = value
                 })
               }
+              const component = props.disabled ? 'span' : 'a'
               const linkElement = createElement(
-                'a',
+                component,
                 { ...attars },
                 {
                   default: () => {
                     return [
-                      <span class={`${prefix}-typography-link-text`}>
+                      renderIcon(),
+                      <span
+                        class={`${prefix}-typography-link-text ${props.underline ? `${prefix}-typography-link-underline` : ''}`}
+                      >
                         {renderPopover(renderChildren)}
                       </span>
                     ]

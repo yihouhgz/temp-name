@@ -129,17 +129,17 @@ $font-typography_title5-medium-fontWeight: 500;
 //六级标题文本字重 - 中等
 $font-typography_title6-medium-fontWeight: 500;
 //一级标题文本字重 - 半粗
-$font-typography_title1-bold-fontWeight: 600;
+$font-typography_title1-semibold-fontWeight: 600;
 //二级标题文本字重 - 半粗
-$font-typography_title2-bold-fontWeight: 600;
+$font-typography_title2-semibold-fontWeight: 600;
 //三级标题文本字重 - 半粗
-$font-typography_title3-bold-fontWeight: 600;
+$font-typography_title3-semibold-fontWeight: 600;
 //三级标题文本字重 - 半粗
-$font-typography_title4-bold-fontWeight: 600;
+$font-typography_title4-semibold-fontWeight: 600;
 //三级标题文本字重 - 半粗
-$font-typography_title5-bold-fontWeight: 600;
+$font-typography_title5-semibold-fontWeight: 600;
 //三级标题文本字重 - 半粗
-$font-typography_title6-bold-fontWeight: 600;
+$font-typography_title6-semibold-fontWeight: 600;
 //一级标题文本字重 - 粗
 $font-typography_title1-bold-fontWeight: 700;
 //二级标题文本字重 - 粗
@@ -210,11 +210,11 @@ $sizes: (
     lineHeight: $spacing-typography_size_small-lineHeight,
     fizeWeight: $font-typography_smallText-regular-fontWeight
   ),
-  'large': (
-    fontSize: $font-size-header-1,
-    lineHeight: $spacing-typography_size_large-lineHeight,
-    fizeWeight: $font-typography_largeText-regular-fontWeight
-  )
+  // 'large': (
+  //   fontSize: $font-size-header-1,
+  //   lineHeight: $spacing-typography_size_large-lineHeight,
+  //   fizeWeight: $font-typography_largeText-regular-fontWeight
+   // )
 );
 $colors: ('primary', 'success', 'warning', 'danger', 'secondary', 'tertiary', 'quaternary');
 .#{$prefix}-typography {
@@ -227,6 +227,9 @@ $colors: ('primary', 'success', 'warning', 'danger', 'secondary', 'tertiary', 'q
     color: $color-typography_disabled-text-default;
     cursor: not-allowed;
     user-select: none;
+    a {
+      color: $color-typography_link-text-disabled;
+    }
   }
   mark {
     background-color: $color-typography_mark-bg-default;
@@ -273,6 +276,37 @@ $colors: ('primary', 'success', 'warning', 'danger', 'secondary', 'tertiary', 'q
           vertical-align: top;
         }
       }
+    }
+  }
+  &-icon {
+    margin-right: $spacing-typography_iconPrefix-marginRight;
+    vertical-align: middle;
+    color: inherit;
+  }
+
+  &-link {
+    color: $color-typography_link-text-default;
+    font-weight: $font-typography_link-fontWeight;
+    &-underline {
+      &:hover {
+        border-bottom: $width-typography_link-border solid $color-typography_link-text-hover;
+        margin-bottom: -1px;
+      }
+    }
+  }
+  a {
+    display: inline;
+    color: $color-typography_link-text-default;
+    cursor: pointer;
+    text-decoration: none;
+    &:hover {
+      color: $color-typography_link-text-hover;
+    }
+    &:active {
+      color: $color-typography_link-text-active;
+    }
+    &:visited {
+      color: $color-typography_link-text-visited;
     }
   }
 

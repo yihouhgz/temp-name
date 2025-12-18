@@ -2,7 +2,7 @@ import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   setup() {
-    const showDialog = ref(true)
+    const showDialog = ref(false)
     const handleShowDialog = () => {
       showDialog.value = true
     }

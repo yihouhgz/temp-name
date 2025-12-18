@@ -12,6 +12,7 @@ import BannerDemo from './components/banner'
 import FeedbackDemo from './components/feedback'
 import SideSheetDemo from './components/sideSheet'
 import ModalDemo from './components/modal'
+import TypographyDemo from './components/typography'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -951,6 +952,7 @@ const App = defineComponent(() => {
       <FeedbackDemo></FeedbackDemo>
       <SideSheetDemo></SideSheetDemo>
       <ModalDemo></ModalDemo>
+      <TypographyDemo></TypographyDemo>
     </div>
   )
 })

@@ -10,7 +10,7 @@ const Paragraph = defineComponent({
     const classNames = computed(() => {
       return [
         prefix + '-typography-paragraph',
-        props.spacing === 'extended' && `${prefix}-typography-paragraph-extended`
+        props.spacing === 'extended' && `${prefix}-typography-extended`
       ]
     })
     return () => {

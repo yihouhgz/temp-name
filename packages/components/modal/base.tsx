@@ -18,6 +18,9 @@ export default defineComponent({
       return [prefix + '-modal', `${prefix}-modal-${size}`]
     })
     return () => {
+      if (!props.visible) {
+        return null
+      }
       return (
         <div>
           <div class={`${prefix}-modal-mask`} role="none"></div>

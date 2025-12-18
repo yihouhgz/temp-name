@@ -4,6 +4,7 @@ import { numeralProps } from './type'
 import Text from './text'
 import { isArray, isFunction, isNumber, isObject, isString } from '../_util'
 import { extractAllNumbers, toPrecision, splitByNumbers } from './utils'
+import { arrays, strings } from './constants'
 
 type NumeralChildren = { children: NumeralChildren[] | string }
 
@@ -19,8 +20,8 @@ const Numeral = defineComponent({
     }
     const getBytes = (number: number) => {
       const { rule } = props
-      const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-      const baseNumber = rule === 'bytes-decimal' ? 1000 : 1024
+      const units = rule === strings.bytesDecimal ? arrays.bytesDecimal : arrays.bytesBinary
+      const baseNumber = rule === strings.bytesDecimal ? strings.bytesDecimalNumber : 1024
       const deepGet = (index: number, v: number) => {
         if (v < baseNumber || index == units.length) {
           return getPrecision(v) + units[index]
@@ -46,23 +47,23 @@ const Numeral = defineComponent({
 
       for (let i = 0; i < numbers.length; i++) {
         let number: number | string = numbers[i]
-        if (rule === 'text' || rule === 'numbers') {
+        if ([strings.numbers, strings.text].includes(rule)) {
           number = getPrecision(Number(number))
           after.push(number)
         }
-        if (rule === 'percentages') {
+        if (rule === strings.percentages) {
           number = getPrecision(Number(number) * 100)
           after.push(number + '%')
         }
-        if (rule === 'bytes-decimal' || rule === 'bytes-binary') {
+        if ([strings.bytesDecimal, strings.bytesBinary].includes(rule)) {
           const v = Number(number)
           after.push(getBytes(v))
         }
-        if (rule === 'exponential') {
+        if (rule === strings.exponential) {
           after.push(Number(number).toExponential(precision))
         }
       }
-      if (rule === 'numbers') {
+      if (rule === strings.numbers) {
         return after.join('')
       }
       let result = String(value)
