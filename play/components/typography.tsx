@@ -51,6 +51,8 @@ export default defineComponent({
               Web 应用。
             </tempui-paragraph>
           </div>
+          <br />
+          <tempui-paragraph copyable>点击右边的图标复制文本。</tempui-paragraph>
         </div>
       )
     }

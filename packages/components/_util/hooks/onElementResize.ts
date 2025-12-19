@@ -1,5 +1,5 @@
 import type { MaybeRefOrGetter } from 'vue'
-import { onScopeDispose, watch, toValue, onWatcherCleanup } from 'vue'
+import { watch, toValue, onWatcherCleanup } from 'vue'
 export type ResizeCallback = () => void
 export const onElementResize = (
   target: HTMLElement | MaybeRefOrGetter<null | undefined>,
@@ -15,20 +15,17 @@ export const onElementResize = (
       })
       resizeObserver.observe(val)
       onWatcherCleanup(() => {
-        cleaup()
+        cleanup()
       })
     },
     { immediate: true }
   )
-  const cleaup = () => {
+  const cleanup = () => {
     if (resizeObserver) {
       resizeObserver.unobserve(toValue(target) as HTMLElement)
       resizeObserver = null
+      stop?.()
     }
-    stop()
   }
-  onScopeDispose(() => {
-    cleaup()
-  })
-  return () => cleaup()
+  return cleanup
 }

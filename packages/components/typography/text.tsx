@@ -5,20 +5,31 @@ import {
   hasPropsOrSlots,
   isArray,
   isBoolean,
-  isObject,
-  renderElementForPropsOrSlot
+  isFunction,
+  // isObject,
+  renderElementForPropsOrSlot,
+  useRandomId,
+  useSetTimeout
 } from '../_util'
+import { isObject } from 'lodash'
 import { getCurrentInstance } from 'vue'
 import Tooltip from '../tooltip'
 import Popover from '../popover'
 import './style/typography'
 import type { StyleValue } from 'vue'
 import type { VueNode } from '../_util/type'
+import { IconCopy, IconTick } from '../icon'
+import { reactive } from 'vue'
+import { copyText } from './utils'
+
 const Text = defineComponent({
   setup(props, ctx) {
     const createElement = h
     const vm = getCurrentInstance()
     const attar = useAttrs()
+    const state = reactive({
+      coping: false
+    })
     const getComponentClass = computed(() => {
       const { ellipsis } = props
       const rows = !isBoolean(ellipsis) ? ellipsis.rows : 1
@@ -73,12 +84,74 @@ const Text = defineComponent({
     const isCssRenderEllipsis = computed(() => {
       return !isJSRenderEllipsis.value
     })
-    const renderPopover = (renderChildren: () => unknown) => {
-      const { ellipsis } = props
-      if (ellipsis) {
-        return <span>{renderChildren()}</span>
+    const copyTooltipId = computed(() => {
+      return useRandomId(5)
+    })
+    const handleClickCopy = (content: string) => {
+      let text = content
+      if (isObject(props.copyable) && props.copyable.content) {
+        text = props.copyable.content
       }
-      return renderChildren()
+      copyText(text).then(() => {
+        state.coping = true
+        const delay = 3000
+        useSetTimeout(() => {
+          state.coping = false
+        }, delay)
+      })
+    }
+    const renderPopover = (renderChildren: () => unknown[]) => {
+      const { ellipsis } = props
+      const template = renderChildren() || []
+      if (props.copyable) {
+        const text = template.join('')
+        const copyable = props.copyable
+        if (isObject(copyable)) {
+          if (isFunction(copyable.render)) {
+            const copied = state.coping
+            const doCopy = () => {
+              handleClickCopy(text)
+            }
+            const config = { ...copyable }
+            const vn = copyable.render(copied, doCopy, config)
+            template.push(vn)
+          }
+        } else {
+          const copy = (
+            <span class={`${prefix}-typography-action-copy`}>
+              <Tooltip
+                showArrow
+                content={<span>复制</span>}
+                position="top"
+                wrapperId={copyTooltipId.value}
+              >
+                <a
+                  onClick={() => handleClickCopy(text)}
+                  class={`${prefix}-typography-action-copy-icon`}
+                  tabindex={'0'}
+                  aria-describedby={copyTooltipId.value}
+                  data-popupid={copyTooltipId.value}
+                >
+                  <IconCopy aria-label="copy"></IconCopy>
+                </a>
+              </Tooltip>
+            </span>
+          )
+          const copied = (
+            <span class={`${prefix}-typography-action-copied`}>
+              <span>
+                <IconTick class={`${prefix}-typography-action-copied-icon`}></IconTick>
+                复制成功
+              </span>
+            </span>
+          )
+          template.push(state.coping ? copied : copy)
+        }
+      }
+      if (ellipsis) {
+        return <span>{template}</span>
+      }
+      return template
     }
     const renderIcon = () => {
       if (hasPropsOrSlots('icon', vm)) {
@@ -98,15 +171,6 @@ const Text = defineComponent({
           default: () => {
             const renderChildren = () => {
               const template = []
-              // if (hasPropsOrSlots('icon', vm)) {
-              //   template.push(
-              //     createElement(
-              //       'span',
-              //       { class: [`${prefix}-typography-icon`] },
-              //       { default: () => renderElementForPropsOrSlot('icon', vm) }
-              //     )
-              //   )
-              // }
               if (!props.link && hasPropsOrSlots('icon', vm)) template.push(renderIcon())
               const { delete: del, underline, code, mark, strong } = props
               const children = ctx.slots.default?.() || []

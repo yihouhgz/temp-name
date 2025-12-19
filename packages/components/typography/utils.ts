@@ -69,3 +69,37 @@ export function splitByNumbers(text: string) {
 
   return result
 }
+
+export function copyText<T extends string>(text: T): Promise<T> {
+  let resolve: (value: T) => void
+  let reject: (reason: T) => void
+  const propmise = new Promise<T>((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        resolve(text)
+      },
+      (err) => {
+        reject(err)
+      }
+    )
+  } else {
+    setTimeout(() => {
+      try {
+        const textarea = document.createElement('textarea')
+        textarea.value = text
+        document.body.appendChild(textarea)
+        textarea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textarea)
+        resolve(text)
+      } catch (error) {
+        reject(error as T)
+      }
+    })
+  }
+  return propmise
+}

@@ -11,7 +11,8 @@ import {
   useAttrs,
   type StyleValue,
   type CSSProperties,
-  type ExtractPropTypes
+  type ExtractPropTypes,
+  onUnmounted
 } from 'vue'
 import { prefix } from 'constants/config'
 import './style/tooltip'
@@ -66,7 +67,7 @@ const Tooltip = defineComponent({
       }
     )
     const hoverScope = effectScope()
-    watchEffect(() => {
+    watchEffect((onCleanup) => {
       const trigger = props.trigger as keyof typeof triggerEventMap
       const targetEventMap = triggerEventMap[trigger]
       const eventSet: { [key: string]: (e: Event) => void } = {}
@@ -117,6 +118,12 @@ const Tooltip = defineComponent({
         }
       }
       triggerEventSet.value = eventSet
+      onCleanup(() => {
+        triggerEventSet.value = {}
+      })
+    })
+    onUnmounted(() => {
+      hoverScope.stop()
     })
     const registerClickOutside = () => {
       const trigger = props.trigger
@@ -159,8 +166,6 @@ const Tooltip = defineComponent({
     watch(
       () => props.visible,
       (res) => {
-        // animationOptions.isAnimating = true
-        // animationOptions.transitionState = res ? 'enter' : 'leave'
         if (res) {
           triggerHnadle()
         } else {
@@ -176,18 +181,15 @@ const Tooltip = defineComponent({
       }
       return visible
     })
-    const scope = effectScope()
     watch(
       () => showTooltip.value,
       (show) => {
-        scope.run(() => {
-          if (show) {
-            registerClickOutside()
-          } else {
-            state.clickOutsideStop?.()
-          }
-          ctx.emit('visibleChange', showTooltip.value)
-        })
+        if (show) {
+          registerClickOutside()
+        } else {
+          state.clickOutsideStop?.()
+        }
+        ctx.emit('visibleChange', showTooltip.value)
       }
     )
     const triggerHnadle = () => {
@@ -205,13 +207,18 @@ const Tooltip = defineComponent({
       state.scrollStop = stop
     }
     const triggerLeave = () => {
+      if (animationOptions.transitionState === 'leave') return
       animationOptions.isAnimating = true
       animationOptions.transitionState = 'leave'
       show.value = false
-      state.scrollStop?.()
-      state.clickOutsideStop?.()
-      state.scrollStop = null
-      state.clickOutsideStop = null
+      if (state.scrollStop) {
+        state.scrollStop?.()
+        state.scrollStop = null
+      }
+      if (state.clickOutsideStop) {
+        state.clickOutsideStop()
+        state.clickOutsideStop = null
+      }
     }
 
     onMounted(() => {
@@ -229,59 +236,6 @@ const Tooltip = defineComponent({
       if (props.trigger === 'custom' && showTooltip.value) {
         registerClickOutside()
       }
-      // const eventMap = triggerEventMap[props.trigger as keyof typeof triggerEventMap]
-      // useEventListener(target, eventMap.enter as keyof EventMap, triggerHnadle)
-      // if (eventMap.enter === 'click' || eventMap.enter === 'custom') {
-      //   const handleClickOutside = (event: Event) => {
-      //     if (showTooltip.value && innerRef.value) {
-      //       if (!props.clickToHide && innerRef.value.contains(event.target)) return
-      //     } else {
-      //       return
-      //     }
-      //     if (eventMap.enter === 'custom') {
-      //       ctx.emit('visibleChange', false)
-      //     } else {
-      //       triggerLeave()
-      //     }
-      //     ctx.emit('clickOutSide', event)
-      //   }
-      //   useClickOutside(target, handleClickOutside)
-      // } else {
-      //   const scope = effectScope()
-      //   if (eventMap.leave !== 'contextmenu') {
-      //     useEventListener(target, eventMap.leave, () => {
-      //       if (eventMap.leave === 'mouseleave') {
-      //         scope.run(() => {
-      //           let hoverInInner = false
-      //           // 鼠标移出
-      //           useEventListener(innerRef.value, 'mouseenter', () => (hoverInInner = true), {
-      //             once: true
-      //           })
-      //           useEventListener(
-      //             innerRef.value,
-      //             'mouseleave',
-      //             () => {
-      //               hoverInInner = false
-      //               triggerLeave()
-      //             },
-      //             { once: true }
-      //           )
-      //           useSetTimeout(() => {
-      //             if (!hoverInInner) {
-      //               triggerLeave()
-      //             }
-      //           }, 100)
-      //         })
-      //       } else {
-      //         triggerLeave()
-      //       }
-      //     })
-      //   }
-      //   const udpateCallback = useThrottle(updatePosition, 20)
-      //   useEventListener(window, 'scroll', () => {
-      //     if (showTooltip.value) udpateCallback()
-      //   })
-      // }
     })
 
     const options = {

@@ -310,6 +310,28 @@ $colors: ('primary', 'success', 'warning', 'danger', 'secondary', 'tertiary', 'q
     }
   }
 
+  //copy
+  &-action {
+    &-copied {
+      display: inline-flex;
+      padding: 0;
+      margin-left: $spacing-typography_copyIcon-marginLeft;
+      color: $color-typography_copied-text-success;
+      &-icon {
+        color: $color-typography_copied-icon-success;
+      }
+    }
+    &-copy {
+      display: inline-flex;
+      vertical-align: middle;
+      padding: 0;
+      margin-left: $spacing-typography_copyIcon-marginLeft;
+      a {
+        display: inline-flex;
+      }
+    }
+  }
+
   @each $size, $properties in $sizes {
     &-#{$size} {
       font-size: map-get($properties, 'fontSize');
