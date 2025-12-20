@@ -52,10 +52,10 @@ export default defineComponent({
                 <div class={prefix + '-modal-footer'}>
                   <div>
                     <Button aria-label="cancel" aria-disabled="false" type="tertiary" theme="light">
-                      {props.cancelText || lang.modal.cancelText}
+                      {props.cancelText || lang.Modal.cancelText}
                     </Button>
                     <Button aria-label="confirm" aria-disabled="false" type="primary" theme="solid">
-                      {props.okText || lang.modal.okText}
+                      {props.okText || lang.Modal.okText}
                     </Button>
                   </div>
                 </div>

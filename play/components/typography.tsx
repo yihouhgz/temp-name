@@ -1,8 +1,14 @@
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   name: 'TypographyDemo',
   setup() {
+    const locale = ref('zh-CN')
+    onMounted(() => {
+      setInterval(() => {
+        locale.value = locale.value === 'zh-CN' ? 'en-US' : 'zh-CN'
+      }, 5000)
+    })
     return () => {
       return (
         <div>
@@ -52,7 +58,9 @@ export default defineComponent({
             </tempui-paragraph>
           </div>
           <br />
-          <tempui-paragraph copyable>点击右边的图标复制文本。</tempui-paragraph>
+          <tempui-locale-provider locale={locale.value}>
+            <tempui-paragraph copyable>点击右边的图标复制文本。</tempui-paragraph>
+          </tempui-locale-provider>
         </div>
       )
     }

@@ -1,6 +1,6 @@
-import { defineComponent, h, useAttrs, computed } from 'vue'
+import { defineComponent, h, useAttrs, computed, reactive, getCurrentInstance } from 'vue'
 import { prefix } from 'constants/config'
-import { textProps } from './type'
+import { textProps, type CopyableConfigType } from './type'
 import {
   hasPropsOrSlots,
   isArray,
@@ -12,15 +12,14 @@ import {
   useSetTimeout
 } from '../_util'
 import { isObject } from 'lodash'
-import { getCurrentInstance } from 'vue'
 import Tooltip from '../tooltip'
 import Popover from '../popover'
 import './style/typography'
 import type { StyleValue } from 'vue'
 import type { VueNode } from '../_util/type'
 import { IconCopy, IconTick } from '../icon'
-import { reactive } from 'vue'
 import { copyText } from './utils'
+import LocaleConsumer from '../locale/locale-consumer'
 
 const Text = defineComponent({
   setup(props, ctx) {
@@ -100,53 +99,72 @@ const Text = defineComponent({
         }, delay)
       })
     }
+    const getCopyableOptions = () => {
+      const { copyable } = props
+      let options = {
+        content: '',
+        copyTip: undefined,
+        icon: undefined,
+        render: undefined,
+        successTip: undefined
+      } as unknown as CopyableConfigType
+      if (isBoolean(copyable)) {
+        return options
+      }
+      options = { ...options, ...copyable }
+      return options
+    }
     const renderPopover = (renderChildren: () => unknown[]) => {
       const { ellipsis } = props
       const template = renderChildren() || []
       if (props.copyable) {
+        const options = getCopyableOptions()
         const text = template.join('')
-        const copyable = props.copyable
-        if (isObject(copyable)) {
-          if (isFunction(copyable.render)) {
-            const copied = state.coping
-            const doCopy = () => {
-              handleClickCopy(text)
-            }
-            const config = { ...copyable }
-            const vn = copyable.render(copied, doCopy, config)
-            template.push(vn)
+        if (isFunction(options.render)) {
+          const copied = state.coping
+          const doCopy = () => {
+            handleClickCopy(text)
           }
-        } else {
-          const copy = (
-            <span class={`${prefix}-typography-action-copy`}>
-              <Tooltip
-                showArrow
-                content={<span>复制</span>}
-                position="top"
-                wrapperId={copyTooltipId.value}
-              >
-                <a
-                  onClick={() => handleClickCopy(text)}
-                  class={`${prefix}-typography-action-copy-icon`}
-                  tabindex={'0'}
-                  aria-describedby={copyTooltipId.value}
-                  data-popupid={copyTooltipId.value}
-                >
-                  <IconCopy aria-label="copy"></IconCopy>
-                </a>
-              </Tooltip>
-            </span>
-          )
-          const copied = (
-            <span class={`${prefix}-typography-action-copied`}>
-              <span>
-                <IconTick class={`${prefix}-typography-action-copied-icon`}></IconTick>
-                复制成功
-              </span>
-            </span>
-          )
-          template.push(state.coping ? copied : copy)
+          const config = { ...options }
+          const vn = config.render(copied, doCopy, config)
+          template.push(vn)
         }
+        const copyable = (
+          <LocaleConsumer componentName="Typography">
+            {(locale: { copy: string; copied: string }) => {
+              const copy = (
+                <span class={`${prefix}-typography-action-copy`}>
+                  <Tooltip
+                    showArrow
+                    content={<span>{options.copyTip || locale.copy}</span>}
+                    position="top"
+                    wrapperId={copyTooltipId.value}
+                  >
+                    <a
+                      onClick={() => handleClickCopy(text)}
+                      class={`${prefix}-typography-action-copy-icon`}
+                      tabindex={'0'}
+                      aria-describedby={copyTooltipId.value}
+                      data-popupid={copyTooltipId.value}
+                    >
+                      {options.icon ? options.icon : <IconCopy aria-label="copy"></IconCopy>}
+                    </a>
+                  </Tooltip>
+                </span>
+              )
+              const copied = (
+                <span class={`${prefix}-typography-action-copied`}>
+                  <span>
+                    <IconTick class={`${prefix}-typography-action-copied-icon`}></IconTick>
+                    {options.successTip || locale.copied}
+                  </span>
+                </span>
+              )
+              return state.coping ? copied : copy
+            }}
+          </LocaleConsumer>
+        )
+        template.push(copyable)
       }
       if (ellipsis) {
         return <span>{template}</span>

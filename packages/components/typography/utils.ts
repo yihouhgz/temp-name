@@ -1,3 +1,5 @@
+import { omit } from 'lodash'
+
 export function extractAllNumbers(text: string) {
   const regex =
     /\b(?:0[xX][0-9a-fA-F_]+|0[bB][01_]+|0[oO][0-7_]+|[0-9][0-9_]*(?:\.[0-9_]*)?[eE][+-]?[0-9_]+|(?:[0-9][0-9_]*\.[0-9_]*|[0-9_]*\.[0-9][0-9_]*)|0[0-7_]+|[1-9][0-9_]*|0)\b/g
@@ -102,4 +104,159 @@ export function copyText<T extends string>(text: T): Promise<T> {
     })
   }
   return propmise
+}
+
+function styleToString(style: CSSStyleDeclaration): string {
+  // There are some different behavior between Firefox & Chrome.
+  // We have to handle this ourself.
+  const styleNames = Array.prototype.slice.apply(style)
+  return styleNames.map((name: string) => `${name}: ${style.getPropertyValue(name)};`).join('')
+}
+
+function pxToNumber(value: string) {
+  if (!value) {
+    return 0
+  }
+  const match = value.match(/^\d*(\.\d*)?/)
+  return match ? Number(match[0]) : 0
+}
+
+let ellipsisContainer: HTMLDivElement | null = null
+export const getRenderText = (
+  originEle: HTMLElement,
+  rows: number,
+  content = '',
+  fixedContent: {
+    expand: Node
+    copy: Node
+  },
+  ellipsisStr: string,
+  suffix: string,
+  ellipsisPos: string,
+  isStrong: boolean
+) => {
+  if (content.length === 0) {
+    return ''
+  }
+  if (!ellipsisContainer) {
+    ellipsisContainer = document.createElement('div')
+    ellipsisContainer.setAttribute('aria-hidden', 'true')
+    document.body.appendChild(ellipsisContainer)
+  }
+
+  const originStyle = window.getComputedStyle(originEle)
+  const originCSS = styleToString(originStyle)
+  const lineHeight = pxToNumber(originStyle.lineHeight)
+  const maxHeight = Math.round(
+    lineHeight * (rows + 1) +
+      pxToNumber(originStyle.paddingTop) +
+      pxToNumber(originStyle.paddingBottom)
+  )
+
+  ellipsisContainer.setAttribute('style', originCSS)
+  ellipsisContainer.style.position = 'fixed'
+  ellipsisContainer.style.left = '0'
+
+  if (originStyle.getPropertyValue('width') === 'auto' && originEle.offsetWidth) {
+    ellipsisContainer.style.width = `${originEle.offsetWidth}px`
+  }
+
+  ellipsisContainer.style.height = 'auto'
+  ellipsisContainer.style.top = '-999999px'
+  ellipsisContainer.style.zIndex = '-1000'
+  if (isStrong) ellipsisContainer.style.fontWeight = '600'
+
+  ellipsisContainer.style.textOverflow = 'clip'
+  ellipsisContainer.style.webkitLineClamp = 'none'
+
+  ellipsisContainer.innerHTML = ''
+
+  function inRange() {
+    if (!ellipsisContainer) {
+      return
+    }
+    // If content does not wrap due to line break strategy, width should be judged to determine whether it's in range
+    const widthInRange = ellipsisContainer.scrollWidth <= ellipsisContainer.offsetWidth
+    const heightInRange = ellipsisContainer.scrollHeight < maxHeight
+
+    return rows === 1 ? widthInRange && heightInRange : heightInRange
+  }
+
+  const ellipsisContentHolder = document.createElement('span')
+  const textNode = document.createTextNode(content)
+
+  ellipsisContentHolder.appendChild(textNode)
+
+  if (suffix.length > 0) {
+    const ellipsisTextNode = document.createTextNode(suffix)
+    ellipsisContentHolder.appendChild(ellipsisTextNode)
+  }
+  ellipsisContainer.appendChild(ellipsisContentHolder)
+
+  Object.values(omit(fixedContent, 'expand')).map(
+    (node) => node && ellipsisContainer?.appendChild(node.cloneNode(true))
+  )
+
+  function appendExpandNode() {
+    if (!ellipsisContainer) return
+    ellipsisContainer.innerHTML = ''
+    ellipsisContainer.appendChild(ellipsisContentHolder)
+    Object.values(fixedContent).map(
+      (node) => node && ellipsisContainer?.appendChild(node.cloneNode(true))
+    )
+  }
+
+  function getCurrentText(text: string, pos: number) {
+    const end = text.length
+    if (!pos) {
+      return ellipsisStr
+    }
+    if (ellipsisPos === 'end') {
+      return text.slice(0, pos) + ellipsisStr
+    }
+    return text.slice(0, pos) + ellipsisStr + text.slice(end - pos, end)
+  }
+
+  function measureText(
+    textNode: Text,
+    fullText: string,
+    startLoc = 0,
+    endLoc = fullText.length,
+    lastSuccessLoc = 0
+  ): string {
+    const midLoc = Math.floor((startLoc + endLoc) / 2)
+    const currentText = getCurrentText(fullText, midLoc)
+    textNode.textContent = currentText
+    if (startLoc >= endLoc - 1 && endLoc > 0) {
+      // Loop when step is small
+      for (let step = endLoc; step >= startLoc; step -= 1) {
+        const currentStepText = getCurrentText(fullText, step)
+        textNode.textContent = currentStepText
+        if (inRange()) {
+          return currentStepText
+        }
+      }
+    } else if (endLoc === 0) {
+      return ellipsisStr
+    }
+
+    if (inRange()) {
+      return measureText(textNode, fullText, midLoc, endLoc, midLoc)
+    }
+    return measureText(textNode, fullText, startLoc, midLoc, lastSuccessLoc)
+  }
+
+  let resText = content
+
+  if (!inRange()) {
+    appendExpandNode()
+    resText = measureText(
+      textNode,
+      content,
+      0,
+      ellipsisPos === 'middle' ? Math.floor(content.length / 2) : content.length
+    )
+  }
+  ellipsisContainer.innerHTML = ''
+  return resText
 }

@@ -2,19 +2,19 @@ import zh_CN from './language/zh_CN'
 import zh_TW from './language/zh_TW'
 import en_US from './language/en_US'
 
-export type LocaleName = 'en_US' | 'zh_CN' | 'zh_TW'
+export type LocaleName = 'en-US' | 'zh-CN' | 'zh-TW'
 export type Locale = typeof zh_CN
 export const defaultLocale = zh_CN
 
 export const getLocale = (localeName: LocaleName) => {
   switch (localeName) {
-    case 'en_US':
+    case 'en-US':
       return en_US
-    case 'zh_CN':
+    case 'zh-CN':
       return zh_CN
-    case 'zh_TW':
+    case 'zh-TW':
       return zh_TW
     default:
-      return zh_CN
+      return defaultLocale
   }
 }

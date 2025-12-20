@@ -1,12 +1,18 @@
 export default {
-  name: 'en_US',
-  locale: 'en_US',
-  popconfirm: {
+  name: 'en-US',
+  locale: 'en-US',
+  Popconfirm: {
     okText: 'confirm',
     cancelText: 'cancel'
   },
-  modal: {
+  Modal: {
     okText: 'confirm',
     cancelText: 'cancel'
+  },
+  Typography: {
+    copy: 'copy',
+    copied: 'copied',
+    expand: 'expand',
+    collapse: 'collapse'
   }
 }

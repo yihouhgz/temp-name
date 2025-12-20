@@ -1,12 +1,18 @@
 export default {
   name: 'zh-CN',
   locale: 'zh-CN',
-  popconfirm: {
+  Popconfirm: {
     okText: '确定',
     cancelText: '取消'
   },
-  modal: {
+  Modal: {
     okText: '确定',
     cancelText: '取消'
+  },
+  Typography: {
+    copy: '复制',
+    copied: '复制成功',
+    expand: '展开',
+    collapse: '收起'
   }
 }

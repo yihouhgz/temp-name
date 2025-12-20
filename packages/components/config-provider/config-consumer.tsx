@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue'
 import { prefix } from 'constants/config'
-import { useConfigInject } from '../config-provider/content'
-import { defaultConfig } from '../config-provider/type'
+import { useConfigInject } from './content'
+import { defaultConfig } from './type'
 
 const ConfigConsumer = defineComponent({
   name: `${prefix}-config-consumer`,
