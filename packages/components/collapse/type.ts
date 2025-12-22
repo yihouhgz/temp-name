@@ -83,7 +83,7 @@ export const collapseEmits = {
   }
 }
 
-export const collapsibleProps = {
+export const collapsePanelProps = {
   /**
    * @description 是否禁用
    */
@@ -129,7 +129,7 @@ export const collapsibleProps = {
   }
 }
 
-export const collapsibleEmits = {
+export const collapsePanelEmits = {
   motionEnd: () => {},
   motionStart: () => {}
 }

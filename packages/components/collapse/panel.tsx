@@ -1,11 +1,12 @@
 import { prefix } from 'constants/config'
-import { defineComponent } from 'vue'
+import { defineComponent, getCurrentInstance } from 'vue'
 import Collapsible from '../collapsible'
-import { collapseProps, collapseEmits } from './type'
-import { useRandomId } from '../_util'
+import { collapsePanelProps, collapsePanelEmits } from './type'
+import { renderElementForPropsOrSlot, useRandomId } from '../_util'
 
 const CollapsePanel = defineComponent({
   setup(props, ctx) {
+    const instance = getCurrentInstance()
     const id = useRandomId(7)
     return () => {
       return (
@@ -17,7 +18,10 @@ const CollapsePanel = defineComponent({
             aria-expanded="false"
             aria-owns={id}
             class={prefix + '-collapse-header'}
-          ></div>
+          >
+            <span>{renderElementForPropsOrSlot('header', instance)}</span>
+            <span class={`${prefix}-collapse-header-right`}></span>
+          </div>
           <Collapsible>
             <div class={prefix + '-collapse-content'} aria-hidden="false" id={id}>
               <div class={prefix + '-collapse-content-wrapper'}>{ctx.slots.default?.()}</div>
@@ -27,8 +31,8 @@ const CollapsePanel = defineComponent({
       )
     }
   },
-  collapseProps,
-  collapseEmits,
+  props: collapsePanelProps,
+  emits: collapsePanelEmits,
   name: prefix + '-collapse-panel'
 })
 export default CollapsePanel
