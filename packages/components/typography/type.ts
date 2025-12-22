@@ -116,11 +116,11 @@ export const textProps = {
    * @description 设置自动溢出省略
    */
   ellipsis: {
-    type: [Boolean, Object] as PropType<boolean | EllipsisConfigType>,
+    type: [Boolean, Object, String] as PropType<boolean | EllipsisConfigType>,
     default: false
   },
   icon: {
-    type: [Function, Object] as PropType<VueNode>,
+    type: [Function, Object, String] as PropType<VueNode>,
     default: null
   },
   /**

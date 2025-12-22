@@ -1,0 +1,8 @@
+@import '../base/constant';
+
+.#{$prefix}-collapsible-transition {
+  transition:
+    height 0.25s ease var(--#{$prefix}-transition_delay-none),
+    opacity 0.25s var(--#{$prefix}-transition_function-easeIn)
+      var(--#{$prefix}-transition_delay-none);
+}

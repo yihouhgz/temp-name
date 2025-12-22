@@ -13,6 +13,7 @@ import FeedbackDemo from './components/feedback'
 import SideSheetDemo from './components/sideSheet'
 import ModalDemo from './components/modal'
 import TypographyDemo from './components/typography'
+import Collapsible from './components/collapsibled'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -953,6 +954,7 @@ const App = defineComponent(() => {
       <SideSheetDemo></SideSheetDemo>
       <ModalDemo></ModalDemo>
       <TypographyDemo></TypographyDemo>
+      <Collapsible></Collapsible>
     </div>
   )
 })
