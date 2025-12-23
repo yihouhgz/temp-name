@@ -37,6 +37,7 @@ import SideSheet from './side-sheet'
 import LocaleProvider from './locale/locale-provider'
 import Modal from './modal'
 import Collapsible from './collapsible'
+import Carousel from './carousel/carousel'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -94,7 +95,8 @@ const components: Component[] = [
   SideSheet,
   LocaleProvider,
   Modal,
-  Collapsible
+  Collapsible,
+  Carousel
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -154,7 +156,8 @@ export {
   SideSheet,
   LocaleProvider,
   Modal,
-  Collapsible
+  Collapsible,
+  Carousel
 }
 
 const globalApis: { [key: string]: unknown } = {

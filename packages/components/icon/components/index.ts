@@ -15,6 +15,8 @@ import IconCheckboxTick from './IconCheckboxTick'
 import IconCheckboxIndeterminate from './IconCheckboxIndeterminate'
 import IconRadio from './IconRadio'
 import IconCopy from './IconCopy'
+import IconChevronLeft from './IconChevronLeft'
+import IconChevronRight from './IconChevronRight'
 
 export {
   Camera,
@@ -33,5 +35,7 @@ export {
   IconCheckboxTick,
   IconCheckboxIndeterminate,
   IconRadio,
-  IconCopy
+  IconCopy,
+  IconChevronLeft,
+  IconChevronRight
 }
