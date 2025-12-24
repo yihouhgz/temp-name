@@ -37,6 +37,7 @@ import SideSheet from './side-sheet'
 import LocaleProvider from './locale/locale-provider'
 import Modal from './modal'
 import Collapsible from './collapsible'
+import Carousel from './carousel/carousel'
 import Collapse, { CollapsePanel } from './collapse'
 const components: Component[] = [
   Button,
@@ -96,6 +97,7 @@ const components: Component[] = [
   LocaleProvider,
   Modal,
   Collapsible,
+  Carousel,
   Collapse,
   CollapsePanel
 ]
@@ -158,6 +160,7 @@ export {
   LocaleProvider,
   Modal,
   Collapsible,
+  Carousel,
   Collapse,
   CollapsePanel
 }

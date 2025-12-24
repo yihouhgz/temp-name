@@ -28,19 +28,19 @@ const Collapsible = defineComponent({
         <div>
           <tempui-button onClick={toggle}>Toggle</tempui-button>
           <tempui-collapsible isOpen={isOpen.value}>{collapsed}</tempui-collapsible>
-          <div>
-            <tempui-collapse>
-              <tempui-collapse-panel header="This is panel header 1" itemKey="1">
-                <p>Hi, bytedance dance dance. This is the docsite of Semi UI. </p>
-              </tempui-collapse-panel>
-              <tempui-collapse-panel header="This is panel header 2" itemKey="2">
-                <p>Hi, bytedance dance dance. This is the docsite of Semi UI. </p>
-              </tempui-collapse-panel>
-              <tempui-collapse-panel header="This is panel header 3" itemKey="3">
-                <p>Hi, bytedance dance dance. This is the docsite of Semi UI. </p>
-              </tempui-collapse-panel>
-            </tempui-collapse>
-          </div>
+          <br />
+          <tempui-collapse accordion defaultActiveKey="1" expandIconPosition="left">
+            <tempui-collapse-panel header="This is panel header 1" itemKey="1">
+              <p>Hi, bytedance dance dance. This is the docsite of Semi UI. </p>
+            </tempui-collapse-panel>
+            <tempui-collapse-panel header="This is panel header 2" itemKey="2">
+              <p>Hi, bytedance dance dance. This is the docsite of Semi UI. </p>
+            </tempui-collapse-panel>
+            <tempui-collapse-panel header="This is panel header 3" itemKey="3">
+              <p>Hi, bytedance dance dance. This is the docsite of Semi UI. </p>
+            </tempui-collapse-panel>
+          </tempui-collapse>
+          <br />
         </div>
       )
     }

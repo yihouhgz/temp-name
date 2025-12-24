@@ -1,0 +1,347 @@
+@import '../base/constant';
+
+//指示器-背景色-动画持续时间
+$transition_duration_carousel_indicator-bg: var(--#{$prefix}-transition_delay-none);
+//指示器-背景色-过渡曲线
+$transition_function_carousel_indicator-bg: var(--#{$prefix}-transition_function-easeOut);
+//指示器-背景色-延迟时间
+$transition_delay_carousel_indicator-bg: var(--#{$prefix}-transition_delay-none);
+//箭头-背景色-动画持续时间
+$transition_duration_carousel_arrow-bg: var(--#{$prefix}-transition_delay-none);
+//箭头-背景色-过渡曲线
+$transition_funciton_carousel_arrow-bg: var(--#{$prefix}-transition_function-easeOut);
+//箭头-背景色-延迟时间
+$transition_delay_carousel_arrow-bg: var(--#{$prefix}-transition_delay-none);
+
+//深色主题指示器背景颜色 - 默认
+$color-carousel_indicator_theme_dark-bg-default: rgba(var(--#{$prefix}-black), 0.5);
+//深色主题指示器背景颜色 - 悬浮
+$color-carousel_indicator_theme_dark-bg-hover: rgba(var(--#{$prefix}-black), 0.7);
+//深色主题指示器背景颜色 - 选中
+$color-carousel_indicator_theme_dark-bg-active: rgba(var(--#{$prefix}-black), 1);
+//主要主题指示器背景颜色 - 默认
+$color-carousel_indicator_theme_primary-bg-default: rgba(var(--#{$prefix}-blue-6), 0.4);
+//主要主题指示器背景颜色 - 悬浮
+$color-carousel_indicator_theme_primary-bg-hover: rgba(var(--#{$prefix}-blue-6), 0.7);
+//主要主题指示器背景颜色 - 选中
+$color-carousel_indicator_theme_primary-bg-active: rgba(var(--#{$prefix}-blue-6), 1);
+//浅色主题指示器背景颜色 - 默认
+$color-carousel_indicator_theme_light-bg-default: rgba(var(--#{$prefix}-white), 0.4);
+//浅色主题指示器背景颜色 - 悬浮
+$color-carousel_indicator_theme_light-bg-hover: rgba(var(--#{$prefix}-white), 0.7);
+//浅色主题指示器背景颜色 - 选中
+$color-carousel_indicator_theme_light-bg-active: rgba(var(--#{$prefix}-white), 1);
+//深色主题箭头背景颜色 - 默认
+$color-carousel_arrow_theme_dark-bg-default: rgba(var(--#{$prefix}-black), 0.5);
+//深色主题箭头背景颜色 - 悬浮
+$color-carousel_arrow_theme_dark-bg-hover: rgba(var(--#{$prefix}-black), 1);
+//主要主题箭头背景颜色 - 默认
+$color-carousel_arrow_theme_primary-bg-default: rgba(var(--#{$prefix}-blue-6), 0.4);
+//主要主题箭头背景颜色 - 悬浮
+$color-carousel_arrow_theme_primary-bg-hover: rgba(var(--#{$prefix}-blue-6), 1);
+//浅色主题箭头背景颜色 - 默认
+$color-carousel_arrow_theme_light-bg-default: rgba(var(--#{$prefix}-white), 0.4);
+//浅色主题箭头背景颜色 - 悬浮
+$color-carousel_arrow_theme_light-bg-hover: rgba(var(--#{$prefix}-white), 1);
+
+//小尺寸柱状指示器高度 - 默认
+$height-carousel_indicator_columnar_small_default: 12px;
+//小尺寸柱状指示器高度 - 选中
+$height-carousel_indicator_columnar_small_active: 20px;
+//中等尺寸柱状指示器高度 - 默认
+$height-carousel_indicator_columnar_medium_default: 20px;
+//中等尺寸柱状指示器高度 - 选中
+$height-carousel_indicator_columnar_medium_active: 28px;
+//小尺寸条状指示器高度
+$height-carousel_indicator_line_small: 4px;
+//中等尺寸条状指示器高度
+$height-carousel_indicator_line_medium: 6px;
+
+//点状指示器圆角
+$radius-carousel_indicator_dot: 50%;
+
+//指示器内边距
+$spacing-carousel_indicator-padding: 32px;
+//柱状指示器水平外边距
+$spacing-carousel_indicator_columnar-marginX: 4px;
+//条状指示器水平外边距
+$spacing-carousel_indicator_line-marginX: 4px;
+//点状指示器水平外边距
+$spacing-carousel_indicator_dot-marginX: 8px;
+//左侧箭头绝对定位 - left
+$spacing-carousel_arrow-left: 20px;
+//右侧箭头绝对定位 - right
+$spacing-carousel_arrow-right: 20px;
+
+//条状指示器最大宽度
+$width-carousel_indicator_line: 240px;
+//小尺寸柱状指示器宽度
+$width-carousel_indicator_columnar_small: 4px;
+//中等尺寸柱状指示器宽度
+$width-carousel_indicator_columnar_medium: 6px;
+//小尺寸点状指示器宽度
+$width-carousel_indicator_dot_small: 8px;
+//中等尺寸点状指示器宽度
+$width-carousel_indicator_dot_medium: 12px;
+//箭头宽度
+$width-carousel_arrow: 32px;
+
+@keyframes carousel-content-item-keyframe-slide-in {
+  0% {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes carousel-content-item-keyframe-slide-out {
+  0% {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes carousel-content-item-keyframe-slide-in-reverse {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes carousel-content-item-keyframe-slide-out-reverse {
+  0% {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.#{$prefix}-carousel {
+  position: relative;
+  overflow: hidden;
+
+  &-content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    &-slide > :not(&-item-current) {
+      visibility: hidden;
+    }
+    &-forward {
+      .#{$prefix}-carousel-content-item-slide-in {
+        animation: carousel-content-item-keyframe-slide-in;
+        animation-fill-mode: forwards;
+        display: block;
+      }
+      .#{$prefix}-carousel-content-item-slide-out {
+        animation: carousel-content-item-keyframe-slide-out;
+        animation-fill-mode: forwards;
+        display: block;
+      }
+    }
+    &-reverse {
+      .#{$prefix}-carousel-content-item-slide-in {
+        animation: carousel-content-item-keyframe-slide-in-reverse;
+        animation-fill-mode: forwards;
+        display: block;
+      }
+      .#{$prefix}-carousel-content-item-slide-out {
+        animation: carousel-content-item-keyframe-slide-out-reverse;
+        animation-fill-mode: forwards;
+        display: block;
+      }
+    }
+
+    &-fade {
+      > * {
+        opacity: 0;
+      }
+      .#{$prefix}-carousel-content-item-current {
+        opacity: 1;
+      }
+    }
+    &-item {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      &-slide {
+        &-in {
+          animation: semi-carousel-content-item-keyframe-slide-in-reverse;
+          animation-fill-mode: forwards;
+        }
+      }
+      &-current {
+        z-index: 1;
+      }
+    }
+  }
+
+  &-arrow {
+    display: flex;
+    cursor: pointer;
+    font-size: $width-carousel_arrow;
+    &-dark {
+      color: $color-carousel_arrow_theme_dark-bg-default;
+      transition: color $transition_duration_carousel_arrow-bg
+        $transition_funciton_carousel_arrow-bg $transition_delay_carousel_arrow-bg;
+      &:hover {
+        color: $color-carousel_arrow_theme_dark-bg-hover;
+      }
+    }
+    &-primary {
+      color: $color-carousel_arrow_theme_primary-bg-default;
+      transition: color $transition_duration_carousel_arrow-bg
+        $transition_funciton_carousel_arrow-bg $transition_delay_carousel_arrow-bg;
+      &:hover {
+        color: $color-carousel_arrow_theme_primary-bg-hover;
+      }
+    }
+    &-light {
+      color: $color-carousel_arrow_theme_light-bg-default;
+      transition: color $transition_duration_carousel_arrow-bg
+        $transition_funciton_carousel_arrow-bg $transition_delay_carousel_arrow-bg;
+      &:hover {
+        color: $color-carousel_arrow_theme_light-bg-hover;
+      }
+    }
+
+    .#{$prefix}-icon {
+      font-size: $width-carousel_arrow;
+    }
+    &-prev,
+    &-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      width: $width-carousel_arrow;
+      height: $width-carousel_arrow;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &-prev {
+      left: $spacing-carousel_arrow-left;
+    }
+    &-next {
+      right: $spacing-carousel_arrow-right;
+    }
+  }
+
+  &-indicator {
+    display: flex;
+    align-items: flex-end;
+    z-index: 2;
+
+    &-center {
+      position: absolute;
+      left: 50%;
+      bottom: $spacing-carousel_indicator-padding;
+      transform: translate(-50%);
+    }
+    &-item {
+      display: block;
+      transition: background-color $transition_duration_carousel_indicator-bg
+        $transition_function_carousel_indicator-bg $transition_delay_carousel_indicator-bg;
+
+      &-dark {
+        background-color: $color-carousel_indicator_theme_dark-bg-default;
+        &:hover {
+          background-color: $color-carousel_indicator_theme_dark-bg-hover;
+        }
+      }
+      &-dark.#{$prefix}-carousel-indicator-item-active {
+        background-color: $color-carousel_indicator_theme_dark-bg-active;
+      }
+      &-light {
+        background-color: $color-carousel_indicator_theme_light-bg-default;
+        &:hover {
+          background-color: $color-carousel_indicator_theme_light-bg-hover;
+        }
+      }
+      &-light.#{$prefix}-carousel-indicator-item-active {
+        background-color: $color-carousel_indicator_theme_light-bg-active;
+      }
+      &-primary {
+        background-color: $color-carousel_indicator_theme_primary-bg-default;
+        &:hover {
+          background-color: $color-carousel_indicator_theme_primary-bg-hover;
+        }
+      }
+      &-primary.#{$prefix}-carousel-indicator-item-active {
+        background-color: $color-carousel_indicator_theme_primary-bg-active;
+      }
+    }
+    &-dot {
+      .#{$prefix}-carousel-indicator-item {
+        border-radius: $radius-carousel_indicator_dot;
+        cursor: pointer;
+      }
+      .#{$prefix}-carousel-indicator-item:not(:last-child) {
+        margin-right: $spacing-carousel_indicator_dot-marginX;
+      }
+      .#{$prefix}-carousel-indicator-item-small {
+        width: $width-carousel_indicator_dot_small;
+        height: $width-carousel_indicator_dot_small;
+      }
+      .#{$prefix}-carousel-indicator-item-medium {
+        width: $width-carousel_indicator_dot_medium;
+        height: $width-carousel_indicator_dot_medium;
+      }
+    }
+    &-line {
+      width: $width-carousel_indicator_line;
+      .#{$prefix}-carousel-indicator-item {
+        flex: 1 1;
+        cursor: pointer;
+      }
+      .#{$prefix}-carousel-indicator-item:not(:last-child) {
+        margin-right: $spacing-carousel_indicator_line-marginX;
+      }
+
+      .#{$prefix}-carousel-indicator-item-small {
+        height: $height-carousel_indicator_line_small;
+      }
+      .#{$prefix}-carousel-indicator-item-medium {
+        height: $height-carousel_indicator_line_medium;
+      }
+    }
+    &-columnar {
+      .#{$prefix}-carousel-indicator-item {
+        cursor: pointer;
+      }
+      .#{$prefix}-carousel-indicator-item:not(:last-child) {
+        margin-right: $spacing-carousel_indicator_columnar-marginX;
+      }
+
+      .#{$prefix}-carousel-indicator-item-small {
+        width: $width-carousel_indicator_columnar_small;
+        height: $height-carousel_indicator_columnar_small_default;
+      }
+      .#{$prefix}-carousel-indicator-item-small.#{$prefix}-carousel-indicator-item-active {
+        height: $height-carousel_indicator_columnar_small_active;
+      }
+      .#{$prefix}-carousel-indicator-item-medium {
+        width: $width-carousel_indicator_columnar_medium;
+        height: $height-carousel_indicator_columnar_medium_default;
+      }
+      .#{$prefix}-carousel-indicator-item-medium.#{$prefix}-carousel-indicator-item-active {
+        height: $height-carousel_indicator_columnar_medium_active;
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import Collapse from './collapse'
 import CollapsePanel from './panel'
-export default Collapse
+Collapse.Panel = CollapsePanel
 export { CollapsePanel }
+export default Collapse

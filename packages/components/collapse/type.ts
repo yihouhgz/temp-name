@@ -49,8 +49,9 @@ export const collapseProps = {
    * @description 展开图标位置
    */
   expandIconPosition: {
+    type: String as PropType<'left' | 'right'>,
     values: ['left', 'right'] as const,
-    default: 'left'
+    default: 'right'
   },
   /**
    * @description 是否保留隐藏的面板 DOM 树，默认销毁
@@ -78,7 +79,7 @@ export const collapseEmits = {
   /**
    * @description 切换面板的回调
    */
-  update: (activeKey: string | string[], e: Event) => {
+  change: (activeKey: string | string[], e: Event) => {
     return (isString(activeKey) || Array.isArray(activeKey)) && e instanceof Event
   }
 }
@@ -130,6 +131,6 @@ export const collapsePanelProps = {
 }
 
 export const collapsePanelEmits = {
-  motionEnd: () => {},
-  motionStart: () => {}
+  motionEnd: () => undefined,
+  motionStart: () => undefined
 }
