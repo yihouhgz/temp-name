@@ -202,6 +202,23 @@ $width-carousel_arrow: 32px;
         color: $color-carousel_arrow_theme_dark-bg-hover;
       }
     }
+    &-primary {
+      color: $color-carousel_arrow_theme_primary-bg-default;
+      transition: color $transition_duration_carousel_arrow-bg
+        $transition_funciton_carousel_arrow-bg $transition_delay_carousel_arrow-bg;
+      &:hover {
+        color: $color-carousel_arrow_theme_primary-bg-hover;
+      }
+    }
+    &-light {
+      color: $color-carousel_arrow_theme_light-bg-default;
+      transition: color $transition_duration_carousel_arrow-bg
+        $transition_funciton_carousel_arrow-bg $transition_delay_carousel_arrow-bg;
+      &:hover {
+        color: $color-carousel_arrow_theme_light-bg-hover;
+      }
+    }
+
     .#{$prefix}-icon {
       font-size: $width-carousel_arrow;
     }
@@ -238,14 +255,44 @@ $width-carousel_arrow: 32px;
     }
     &-item {
       display: block;
+      transition: background-color $transition_duration_carousel_indicator-bg
+        $transition_function_carousel_indicator-bg $transition_delay_carousel_indicator-bg;
+
+      &-dark {
+        background-color: $color-carousel_indicator_theme_dark-bg-default;
+        &:hover {
+          background-color: $color-carousel_indicator_theme_dark-bg-hover;
+        }
+      }
+      &-dark.#{$prefix}-carousel-indicator-item-active {
+        background-color: $color-carousel_indicator_theme_dark-bg-active;
+      }
+      &-light {
+        background-color: $color-carousel_indicator_theme_light-bg-default;
+        &:hover {
+          background-color: $color-carousel_indicator_theme_light-bg-hover;
+        }
+      }
+      &-light.#{$prefix}-carousel-indicator-item-active {
+        background-color: $color-carousel_indicator_theme_light-bg-active;
+      }
+      &-primary {
+        background-color: $color-carousel_indicator_theme_primary-bg-default;
+        &:hover {
+          background-color: $color-carousel_indicator_theme_primary-bg-hover;
+        }
+      }
+      &-primary.#{$prefix}-carousel-indicator-item-active {
+        background-color: $color-carousel_indicator_theme_primary-bg-active;
+      }
     }
     &-dot {
       .#{$prefix}-carousel-indicator-item {
         border-radius: $radius-carousel_indicator_dot;
         cursor: pointer;
-        &:hover {
-          background-color: $color-carousel_indicator_theme_dark-bg-hover;
-        }
+      }
+      .#{$prefix}-carousel-indicator-item:not(:last-child) {
+        margin-right: $spacing-carousel_indicator_dot-marginX;
       }
       .#{$prefix}-carousel-indicator-item-small {
         width: $width-carousel_indicator_dot_small;
@@ -255,17 +302,45 @@ $width-carousel_arrow: 32px;
         width: $width-carousel_indicator_dot_medium;
         height: $width-carousel_indicator_dot_medium;
       }
-
-      .#{$prefix}-carousel-indicator-item-dark {
-        background-color: $color-carousel_indicator_theme_dark-bg-default;
-        transition: background-color $transition_duration_carousel_indicator-bg
-          $transition_function_carousel_indicator-bg $transition_delay_carousel_indicator-bg;
-        &:not(:last-child) {
-          margin-right: $spacing-carousel_indicator_dot-marginX;
-        }
+    }
+    &-line {
+      width: $width-carousel_indicator_line;
+      .#{$prefix}-carousel-indicator-item {
+        flex: 1 1;
+        cursor: pointer;
       }
-      .#{$prefix}-carousel-indicator-item-dark.#{$prefix}-carousel-indicator-item-active {
-        background-color: $color-carousel_indicator_theme_dark-bg-active;
+      .#{$prefix}-carousel-indicator-item:not(:last-child) {
+        margin-right: $spacing-carousel_indicator_line-marginX;
+      }
+
+      .#{$prefix}-carousel-indicator-item-small {
+        height: $height-carousel_indicator_line_small;
+      }
+      .#{$prefix}-carousel-indicator-item-medium {
+        height: $height-carousel_indicator_line_medium;
+      }
+    }
+    &-columnar {
+      .#{$prefix}-carousel-indicator-item {
+        cursor: pointer;
+      }
+      .#{$prefix}-carousel-indicator-item:not(:last-child) {
+        margin-right: $spacing-carousel_indicator_columnar-marginX;
+      }
+
+      .#{$prefix}-carousel-indicator-item-small {
+        width: $width-carousel_indicator_columnar_small;
+        height: $height-carousel_indicator_columnar_small_default;
+      }
+      .#{$prefix}-carousel-indicator-item-small.#{$prefix}-carousel-indicator-item-active {
+        height: $height-carousel_indicator_columnar_small_active;
+      }
+      .#{$prefix}-carousel-indicator-item-medium {
+        width: $width-carousel_indicator_columnar_medium;
+        height: $height-carousel_indicator_columnar_medium_default;
+      }
+      .#{$prefix}-carousel-indicator-item-medium.#{$prefix}-carousel-indicator-item-active {
+        height: $height-carousel_indicator_columnar_medium_active;
       }
     }
   }

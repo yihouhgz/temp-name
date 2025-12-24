@@ -78,12 +78,12 @@ export const collapseEmits = {
   /**
    * @description 切换面板的回调
    */
-  update: (activeKey: string | string[], e: Event) => {
+  change: (activeKey: string | string[], e: Event) => {
     return (isString(activeKey) || Array.isArray(activeKey)) && e instanceof Event
   }
 }
 
-export const collapsibleProps = {
+export const collapsePanelProps = {
   /**
    * @description 是否禁用
    */
@@ -129,7 +129,7 @@ export const collapsibleProps = {
   }
 }
 
-export const collapsibleEmits = {
+export const collapsePanelEmits = {
   motionEnd: () => {},
   motionStart: () => {}
 }

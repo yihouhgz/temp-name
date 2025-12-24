@@ -17,6 +17,7 @@ import IconRadio from './IconRadio'
 import IconCopy from './IconCopy'
 import IconChevronLeft from './IconChevronLeft'
 import IconChevronRight from './IconChevronRight'
+import IconChevronUp from './IconChevronUp'
 
 export {
   Camera,
@@ -37,5 +38,6 @@ export {
   IconRadio,
   IconCopy,
   IconChevronLeft,
-  IconChevronRight
+  IconChevronRight,
+  IconChevronUp
 }

@@ -38,6 +38,7 @@ import LocaleProvider from './locale/locale-provider'
 import Modal from './modal'
 import Collapsible from './collapsible'
 import Carousel from './carousel/carousel'
+import Collapse, { CollapsePanel } from './collapse'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -96,7 +97,9 @@ const components: Component[] = [
   LocaleProvider,
   Modal,
   Collapsible,
-  Carousel
+  Carousel,
+  Collapse,
+  CollapsePanel
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -157,7 +160,9 @@ export {
   LocaleProvider,
   Modal,
   Collapsible,
-  Carousel
+  Carousel,
+  Collapse,
+  CollapsePanel
 }
 
 const globalApis: { [key: string]: unknown } = {

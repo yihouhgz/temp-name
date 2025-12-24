@@ -54,7 +54,14 @@ const Carousel = defineComponent({
     return () => {
       return (
         <div>
-          <tempui-carousel speed={300} style={style} theme="dark">
+          <tempui-carousel
+            speed={300}
+            style={style}
+            theme="light"
+            autoPlay={false}
+            indicatorType="columnar"
+            indicatorSize="medium"
+          >
             {imgList.map((src, index) => {
               return (
                 <div

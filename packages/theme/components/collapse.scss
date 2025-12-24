@@ -1,0 +1,103 @@
+@import '../base/constant';
+
+// 分割线颜色
+$color-collapse_item-border-default: var(--#{$prefix}-color-border);
+// 标题文字颜色
+$color-collapse_header-text-default: var(--#{$prefix}-color-text-0);
+// 标题文字颜色 - 禁用状态
+$color-collapse_header-text-disabled: var(--#{$prefix}-color-disabled-text);
+// 展开箭头图标颜色
+$color-collapse_header-icon-default: var(--#{$prefix}-color-text-2);
+// 菜单项背景颜色 - 悬浮
+$color-collapse_header-bg-hover: var(--#{$prefix}-color-fill-0);
+// 菜单项背景颜色 - 按下
+$color-collapse_header-bg-active: var(--#{$prefix}-color-fill-1);
+// 内容文字颜色
+$color-collapse_content-text-default: var(--#{$prefix}-color-text-1);
+
+// 标题字重
+$font-collapse_header-fontWeight: $font-weight-bold;
+// 图标尺寸
+$size-collapse_icon-default: $width-icon-medium;
+// 内容圆角大小
+$radius-collapse_header: var(--#{$prefix}-border-radius-small);
+// 标题水平外边距
+$spacing-collapse_header-marginX: $spacing-tight;
+// 标题垂直外边距
+$spacing-collapse_header-marginY: $spacing-extra-tight;
+// 标题内边距
+$spacing-collapse_header-padding: $spacing-tight;
+// 图标右侧内边距
+$spacing-collapse_right-paddingRight: $spacing-tight;
+// 暂无
+$spacing-collapse_header_iconLeft-marginRight: 8px;
+// 内容顶部内边距
+$spacing-collapse_content-paddingTop: $spacing-extra-tight;
+// 内容右侧内边距
+$spacing-collapse_content-paddingRight: $spacing-base;
+// 内容底部内边距
+$spacing-collapse_content-paddingBottom: $spacing-tight;
+// 内容左侧内边距
+$spacing-collapse_content-paddingLeft: $spacing-base;
+// 分割线宽度
+$width-collapse_item-border: 1px;
+
+.#{$prefix}-collapse {
+  &-item {
+    border-bottom: $width-collapse_item-border solid $color-collapse_item-border-default;
+  }
+  &-header,
+  &-header-right {
+    display: flex;
+    align-items: center;
+  }
+  &-header {
+    justify-content: space-between;
+    margin: $spacing-collapse_header-marginY $spacing-collapse_header-marginX;
+    padding: $spacing-collapse_header-padding;
+    padding-right: $spacing-collapse_right-paddingRight;
+    border-radius: $radius-collapse_header;
+    outline: none;
+    cursor: pointer;
+    color: $color-collapse_header-text-default;
+    font-weight: $font-collapse_header-fontWeight;
+    font-size: $font-size-regular;
+    line-height: 20px;
+    font-family: $font-family;
+    &:hover {
+      background-color: $color-collapse_header-bg-hover;
+    }
+    &:active {
+      background-color: $color-collapse_header-bg-active;
+    }
+    &-disabled {
+      cursor: not-allowed;
+      color: $color-collapse_header-text-disabled;
+      &:hover,
+      &:active {
+        background-color: $color-collapse_header-text-disabled;
+      }
+      .#{$prefix}-collapse-header-icon {
+        color: $color-collapse_header-text-disabled;
+      }
+    }
+    &-extra {
+      display: flex;
+    }
+    &-icon {
+      width: $size-collapse_icon-default;
+      height: $size-collapse_icon-default;
+      color: $color-collapse_header-icon-default;
+      margin-left: $spacing-collapse_header_iconLeft-marginRight;
+    }
+  }
+
+  &-content {
+    padding: $spacing-collapse_content-paddingTop $spacing-collapse_content-paddingRight
+      $spacing-collapse_content-paddingBottom $spacing-collapse_content-paddingLeft;
+    color: $color-collapse_content-text-default;
+    font-size: $font-size-regular;
+    line-height: 20px;
+    font-family: $font-family;
+  }
+}
