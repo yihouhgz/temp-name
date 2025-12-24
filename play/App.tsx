@@ -15,6 +15,7 @@ import ModalDemo from './components/modal'
 import TypographyDemo from './components/typography'
 import Collapsible from './components/collapsibled'
 import CarouselDemo from './components/carousel'
+import Navigation from './components/navigation'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -957,6 +958,7 @@ const App = defineComponent(() => {
       <TypographyDemo></TypographyDemo>
       <Collapsible></Collapsible>
       <CarouselDemo></CarouselDemo>
+      <Navigation></Navigation>
     </div>
   )
 })

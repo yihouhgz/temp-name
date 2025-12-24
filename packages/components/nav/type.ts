@@ -442,7 +442,7 @@ export const navProps = {
   }
 }
 
-export const collapseEmits = {
+export const navEmits = {
   /**
    * @description 点击任意导航项时触发
    */
