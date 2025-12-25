@@ -201,5 +201,10 @@ export const tooltipEmits = {
   /**
    * @description 当弹出层处于展示状态，点击非Children、非浮层内部区域时的回调（仅trigger为custom、click时有效）
    */
-  clickOutSide: (e: Event) => e instanceof Event
+  clickOutSide: (e: Event) => e instanceof Event,
+
+  /**
+   * @description 在 trigger 或 弹出层按 Esc 键时调用
+   */
+  escKeyDown: (e: KeyboardEvent) => e instanceof KeyboardEvent
 }

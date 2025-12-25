@@ -6,6 +6,9 @@ import { renderElementForPropsOrSlot } from '../_util'
 import { IconChevronDown } from '../icon'
 import { useNavigationInject } from './content'
 import Dropdown from '../dropdown'
+import { useSubProvide } from './sub-content'
+import NavItem, { type NavItemProps } from './item'
+import { h } from 'vue'
 
 const NavSub = defineComponent({
   setup(props, ctx) {
@@ -13,6 +16,10 @@ const NavSub = defineComponent({
     const state = reactive({
       isOpen: props.isOpen
     })
+    const subContent = reactive({
+      subItems: true
+    })
+    useSubProvide(subContent)
     const navigationContext = useNavigationInject()
     const handleClick = () => {
       if (navigationContext?.isCollapsed) {
@@ -79,9 +86,31 @@ const NavSub = defineComponent({
         </li>
       )
       if (isCollapsed) {
-        const render = <div>1</div>
+        const render = () => {
+          const children = ctx.slots.default?.() || []
+          const Item = Dropdown.Item
+          const deepRender = (nodes: VNode[]) => {
+            const result: VNode[] = []
+            for (const node of nodes) {
+              if (node.type === NavItem) {
+                const p = node.props as NavItemProps
+                const n = h(
+                  Item,
+                  {},
+                  {
+                    default: () => p.text
+                  }
+                )
+                result.push(n)
+              }
+            }
+            return result
+          }
+          console.log(children)
+          return <Dropdown.Menu>{deepRender(children)}</Dropdown.Menu>
+        }
         return (
-          <Dropdown trigger="click" render={render} position="right">
+          <Dropdown trigger="click" render={render()} position="right">
             {inner}
           </Dropdown>
         )

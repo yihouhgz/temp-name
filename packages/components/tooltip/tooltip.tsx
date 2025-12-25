@@ -37,6 +37,7 @@ import { watchEffect } from 'vue'
 import ArrowHorizontalIcon from './arrow-horizontal-icon'
 import ArrowVerticalIcon from './arrow-vertical-icon'
 import { effectScope } from 'vue'
+import type { VNode } from 'vue'
 
 type StateType = {
   wrapperId: string
@@ -339,34 +340,68 @@ const Tooltip = defineComponent({
       return position.startsWith('top') || position.startsWith('bottom')
     })
     const allAttrs = useAttrs()
+    function parseVNode(nodes: VNode[]): VNode[] {
+      let eventHander = true
+      const deep = (nodes: VNode[]): VNode[] => {
+        const result: VNode[] = []
+        for (const node of nodes) {
+          if (typeof node.type === 'symbol') {
+            if (isArray(node.children)) {
+              result.push({
+                ...node,
+                children: deep(node.children as VNode[])
+              })
+            }
+          } else {
+            if (eventHander) {
+              result.push(
+                cloneVNode(node, {
+                  'data-popupid': state.wrapperId,
+                  'aria-describedby': state.wrapperId,
+                  'aria-expanded': showTooltip.value,
+                  ...triggerEventSet.value
+                })
+              )
+              eventHander = false
+            } else {
+              result.push(node)
+            }
+          }
+        }
+        return result
+      }
+      return deep(nodes)
+    }
     const render = () => {
       let vnodes = ctx.slots.default?.()
       if (vnodes) {
-        vnodes = vnodes.map((node) => {
-          if (typeof node.type === 'symbol') {
-            // 处理symbol类型的节点 Fragment
-            const children = isArray(node.children) ? node.children[0] : null
-            if (
-              children &&
-              typeof children === 'object' &&
-              Object.hasOwnProperty.call(children, 'type')
-            ) {
-              return cloneVNode(children as typeof node, {
-                ...triggerEventSet.value
-              })
-            }
-            return node
-          }
-          return cloneVNode(node, {
-            ...triggerEventSet.value
-          })
-        })
+        // vnodes = vnodes.map((node) => {
+        //   if (typeof node.type === 'symbol') {
+        //     // 处理symbol类型的节点 Fragment
+        //     const children = isArray(node.children) ? node.children[0] : null
+        //     if (
+        //       children &&
+        //       typeof children === 'object' &&
+        //       Object.hasOwnProperty.call(children, 'type')
+        //     ) {
+        //       return cloneVNode(children as typeof node, {
+        //         ...triggerEventSet.value
+        //       })
+        //     }
+        //     return node
+        //   }
+        //   return cloneVNode(node, {
+        //     ...triggerEventSet.value
+        //   })
+        // })
+        vnodes = parseVNode(vnodes)
       }
       if (vnodes && vnodes?.length > 1) {
         return (
           <span
             aria-describedby={state.wrapperId}
             data-popupid={state.wrapperId}
+            aria-expanded={showTooltip.value}
             class={props.wrapperClassName}
             style={{ display: 'inline-block' }}
           >

@@ -1,14 +1,16 @@
-import { defineComponent, getCurrentInstance } from 'vue'
+import { defineComponent, getCurrentInstance, type ExtractPublicPropTypes } from 'vue'
 import { prefix } from 'constants/config'
 import { itemProps, itemEmits } from './type'
 import { renderElementForPropsOrSlot } from '../_util'
 import { useNavigationInject } from './content'
 import Tooltip from '../tooltip'
+import { useSubInject } from './sub-content'
 
 const NavItem = defineComponent({
   setup() {
     const instance = getCurrentInstance()
     const navigationContext = useNavigationInject()
+    const subContent = useSubInject({ subItems: false })
     return () => {
       const isCollapsed = !!navigationContext?.isCollapsed
       const inner = (
@@ -32,7 +34,7 @@ const NavItem = defineComponent({
           ></i>
         </li>
       )
-      if (isCollapsed) {
+      if (isCollapsed && !subContent?.subItems) {
         return (
           <Tooltip position="right" content={<>{renderElementForPropsOrSlot('text', instance)}</>}>
             {inner}
@@ -46,4 +48,5 @@ const NavItem = defineComponent({
   emits: itemEmits,
   name: prefix + '-nav-item'
 })
+export type NavItemProps = ExtractPublicPropTypes<typeof itemProps>
 export default NavItem

@@ -7,6 +7,8 @@ export type DropdownMenuItem = {
   node: 'title' | 'item' | 'divider'
   name?: string
 }
+export const itemTypeValues = ['primary', 'secondary', 'tertiary', 'warning', 'danger'] as const
+export type DropdownItemType = (typeof itemTypeValues)[number]
 
 export const dropdownProps = {
   /**
@@ -165,4 +167,55 @@ export const dropdownEmits = {
    * @description 在 trigger 或 弹出层按 Esc 键时调用
    */
   escKeyDown: (e: Event) => e instanceof Event
+}
+
+export const itemProps = {
+  /**
+   * @property 当前项是否处于激活态，激活态时左侧有 √，字体加粗，颜色加深。当 Dropdown 的 showTick 为 false 时，即使 Dropdown.Item 的 active 为 true，√ 也不会展示
+   */
+  active: {
+    type: Boolean,
+    default: false
+  },
+  /**
+   * @property 是否禁用菜单
+   */
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  /**
+   * @property 自定义图标
+   */
+  icon: {
+    type: [Object, Function, String] as PropType<VueNode>,
+    default: undefined
+  },
+
+  type: {
+    type: String as PropType<DropdownItemType>,
+    values: itemTypeValues,
+    default: undefined
+  }
+}
+
+export const itemEmits = {
+  /**
+   * @description 点击菜单项时触发的回调
+   */
+  click: (e: MouseEvent) => e instanceof MouseEvent,
+  /**
+   * @description MouseEnter 触发的回调事件
+   */
+  mouseEnter: (e: MouseEvent) => e instanceof MouseEvent,
+
+  /**
+   * @description MouseLeave 触发的回调事件
+   */
+  mouseLeave: (e: MouseEvent) => e instanceof MouseEvent,
+
+  /**
+   * @description ContextMenu 触发的回调事件
+   */
+  contextMenu: (e: MouseEvent) => e instanceof MouseEvent
 }

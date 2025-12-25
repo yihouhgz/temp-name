@@ -1,0 +1,169 @@
+@import '../base/constant';
+
+// 下拉菜单项-背景颜色-动画持续时间
+$transition_duration-dropdown_item-bg: var(--#{$prefix}-transition_duration-none);
+// 下拉菜单项-背景颜色-过渡曲线
+$transition_function-dropdown_item-bg: var(--#{$prefix}-transition_function-easeOut);
+// 下拉菜单项-背景颜色-延迟时间
+$transition_delay-dropdown_item-bg: 0ms;
+
+// 下拉菜单背景颜色
+$color-dropdown-bg-default: var(--#{$prefix}-color-bg-3);
+// 下拉菜单分组标题文字颜色
+$color-dropdown_title-text-default: var(--#{$prefix}-color-text-2);
+// 下拉菜单项文字颜色
+$color-dropdown_item-text-default: var(--#{$prefix}-color-text-0);
+// 下拉菜单项背景颜色 - 悬浮
+$color-dropdown_item-bg-hover: var(--#{$prefix}-color-fill-0);
+// 下拉菜单项背景颜色 - 按下
+$color-dropdown_item-bg-active: var(--#{$prefix}-color-fill-1);
+// 危险菜单项文字颜色
+$color-dropdown_item_danger-text-default: var(--#{$prefix}-color-danger);
+// 二级菜单项文字颜色
+$color-dropdown_item_secondary-text-default: var(--#{$prefix}-color-secondary);
+// 警告菜单项文字颜色
+$color-dropdown_item_warning-text-default: var(--#{$prefix}-color-warning);
+// 第三菜单项文字颜色
+$color-dropdown_item_tertiary-text-default: var(--#{$prefix}-color-tertiary);
+// 主要菜单项文字颜色
+$color-dropdown_item_primary-text-default: var(--#{$prefix}-color-primary);
+// 禁用菜单项文字颜色
+$color-dropdown_item_disabled-text-default: var(--#{$prefix}-color-disabled-text);
+// 禁用菜单项背景颜色
+$color-dropdown_item_disabled-bg-default: transparent;
+// 菜单项分隔线颜色
+$color-dropdown_seperator-bg-default: var(--#{$prefix}-color-border);
+// 选中菜单项字重
+$font-dropdown_item_active-fontWeight: 600;
+// 菜单项分隔线宽度
+$height-dropdown_seperator: 1px;
+// 菜单项图标宽度
+$size-dropdown-icon-width: 12px;
+// 菜单项图标高度
+$size-dropdown-icon-height: 12px;
+// 暂无
+$filter-dropdown-bg: none;
+// 下拉菜单圆角大小
+$radius-dropdown: var(--#{$prefix}-border-radius-medium);
+// 下拉菜单项圆角大小
+$radius-dropdown_item: 0px;
+// 下拉菜单垂直内边距
+$spacing-dropdown_menu-paddingY: $spacing-extra-tight;
+// 下拉菜单水平内边距
+$spacing-dropdown_menu-paddingX: 0;
+// 下拉菜单分组标题顶部内边距
+$spacing-dropdown_title-paddingTop: $spacing-tight;
+// 下拉菜单分组标题底部内边距
+$spacing-dropdown_title-paddingBottom: $spacing-extra-tight;
+// 下拉菜单分组标题左侧内边距
+$spacing-dropdown_title-paddingLeft: $spacing-base;
+// 下拉菜单分组标题右侧内边距
+$spacing-dropdown_title-paddingRight: $spacing-base;
+// 可选中的下拉菜单，分组标题左侧内边距
+$spacing-dropdown_title_withTick-paddingLeft: 31px;
+// 可选中的下拉菜单项，对勾 icon 左侧内边距
+$spacing-dropdown_item_withTick-paddingLeft: $spacing-base-tight;
+// 下拉菜单项垂直内边距
+$spacing-dropdown_item-paddingY: $spacing-tight;
+// 下拉菜单项水平内边距
+$spacing-dropdown_item-paddingX: $spacing-base;
+// 菜单项图标右侧外边距
+$spacing-dropdown_icon-marginRight: 8px;
+// 菜单项分隔线垂直内边距
+$spacing-dropdown_seperator-marginY: $spacing-extra-tight;
+// 菜单项分隔线水平内边距
+$spacing-dropdown_seperator-marginX: 0;
+// 菜单最大宽度
+$width-dropdown: 280px;
+
+$types: (
+  primary: (
+    text: $color-dropdown_item_primary-text-default
+  ),
+  secondary: (
+    text: $color-dropdown_item_secondary-text-default
+  ),
+  tertiary: (
+    text: $color-dropdown_item_tertiary-text-default
+  ),
+  danger: (
+    text: $color-dropdown_item_danger-text-default
+  ),
+  warning: (
+    text: $color-dropdown_item_warning-text-default
+  )
+);
+
+.#{$prefix}-dropdown {
+  font-size: $font-size-regular;
+  line-height: 20px;
+  font-family: $font-family;
+  &-wrapper {
+    overflow-y: auto;
+    box-shadow: var(--#{$prefix}-shadow-elevated);
+    position: relative;
+    z-index: $z-dropdown;
+    border-radius: $radius-dropdown;
+    background: $color-dropdown-bg-default;
+    backdrop-filter: $filter-dropdown-bg;
+  }
+  &-menu {
+    list-style: none;
+    padding: $spacing-dropdown_menu-paddingY $spacing-dropdown_menu-paddingX;
+    margin: 0;
+  }
+  &-title {
+    color: $color-dropdown_title-text-default;
+    padding: $spacing-dropdown_title-paddingTop $spacing-dropdown_title-paddingLeft
+      $spacing-dropdown_title-paddingBottom $spacing-dropdown_title-paddingRight;
+    font-size: $font-size-small;
+    line-height: 16px;
+    font-family: $font-family;
+    cursor: default;
+  }
+  &-item {
+    padding: $spacing-dropdown_item-paddingY $spacing-dropdown_item-paddingX;
+    color: $color-dropdown_item-text-default;
+    max-width: $width-dropdown;
+    display: flex;
+    align-items: center;
+    transition: background-color $transition_duration-dropdown_item-bg
+      $transition_function-dropdown_item-bg $transition_delay-dropdown_item-bg;
+    border-radius: $radius-dropdown_item;
+    @each $type, $value in $types {
+      &-#{$type} {
+        color: map-get($value, text);
+      }
+    }
+    &:hover:not(&-disabled) {
+      background-color: $color-dropdown_item-bg-hover;
+    }
+    &:active:not(&-disabled) {
+      background-color: $color-dropdown_item-bg-active;
+    }
+    &-icon {
+      display: inline-flex;
+      align-items: center;
+      margin-right: $spacing-dropdown_icon-marginRight;
+    }
+    &-disabled {
+      color: $color-dropdown_item_disabled-text-default;
+      background-color: $color-dropdown_item_disabled-bg-default;
+      cursor: not-allowed;
+      &:hover,
+      &:active {
+        background-color: $color-dropdown_item_disabled-bg-default;
+        color: $color-dropdown_item_disabled-text-default;
+      }
+    }
+  }
+  &-divider {
+    display: block;
+    height: $height-dropdown_seperator;
+    width: 100%;
+    min-width: 100%;
+    clear: both;
+    background: $color-dropdown_seperator-bg-default;
+    margin: $spacing-dropdown_seperator-marginY $spacing-dropdown_seperator-marginX;
+  }
+}
