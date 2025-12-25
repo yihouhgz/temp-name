@@ -49,7 +49,7 @@ export type HeaderType = {
   //Logo
   logo?: VueNode
   //Logo 文案
-  title?: VueNode
+  text?: VueNode
 }
 export const headerProps = {
   children: {
@@ -68,7 +68,7 @@ export const headerProps = {
     type: [String, Object, Function] as PropType<VueNode>,
     default: undefined
   },
-  title: {
+  text: {
     type: [String, Object, Function] as PropType<VueNode>,
     default: undefined
   }
@@ -158,19 +158,27 @@ export const itemProps = {
    * @description 导航项目文案或元素
    */
   text: {
-    type: String,
-    default: ''
+    type: [String, Object, Function] as PropType<VueNode>,
+    default: undefined
   }
 }
 export const itemEmits = {
-  click: ({ itemKey, domEvent, isOpen }: { itemKey: string; domEvent: Event; isOpen: boolean }) => {
-    return isString(itemKey) && domEvent instanceof Event && isBoolean(isOpen)
+  click: ({
+    itemKey,
+    domEvent,
+    isOpen
+  }: {
+    itemKey: string
+    domEvent: MouseEvent
+    isOpen: boolean
+  }) => {
+    return isString(itemKey) && domEvent instanceof MouseEvent && isBoolean(isOpen)
   },
-  mouseEnter: (event: Event) => {
-    return event instanceof Event
+  mouseEnter: (event: MouseEvent) => {
+    return event instanceof MouseEvent
   },
-  mouseLeave: (event: Event) => {
-    return event instanceof Event
+  mouseLeave: (event: MouseEvent) => {
+    return event instanceof MouseEvent
   }
 }
 
@@ -197,6 +205,7 @@ export type Sub = {
   maxHeight?: number
   //导航项目文案或组件
   text?: VueNode
+  items: string[] | Item[] | Sub[]
   onMouseEnter?: (e: MouseEvent) => void
   onMouseLeave?: (e: MouseEvent) => void
 }
@@ -276,13 +285,13 @@ export const subProps = {
    * @description 导航项目文案或组件
    */
   text: {
-    type: String,
-    default: ''
+    type: [Function, Object, String] as PropType<VueNode>,
+    default: undefined
   }
 }
 export const subEmits = {
-  mouseEnter: (e: Event) => e instanceof Event,
-  mouseLeave: (e: Event) => e instanceof Event
+  mouseEnter: (e: MouseEvent) => e instanceof MouseEvent,
+  mouseLeave: (e: MouseEvent) => e instanceof MouseEvent
 }
 
 export const navProps = {
@@ -375,7 +384,7 @@ export const navProps = {
   mode: {
     type: String as PropType<'horizontal' | 'vertical'>,
     values: ['horizontal', 'vertical'],
-    default: 'horizontal'
+    default: 'vertical'
   },
   /**
    * @property 受控的打开的子导航 itemKey 数组，配合 onOpenChange 回调控制子导航项展开，仅 mode = "vertical" 且侧边栏处于展开状态时有效

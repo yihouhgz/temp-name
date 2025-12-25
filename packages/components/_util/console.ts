@@ -14,5 +14,5 @@ const generateConsola = () => {
   })
   return functions as LogFunctions
 }
-export const consolaWapper = generateConsola()
-export default consolaWapper
+export const consolaWrapper = generateConsola()
+export default consolaWrapper

@@ -18,6 +18,7 @@ import IconCopy from './IconCopy'
 import IconChevronLeft from './IconChevronLeft'
 import IconChevronRight from './IconChevronRight'
 import IconChevronUp from './IconChevronUp'
+import IconSidebar from './IconSidebar'
 
 export {
   Camera,
@@ -39,5 +40,6 @@ export {
   IconCopy,
   IconChevronLeft,
   IconChevronRight,
-  IconChevronUp
+  IconChevronUp,
+  IconSidebar
 }

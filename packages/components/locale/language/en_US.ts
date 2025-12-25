@@ -14,5 +14,9 @@ export default {
     copied: 'copied',
     expand: 'expand',
     collapse: 'collapse'
+  },
+  Navigation: {
+    collapseText: 'Collapse Sidebar',
+    expandText: 'Expand Sidebar'
   }
 }

@@ -118,9 +118,9 @@ export default defineComponent({
   setup() {
     return () => {
       return (
-        <div>
+        <div style="display: flex;">
           <tempui-nav
-            bodyStyle={{ height: 320 }}
+            bodyStyle={{ height: 320 + 'px' }}
             items={[
               { itemKey: 'user', text: '用户管理', icon: <IconAvatar /> },
               { itemKey: 'union', text: '活动管理', icon: <IconDescriptions /> },
@@ -144,7 +144,7 @@ export default defineComponent({
 
           <br />
           <tempui-nav
-            bodyStyle={{ height: 300 }}
+            bodyStyle={{ height: 300 + 'px' }}
             defaultOpenKeys={['user', 'union']}
             onSelect={(data: unknown) => console.log('trigger onSelect: ', data)}
             onClick={(data: unknown) => console.log('trigger onClick: ', data)}

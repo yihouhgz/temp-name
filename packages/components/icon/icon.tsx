@@ -21,7 +21,7 @@ const IconJsx = defineComponent({
     const spanStyle = computed(() => {
       const { rotate } = props
       const style: CSSProperties = {}
-      if (Number.isSafeInteger(rotate)) {
+      if (rotate && Number.isSafeInteger(rotate)) {
         style.transform = `rotate(${rotate}deg)`
       }
       return style

@@ -15,7 +15,7 @@ import { selectEmits, selectProps, type SelectRefMethods } from './type'
 import Option from './option'
 import SelectOptionGroup from './option-group'
 import { IconChevronDown } from '../icon'
-import { consolaWapper, isArray, isObject } from '../_util'
+import { consolaWrapper, isArray, isObject } from '../_util'
 import type { VNode } from 'vue'
 import { hasPropsOrSlots, renderElementForPropsOrSlot } from '../_util'
 import Tag from '../tag'
@@ -218,7 +218,7 @@ const Select = defineComponent({
                 childIndex += 1
               }
             } else {
-              consolaWapper.error('Option or SelectOption must be used as a child of Select')
+              consolaWrapper.error('Option or SelectOption must be used as a child of Select')
               break
             }
           }

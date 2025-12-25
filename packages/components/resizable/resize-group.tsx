@@ -5,7 +5,7 @@ import { resizableGroupProps } from './type'
 import type { VNode, ComponentPublicInstance } from 'vue'
 import ResizeItem from './resize-item'
 import ResizeHandler from './resize-handler'
-import { consolaWapper, isArray, isString, onElementResize } from '../_util'
+import { consolaWrapper, isArray, isString, onElementResize } from '../_util'
 import { onMounted } from 'vue'
 import { provideResizeContent, type ResizeContent } from './resize-content'
 import { getPixelSize, getOffset, getItemDirection } from './utils'
@@ -114,7 +114,7 @@ const ResizeGroup = defineComponent({
         const minSizePercent = minSize ? (getPixelSize(minSize, parentSize) / parentSize) * 100 : 0,
           maxSizePercent = maxSize ? (getPixelSize(maxSize, parentSize) / parentSize) * 100 : 100
         if (minSizePercent > maxSizePercent) {
-          consolaWapper.warn('ResizableItem min size bigger than max size')
+          consolaWrapper.warn('ResizableItem min size bigger than max size')
         }
 
         const defaultSize = child.defaultSize
@@ -153,10 +153,10 @@ const ResizeGroup = defineComponent({
           }
 
           if (itemSizePercent < minSizePercent) {
-            consolaWapper.warn('ResizableGroup item size smaller than min size')
+            consolaWrapper.warn('ResizableGroup item size smaller than min size')
           }
           if (itemSizePercent > maxSizePercent) {
-            consolaWapper.warn('ResizableGroup item size bigger than max size')
+            consolaWrapper.warn('ResizableGroup item size bigger than max size')
           }
         } else {
           undefineLoc.set(i, {
@@ -168,7 +168,7 @@ const ResizeGroup = defineComponent({
       }
       let undefineSizePercent = 100 - totalSizePercent
       if (totalSizePercent > 100) {
-        consolaWapper.warn('ResizableGroup total Size bigger than 100%')
+        consolaWrapper.warn('ResizableGroup total Size bigger than 100%')
         undefineSizePercent = 10 // 如果总和超过100%，则保留10%的空间均分给未定义的item
       }
       if (undefineLoc.size > 0) {

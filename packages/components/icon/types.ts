@@ -5,8 +5,7 @@ export const iconProps = {
    */
   rotate: {
     type: Number,
-    default: 0,
-    required: false
+    default: undefined
   },
   /**
    * @description 图标大小

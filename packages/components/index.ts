@@ -40,6 +40,7 @@ import Collapsible from './collapsible'
 import Carousel from './carousel/carousel'
 import Collapse, { CollapsePanel } from './collapse'
 import Nav, { NavItem, NavFooter, NavHeader, NavSub } from './nav'
+import Dropdown from './dropdown'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -105,7 +106,8 @@ const components: Component[] = [
   NavItem,
   NavFooter,
   NavHeader,
-  NavSub
+  NavSub,
+  Dropdown
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -173,7 +175,8 @@ export {
   NavItem,
   NavFooter,
   NavHeader,
-  NavSub
+  NavSub,
+  Dropdown
 }
 
 const globalApis: { [key: string]: unknown } = {

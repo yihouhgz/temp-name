@@ -14,5 +14,9 @@ export default {
     copied: '复制成功',
     expand: '展开',
     collapse: '收起'
+  },
+  Navigation: {
+    collapseText: '收起侧边栏',
+    expandText: '展开侧边栏'
   }
 }

@@ -3,7 +3,14 @@ import { prefix } from 'constants/config'
 import { carouselProps, carouselEmits } from './type'
 import type { CarouselRef } from './type'
 import './style/carousel'
-import { consolaWapper, isArray, isNumber, isObject, isUndefined, useEventListener } from '../_util'
+import {
+  consolaWrapper,
+  isArray,
+  isNumber,
+  isObject,
+  isUndefined,
+  useEventListener
+} from '../_util'
 import type { VNode, StyleValue, HTMLAttributes } from 'vue'
 import { IconChevronLeft, IconChevronRight } from '../icon'
 import { computed } from 'vue'
@@ -52,7 +59,7 @@ const Carousel = defineComponent({
       },
       goTo: (targetIndex: number) => {
         if (targetIndex < 0 || targetIndex > vNodeLength - 1) {
-          consolaWapper.warn('The index is out of bounds')
+          consolaWrapper.warn('The index is out of bounds')
           return
         }
         handleToTarget(targetIndex)
@@ -109,7 +116,7 @@ const Carousel = defineComponent({
       const { currentIndex } = state
       let current = currentIndex
       if (currentIndex > len - 1) {
-        consolaWapper.warn('The activeIndex or defaultActiveIndex is out of bounds')
+        consolaWrapper.warn('The activeIndex or defaultActiveIndex is out of bounds')
         current = 0
       }
       let nextIndex = currentIndex + 1
