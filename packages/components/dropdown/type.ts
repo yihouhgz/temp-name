@@ -151,6 +151,13 @@ export const dropdownProps = {
   zIndex: {
     type: Number,
     default: 1050
+  },
+  /**
+   * @description 是否展示弹出层动画
+   */
+  motion: {
+    type: Boolean,
+    default: true
   }
 }
 

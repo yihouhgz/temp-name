@@ -3,6 +3,7 @@ import { prefix } from 'constants/config'
 import { collapsibleProps, collapsibleEmits } from './type'
 import type { StyleValue } from 'vue'
 import './style/collapsible'
+import { onElementResize } from '../_util'
 
 type CollapsibleState = {
   isOpen: boolean
@@ -24,6 +25,9 @@ const Collapsible = defineComponent({
     })
     onMounted(() => {
       state.lazyRender = false
+      onElementResize(state.container, () => {
+        calcContainerHeight()
+      })
     })
     const calcContainerHeight = () => {
       const rect = state.container?.getBoundingClientRect()

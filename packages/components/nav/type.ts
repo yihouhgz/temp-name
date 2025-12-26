@@ -363,7 +363,7 @@ export const navProps = {
    */
   isCollapsed: {
     type: Boolean,
-    default: false
+    default: undefined
   },
   /**
    * @property 导航项目列表，每一项可以继续带有 items 属性。如果为 string 数组，则会取每一项作为 text 和 itemKey
@@ -391,7 +391,7 @@ export const navProps = {
    */
   openKeys: {
     type: Array as PropType<string[]>,
-    default: () => []
+    default: undefined
   },
   /**
    * @property 自定义导航项外层组件

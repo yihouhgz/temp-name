@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { defineComponent, type ExtractPublicPropTypes } from 'vue'
 import { prefix } from 'constants/config'
 import { dropdownProps, dropdownEmits } from './type'
 import Tooltip from '../tooltip'
@@ -34,4 +34,5 @@ const Dropdown = defineComponent({
   emits: dropdownEmits,
   name: prefix + '-dropdown'
 })
+export type DropdownProps = ExtractPublicPropTypes<typeof dropdownProps>
 export default Dropdown

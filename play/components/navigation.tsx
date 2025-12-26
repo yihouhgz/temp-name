@@ -120,7 +120,7 @@ export default defineComponent({
       return (
         <div style="display: flex;">
           <tempui-nav
-            bodyStyle={{ height: 320 + 'px' }}
+            bodyStyle={{ height: 420 + 'px' }}
             items={[
               { itemKey: 'user', text: '用户管理', icon: <IconAvatar /> },
               { itemKey: 'union', text: '活动管理', icon: <IconDescriptions /> },
@@ -128,7 +128,15 @@ export default defineComponent({
                 text: '任务平台',
                 icon: <IconTree />,
                 itemKey: 'job',
-                items: ['任务管理', '用户任务查询']
+                items: [
+                  '任务管理',
+                  '用户任务查询',
+                  {
+                    itemKey: 'operation-management',
+                    text: '运营管理',
+                    items: ['人员管理', '人员变更']
+                  }
+                ]
               }
             ]}
             header={{
@@ -144,7 +152,7 @@ export default defineComponent({
 
           <br />
           <tempui-nav
-            bodyStyle={{ height: 300 + 'px' }}
+            bodyStyle={{ height: 400 + 'px' }}
             defaultOpenKeys={['user', 'union']}
             onSelect={(data: unknown) => console.log('trigger onSelect: ', data)}
             onClick={(data: unknown) => console.log('trigger onClick: ', data)}

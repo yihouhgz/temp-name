@@ -35,8 +35,20 @@ const NavItem = defineComponent({
         </li>
       )
       if (isCollapsed && !subContent?.subItems) {
+        let p = {}
+        if (navigationContext) {
+          const { tooltipHideDelay, tooltipShowDelay } = navigationContext.getProps()
+          p = {
+            mouseEnterDelay: tooltipShowDelay,
+            tooltipHideDelay: tooltipHideDelay
+          }
+        }
         return (
-          <Tooltip position="right" content={<>{renderElementForPropsOrSlot('text', instance)}</>}>
+          <Tooltip
+            {...p}
+            position="right"
+            content={<>{renderElementForPropsOrSlot('text', instance)}</>}
+          >
             {inner}
           </Tooltip>
         )

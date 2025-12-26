@@ -16,9 +16,9 @@ const NavFooter = defineComponent({
       isCollapse.value = !!isCollapsed
     })
     const handleCollapse = () => {
-      isCollapse.value = !isCollapse.value
+      // isCollapse.value = !isCollapse.value
       if (navigationContext) {
-        navigationContext.collapsedChange(isCollapse.value)
+        navigationContext.collapsedChange(!isCollapse.value)
       }
     }
     return () => {

@@ -130,6 +130,7 @@ $types: (
     transition: background-color $transition_duration-dropdown_item-bg
       $transition_function-dropdown_item-bg $transition_delay-dropdown_item-bg;
     border-radius: $radius-dropdown_item;
+    cursor: pointer;
     @each $type, $value in $types {
       &-#{$type} {
         color: map-get($value, text);
