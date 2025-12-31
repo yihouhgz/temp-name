@@ -6,14 +6,15 @@ import './style.css'
 import { MonacoEditor } from '../../monaco.tsx'
 import ReplMonaco from '../../editor/repl-monaco.tsx'
 import * as Components from '../../../dist'
-import '../../..//dist/ui-vue-components.esm.css'
+import Layout from '../../layout/layout.tsx'
 export default {
   extends: DefaultTheme,
-  Layout: () => {
-    return h(DefaultTheme.Layout, null, {
-      // https://vitepress.dev/guide/extending-default-theme#layout-slots
-    })
-  },
+  // Layout: () => {
+  //   return h(DefaultTheme.Layout, null, {
+  //     // https://vitepress.dev/guide/extending-default-theme#layout-slots
+  //   })
+  // },
+  Layout: Layout,
   enhanceApp({ app, router, siteData }) {
     console.log(app, router, siteData)
     app.component('MonacoEditor', MonacoEditor)

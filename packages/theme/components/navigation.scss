@@ -402,9 +402,17 @@ $spacing-navigation_sub_item_left_toggle_marginRight: $spacing-tight;
         background-color: $color-navigation_itemL1-bg-active;
       }
     }
-    &-selected {
+    &.#{$prefix}-navigation-item-selected {
       background-color: $color-navigation_itemL1_selected-bg-default;
       color: $color-navigation_itemL1_selected-text-default;
+      &:hover {
+        background-color: $color-navigation_itemL1_selected-bg-default;
+        color: $color-navigation_itemL1_selected-text-default;
+      }
+      &-active {
+        background-color: $color-navigation_itemL1_selected-bg-default;
+        color: $color-navigation_itemL1_selected-text-default;
+      }
     }
     &-icon {
       & > svg {
@@ -468,9 +476,21 @@ $spacing-navigation_sub_item_left_toggle_marginRight: $spacing-tight;
     height: $height-navigation_item_base;
     font-weight: $font-navigation_sub_item-fontWeight;
     width: 100%;
+    &:hover.#{$prefix}-navigation-item-selected {
+      color: $color-navigation_itemLn-text-default;
+      background-color: $color-navigation_itemLn_selected-bg-default;
+    }
+    &:active.#{$prefix}-navigation-item-selected {
+      color: $color-navigation_itemLn-text-default;
+      background-color: $color-navigation_itemLn_selected-bg-default;
+    }
     &:first-child {
       margin-top: $spacing-navigation_item-marginBottom;
     }
+  }
+  &-sub &-item-selected {
+    color: $color-navigation_itemLn-text-default;
+    background-color: $color-navigation_itemLn_selected-bg-default;
   }
   &-sub &-sub-wrap {
     height: inherit;
@@ -520,4 +540,12 @@ $spacing-navigation_sub_item_left_toggle_marginRight: $spacing-tight;
   min-width: $width-navigation_dropdown_item_nav_item-minWidth;
   margin-bottom: $spacing-navigation_dropdown_item_nav_item-marginBottom;
   margin-top: $spacing-navigation_dropdown_item_nav_item-marginTop;
+}
+.#{$prefix}-dropdown-item {
+  .#{$prefix}-navigation-item,
+  .#{$prefix}-navigation-sub-title {
+    margin-bottom: 0;
+    padding: 0;
+    height: inherit;
+  }
 }

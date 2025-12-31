@@ -48,6 +48,7 @@ const Nav = defineComponent({
     const navigationProvideContent = reactive<NavigationProvideContent>({
       getPopupContainer: props.getPopupContainer,
       clickItem: (itemKey, domEvent, isOpen) => {
+        navigationProvideContent.selectedKeys = [itemKey]
         ctx.emit('click', { itemKey, domEvent, isOpen })
       },
       getExpandIcon: () => {

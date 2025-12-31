@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, type ExtractPublicPropTypes } from 'vue'
+import { defineComponent, getCurrentInstance, computed, type ExtractPublicPropTypes } from 'vue'
 import { prefix } from 'constants/config'
 import { itemProps, itemEmits } from './type'
 import { renderElementForPropsOrSlot } from '../_util'
@@ -7,10 +7,25 @@ import Tooltip from '../tooltip'
 import { useSubInject } from './sub-content'
 
 const NavItem = defineComponent({
-  setup() {
+  setup(props) {
     const instance = getCurrentInstance()
     const navigationContext = useNavigationInject()
     const subContent = useSubInject({ subItems: false })
+    const isOpen = computed(() => {
+      return navigationContext?.selectedKeys?.includes?.(props.itemKey)
+    })
+    const wrapperClass = computed(() => {
+      return [
+        `${prefix}-navigation-item`,
+        `${prefix}-navigation-item-normal`,
+        {
+          [`${prefix}-navigation-item-selected`]: isOpen.value
+        }
+      ]
+    })
+    const handleClickItem = (e: MouseEvent) => {
+      navigationContext?.clickItem?.(props.itemKey, e, !isOpen?.value)
+    }
     return () => {
       const isCollapsed = !!navigationContext?.isCollapsed
       const inner = (
@@ -18,7 +33,8 @@ const NavItem = defineComponent({
           role="menuitem"
           tabindex="0"
           aria-disabled="false"
-          class={[`${prefix}-navigation-item`, `${prefix}-navigation-item-normal`]}
+          class={wrapperClass.value}
+          onClick={handleClickItem}
         >
           <i class={[`${prefix}-navigation-item-icon`, `${prefix}-navigation-item-icon-info`]}>
             {renderElementForPropsOrSlot('icon', instance)}

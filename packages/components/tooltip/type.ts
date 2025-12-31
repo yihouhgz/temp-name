@@ -88,10 +88,10 @@ export const tooltioProps = {
   /**
    * @description trigger为hover时，不响应键盘聚焦弹出浮层事件
    */
-  // disableFocusListener: {
-  //   type: Boolean,
-  //   default: false
-  // },
+  disableFocusListener: {
+    type: Boolean,
+    default: false
+  },
   // if trigger == custom effect
   visible: {
     type: Boolean,

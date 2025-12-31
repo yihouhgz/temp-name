@@ -1,20 +1,25 @@
-import { defineComponent, getCurrentInstance, reactive, type VNode } from 'vue'
+import {
+  defineComponent,
+  getCurrentInstance,
+  reactive,
+  computed,
+  nextTick,
+  h,
+  type VNode
+} from 'vue'
 import { prefix } from 'constants/config'
 import { subProps, subEmits } from './type'
 import Collapsible from '../collapsible'
 import { isArray, renderElementForPropsOrSlot, useRandomId } from '../_util'
-import { IconChevronDown } from '../icon'
+import { IconChevronDown, IconChevronRight } from '../icon'
 import { useNavigationInject } from './content'
 import Dropdown from '../dropdown'
 import { useSubProvide } from './sub-content'
 import NavItem, { type NavItemProps } from './item'
-import { h } from 'vue'
-import { computed } from 'vue'
-import { nextTick } from 'vue'
+import { flatMap } from 'lodash'
 
 const NavSub = defineComponent({
   setup(props, ctx) {
-    console.log('NavSub', props.itemKey)
     const instance = getCurrentInstance()
     const state = reactive({
       isOpen: props.isOpen,
@@ -59,7 +64,13 @@ const NavSub = defineComponent({
         prefix + '-navigation-item-sub'
       ]
     })
+    const handleClickItem = (itemKey: string, e: MouseEvent) => {
+      navigationContext?.clickItem?.(itemKey, e, !state.isOpen)
+    }
     const rightIcon = () => {
+      if (navigationContext?.isCollapsed) {
+        return <IconChevronRight />
+      }
       let icon = (
         <IconChevronDown
           class={`${prefix}-navigation-item-icon-rotate-${state.isOpen ? 180 : 0}`}
@@ -95,7 +106,7 @@ const NavSub = defineComponent({
         <div
           role="menuitem"
           tabindex="0"
-          aria-expanded="false"
+          aria-expanded={state.isOpen}
           class={prefix + '-navigation-sub-title'}
           onClick={handleClick}
         >
@@ -104,7 +115,12 @@ const NavSub = defineComponent({
       )
       const inner = () => {
         return (
-          <li class={wrapperClass.value} tabindex="-1" aria-disabled="false" aria-expanded="false">
+          <li
+            class={wrapperClass.value}
+            tabindex="-1"
+            aria-disabled="false"
+            aria-expanded={state.isOpen}
+          >
             {innerItem}
             <Collapsible isOpen={state.isOpen} reCalcKey={state.reCalcKey} keepDOM>
               <ul
@@ -131,7 +147,15 @@ const NavSub = defineComponent({
             for (const node of nodes) {
               if (node.type === NavItem) {
                 const p = node.props as NavItemProps
-                const n = <Item class={classNames}>{getItem(p.text, false, false)}</Item>
+                const c = [...classNames]
+                if (navigationContext?.selectedKeys?.includes?.(p.itemKey!)) {
+                  c.push(prefix + '-navigation-item-selected')
+                }
+                const n = (
+                  <Item onClick={(e: MouseEvent) => handleClickItem(p.itemKey!, e)} class={c}>
+                    {getItem(p.text, false, false)}
+                  </Item>
+                )
                 result.push(n)
               } else {
                 if (typeof node.type === 'symbol') {
@@ -141,8 +165,34 @@ const NavSub = defineComponent({
                   } else {
                     result.push(node)
                   }
-                } else {
-                  result.push(h(Item, {}, { default: () => node }))
+                } else if (node.type === NavSub) {
+                  // result.push(h(Item, { class: classNames }, { default: () => node }))
+                  //处理下级的Dropdown
+                  const i = h(
+                    Item,
+                    { class: classNames },
+                    {
+                      default: () => {
+                        const p = node.props || {}
+                        return getItem(p.text, false, true)
+                      }
+                    }
+                  )
+                  const renderDeepDropdown = () => {
+                    if (isArray(node.children)) {
+                      return <Dropdown.Menu>{deepRender(node.children as VNode[])}</Dropdown.Menu>
+                    } else {
+                      const list = flatMap(
+                        (node.children as { default: () => VNode[] })?.default?.() || []
+                      )
+                      return <Dropdown.Menu>{deepRender(list)}</Dropdown.Menu>
+                    }
+                  }
+                  result.push(
+                    <Dropdown spacing={2} position="rightTop" {...p} render={renderDeepDropdown()}>
+                      {i}
+                    </Dropdown>
+                  )
                 }
               }
             }
@@ -168,8 +218,9 @@ const NavSub = defineComponent({
             motion: subNavMotion
           }
         }
+
         innerItem = (
-          <Dropdown position="right" {...p} trigger="click" render={render()}>
+          <Dropdown trigger="click" position="rightTop" {...p} render={render()}>
             {innerItem}
           </Dropdown>
         )

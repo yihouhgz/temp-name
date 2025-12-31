@@ -130,7 +130,7 @@ export default defineComponent({
                 itemKey: 'job',
                 items: [
                   '任务管理',
-                  '用户任务查询',
+                  '用户任务',
                   {
                     itemKey: 'operation-management',
                     text: '运营管理',

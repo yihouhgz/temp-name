@@ -77,6 +77,6 @@ export default defineConfig({
     }
   },
   vite: {
-    plugins: [vueJsx()]
+    plugins: [vueJsx() as unknown as undefined]
   }
 })

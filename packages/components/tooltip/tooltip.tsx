@@ -88,6 +88,20 @@ const Tooltip = defineComponent({
             }
           }
         }
+        if (trigger === 'hover') {
+          eventSet[triggerEventMap.hover.enter] = () => {
+            const { disableFocusListener } = props
+            if (!disableFocusListener) {
+              triggerHnadle()
+            }
+          }
+          eventSet[triggerEventMap.hover.leave] = () => {
+            const { disableFocusListener } = props
+            if (!disableFocusListener) {
+              triggerLeave()
+            }
+          }
+        }
         registerEnterEvent()
         if (!['click', 'contextMenu'].includes(trigger)) {
           eventSet[targetEventMap.leave] = () => {
