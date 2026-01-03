@@ -30,3 +30,28 @@
     }
   }
 }
+.side-container {
+  width: 280px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin-top: 60px;
+  background: hsla(0, 0%, 100%, 0.55);
+  .#{$prefix}-navigation {
+    padding-right: 0;
+  }
+  .#{$prefix}-navigation-list-wrapper::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+  .#{$prefix}-navigation-list-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .#{$prefix}-navigation-sub-title {
+    height: 40px;
+  }
+  .#{$prefix}-navigation-sub > .#{$prefix}-navigation-item {
+    height: 40px;
+  }
+}

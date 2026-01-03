@@ -330,8 +330,11 @@ $spacing-navigation_sub_item_left_toggle_marginRight: $spacing-tight;
     display: inline-flex;
     align-items: center;
   }
-
+  &-vertical &-header-list-outer {
+    height: 100%;
+  }
   &-vertical &-list-wrapper {
+    height: 100%;
     padding-top: $spacing-navigation_list_wrapper-paddingTop;
     overflow-y: auto;
     overflow-x: hidden;

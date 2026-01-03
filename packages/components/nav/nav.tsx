@@ -145,6 +145,7 @@ const Nav = defineComponent({
         if (isJsx) {
           return header
         }
+        if (!header) return null
         if (isVNode(props.header) || isString(props.header)) return props.header
         if (isFunction(props.header)) return props.header()
         return <NavHeader {...(props.header ? props.header : {})}></NavHeader>

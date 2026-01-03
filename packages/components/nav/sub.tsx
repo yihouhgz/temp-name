@@ -10,7 +10,7 @@ import {
 import { prefix } from 'constants/config'
 import { subProps, subEmits } from './type'
 import Collapsible from '../collapsible'
-import { isArray, renderElementForPropsOrSlot, useRandomId } from '../_util'
+import { hasPropsOrSlots, isArray, renderElementForPropsOrSlot, useRandomId } from '../_util'
 import { IconChevronDown, IconChevronRight } from '../icon'
 import { useNavigationInject } from './content'
 import Dropdown from '../dropdown'
@@ -86,9 +86,11 @@ const NavSub = defineComponent({
       const isCollapsed = !!navigationContext?.isCollapsed
       const getItem = (text?: unknown, icon: unknown = true, right: unknown = true) => {
         return [
-          <i class={[`${prefix}-navigation-item-icon`, `${prefix}-navigation-item-icon-info`]}>
-            {icon && renderElementForPropsOrSlot('icon', instance)}
-          </i>,
+          hasPropsOrSlots('icon', instance) && (
+            <i class={[`${prefix}-navigation-item-icon`, `${prefix}-navigation-item-icon-info`]}>
+              {icon && renderElementForPropsOrSlot('icon', instance)}
+            </i>
+          ),
           <span class={`${prefix}-navigation-item-text`}>
             {text ? text : renderElementForPropsOrSlot('text', instance)}
           </span>,
