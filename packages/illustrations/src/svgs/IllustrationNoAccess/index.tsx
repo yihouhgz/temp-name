@@ -24,7 +24,7 @@ const IllustrationNoAccess = defineComponent({
             fill-rule="evenodd"
             clip-rule="evenodd"
             d="M145.5 92.62a9.47 9.47 0 0 0 10.6-8.16l4.36-33.14a9.47 9.47 0 1 0-18.76-2.47l-4.36 33.14a9.47 9.47 0 0 0 8.15 10.63Zm7.52-57.39h.02a14.98 14.98 0 0 1 12.9 16.81l-4.36 33.14a14.98 14.98 0 0 1-16.8 12.9h-.02a14.98 14.98 0 0 1-12.9-16.8l4.36-33.15a14.98 14.98 0 0 1 16.8-12.9Z"
-            fill="var(--semi-color-primary)"
+            fill={`var(--${prefix}-color-primary)`}
           ></path>
           <path
             fill-rule="evenodd"
@@ -36,7 +36,7 @@ const IllustrationNoAccess = defineComponent({
             fill-rule="evenodd"
             clip-rule="evenodd"
             d="M148.62 80.9a4.67 4.67 0 1 0-3.29-.43l-4.17 7.63a1 1 0 0 0 .75 1.47l7.65 1.01a1 1 0 0 0 1.1-1.23l-2.04-8.45Z"
-            fill="var(--semi-color-primary)"
+            fill={`var(--${prefix}-color-primary)`}
           ></path>
           <path
             fill-rule="evenodd"
@@ -106,12 +106,12 @@ const IllustrationNoAccess = defineComponent({
           ></circle>
           <path
             d="M174.02 106c-.5 1.8-2.7 5.73-7.47 7.05"
-            stroke="var(--semi-color-primary)"
+            stroke={`var(--${prefix}-color-primary)`}
             stroke-linecap="round"
           ></path>
           <path
             d="M181.21 110.24c-.87 2.88-4.54 9.14-12.27 11.13"
-            stroke="var(--semi-color-primary)"
+            stroke={`var(--${prefix}-color-primary)`}
             stroke-linecap="round"
           ></path>
         </svg>
