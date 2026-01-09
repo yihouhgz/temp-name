@@ -10,7 +10,8 @@
       "theme": ["packages/theme"],
       "theme/*": ["packages/theme/*"],
       "constants": ["packages/constants"],
-      "constants/*": ["packages/constants/*"]
+      "constants/*": ["packages/constants/*"],
+      "illustrations": ["packages/illustrations"]
     }
   }
 }

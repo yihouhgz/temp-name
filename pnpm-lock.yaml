@@ -196,6 +196,12 @@ importers:
 
   packages/constants: {}
 
+  packages/illustrations:
+    dependencies:
+      constants:
+        specifier: workspace:*
+        version: link:../constants
+
   packages/locale: {}
 
   packages/theme:

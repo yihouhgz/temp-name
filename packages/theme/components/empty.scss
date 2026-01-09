@@ -1,0 +1,53 @@
+@import '../base/constant';
+$color-empty_description-text-default: var(--#{$prefix}-color-text-1);
+$font-empty_title-fontWeight: $font-weight-bold;
+
+//垂直布局内容顶部外边距
+$spacing-empty_content_vertical-marginTop: 24px;
+//水平布局内容左侧外边距
+$spacing-empty_content_horizontal-marginLeft: 32px;
+//标题内容顶部外边距
+$spacing-empty_title-marginTop: 16px;
+//操作 footer 顶部外边距
+$spacing-empty_footer-marginTop: 24px;
+
+.#{$prefix}-empty {
+  display: flex;
+  &-vertical {
+    align-items: center;
+    flex-direction: column;
+    .#{$prefix}-empty-content {
+      margin-top: $spacing-empty_content_vertical-marginTop;
+    }
+    .#{$prefix}-empty-title,
+    .#{$prefix}-empty-description {
+      text-align: center;
+    }
+  }
+  &-horizontal {
+    .#{$prefix}-empty-content {
+      margin-left: $spacing-empty_content_horizontal-marginLeft;
+    }
+  }
+
+  &-image {
+    display: flex;
+    justify-content: center;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  &-title {
+    display: block;
+    font-weight: $font-empty_title-fontWeight;
+  }
+  &-description {
+    color: $color-empty_description-text-default;
+  }
+  &title + &-description {
+    margin-top: $spacing-empty_title-marginTop;
+  }
+  &-footer {
+    margin-top: $spacing-empty_footer-marginTop;
+  }
+}
