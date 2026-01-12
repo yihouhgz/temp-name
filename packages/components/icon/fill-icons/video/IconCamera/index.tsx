@@ -1,5 +1,7 @@
-export default function CameraIcon() {
-  return (
+import { defineComponent, type SVGAttributes } from 'vue'
+import { warpperIcon } from '../../../icon'
+const IconCamera = defineComponent((props: SVGAttributes) => {
+  return () => (
     <svg
       viewBox="0 0 24 24"
       fill="none"
@@ -8,6 +10,7 @@ export default function CameraIcon() {
       height="1em"
       focusable="false"
       aria-hidden="true"
+      {...props}
     >
       <path
         fill-rule="evenodd"
@@ -17,4 +20,5 @@ export default function CameraIcon() {
       ></path>
     </svg>
   )
-}
+})
+export default warpperIcon(IconCamera, 'IconCamera')

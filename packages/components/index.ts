@@ -42,6 +42,7 @@ import Collapse, { CollapsePanel } from './collapse'
 import Nav, { NavItem, NavFooter, NavHeader, NavSub } from './nav'
 import Dropdown from './dropdown'
 import Empty from './empty'
+import MarkdownRender from './markdown-render'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -109,7 +110,8 @@ const components: Component[] = [
   NavHeader,
   NavSub,
   Dropdown,
-  Empty
+  Empty,
+  MarkdownRender
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -179,7 +181,8 @@ export {
   NavHeader,
   NavSub,
   Dropdown,
-  Empty
+  Empty,
+  MarkdownRender
 }
 
 const globalApis: { [key: string]: unknown } = {
