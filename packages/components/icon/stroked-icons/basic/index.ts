@@ -1,4 +1,3 @@
-// Auto-generated index file
 export { default as IconAlignVBotStroked } from './IconAlignVBotStroked'
 export { default as IconBellStroked } from './IconBellStroked'
 export { default as IconBookOpenStroked } from './IconBookOpenStroked'
