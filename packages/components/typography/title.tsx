@@ -1,4 +1,4 @@
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, type ExtractPropTypes } from 'vue'
 import { prefix } from 'constants/config'
 import { titleProps } from './type'
 import Text from './text'
@@ -26,3 +26,4 @@ const Title = defineComponent({
   props: titleProps
 })
 export default Title
+export type TitleProps = ExtractPropTypes<typeof titleProps>

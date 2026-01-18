@@ -1,0 +1,102 @@
+@import '../base/constant';
+
+// 代码块背景
+$color-markdownRender_simpleCode-bg: var(--#{$prefix}-color-fill-0);
+// 代码块颜色
+$color-markdownRender_simpleCode-text: var(--#{$prefix}-color-text-1);
+// 列表颜色
+$color-markdownRender_component_list: var(--#{$prefix}-color-text-0);
+// 图片alt颜色
+$color-markdownRender_component_image_alt: var(--#{$prefix}-color-tertiary);
+
+// 图片左边距
+$spacing-markdownRender_component_image-marginLeft: 16px;
+// 图片右边距
+$spacing-markdownRender_component_image-marginRight: 16px;
+// 图片上边距
+$spacing-markdownRender_component_image-marginTop: 16px;
+// 图片下边距
+$spacing-markdownRender_component_image-marginBottom: 16px;
+// 图片alt上边距
+$spacing-markdownRender_component_image_alt-marginTop: 8px;
+// 一级标题的上边距
+$spacing-markdownRender_component_header1-marginTop: 16px;
+// 一级标题的下边距
+$spacing-markdownRender_component_header1-marginBottom: 16px;
+// 二级标题的上边距
+$spacing-markdownRender_component_header2-marginTop: 16px;
+// 二级标题的下边距
+$spacing-markdownRender_component_header2-marginBottom: 16px;
+// 三级标题的上边距
+$spacing-markdownRender_component_header3-marginTop: 16px;
+// 三级标题的下边距
+$spacing-markdownRender_component_header3-marginBottom: 16px;
+// 四级标题的上边距
+$spacing-markdownRender_component_header4-marginTop: 16px;
+// 四级标题的下边距
+$spacing-markdownRender_component_header4-marginBottom: 16px;
+// 五级标题的上边距
+$spacing-markdownRender_component_header5-marginTop: 16px;
+// 五级标题的下边距
+$spacing-markdownRender_component_header5-marginBottom: 16px;
+// 六级标题的上边距
+$spacing-markdownRender_component_header6-marginTop: 16px;
+// 六级标题的下边距
+$spacing-markdownRender_component_header6-marginBottom: 16px;
+// 图片最大宽度
+$width-markdownRender_component_image-maxWidth: 50%;
+// 图片最大高度
+$width-markdownRender_component_image-maxHeight: 500px;
+
+$margin: (
+  h1: (
+    margin-top: $spacing-markdownRender_component_header1-marginTop,
+    margin-bottom: $spacing-markdownRender_component_header1-marginBottom
+  ),
+  h2: (
+    margin-top: $spacing-markdownRender_component_header2-marginTop,
+    margin-bottom: $spacing-markdownRender_component_header2-marginBottom
+  ),
+  h3: (
+    margin-top: $spacing-markdownRender_component_header3-marginTop,
+    margin-bottom: $spacing-markdownRender_component_header3-marginBottom
+  ),
+  h4: (
+    margin-top: $spacing-markdownRender_component_header4-marginTop,
+    margin-bottom: $spacing-markdownRender_component_header4-marginBottom
+  ),
+  h5: (
+    margin-top: $spacing-markdownRender_component_header5-marginTop,
+    margin-bottom: $spacing-markdownRender_component_header5-marginBottom
+  ),
+  h6: (
+    margin-top: $spacing-markdownRender_component_header6-marginTop,
+    margin-bottom: $spacing-markdownRender_component_header6-marginBottom
+  )
+);
+.#{$prefix}-markdownRender {
+  ul,
+  li {
+    color: $color-markdownRender_component_list;
+  }
+  &-component {
+    &-image {
+      margin: $spacing-markdownRender_component_image-marginTop
+        $spacing-markdownRender_component_image-marginRight
+        $spacing-markdownRender_component_image-marginBottom
+        $spacing-markdownRender_component_image-marginLeft;
+      max-width: $width-markdownRender_component_image-maxWidth;
+      max-height: $width-markdownRender_component_image-maxHeight;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @each $name, $size in $margin {
+      &-header.#{$prefix}-typography.#{$prefix}-typography-#{$name} {
+        margin-top: map-get($size, 'margin-top');
+        margin-bottom: map-get($size, 'margin-bottom');
+      }
+    }
+  }
+}

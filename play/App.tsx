@@ -16,6 +16,7 @@ import TypographyDemo from './components/typography'
 import Collapsible from './components/collapsibled'
 import CarouselDemo from './components/carousel'
 import Navigation from './components/navigation'
+import MarkdownRenderDemo from './components/markdown'
 const App = defineComponent(() => {
   const loading = ref(false)
   const switchLoading = ref(false)
@@ -959,6 +960,7 @@ const App = defineComponent(() => {
       <Collapsible></Collapsible>
       <CarouselDemo></CarouselDemo>
       <Navigation></Navigation>
+      <MarkdownRenderDemo></MarkdownRenderDemo>
     </div>
   )
 })

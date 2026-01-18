@@ -43,6 +43,7 @@ import Nav, { NavItem, NavFooter, NavHeader, NavSub } from './nav'
 import Dropdown from './dropdown'
 import Empty from './empty'
 import MarkdownRender from './markdown-render'
+import Image from './image'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -111,7 +112,8 @@ const components: Component[] = [
   NavSub,
   Dropdown,
   Empty,
-  MarkdownRender
+  MarkdownRender,
+  Image
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -182,7 +184,8 @@ export {
   NavSub,
   Dropdown,
   Empty,
-  MarkdownRender
+  MarkdownRender,
+  Image
 }
 
 const globalApis: { [key: string]: unknown } = {

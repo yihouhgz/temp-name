@@ -1,4 +1,12 @@
-import { defineComponent, h, useAttrs, computed, reactive, getCurrentInstance } from 'vue'
+import {
+  defineComponent,
+  h,
+  useAttrs,
+  computed,
+  reactive,
+  getCurrentInstance,
+  type ExtractPropTypes
+} from 'vue'
 import { prefix } from 'constants/config'
 import { textProps, type CopyableConfigType } from './type'
 import {
@@ -293,3 +301,4 @@ const Text = defineComponent({
 })
 
 export default Text
+export type TextProps = ExtractPropTypes<typeof textProps>
