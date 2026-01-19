@@ -90,6 +90,16 @@ $margin: (
       display: flex;
       flex-direction: column;
       justify-content: center;
+      &-alt {
+        color: $color-markdownRender_component_image_alt;
+        margin-top: $spacing-markdownRender_component_image_alt-marginTop;
+        text-align: center;
+      }
+    }
+
+    &-code {
+      background-color: $color-markdownRender_simpleCode-bg;
+      color: $color-markdownRender_simpleCode-text;
     }
 
     @each $name, $size in $margin {

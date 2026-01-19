@@ -11,9 +11,6 @@ importers:
       '@mdx-js/mdx':
         specifier: ^3.1.1
         version: 3.1.1
-      '@mdx-js/vue':
-        specifier: ^3.1.1
-        version: 3.1.1(vue@3.5.18(typescript@5.8.3))
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1129,11 +1126,6 @@ packages:
 
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
-
-  '@mdx-js/vue@3.1.1':
-    resolution: {integrity: sha512-S7xxdFwAgTAzgKpePx3JcvpITYZQ+vIo8DAq8VL1VixJ5WVK0CdZjlJT4CU4whimmSWpg66JWarh/ZgcjYYC1w==}
-    peerDependencies:
-      vue: '>=3.0.0'
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -5228,11 +5220,6 @@ snapshots:
       vfile: 6.0.3
     transitivePeerDependencies:
       - supports-color
-
-  '@mdx-js/vue@3.1.1(vue@3.5.18(typescript@5.8.3))':
-    dependencies:
-      '@types/mdx': 2.0.13
-      vue: 3.5.18(typescript@5.8.3)
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
