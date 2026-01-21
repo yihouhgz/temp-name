@@ -57,7 +57,12 @@ const MarkdownRender = defineComponent({
 
     `
     return () => {
-      return <tempui-markdown-render raw={raw}></tempui-markdown-render>
+      return (
+        <div>
+          <tempui-markdown-render raw={raw}></tempui-markdown-render>
+          <tempui-image width={360} height={200} src="https://load-error.jpeg"></tempui-image>
+        </div>
+      )
     }
   }
 })
