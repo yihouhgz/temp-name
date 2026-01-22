@@ -2,12 +2,13 @@ import { prefix } from 'constants/config'
 import { computed, defineComponent, type StyleValue } from 'vue'
 import { dividerProps } from './type'
 import './style/divider'
-import { isNumber } from '../_util'
+import { isNumber, isUndefined } from '../_util'
 
 const Divider = defineComponent({
   setup(props, ctx) {
     const style = computed<StyleValue>(() => {
       let { margin } = props
+      if (isUndefined(margin)) return {}
       if (isNumber(margin)) {
         margin = margin + 'px'
       }

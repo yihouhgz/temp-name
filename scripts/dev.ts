@@ -27,7 +27,7 @@ function checkDistFiles(): Promise<void> {
     setTimeout(() => {
       clearInterval(checkInterval)
       resolve()
-    }, 30000)
+    }, 300000)
   })
 }
 

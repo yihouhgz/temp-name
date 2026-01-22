@@ -63,7 +63,7 @@ const MarkdownRender = defineComponent({
           <tempui-image
             width={360}
             height={200}
-            src="https://semi.design/dsm_manual/content/introduction/start/start-intro.png"
+            src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/abstract.jpg"
           ></tempui-image>
         </div>
       )

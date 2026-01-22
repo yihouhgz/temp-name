@@ -5,6 +5,8 @@ import { imagePreviewProps, imagePreviewEmits } from './type'
 import '../image/style/image'
 import { hasPropsOrSlots, isArray, isString, renderElementForPropsOrSlot } from '../_util'
 import {
+  IconArrowLeft,
+  IconArrowRight,
   IconChevronLeft,
   IconChevronRight,
   IconClose,
@@ -53,21 +55,47 @@ const imagePreview = defineComponent({
     }
     const renderPreviewMenu = () => {
       const templates = []
-      templates.push(<IconChevronLeft></IconChevronLeft>)
-      templates.push(<div class={`-image-preview-footer-page`}>1 / 1</div>)
-      templates.push(<IconChevronRight></IconChevronRight>)
+      templates.push(<IconChevronLeft size="large"></IconChevronLeft>)
+      templates.push(<div class={prefix + `-image-preview-footer-page`}>1 / 1</div>)
+      templates.push(<IconChevronRight size="large"></IconChevronRight>)
       templates.push(<Divider layout="vertical"></Divider>)
-      templates.push(<IconMinus></IconMinus>)
+      templates.push(<IconMinus size="large"></IconMinus>)
       templates.push(<Slider></Slider>)
-      templates.push(<IconPlus></IconPlus>)
+      templates.push(<IconPlus size="large"></IconPlus>)
       if (state.ratioType === strings.REAL_SIZE) {
-        templates.push(<IconRealSizeStroked></IconRealSizeStroked>)
+        templates.push(
+          <IconRealSizeStroked
+            class={prefix + '-image-preview-footer-gap'}
+            size="large"
+          ></IconRealSizeStroked>
+        )
       } else {
-        templates.push(<IconWindowAdaptionStroked></IconWindowAdaptionStroked>)
+        templates.push(
+          <IconWindowAdaptionStroked
+            class={prefix + '-image-preview-footer-gap'}
+            size="large"
+          ></IconWindowAdaptionStroked>
+        )
       }
       templates.push(<Divider layout="vertical"></Divider>)
-      templates.push(<IconRotate></IconRotate>)
-      templates.push(<IconDownload></IconDownload>)
+      templates.push(<IconRotate size="large"></IconRotate>)
+      templates.push(
+        <IconDownload class={prefix + '-image-preview-footer-gap'} size="large"></IconDownload>
+      )
+      return templates
+    }
+    const renderPageHandle = () => {
+      const templates = []
+      templates.push(
+        <div class={[prefix + '-image-preview-icon', prefix + '-image-preview-prev']}>
+          <IconArrowLeft></IconArrowLeft>
+        </div>
+      )
+      templates.push(
+        <div class={[prefix + '-image-preview-icon', prefix + '-image-preview-next']}>
+          <IconArrowRight></IconArrowRight>
+        </div>
+      )
       return templates
     }
     return () => {
@@ -94,6 +122,7 @@ const imagePreview = defineComponent({
             <div class={`${prefix}-image-preview-image`}>
               <img class={`${prefix}-image-preview-image-img`} src={currentImageUrl.value} />
             </div>
+            {renderPageHandle()}
             <section class={footerCls}>{renderPreviewMenu()}</section>
           </div>
         </Portal>
