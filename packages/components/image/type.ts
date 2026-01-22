@@ -58,7 +58,8 @@ export const imageProps = {
    * @description 图片加载失败时候的占位内容
    */
   preview: {
-    type: [Boolean, Object] as PropType<boolean | PreviewConfigType>
+    type: [Boolean, Object] as PropType<boolean | PreviewConfigType>,
+    default: true
   },
   /**
    * @description 图片地址

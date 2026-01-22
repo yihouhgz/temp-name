@@ -1,0 +1,100 @@
+@import '../base/constant';
+
+//分割线颜色
+$color-divider_border-color: var(--#{$prefix}-color-border);
+//标题颜色
+$color-divider_text-default: var(--#{$prefix}-color-text-0);
+
+// 分割线文字字重
+$font-divider_text-weight: $font-weight-bold;
+
+// 垂直分割线高度
+$height-divider_vertical: 20px;
+
+// 水平模式左间距
+$spacing-divider_horizontal-marginLeft: 0px;
+// 水平模式右间距
+$spacing-divider_horizontal-marginRight: 0px;
+// 水平模式上间距
+$spacing-divider_horizontal-marginTop: 1px;
+// 水平模式下间距
+$spacing-divider_horizontal-marginBottom: 1px;
+
+// 垂直模式左间距
+$spacing-divider_vertical-marginLeft: 1px;
+// 垂直模式右间距
+$spacing-divider_vertical-marginRight: 1px;
+// 垂直模式上间距
+$spacing-divider_vertical-marginTop: 0px;
+// 垂直模式下间距
+$spacing-divider_vertical-marginBottom: 0px;
+
+// 内容为纯文字时内容左间距
+$spacing-divider_inner_text-paddingLeft: 8px;
+// 内容为纯文字时内容右间距
+$spacing-divider_inner_text-paddingRight: 8px;
+// 内容为纯文字时内容上间距
+$spacing-divider_inner_text-paddingTop: 0px;
+// 内容为纯文字时内容下间距
+$spacing-divider_inner_text-paddingBottom: 0px;
+
+// 左对齐文字时左间距宽度
+$width-divider_inner_text_left_line: 40px;
+// 右对齐文字时右间距宽度
+$width-divider_inner_text_right_line: 40px;
+// 分割线宽度
+$width-divider-border: 1px;
+
+.#{$prefix}-divider {
+  margin: $spacing-divider_horizontal-marginTop $spacing-divider_horizontal-marginRight
+    $spacing-divider_horizontal-marginBottom $spacing-divider_horizontal-marginLeft;
+  border-bottom: $width-divider-border solid $color-divider_border-color;
+  color: $color-divider_text-default;
+  box-sizing: border-box;
+  &-horizonta {
+    width: 100%;
+    display: flex;
+  }
+  &-vertical {
+    border-bottom: 0;
+    display: inline-block;
+    margin: $spacing-divider_vertical-marginTop $spacing-divider_vertical-marginRight
+      $spacing-divider_vertical-marginBottom $spacing-divider_vertical-marginLeft;
+    border-left: $width-divider-border solid $color-divider_border-color;
+    height: $height-divider_vertical;
+    vertical-align: middle;
+  }
+  &-dashed {
+    border-bottom-style: dashed;
+  }
+  &-with-text {
+    display: flex;
+    border-bottom: 0;
+    white-space: nowrap;
+    align-items: center;
+    &::before,
+    &::after {
+      content: '';
+      width: 50%;
+      border-bottom: $width-divider-border solid $color-divider_border-color;
+    }
+    &-left:before {
+      width: $width-divider_inner_text_left_line;
+    }
+    &-left:after {
+      flex: 1 1;
+    }
+    &-right::before {
+      flex: 1 1;
+    }
+    &-right::after {
+      width: $width-divider_inner_text_right_line;
+    }
+  }
+  &-with-text &_inner-text {
+    font-weight: $font-divider_text-weight;
+    padding: $spacing-divider_inner_text-paddingTop $spacing-divider_inner_text-paddingRight
+      $spacing-divider_inner_text-paddingBottom $spacing-divider_inner_text-paddingLeft;
+    display: inline-block;
+  }
+}

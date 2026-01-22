@@ -11,6 +11,7 @@ import { imageProps, imageEmits } from './type'
 import { hasPropsOrSlots, isObject, renderElementForPropsOrSlot } from '../_util'
 import { IconUploadError } from '../icon'
 import './style/image'
+import ImagePreview from '../image-preview'
 
 const Image = defineComponent({
   setup(props, ctx) {
@@ -94,6 +95,7 @@ const Image = defineComponent({
               )}
             </div>
           )}
+          <ImagePreview src={props.src}></ImagePreview>
         </div>
       )
     }

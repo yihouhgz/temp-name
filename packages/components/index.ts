@@ -44,6 +44,9 @@ import Dropdown from './dropdown'
 import Empty from './empty'
 import MarkdownRender from './markdown-render'
 import Image from './image'
+import imagePreview from './image-preview'
+import Divider from './divider'
+import Slider from './slider'
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -113,7 +116,10 @@ const components: Component[] = [
   Dropdown,
   Empty,
   MarkdownRender,
-  Image
+  Image,
+  imagePreview,
+  Divider,
+  Slider
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -185,7 +191,10 @@ export {
   Dropdown,
   Empty,
   MarkdownRender,
-  Image
+  Image,
+  imagePreview,
+  Divider,
+  Slider
 }
 
 const globalApis: { [key: string]: unknown } = {
