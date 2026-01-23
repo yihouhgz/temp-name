@@ -1,5 +1,4 @@
 import { ref, defineComponent, watchEffect } from 'vue'
-import { Button } from '../dist'
 import './styles/app.scss'
 import './styles/reset.scss'
 import TooltipDemo from './components/tooltip'
@@ -131,10 +130,10 @@ const App = defineComponent(() => {
     <div>
       <div>
         <tempui-sync-button onClick={handleSync}>hello</tempui-sync-button>
-        <Button type="primary">确定</Button>
-        <Button type="primary" disabled>
+        <tempui-button type="primary">确定</tempui-button>
+        <tempui-button type="primary" disabled>
           确定
-        </Button>
+        </tempui-button>
         <tempui-button
           loading={loading.value}
           onClick={handleClick}
@@ -190,91 +189,91 @@ const App = defineComponent(() => {
         </tempui-button>
       </div>
       <div class="top-50">
-        <Button theme="solid" disabled type="primary" style={{ marginRight: 8 }}>
+        <tempui-button theme="solid" disabled type="primary" style={{ marginRight: 8 }}>
           深色主要 disabled
-        </Button>
-        <Button theme="solid" type="primary" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="solid" type="primary" style={{ marginRight: 8 }}>
           深色主要
-        </Button>
-        <Button theme="solid" type="secondary" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="solid" type="secondary" style={{ marginRight: 8 }}>
           深色次要
-        </Button>
-        <Button theme="solid" type="tertiary" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="solid" type="tertiary" style={{ marginRight: 8 }}>
           深色第三
-        </Button>
-        <Button theme="solid" type="warning" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="solid" type="warning" style={{ marginRight: 8 }}>
           深色警告
-        </Button>
-        <Button theme="solid" type="danger" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="solid" type="danger" style={{ marginRight: 8 }}>
           深色危险
-        </Button>
+        </tempui-button>
       </div>
       <div class="top-50">
-        <Button theme="borderless" disabled type="primary" style={{ marginRight: 8 }}>
+        <tempui-button theme="borderless" disabled type="primary" style={{ marginRight: 8 }}>
           无背景主要 disabled
-        </Button>
-        <Button theme="borderless" type="primary" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="borderless" type="primary" style={{ marginRight: 8 }}>
           无背景主要
-        </Button>
-        <Button theme="borderless" type="secondary" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="borderless" type="secondary" style={{ marginRight: 8 }}>
           无背景次要
-        </Button>
-        <Button theme="borderless" type="tertiary" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="borderless" type="tertiary" style={{ marginRight: 8 }}>
           无背景第三
-        </Button>
-        <Button theme="borderless" type="warning" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="borderless" type="warning" style={{ marginRight: 8 }}>
           无背景警告
-        </Button>
-        <Button theme="borderless" type="danger" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="borderless" type="danger" style={{ marginRight: 8 }}>
           无背景危险
-        </Button>
+        </tempui-button>
       </div>
       <div class="top-50">
-        <Button theme="outline" disabled type="primary" style={{ marginRight: 8 }}>
+        <tempui-button theme="outline" disabled type="primary" style={{ marginRight: 8 }}>
           边框主要 disabled
-        </Button>
-        <Button theme="outline" type="primary" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="outline" type="primary" style={{ marginRight: 8 }}>
           边框主要
-        </Button>
-        <Button theme="outline" type="secondary" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="outline" type="secondary" style={{ marginRight: 8 }}>
           边框次要
-        </Button>
-        <Button theme="outline" type="tertiary" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="outline" type="tertiary" style={{ marginRight: 8 }}>
           边框第三
-        </Button>
-        <Button theme="outline" type="warning" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="outline" type="warning" style={{ marginRight: 8 }}>
           边框警告
-        </Button>
-        <Button theme="outline" type="danger" style={{ marginRight: 8 }}>
+        </tempui-button>
+        <tempui-button theme="outline" type="danger" style={{ marginRight: 8 }}>
           边框危险
-        </Button>
+        </tempui-button>
       </div>
       <div>
-        <Button type="secondary" loading icon={CameraIcon}>
+        <tempui-button type="secondary" loading icon={CameraIcon}>
           1
-        </Button>
+        </tempui-button>
       </div>
       <div>
-        <Button disabled>禁用</Button>
-        <Button disabled theme="borderless">
+        <tempui-button disabled>禁用</tempui-button>
+        <tempui-button disabled theme="borderless">
           无背景禁用
-        </Button>
-        <Button disabled theme="light">
+        </tempui-button>
+        <tempui-button disabled theme="light">
           浅色禁用
-        </Button>
-        <Button disabled theme="borderless" type="primary">
+        </tempui-button>
+        <tempui-button disabled theme="borderless" type="primary">
           无背景主要禁用
-        </Button>
-        <Button disabled theme="solid" type="warning">
+        </tempui-button>
+        <tempui-button disabled theme="solid" type="warning">
           深色警告禁用
-        </Button>
+        </tempui-button>
       </div>
       <div>
         <div style={{ marginRight: 10 }}>
           <tempui-button-group type="primary">
-            <Button loading>拷贝</Button>
-            <Button>查询</Button>
-            <Button>剪切</Button>
+            <tempui-button loading>拷贝</tempui-button>
+            <tempui-button>查询</tempui-button>
+            <tempui-button>剪切</tempui-button>
           </tempui-button-group>
         </div>
       </div>
@@ -446,12 +445,12 @@ const App = defineComponent(() => {
           content={<div class="popover-children">111</div>}
           trigger="click"
         >
-          <Button type="primary">我是popover 点击触发</Button>
+          <tempui-button type="primary">我是popover 点击触发</tempui-button>
         </tempui-popover>
       </div>
       <div class="top-20">
         <tempui-tooltip content={<div>111</div>}>
-          <Button type="primary">tooltip hover触发</Button>
+          <tempui-button type="primary">tooltip hover触发</tempui-button>
         </tempui-tooltip>
       </div>
       <div class="top-20">

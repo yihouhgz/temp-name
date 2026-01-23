@@ -63,12 +63,12 @@ async function startDevEnvironment() {
         command: 'pnpm -C play dev',
         name: 'play',
         prefixColor: 'green'
-      },
-      {
-        command: 'pnpm -C docs docs:dev',
-        name: 'docs',
-        prefixColor: 'magenta'
       }
+      // {
+      //   command: 'pnpm -C docs docs:dev',
+      //   name: 'docs',
+      //   prefixColor: 'magenta'
+      // }
     ],
     {
       prefix: 'name',

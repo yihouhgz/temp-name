@@ -1,0 +1,218 @@
+@import '../base/constant';
+
+// 滑动条圆形按钮-背景色-动画持续时间
+$transition_duration-slider_handle-bg: var(--#{$prefix}-transition_duration-none);
+// 滑动条圆形按钮-背景色-过渡曲线
+$transition_function-slider_handle-bg: var(--#{$prefix}-transition_function-easeIn);
+// 滑动条圆形按钮-背景色-延迟时间
+$transition_delay-slider_handle-bg: var(--#{$prefix}-transition_delay-none);
+
+// 滑动条文本颜色 - 默认
+$color-slider-text-default: var(--#{$prefix}-color-text-0);
+// 滑动条禁用文本颜色 - 默认
+$color-slider_disabled-text-default: var(--#{$prefix}-color-disabled-text);
+// 滑动条圆形刻度点颜色 - 默认态
+$color-slider_dot-bg-default: var(--#{$prefix}-color-white);
+// 滑动条圆形刻度点描边颜色 - 按下态
+$color-slider_dot-border-active: var(--#{$prefix}-color-white);
+// 滑动条圆形刻度点描边颜色 - 默认态
+$color-slider_dot-border: var(--#{$prefix}-color-white);
+// 滑动条圆形按钮颜色 - 默认态
+$color-slider_handle-bg-default: var(--#{$prefix}-color-white);
+// 滑动条圆形按钮颜色 - 悬停态
+$color-slider_handle-bg-hover: var(--#{$prefix}-color-white);
+// 滑动条圆形描边颜色 - 激活态
+$color-slider_handle-border-focus: var(--#{$prefix}-color-focus-border);
+// 禁用滑动条圆形描边颜色 - 悬停态
+$color-slider_handle_disabled-border-hover: var(--#{$prefix}-color-white);
+// 禁用滑动条圆形描边颜色 - 默认态
+$color-slider_handle_disabled-border: var(--#{$prefix}-color-border);
+// 滑动条刻度文字颜色
+$color-slider_mark-text-default: var(--#{$prefix}-color-text-2);
+// 滑动条轨道颜色 - 未填充
+$color-slider_rail-bg-default: var(--#{$prefix}-color-fill-0);
+// 暂无
+$color-slider_rail: rgba(0, 0, 0, 0.65);
+// 滑动条轨道颜色 - 已填充
+$color-slider_track-bg-default: var(--#{$prefix}-color-primary);
+// 禁用滑动条轨道颜色 - 已填充
+$color-slider_track_disabled-bg: var(--#{$prefix}-color-primary-disabled);
+// 圆形按钮轮廓 - 聚焦
+$color-slider_handle-focus: var(--#{$prefix}-color-primary-light-active);
+// 圆形按钮内部圆点颜色
+$color-slider_handle_dot: var(--#{$prefix}-color-primary);
+
+// 滚动条轨道文本字号
+$font-slider_rail-fontSize: $font-size-regular;
+// 滚动条刻度标签字号
+$font-slider_marks-fontSize: $font-size-regular;
+// 滚动条轨道文本行高倍数
+$font-slider_rail-lineHeight: 1.5;
+
+// 滚动条容器整体高度
+$height-slider_wrapper: 32px;
+// 垂直滚动条整体宽度
+$height-slider_vertical_wrapper: 4px;
+// 滚动条未填充轨道高度
+$height-slider_rail: 4px;
+// 滚动条已填充轨道高度
+$height-slider_track: 4px;
+// 滚动条圆形按钮高度
+$height-slider_handle: 24px;
+
+// 滑动条圆形按钮-放大
+$transform_scale-slider_handle: var(--#{$prefix}-transform_scale-small);
+
+// 滚动条未填充轨道圆角
+$radius-slider_rail: var(--#{$prefix}-border-radius-small);
+// 滚动条已填充轨道圆角
+$radius-slider_track: var(--#{$prefix}-border-radius-small);
+
+// 滑动条整体水平内边距
+$spacing-slider-paddingX: 13px;
+// 滑动条整体垂直内边距
+$spacing-slider-paddingY: 0px;
+// 滑动条整体外边距
+$spacing-slider-margin: 0px;
+// 滑动条轨道外边距
+$spacing-slider_rail-margin: 0px;
+// 滑动条轨道内边距
+$spacing-slider_rail-padding: 0px;
+// 滑动条未填充轨道顶部距离
+$spacing-slider_rail-top: 14px;
+// 滑动条圆形按钮顶部外边距
+$spacing-slider_handle-marginTop: 4px;
+// 滑动条已填充轨道顶部距离
+$spacing-slider_track-top: 14px;
+// 滑动条工具提示顶部距离
+$spacing-slider_tooltip-top: -40px;
+// 滑动条圆形刻度点顶部距离
+$spacing-slider_dot-top: 14px;
+// 滑动条刻度标签顶部距离
+$spacing-slider_marks-top: 23px;
+// 滑动条刻度标签左侧距离
+$spacing-slider_marks-left: 0px;
+// 暂无
+$spacing-slider_boundary-top: 30px;
+// 暂无
+$spacing-slider_boundary_min-left: 0px;
+// 暂无
+$spacing-slider_boundary_max-right: 0px;
+// 垂直滑动条刻度标签顶部外边距
+$spacing-slider_vertical_marks-marginTop: -30px;
+// 垂直滑动条刻度标签左侧外边距
+$spacing-slider_vertical_marks-marginLeft: 29px;
+// 垂直滑动条刻度标签左侧外边距（标签在左侧时）
+$spacing-slider_vertical_marks-reverse-marginLeft: -26px;
+// 垂直滑动条轨道顶部距离
+$spacing-slider_vertical_rail-top: 0px;
+// 垂直滑动条原型按钮顶部外边距
+$spacing-slider_vertical_handle-marginTop: 0px;
+// 垂直滑动条原型按钮左侧外边距
+$spacing-slider_vertical_handle-marginLeft: -10px;
+// 水平滑动条原型按钮垂直偏移量
+$spacing-slider_handle-translateY: 0px;
+// 垂直滑动条原型按钮水平偏移量
+$spacing-slider_vertical_handle-translateX: 0px;
+// 水平滑动条圆形刻度点水平偏移量
+$spacing-slider_dot-translateX: 0px;
+// 垂直滑动条圆形刻度点垂直偏移量
+$spacing-slider_vertical_dot-translateY: 0px;
+
+// 滚动条圆形按钮宽度
+$width-slider_handle: 24px;
+// 滚动条圆形按钮按下后描边宽度
+$width-slider_handle_clicked: 1px;
+// 滚动条圆形刻度点宽度
+$width-slider_dot: 4px;
+// 禁用滚动条圆形按钮按下后描边宽度
+$width-slider_handle_border_disabled: 1px;
+// 圆形按钮轮廓 - 聚焦
+$width-slider_handle-focus: 2px;
+// 圆形按钮内部圆点宽度
+$width-slider_handle_dot: 4px;
+
+.#{$prefix}-slider {
+  padding: $spacing-slider-paddingY $spacing-slider-paddingX;
+  margin: $spacing-slider-margin;
+  &-wrapper {
+    box-sizing: border-box;
+    position: relative;
+    height: $height-slider_wrapper;
+    width: 100%;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  &-rail,
+  &-handle {
+    box-sizing: border-box;
+    position: absolute;
+    cursor: pointer;
+    touch-action: none;
+  }
+  &-rail {
+    margin: $spacing-slider_rail-margin;
+    padding: $spacing-slider_rail-padding;
+    color: $color-slider_rail;
+    font-size: $font-slider_rail-fontSize;
+    font-variant: tabular-nums;
+    line-height: 1.5;
+    list-style: none;
+    font-feature-settings: 'tnum';
+    height: $height-slider_rail;
+    background-color: $color-slider_rail-bg-default;
+    width: 100%;
+    border-radius: $radius-slider_rail;
+    top: $spacing-slider_rail-top;
+  }
+  &-track {
+    height: $height-slider_track;
+    background: $color-slider_track-bg-default;
+    border-radius: $radius-slider_track;
+    position: absolute;
+    cursor: pointer;
+    top: $spacing-slider_track-top;
+  }
+
+  &-handle {
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.1),
+      0 0 1px rgba(0, 0, 0, 0.3);
+    width: $width-slider_handle;
+    height: $height-slider_handle;
+    margin-top: $spacing-slider_handle-marginTop;
+    background-color: $color-slider_handle-bg-default;
+    border: none;
+    border-radius: 50%;
+    transition: background-color $transition_duration-slider_handle-bg
+      $transition_function-slider_handle-bg $transition_delay-slider_handle-bg;
+    transform: $transform_scale-slider_handle translateX(-50%) translateY(0);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+      background-color: $color-slider_handle-bg-hover;
+    }
+    &:active {
+      border: $width-slider_handle_clicked solid $color-slider_handle-border-focus;
+      cursor: grabbing;
+    }
+  }
+  &-boundary {
+    position: relative;
+    font-size: $font-size-small;
+    color: $color-slider-text-default;
+    visibility: hidden;
+    top: $spacing-slider_boundary-top;
+    span {
+      position: absolute;
+      display: inline-block;
+    }
+    &-min {
+      left: 0;
+    }
+    &-max {
+      right: 0;
+    }
+  }
+}

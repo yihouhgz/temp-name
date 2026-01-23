@@ -163,13 +163,13 @@ export const sliderEmits = {
   /**
    * @description 值变化后触发，把当前值作为参数传入
    */
-  onAfterChange: (value: number | number[]) => isNumber(value) || isArray(value),
+  afterChange: (value: number | number[]) => isNumber(value) || isArray(value),
   /**
    * @description 当Slider的值发生改变时的回调
    */
-  onChange: (value: number | number[]) => isNumber(value) || isArray(value),
+  change: (value: number | number[]) => isNumber(value) || isArray(value),
   /**
    * @description 鼠标松开滑块时触发
    */
-  onMouseUp: (e: MouseEvent) => e instanceof MouseEvent
+  mouseUp: (e: MouseEvent) => e instanceof MouseEvent
 }

@@ -60,11 +60,29 @@ const MarkdownRender = defineComponent({
       return (
         <div>
           {/* <tempui-markdown-render raw={raw}></tempui-markdown-render> */}
-          <tempui-image
+          {/*<tempui-image
             width={360}
             height={200}
             src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/abstract.jpg"
-          ></tempui-image>
+          ></tempui-image>*/}
+          <div style={{ width: '430px' }}>
+            <div>
+              <div>Default</div>
+              <tempui-slider showBoundary={true}></tempui-slider>
+            </div>
+            <br />
+            <br />
+            <div>
+              <div>Range</div>
+              <tempui-slider defaultValue={[20, 60]} range></tempui-slider>
+            </div>
+            <br />
+            <br />
+            <div>
+              <div>Disabled</div>
+              <tempui-slider defaultValue={40} disabled></tempui-slider>
+            </div>
+          </div>
         </div>
       )
     }
