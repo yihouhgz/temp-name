@@ -125,7 +125,7 @@ const Avatar = defineComponent({
           class={baseClass.value}
           style={baseStyle}
           {...baseAttrs}
-          ref={container}
+          ref={(node) => (container.value = node as HTMLElement)}
           {...handlerAttrs}
         >
           {content}

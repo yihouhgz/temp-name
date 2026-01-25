@@ -7,7 +7,7 @@ import {
   renderElementForPropsOrSlot,
   useRandomIdWithPrefix
 } from '../_util'
-import { IconRadio } from '../icon'
+import { IconRadio } from 'icons'
 import './style/radio'
 import { useRadioInject } from './radio-content'
 

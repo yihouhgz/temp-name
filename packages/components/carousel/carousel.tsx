@@ -12,7 +12,7 @@ import {
   useEventListener
 } from '../_util'
 import type { VNode, StyleValue, HTMLAttributes } from 'vue'
-import { IconChevronLeft, IconChevronRight } from '../icon'
+import { IconChevronLeft, IconChevronRight } from 'icons'
 import { computed } from 'vue'
 import { onMounted } from 'vue'
 

@@ -9,7 +9,7 @@ import {
   isBoolean,
   isArray
 } from '../_util'
-import { IconCheckboxTick, IconCheckboxIndeterminate } from '../icon'
+import { IconCheckboxTick, IconCheckboxIndeterminate } from 'icons'
 import { useCheckboxInject } from './checkbox-content'
 
 type CheckboxStateType = {

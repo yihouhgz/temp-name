@@ -8,7 +8,7 @@ import {
   IconInfoCircle,
   IconClose,
   IconLoading
-} from '../icon'
+} from 'icons'
 import { hasPropsOrSlots, isNumber, renderElementForPropsOrSlot } from '../_util'
 import Button from '../button'
 import CSSAnimation from '../css-animation'

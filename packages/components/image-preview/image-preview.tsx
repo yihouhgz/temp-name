@@ -14,11 +14,11 @@ import {
   IconMinus,
   IconPlus,
   IconRotate
-} from '../icon'
+} from 'icons'
 import Divider from '../divider'
 import Slider from '../slider'
 import { strings } from './constants'
-import { IconRealSizeStroked, IconWindowAdaptionStroked } from '../icon/stroked-icons'
+import { IconRealSizeStroked, IconWindowAdaptionStroked } from 'icons/stroked-icons'
 
 type ImagePreviewState = {
   triggerElementRef: HTMLElement | null

@@ -2,7 +2,7 @@ import { defineComponent, computed, ref, onMounted } from 'vue'
 import type { ExtractPropTypes } from 'vue'
 import { prefix } from 'constants/config'
 import { useEventListener } from '../_util'
-import { IconTick } from '../icon'
+import { IconTick } from 'icons'
 import './style/select-option'
 
 const SelectOption = defineComponent({

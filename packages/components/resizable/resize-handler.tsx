@@ -1,7 +1,7 @@
 import { defineComponent, computed, ref, onMounted } from 'vue'
 import { prefix } from 'constants/config'
 import './style/resizable.ts'
-import { IconHandle } from '../icon'
+import { IconHandle } from 'icons'
 import { resizeHandlerProps, resizableEmits } from './type'
 import { useEventListener } from '../_util'
 

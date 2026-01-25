@@ -14,10 +14,12 @@ type SliderState = {
   offsetX: number
   visibles: boolean[]
   currentIndex: number
+  isHoverHnadle: boolean
 }
 
 const Slider = defineComponent({
   setup(props, ctx) {
+    console.log(props, 'lll')
     const state = reactive<SliderState>({
       hover: false,
       isMove: false,
@@ -26,7 +28,8 @@ const Slider = defineComponent({
       handleRef: null,
       offsetX: 0,
       visibles: [false, false],
-      currentIndex: -1
+      currentIndex: -1,
+      isHoverHnadle: false
     })
     const showBoundary = computed(() => {
       const { showBoundary } = props
@@ -42,13 +45,15 @@ const Slider = defineComponent({
         state.offsetX = e.clientX - handleRect.left
       }
       state.currentIndex = index
-      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mousemove', (e) => handleMouseMove(e, index))
       document.addEventListener('mouseup', () => {
         state.isMove = false
-        state.visibles[index] = false
+        if (!state.isHoverHnadle) {
+          state.visibles[index] = false
+        }
       })
     }
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent, index: number) => {
       if (!state.isMove || !state.sliderRef) return
       const sliderRect = state.sliderRef.getBoundingClientRect()
 
@@ -66,7 +71,10 @@ const Slider = defineComponent({
 
       newValue = Math.max(min, Math.min(max, newValue))
 
-      if (state.value !== newValue) {
+      if (props.range && isArray(state.value)) {
+        state.value[index] = newValue
+        ctx.emit('change', state.value)
+      } else {
         state.value = newValue
         ctx.emit('change', newValue)
       }
@@ -77,17 +85,16 @@ const Slider = defineComponent({
     const handleMouseLeave = () => {
       state.hover = false
     }
-    const handleStyle = computed<StyleValue>(() => {
-      const style: StyleValue = {
-        zIndex: 1,
-        left: state.value + '%'
-      }
-      return style
-    })
     const trackStyle = computed<StyleValue>(() => {
+      const { range } = props
       const style: StyleValue = {
         left: 0,
         width: state.value + '%'
+      }
+      if (range && isArray(state.value)) {
+        const [start, end] = state.value
+        style.left = start + '%'
+        style.width = Math.min(end - start, 100) + '%'
       }
       return style
     })
@@ -101,7 +108,9 @@ const Slider = defineComponent({
       return tipFormatter(value)
     }
     return () => {
+      const { max, min, disabled } = props
       const values = isArray(state.value) ? state.value : [state.value]
+      console.log(values, 'values')
       return (
         <div
           class={`${prefix}-slider`}
@@ -115,6 +124,10 @@ const Slider = defineComponent({
             <div>
               {values.map((item, index) => {
                 const v = getTipFormatter()
+                const style: StyleValue = {
+                  zIndex: 1,
+                  left: item + '%'
+                }
                 return (
                   <Tooltip
                     trigger="custom"
@@ -128,15 +141,25 @@ const Slider = defineComponent({
                       ref={(node) => (state.handleRef = node as HTMLElement)}
                       onMousedown={(e) => handleClickDownHandle(e, index)}
                       onTouchstart={(e) => handleTouchHandle(e, index)}
-                      onMouseover={() => (state.visibles[index] = true)}
-                      style={handleStyle.value}
+                      onMouseenter={() => {
+                        state.visibles[index] = true
+                        state.isHoverHnadle = true
+                      }}
+                      onMouseleave={() => {
+                        state.isHoverHnadle = false
+                        if (!state.isMove) {
+                          state.visibles[index] = false
+                        }
+                      }}
+                      // style={handleStyle.value}
+                      style={style}
                       class={`${prefix}-slider-handle`}
                       role="slider"
                       tabindex="0"
-                      aria-disabled="false"
-                      aria-valuenow="0"
-                      aria-valuemax="100"
-                      aria-valuemin="0"
+                      aria-disabled={disabled}
+                      aria-valuenow={item}
+                      aria-valuemax={max}
+                      aria-valuemin={min}
                     ></span>
                   </Tooltip>
                 )

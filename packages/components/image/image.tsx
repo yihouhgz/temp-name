@@ -9,7 +9,7 @@ import {
 } from 'vue'
 import { imageProps, imageEmits } from './type'
 import { hasPropsOrSlots, isObject, renderElementForPropsOrSlot } from '../_util'
-import { IconUploadError } from '../icon'
+import { IconUploadError } from 'icons'
 import './style/image'
 import ImagePreview from '../image-preview'
 

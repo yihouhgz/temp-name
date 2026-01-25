@@ -1,4 +1,4 @@
-import { IconUploadError } from '../../icon'
+import { IconUploadError } from 'icons'
 import Image from '../../image'
 import type { ImageProps } from '../../image/image'
 import { prefix } from 'constants/config'

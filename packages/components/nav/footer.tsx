@@ -1,7 +1,7 @@
 import { defineComponent, ref, watchEffect } from 'vue'
 import { prefix } from 'constants/config'
 import Button from '../button'
-import { IconSidebar } from '../icon'
+import { IconSidebar } from 'icons'
 import { footerProps, footerEmits } from './type'
 import LocaleConsumer from '../locale/locale-consumer'
 import Tooltip from '../tooltip'

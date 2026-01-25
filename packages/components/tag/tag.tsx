@@ -3,7 +3,7 @@ import { prefix } from 'constants/config'
 import { tagEmits, tagProps } from './type'
 import type { ExtractPropTypes, ExtractPublicPropTypes } from 'vue'
 import './style/tag.ts'
-import { IconClear } from '../icon'
+import { IconClear } from 'icons'
 import { Avatar } from '../avatar'
 import { renderElementForPropsOrSlot } from '../_util/helps'
 

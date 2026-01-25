@@ -4,7 +4,7 @@ import Collapsible from '../collapsible'
 import { collapsePanelProps, collapsePanelEmits, collapseProps } from './type'
 import { isUndefined, renderElementForPropsOrSlot, useRandomId } from '../_util'
 import './style/collapse'
-import { IconChevronDown, IconChevronUp } from '../icon'
+import { IconChevronDown, IconChevronUp } from 'icons'
 import { useCollapseInject } from './content'
 type CollapsePropsType = ExtractDefaultPropTypes<typeof collapseProps>
 type CollapsePanelState = {

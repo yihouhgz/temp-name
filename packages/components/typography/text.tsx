@@ -25,7 +25,7 @@ import Popover from '../popover'
 import './style/typography'
 import type { StyleValue } from 'vue'
 import type { VueNode } from '../_util/type'
-import { IconCopy, IconTick } from '../icon'
+import { IconCopy, IconTick } from 'icons'
 import { copyText } from './utils'
 import LocaleConsumer from '../locale/locale-consumer'
 

@@ -9,7 +9,7 @@ import {
   IconAlertTriangle,
   IconInfoCircle,
   IconClose
-} from '../icon'
+} from 'icons'
 import { hasPropsOrSlots, renderElementForPropsOrSlot } from '../_util'
 import { strings } from './constant'
 import { Text } from '../typography'

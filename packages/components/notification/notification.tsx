@@ -11,7 +11,7 @@ import {
   IconInfoCircle,
   IconClose,
   IconLoading
-} from '../icon'
+} from 'icons'
 import { strings } from './constants'
 import CSSAnimation from '../css-animation'
 import { useNotification } from './content'

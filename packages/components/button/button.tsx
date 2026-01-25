@@ -10,8 +10,8 @@ import {
   isString,
   toFirstLocaleUpperCase
 } from '../_util'
-// import { Icon } from '../icon'
-import { IconLoading } from '../icon'
+// import { Icon } from 'icons'
+import { IconLoading } from 'icons'
 import './style/button'
 import { generate } from 'theme/derive'
 import { formChildrenIndex } from '../_util/tab-index'
