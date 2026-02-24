@@ -18,7 +18,8 @@ const Image = defineComponent({
     const state = reactive({
       loading: false,
       isError: false, // load error
-      isLoad: false // load done
+      isLoad: false, // load done
+      showVisible: false
     })
     const instance = getCurrentInstance()
 
@@ -38,6 +39,7 @@ const Image = defineComponent({
       if (preview) {
         const option = getPerviewoOption()
         console.log(option)
+        state.showVisible = true
       }
     }
     const handleImgLoad = (e: Event) => {
@@ -56,12 +58,16 @@ const Image = defineComponent({
     const isShowOverlay = computed(() => {
       return state.isError || isShowPlaceholder.value
     })
+    const handleImagePreviewClose = () => {
+      state.showVisible = false
+    }
     const attrs = useAttrs()
     return () => {
       const { src, alt, width, height, imgCls, imgStyle, preview } = props
+      const isPreview = !!preview
       const classNames = [
         prefix + '-image-img',
-        !!preview && prefix + '-image-img-perview',
+        isPreview && prefix + '-image-img-perview',
         state.isError && prefix + '-image-img-error',
         imgCls
       ]
@@ -95,7 +101,13 @@ const Image = defineComponent({
               )}
             </div>
           )}
-          <ImagePreview src={props.src}></ImagePreview>
+          {isPreview && (
+            <ImagePreview
+              onClose={handleImagePreviewClose}
+              src={props.src}
+              visible={state.showVisible}
+            ></ImagePreview>
+          )}
         </div>
       )
     }

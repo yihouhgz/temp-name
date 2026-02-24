@@ -193,7 +193,7 @@ export const imagePreviewProps = {
    */
   showTooltip: {
     type: Boolean,
-    default: false
+    default: true
   },
   /**
    * @description 图片地址

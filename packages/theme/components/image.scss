@@ -153,6 +153,9 @@ $width-image_preview_header_close: 30px;
     background-color: $color-image_mask-bg;
     transition: opacity 0.5s;
     overflow: hidden;
+    &-hide {
+      opacity: 0;
+    }
     &-header {
       position: absolute;
       top: 0;
@@ -170,9 +173,6 @@ $width-image_preview_header_close: 30px;
       padding: $spacing-image_preview_header-paddingY $spacing-image_preview_header-paddingX;
       z-index: 1;
       pointer-events: none;
-      &-hide {
-        opacity: 0;
-      }
       &-title {
         flex: 1 1;
       }

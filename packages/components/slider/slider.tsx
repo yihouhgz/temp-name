@@ -378,17 +378,15 @@ const Slider = defineComponent({
                         state.visibles[index] = false
                       }
                     }}
-                    // style={handleStyle.value}
                     style={style}
                     class={`${prefix}-slider-handle`}
                     role="slider"
                     tabindex="0"
                     aria-disabled={disabled}
                     aria-valuenow={item}
-                    aria-valuetext={props['aria-valuetext']}
                     {...(isFunction(getAriaValueText)
                       ? { 'aria-valuetext': getAriaValueText(item) }
-                      : {})}
+                      : { 'aria-valuetext': props['aria-valuetext'] })}
                     aria-valuemax={max}
                     aria-valuemin={min}
                     aria-labelledby={props['aria-labelledby']}

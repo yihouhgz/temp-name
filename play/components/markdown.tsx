@@ -109,6 +109,11 @@ const MarkdownRender = defineComponent({
                 defaultValue={[20, 60]}
               ></tempui-slider>
             </div>
+            <tempui-image
+              width={360}
+              height={200}
+              src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/abstract.jpg"
+            />
           </div>
         </div>
       )
