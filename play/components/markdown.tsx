@@ -82,6 +82,33 @@ const MarkdownRender = defineComponent({
               <div>Disabled</div>
               <tempui-slider defaultValue={40} disabled></tempui-slider>
             </div>
+            <div>
+              <div>step=10</div>
+              <tempui-slider
+                step={10}
+                marks={{ 0: '0', 10: '10', 20: '20', 30: '30', 40: '40', 50: '50', 100: '100' }}
+                defaultValue={[10, 100]}
+                range={true}
+              ></tempui-slider>
+            </div>
+            <div
+              style={{
+                height: 300 + 'px',
+                marginLeft: 30 + 'px',
+                marginTop: 10 + 'px',
+                paddingRight: 30 + 'px',
+                display: 'inline-block'
+              }}
+            >
+              <tempui-slider
+                vertical
+                verticalReverse
+                range
+                marks={{ 20: '20°C', 40: '40°C' }}
+                step={10}
+                defaultValue={[20, 60]}
+              ></tempui-slider>
+            </div>
           </div>
         </div>
       )

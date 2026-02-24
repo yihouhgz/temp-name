@@ -1,35 +1,41 @@
 import { prefix } from 'constants/config'
-import { computed, defineComponent, reactive, type StyleValue } from 'vue'
+import { computed, defineComponent, nextTick, reactive, type StyleValue } from 'vue'
 import './style/silder'
 import Tooltip from '../tooltip'
 import { sliderProps, sliderEmits } from './type'
-import { isArray, isNumber, isUndefined } from '../_util'
+import { isArray, isFunction, isUndefined } from '../_util'
 
 type SliderState = {
   hover: boolean
   isMove: boolean
   value: number | number[]
   sliderRef: null | HTMLElement
-  handleRef: null | HTMLElement
+  handleRefs: (HTMLElement | null)[]
+  handleFocus: boolean[]
   offsetX: number
+  offsetY: number
   visibles: boolean[]
   currentIndex: number
   isHoverHnadle: boolean
+  rePosKey: number | string
 }
 
 const Slider = defineComponent({
   setup(props, ctx) {
-    console.log(props, 'lll')
+    let keydownHandler: ((e: KeyboardEvent) => void) | null = null
     const state = reactive<SliderState>({
       hover: false,
       isMove: false,
       value: isUndefined(props.value) ? props.defaultValue : props.value,
       sliderRef: null,
-      handleRef: null,
+      handleRefs: [],
       offsetX: 0,
+      offsetY: 0,
       visibles: [false, false],
       currentIndex: -1,
-      isHoverHnadle: false
+      isHoverHnadle: false,
+      rePosKey: Math.random(),
+      handleFocus: []
     })
     const showBoundary = computed(() => {
       const { showBoundary } = props
@@ -40,37 +46,53 @@ const Slider = defineComponent({
     }
     const handleClickDownHandle = (e: MouseEvent, index: number) => {
       state.isMove = true
-      if (state.handleRef) {
-        const handleRect = state.handleRef.getBoundingClientRect()
+      if (state.handleRefs[index]) {
+        const handleRect = state.handleRefs[index]!.getBoundingClientRect()
         state.offsetX = e.clientX - handleRect.left
+        state.offsetY = e.clientY - handleRect.top
       }
       state.currentIndex = index
-      document.addEventListener('mousemove', (e) => handleMouseMove(e, index))
-      document.addEventListener('mouseup', () => {
-        state.isMove = false
-        if (!state.isHoverHnadle) {
-          state.visibles[index] = false
-        }
-      })
+      state.visibles[index] = true
+      const hander = (e: MouseEvent) => handleMouseMove(e, index)
+      document.addEventListener('mousemove', hander)
+      document.addEventListener(
+        'mouseup',
+        () => {
+          state.isMove = false
+          if (!state.isHoverHnadle) {
+            state.visibles[index] = false
+          }
+          document.removeEventListener('mousemove', hander)
+        },
+        { once: true }
+      )
     }
-    const handleMouseMove = (e: MouseEvent, index: number) => {
-      if (!state.isMove || !state.sliderRef) return
+    const updateByClientPos = (index: number, clientX: number, clientY: number) => {
+      if (!state.sliderRef || props.disabled) return
       const sliderRect = state.sliderRef.getBoundingClientRect()
-
-      const handleLeftPos = e.clientX - state.offsetX - sliderRect.left
-      const availableTrackWidth = sliderRect.width - (state.handleRef?.offsetWidth || 0)
-      const positionRatio =
-        availableTrackWidth > 0 ? Math.max(0, Math.min(1, handleLeftPos / availableTrackWidth)) : 0
-
+      const handlePos = props.vertical
+        ? clientY - state.offsetY - sliderRect.top
+        : clientX - state.offsetX - sliderRect.left
+      const trackSize = props.vertical
+        ? sliderRect.height - (state.handleRefs[index]?.offsetHeight || 0)
+        : sliderRect.width - (state.handleRefs[index]?.offsetWidth || 0)
+      let positionRatio = trackSize > 0 ? Math.max(0, Math.min(1, handlePos / trackSize)) : 0
+      if (props.vertical && props.verticalReverse) {
+        positionRatio = 1 - positionRatio
+      }
       const { min = 0, max = 100, step = 1 } = props
       let newValue = min + positionRatio * (max - min)
-
       if (step > 0) {
-        newValue = Math.floor(newValue / step) * step
+        newValue = Math.ceil(newValue / step) * step
       }
-
       newValue = Math.max(min, Math.min(max, newValue))
-
+      if (isArray(state.value)) {
+        if (index === 0 && newValue > state.value[1]) {
+          newValue = state.value[1]
+        } else if (index === 1 && newValue < state.value[0]) {
+          newValue = state.value[0]
+        }
+      }
       if (props.range && isArray(state.value)) {
         state.value[index] = newValue
         ctx.emit('change', state.value)
@@ -78,97 +100,331 @@ const Slider = defineComponent({
         state.value = newValue
         ctx.emit('change', newValue)
       }
+      state.visibles[index] = true
+      nextTick(() => {
+        state.rePosKey = Math.random()
+        ctx.emit('afterChange', state.value)
+      })
+    }
+    const handleMouseMove = (e: MouseEvent, index: number) => {
+      if (!state.isMove || !state.sliderRef) return
+      updateByClientPos(index, e.clientX, e.clientY)
     }
     const handleTouchHandle = (e: TouchEvent, index: number) => {
-      console.log(e, index)
+      state.isMove = true
+      const touch = e.touches[0] || e.changedTouches[0]
+      if (state.handleRefs[index]) {
+        const handleRect = state.handleRefs[index]!.getBoundingClientRect()
+        state.offsetX = touch.clientX - handleRect.left
+        state.offsetY = touch.clientY - handleRect.top
+      }
+      state.currentIndex = index
+      state.visibles[index] = true
+      const hander = (event: TouchEvent) => {
+        const t = event.touches[0] || event.changedTouches[0]
+        updateByClientPos(index, t.clientX, t.clientY)
+        event.preventDefault()
+      }
+      document.addEventListener('touchmove', hander, { passive: false })
+      document.addEventListener(
+        'touchend',
+        () => {
+          state.isMove = false
+          if (!state.isHoverHnadle) {
+            state.visibles[index] = false
+          }
+          document.removeEventListener('touchmove', hander)
+        },
+        { once: true }
+      )
     }
     const handleMouseLeave = () => {
       state.hover = false
     }
+    const handleFocus = (index: number) => {
+      state.currentIndex = index
+      state.handleFocus[index] = true
+      const { min = 0, max = 100, step = 1, vertical, verticalReverse } = props
+      if (keydownHandler) {
+        document.removeEventListener('keydown', keydownHandler)
+        keydownHandler = null
+      }
+      keydownHandler = (event: KeyboardEvent) => {
+        if (props.disabled) return
+        const key = event.key
+        let delta = 0
+        if (key === 'ArrowRight' || key === 'ArrowUp') {
+          delta = step
+        } else if (key === 'ArrowLeft' || key === 'ArrowDown') {
+          delta = -step
+        } else {
+          return
+        }
+        event.preventDefault()
+        if (vertical && verticalReverse) {
+          delta = -delta
+        }
+        const idx = state.currentIndex >= 0 ? state.currentIndex : index
+        const currentVal = isArray(state.value) ? Number(state.value[idx]) : Number(state.value)
+        let newValue = Math.min(max, Math.max(min, currentVal + delta))
+        if (isArray(state.value)) {
+          if (idx === 0) {
+            newValue = Math.min(newValue, Number(state.value[1]))
+            state.value[0] = newValue
+          } else {
+            newValue = Math.max(newValue, Number(state.value[0]))
+            state.value[1] = newValue
+          }
+          ctx.emit('change', state.value)
+        } else {
+          state.value = newValue
+          ctx.emit('change', newValue)
+        }
+        state.visibles[idx] = true
+        nextTick(() => {
+          state.rePosKey = Math.random()
+          ctx.emit('afterChange', state.value)
+        })
+      }
+      document.addEventListener('keydown', keydownHandler)
+    }
+    const handleBlur = (index: number) => {
+      state.handleFocus[index] = false
+      if (keydownHandler) {
+        document.removeEventListener('keydown', keydownHandler)
+        keydownHandler = null
+      }
+      if (!state.isMove) {
+        state.visibles[index] = false
+      }
+    }
+
     const trackStyle = computed<StyleValue>(() => {
-      const { range } = props
+      const { range, included, vertical } = props
+      if (!included) {
+        return {}
+      }
+      const key = vertical ? 'height' : 'width'
+      const direction = vertical ? 'top' : 'left'
       const style: StyleValue = {
-        left: 0,
-        width: state.value + '%'
+        [direction]: 0,
+        [key]: state.value + '%'
       }
       if (range && isArray(state.value)) {
         const [start, end] = state.value
-        style.left = start + '%'
-        style.width = Math.min(end - start, 100) + '%'
+        style[direction] = start + '%'
+        style[key] = Math.min(end - start, 100) + '%'
       }
       return style
     })
-    const rePosKey = computed(() => {
-      const value = state.value
-      return isNumber(value) ? value : Math.random()
-    })
-    const getTipFormatter = () => {
+    const getTipFormatter = (item: number | string) => {
       const { tipFormatter } = props
-      const value = state.value
-      return tipFormatter(value)
+      return tipFormatter(item)
     }
-    return () => {
-      const { max, min, disabled } = props
-      const values = isArray(state.value) ? state.value : [state.value]
-      console.log(values, 'values')
+    const renderMarksDot = (valids: [string, string][]) => {
+      const { vertical, tooltipOnMark } = props
+      const direction = vertical ? 'top' : 'left'
+      return (
+        <div class={`${prefix}-slider-dots`}>
+          {valids.map(([key], value) => {
+            const style: StyleValue = {
+              [direction]: `calc(${key}% - 2px)`
+            }
+            let isActive = false
+            if (isArray(state.value)) {
+              const [min, max] = state.value
+              isActive = Number(key) >= min && Number(key) <= max
+            } else {
+              isActive = Number(key) >= state.value
+            }
+            const t = (
+              <span
+                class={[`${prefix}-slider-dot`, isActive && `${prefix}-slider-dot-active`]}
+                style={style}
+              ></span>
+            )
+            if (tooltipOnMark) {
+              return (
+                <Tooltip content={<span>{value}</span>} position="top" trigger="hover">
+                  {t}
+                </Tooltip>
+              )
+            }
+            return t
+          })}
+        </div>
+      )
+    }
+    const renderMarksLabel = (valids: [string, string][]) => {
+      const { verticalReverse, vertical } = props
+      const direction = vertical ? 'top' : 'left'
       return (
         <div
-          class={`${prefix}-slider`}
+          class={[`${prefix}-slider-marks`, verticalReverse && `${prefix}-slider-marks-reverse`]}
+        >
+          {valids.map(([key, value]) => {
+            const style: StyleValue = {
+              [direction]: `${key}%`
+            }
+            return (
+              <span
+                class={[
+                  `${prefix}-slider-mark`,
+                  verticalReverse && `${prefix}-slider-mark-reverse`
+                ]}
+                style={style}
+              >
+                {value}
+              </span>
+            )
+          })}
+        </div>
+      )
+    }
+    return () => {
+      const {
+        max,
+        min,
+        disabled,
+        tipFormatter,
+        getAriaValueText,
+        marks,
+        vertical,
+        verticalReverse,
+        handleDot,
+        range,
+        railStyle,
+        showMarkLabel,
+        tooltipVisible
+      } = props
+      const values = isArray(state.value) ? state.value : [state.value]
+      const handleDots = isArray(handleDot) ? handleDot : [handleDot]
+      let marksValids: [string, string][] = []
+      if (marks) {
+        const lists = Object.entries(marks)
+        marksValids = lists
+          .filter(([key]) => {
+            return Number(key) >= min && Number(key) <= max
+          })
+          .sort((a, b) => {
+            return Number(a[0]) - Number(b[0])
+          })
+      }
+      const ariaLabel =
+        isArray(state.value) && range
+          ? {
+              'aria-label': `Range: ${getTipFormatter(state.value[0])} to ${getTipFormatter(state.value[1])}`
+            }
+          : {}
+      return (
+        <div
+          class={[`${prefix}-slider`, vertical && `${prefix}-slider-vertical`]}
           onMouseenter={handleMouseEnter}
           onMouseleave={handleMouseLeave}
           ref={(node) => (state.sliderRef = node as HTMLElement)}
         >
-          <div class={`${prefix}-slider-wrapper`}>
-            <div class={`${prefix}-slider-rail`}></div>
+          <div
+            {...ariaLabel}
+            class={[
+              `${prefix}-slider-wrapper`,
+              {
+                [`${prefix}-slider-vertical-wrapper`]: vertical,
+                [`${prefix}-slider-reverse`]: verticalReverse,
+                [`${prefix}-slider-disabled`]: disabled
+              }
+            ]}
+          >
+            <div class={`${prefix}-slider-rail`} style={railStyle}></div>
             <div class={`${prefix}-slider-track`} style={trackStyle.value}></div>
+            {marksValids && renderMarksDot(marksValids)}
             <div>
               {values.map((item, index) => {
-                const v = getTipFormatter()
+                const v = item
+                const direction = vertical ? 'top' : 'left'
                 const style: StyleValue = {
                   zIndex: 1,
-                  left: item + '%'
+                  [direction]: item + '%'
                 }
-                return (
+                const vText = getTipFormatter(isArray(v) ? v[index] : v)
+                let handleDotStyle = null
+                if (handleDots && handleDots.length) {
+                  const dot = handleDots[index]
+                  if (dot?.color) {
+                    handleDotStyle = {
+                      backgroundColor: dot.color
+                    }
+                  }
+                  if (dot?.size) {
+                    handleDotStyle = {
+                      ...(handleDotStyle || {}),
+                      width: dot.size,
+                      height: dot.size
+                    }
+                  }
+                }
+                const handerDom = (
+                  <span
+                    ref={(node) => (state.handleRefs[index] = node as HTMLElement)}
+                    onMousedown={(e) => handleClickDownHandle(e, index)}
+                    onMouseup={(e) => ctx.emit('mouseUp', e)}
+                    onTouchstart={(e) => handleTouchHandle(e, index)}
+                    onMouseenter={() => {
+                      state.visibles[index] = true
+                      state.isHoverHnadle = true
+                    }}
+                    onMouseleave={() => {
+                      state.isHoverHnadle = false
+                      if (!state.isMove) {
+                        state.visibles[index] = false
+                      }
+                    }}
+                    // style={handleStyle.value}
+                    style={style}
+                    class={`${prefix}-slider-handle`}
+                    role="slider"
+                    tabindex="0"
+                    aria-disabled={disabled}
+                    aria-valuenow={item}
+                    aria-valuetext={props['aria-valuetext']}
+                    {...(isFunction(getAriaValueText)
+                      ? { 'aria-valuetext': getAriaValueText(item) }
+                      : {})}
+                    aria-valuemax={max}
+                    aria-valuemin={min}
+                    aria-labelledby={props['aria-labelledby']}
+                    aria-label={props['aria-label']}
+                    aria-orientation={vertical ? 'vertical' : 'horizontal'}
+                    onFocus={() => handleFocus(index)}
+                    onBlur={() => handleBlur(index)}
+                  >
+                    {handleDotStyle && (
+                      <div class={`${prefix}-slider-handle-dot`} style={handleDotStyle}></div>
+                    )}
+                  </span>
+                )
+                const visible = tooltipVisible ? tooltipVisible : state.visibles[index]
+                return isFunction(tipFormatter) && !disabled ? (
                   <Tooltip
                     trigger="custom"
-                    visible={state.visibles[index]}
+                    visible={visible}
                     key={index}
                     position="top"
-                    content={<span>{v}</span>}
-                    rePosKey={rePosKey.value}
+                    content={<span>{vText}</span>}
+                    rePosKey={state.rePosKey}
+                    showArrow={props.showArrow}
                   >
-                    <span
-                      ref={(node) => (state.handleRef = node as HTMLElement)}
-                      onMousedown={(e) => handleClickDownHandle(e, index)}
-                      onTouchstart={(e) => handleTouchHandle(e, index)}
-                      onMouseenter={() => {
-                        state.visibles[index] = true
-                        state.isHoverHnadle = true
-                      }}
-                      onMouseleave={() => {
-                        state.isHoverHnadle = false
-                        if (!state.isMove) {
-                          state.visibles[index] = false
-                        }
-                      }}
-                      // style={handleStyle.value}
-                      style={style}
-                      class={`${prefix}-slider-handle`}
-                      role="slider"
-                      tabindex="0"
-                      aria-disabled={disabled}
-                      aria-valuenow={item}
-                      aria-valuemax={max}
-                      aria-valuemin={min}
-                    ></span>
+                    {handerDom}
                   </Tooltip>
+                ) : (
+                  handerDom
                 )
               })}
             </div>
+            {marksValids && showMarkLabel && renderMarksLabel(marksValids)}
             {showBoundary.value && (
               <div class={`${prefix}-slider-boundary`}>
-                <div class={`${prefix}-slider-boundary-min`}>0</div>
-                <div class={`${prefix}-slider-boundary-max`}>100</div>
+                <div class={`${prefix}-slider-boundary-min`}>{min}</div>
+                <div class={`${prefix}-slider-boundary-max`}>{max}</div>
               </div>
             )}
           </div>
