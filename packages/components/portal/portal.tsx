@@ -1,9 +1,10 @@
-import { defineComponent, computed, Teleport, useAttrs } from 'vue'
+import { defineComponent, computed, Teleport, useAttrs, onMounted } from 'vue'
 import { prefix } from 'constants/config'
-import { portalProps } from './type'
+import { portalEmits, portalProps } from './type'
 import './style/portal'
-const Portal = defineComponent(
-  (props, ctx) => {
+import { onKeyEsc } from './utils'
+const Portal = defineComponent({
+  setup(props, ctx) {
     const style = computed(() => {
       return {
         zIndex: props.zIndex
@@ -16,6 +17,14 @@ const Portal = defineComponent(
       if (dom) return dom
       return el
     })
+    onMounted(() => {
+      const { closeOnEsc } = props
+      if (closeOnEsc) {
+        onKeyEsc((e) => {
+          ctx.emit('keyEsc', e)
+        })
+      }
+    })
     return () => {
       return (
         <Teleport to={targetElement.value}>
@@ -26,6 +35,9 @@ const Portal = defineComponent(
       )
     }
   },
-  { name: prefix + '-portal', props: portalProps, inheritAttrs: false }
-)
+  name: prefix + '-portal',
+  props: portalProps,
+  emits: portalEmits,
+  inheritAttrs: false
+})
 export default Portal

@@ -4,6 +4,7 @@ import './style/silder'
 import Tooltip from '../tooltip'
 import { sliderProps, sliderEmits } from './type'
 import { isArray, isFunction, isUndefined } from '../_util'
+import { watch } from 'vue'
 
 type SliderState = {
   hover: boolean
@@ -37,6 +38,14 @@ const Slider = defineComponent({
       rePosKey: Math.random(),
       handleFocus: []
     })
+    watch(
+      () => props.value,
+      (v) => {
+        if (!isUndefined(v)) {
+          state.value = v
+        }
+      }
+    )
     const showBoundary = computed(() => {
       const { showBoundary } = props
       return showBoundary && state.hover
@@ -81,9 +90,10 @@ const Slider = defineComponent({
         positionRatio = 1 - positionRatio
       }
       const { min = 0, max = 100, step = 1 } = props
-      let newValue = min + positionRatio * (max - min)
+      const raw = min + positionRatio * (max - min)
+      let newValue = raw
       if (step > 0) {
-        newValue = Math.ceil(newValue / step) * step
+        newValue = Math.round((raw - min) / step) * step + min
       }
       newValue = Math.max(min, Math.min(max, newValue))
       if (isArray(state.value)) {
@@ -199,37 +209,73 @@ const Slider = defineComponent({
       }
     }
 
+    const handleChangeByPonint = (e: MouseEvent) => {
+      if (props.disabled || !state.sliderRef) return
+      const { min = 0, max = 100 } = props
+      let index = 0
+      if (props.range && isArray(state.value)) {
+        const rect = state.sliderRef.getBoundingClientRect()
+        const pos = props.vertical ? e.clientY - rect.top : e.clientX - rect.left
+        const size = props.vertical ? rect.height : rect.width
+        let ratio = size > 0 ? Math.max(0, Math.min(1, pos / size)) : 0
+        if (props.vertical && props.verticalReverse) {
+          ratio = 1 - ratio
+        }
+        const clickValue = min + ratio * (max - min)
+        const d0 = Math.abs(clickValue - Number(state.value[0]))
+        const d1 = Math.abs(clickValue - Number(state.value[1]))
+        index = d0 <= d1 ? 0 : 1
+      }
+      if (props.vertical) {
+        state.offsetY = (state.handleRefs[index]?.offsetHeight || 0) / 2
+        state.offsetX = 0
+      } else {
+        state.offsetX = (state.handleRefs[index]?.offsetWidth || 0) / 2
+        state.offsetY = 0
+      }
+      state.currentIndex = index
+      state.visibles[index] = true
+      updateByClientPos(index, e.clientX, e.clientY)
+    }
+
     const trackStyle = computed<StyleValue>(() => {
-      const { range, included, vertical } = props
+      const { range, included, vertical, min = 0, max = 100 } = props
       if (!included) {
         return {}
       }
       const key = vertical ? 'height' : 'width'
       const direction = vertical ? 'top' : 'left'
-      const style: StyleValue = {
-        [direction]: 0,
-        [key]: state.value + '%'
+      const span = max - min || 1
+      const style: StyleValue = { [direction]: 0, [key]: '0%' }
+      if (!range && !isArray(state.value)) {
+        const percent = Math.max(0, Math.min(100, ((Number(state.value) - min) / span) * 100))
+        style[key] = percent + '%'
       }
       if (range && isArray(state.value)) {
         const [start, end] = state.value
-        style[direction] = start + '%'
-        style[key] = Math.min(end - start, 100) + '%'
+        const startPercent = Math.max(0, Math.min(100, ((Number(start) - min) / span) * 100))
+        const endPercent = Math.max(0, Math.min(100, ((Number(end) - min) / span) * 100))
+        style[direction] = startPercent + '%'
+        style[key] = Math.min(Math.max(endPercent - startPercent, 0), 100) + '%'
       }
       return style
     })
     const getTipFormatter = (item: number | string) => {
       const { tipFormatter } = props
-      return tipFormatter(item)
+      if (isFunction(tipFormatter)) {
+        return tipFormatter(item)
+      }
+      return item
     }
     const renderMarksDot = (valids: [string, string][]) => {
-      const { vertical, tooltipOnMark } = props
+      const { vertical, tooltipOnMark, min = 0, max = 100 } = props
       const direction = vertical ? 'top' : 'left'
+      const span = max - min || 1
       return (
         <div class={`${prefix}-slider-dots`}>
           {valids.map(([key], value) => {
-            const style: StyleValue = {
-              [direction]: `calc(${key}% - 2px)`
-            }
+            const percent = Math.max(0, Math.min(100, ((Number(key) - min) / span) * 100))
+            const style: StyleValue = { [direction]: `calc(${percent}% - 2px)` }
             let isActive = false
             if (isArray(state.value)) {
               const [min, max] = state.value
@@ -256,16 +302,16 @@ const Slider = defineComponent({
       )
     }
     const renderMarksLabel = (valids: [string, string][]) => {
-      const { verticalReverse, vertical } = props
+      const { verticalReverse, vertical, min = 0, max = 100 } = props
       const direction = vertical ? 'top' : 'left'
+      const span = max - min || 1
       return (
         <div
           class={[`${prefix}-slider-marks`, verticalReverse && `${prefix}-slider-marks-reverse`]}
         >
           {valids.map(([key, value]) => {
-            const style: StyleValue = {
-              [direction]: `${key}%`
-            }
+            const percent = Math.max(0, Math.min(100, ((Number(key) - min) / span) * 100))
+            const style: StyleValue = { [direction]: `${percent}%` }
             return (
               <span
                 class={[
@@ -301,7 +347,7 @@ const Slider = defineComponent({
       const handleDots = isArray(handleDot) ? handleDot : [handleDot]
       let marksValids: [string, string][] = []
       if (marks) {
-        const lists = Object.entries(marks)
+        const lists = Object.entries(marks) as [string, string][]
         marksValids = lists
           .filter(([key]) => {
             return Number(key) >= min && Number(key) <= max
@@ -334,16 +380,26 @@ const Slider = defineComponent({
               }
             ]}
           >
-            <div class={`${prefix}-slider-rail`} style={railStyle}></div>
-            <div class={`${prefix}-slider-track`} style={trackStyle.value}></div>
+            <div
+              class={`${prefix}-slider-rail`}
+              style={railStyle}
+              onClick={handleChangeByPonint}
+            ></div>
+            <div
+              class={`${prefix}-slider-track`}
+              style={trackStyle.value}
+              onClick={handleChangeByPonint}
+            ></div>
             {marksValids && renderMarksDot(marksValids)}
             <div>
-              {values.map((item, index) => {
+              {values.map((item: number, index: number) => {
                 const v = item
                 const direction = vertical ? 'top' : 'left'
+                const span = max - min || 1
+                const percent = Math.max(0, Math.min(100, ((Number(item) - min) / span) * 100))
                 const style: StyleValue = {
                   zIndex: 1,
-                  [direction]: item + '%'
+                  [direction]: percent + '%'
                 }
                 const vText = getTipFormatter(isArray(v) ? v[index] : v)
                 let handleDotStyle = null

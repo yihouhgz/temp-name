@@ -95,8 +95,8 @@ export const sliderProps = {
    * @description 设置Tooltip的展示格式，默认显示当前选值
    */
   tipFormatter: {
-    type: Function as PropType<
-      (value: string | number | boolean | (string | number | boolean)[]) => unknown
+    type: [Function, null] as PropType<
+      ((value: string | number | boolean | (string | number | boolean)[]) => unknown) | null
     >,
     default: (v: unknown) => v
   },

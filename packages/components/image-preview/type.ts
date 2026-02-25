@@ -193,7 +193,7 @@ export const imagePreviewProps = {
    */
   showTooltip: {
     type: Boolean,
-    default: true
+    default: false
   },
   /**
    * @description 图片地址
@@ -300,7 +300,7 @@ export type MenuProps = {
   /**
    * @description 当前图片页下标
    */
-  index: number
+  curPage: number
   /**
    * @description 是否禁用向左切换按钮
    */

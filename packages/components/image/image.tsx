@@ -71,6 +71,10 @@ const Image = defineComponent({
         state.isError && prefix + '-image-img-error',
         imgCls
       ]
+      let imagePreviewProps = {}
+      if (isObject(preview)) {
+        imagePreviewProps = { ...preview }
+      }
       return (
         <div class={prefix + '-image'}>
           <img
@@ -103,8 +107,10 @@ const Image = defineComponent({
           )}
           {isPreview && (
             <ImagePreview
-              onClose={handleImagePreviewClose}
+              setDownloadName={props.setDownloadName}
               src={props.src}
+              {...imagePreviewProps}
+              onClose={handleImagePreviewClose}
               visible={state.showVisible}
             ></ImagePreview>
           )}

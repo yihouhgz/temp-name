@@ -238,6 +238,17 @@ $width-image_preview_header_close: 30px;
       &-gap {
         margin-left: $spacing-image_preview_footer_gap-marginLeft;
       }
+      & &-disabled {
+        color: hsla(0, 0%, 97.6%, 0.35);
+        cursor: default;
+        pointer-events: none;
+      }
+      .#{$prefix}-slider .#{$prefix}-slider-handle {
+        width: $width-image_preview_footer_slider_handle;
+        height: $height-image_preview_footer_slider_handle;
+        margin-top: $spacing-image_preview_footer_slider_handle-marginTop;
+        box-sizing: border-box;
+      }
     }
     &-icon {
       display: flex;

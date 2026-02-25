@@ -19,21 +19,21 @@ export default {
   file,
   input: './packages/components/index.ts',
   output: [
-    {
-      name,
-      file: file('umd'),
-      format: 'umd'
-    },
+    // {
+    //   name,
+    //   file: file('umd'),
+    //   format: 'umd'
+    // },
     {
       name,
       file: file('esm'),
       format: 'esm'
-    },
-    {
-      name,
-      file: file('common'),
-      format: 'commonjs'
     }
+    // {
+    //   name,
+    //   file: file('common'),
+    //   format: 'commonjs'
+    // }
   ],
   watch: {
     include: ['packages/**/*'],

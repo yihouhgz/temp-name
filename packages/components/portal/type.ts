@@ -13,5 +13,12 @@ export const portalProps = {
     type: Number,
     default: 1000,
     required: false
+  },
+  closeOnEsc: {
+    type: Boolean,
+    default: true
   }
+}
+export const portalEmits = {
+  keyEsc: (e: KeyboardEvent) => e instanceof KeyboardEvent
 }

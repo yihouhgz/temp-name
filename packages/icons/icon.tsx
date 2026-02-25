@@ -1,4 +1,4 @@
-import { iconProps, iconEmits } from './types'
+import { iconProps } from './types'
 import { defineComponent, computed, getCurrentInstance } from 'vue'
 import type { CSSProperties, VNode, Component, ComponentInternalInstance } from 'vue'
 import { prefix } from 'constants/config'
@@ -39,8 +39,7 @@ const IconJsx = defineComponent({
     }
   },
   name: prefix + '-icon-jsx',
-  props: iconProps,
-  emits: iconEmits
+  props: iconProps
 })
 
 const nameToSplit = (name: string) => {
@@ -56,11 +55,10 @@ export function warpperIcon(icon: VNode | Component, name: string) {
   const innerProps = omitKeys(iconProps, ['type', 'svg'])
   const renderIcon = () => <icon></icon>
   const InnerIcon = defineComponent({
-    setup(props) {
-      return () => <IconJsx svg={renderIcon} type={name} {...props}></IconJsx>
+    setup(props, ctx) {
+      return () => <IconJsx svg={renderIcon} type={name} {...props} {...ctx.attrs}></IconJsx>
     },
     props: innerProps,
-    emits: iconEmits,
     name: prefix + '-' + nameToSplit(name)
   })
   return InnerIcon

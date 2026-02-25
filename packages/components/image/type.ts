@@ -72,7 +72,7 @@ export const imageProps = {
    * @description 设置图片下载名称
    */
   setDownloadName: {
-    type: [String, Function] as PropType<string | ((src: string) => string)>,
+    type: Function as PropType<(src: string) => string>,
     default: ''
   }
 }
