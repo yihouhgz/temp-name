@@ -8,7 +8,10 @@ import {
   watch,
   watchEffect,
   type VNode,
-  type StyleValue
+  type StyleValue,
+  useAttrs,
+  type ExtractPropTypes,
+  type ExtractPublicPropTypes
 } from 'vue'
 import Portal from '../portal'
 import { imagePreviewProps, imagePreviewEmits } from './type'
@@ -17,6 +20,7 @@ import {
   hasPropsOrSlots,
   isArray,
   isFunction,
+  isObject,
   isString,
   isUndefined,
   renderElementForPropsOrSlot
@@ -38,6 +42,9 @@ import { numbers, strings } from './constants'
 import { IconRealSizeStroked, IconWindowAdaptionStroked } from 'icons/stroked-icons'
 import Tooltip from '../tooltip'
 import { downloadFile } from './utils'
+import Spin from '../spin'
+import { useImagePerviewProvider } from './scope'
+import type { VueNode } from '../_util/type'
 
 type ImagePreviewState = {
   triggerElementRef: HTMLElement | null
@@ -49,6 +56,9 @@ type ImagePreviewState = {
   zoom: number
   naturalWidth: number
   naturalHeight: number
+  currentImageLoading: boolean
+  scopeImageUrls: string[]
+  scopeImageTitles: VueNode[]
 }
 const imagePreview = defineComponent({
   setup(props, ctx) {
@@ -62,34 +72,70 @@ const imagePreview = defineComponent({
       rotate: 0,
       zoom: 1,
       naturalWidth: 0,
-      naturalHeight: 0
+      naturalHeight: 0,
+      currentImageLoading: false,
+      scopeImageUrls: [],
+      scopeImageTitles: []
     })
     let imageRef: HTMLImageElement | null = null
     let containerObserver: ResizeObserver | null = null
+    let scheduleIndex = 0
+    useImagePerviewProvider({
+      isChildren: true,
+      setImageUrl(index, url) {
+        state.scopeImageUrls[index] = url
+      },
+      showImagePerview(index) {
+        if (!isUndefined(index)) {
+          state.currentIndex = index
+        }
+        state.viewerVisible = true
+      },
+      getSchedule() {
+        return {
+          index: scheduleIndex++
+        }
+      },
+      setImagePerviewTitle(index, title) {
+        state.scopeImageTitles[index] = title
+      }
+    })
     watchEffect(() => {
       if (!isUndefined(props.currentIndex)) {
         state.currentIndex = props.currentIndex
       }
     })
-    watchEffect(() => {
-      const viewerVisible = state.viewerVisible
-      ctx.emit('visibleChange', viewerVisible)
-    })
+    watch(
+      () => state.viewerVisible,
+      () => {
+        const viewerVisible = state.viewerVisible
+        ctx.emit('visibleChange', viewerVisible)
+        if (viewerVisible) {
+          state.currentImageLoading = true
+        }
+      }
+    )
     watch(
       () => state.currentIndex,
       () => {
-        ctx.emit('change', state.currentIndex)
+        state.currentImageLoading = true
+        // ctx.emit('change', state.currentIndex)
       }
     )
     const instance = getCurrentInstance()
     const getImagesUrls = computed(() => {
       const src = props.src
+      const scopeImageUrls = state.scopeImageUrls
+      let imageUrls: string[] = []
       if (isString(src)) {
-        return [src]
+        imageUrls = [src]
       } else if (isArray(src)) {
-        return src
+        imageUrls = src
       }
-      return []
+      if (scopeImageUrls.length) {
+        imageUrls = imageUrls.concat(scopeImageUrls)
+      }
+      return imageUrls
     })
     const currentImageUrl = computed(() => {
       return getImagesUrls.value[state.currentIndex]
@@ -191,7 +237,9 @@ const imagePreview = defineComponent({
     const handleChangeIamge = (index: number) => {
       if (getImagesUrls.value.length <= 1) return
       if (index === state.currentIndex) return
-      state.currentIndex = index
+      if (isUndefined(props.currentIndex)) {
+        state.currentIndex = index
+      }
       ctx.emit('change', index)
     }
 
@@ -216,7 +264,9 @@ const imagePreview = defineComponent({
       })
     }
     const handleClickClose = () => {
-      state.viewerVisible = false
+      if (!isUndefined(props.visible)) {
+        state.viewerVisible = false
+      }
       ctx.emit('close')
     }
     const handleChangeRatioType = (type: 'adaptation' | 'realSize') => {
@@ -228,6 +278,14 @@ const imagePreview = defineComponent({
         handleZoomIn()
       } else {
         handleZoomOut()
+      }
+    }
+    const handleClickRoot = (event: MouseEvent) => {
+      cancelNotHandle()
+      if (event.target === event.currentTarget) {
+        if (props.maskClosable) {
+          handleClickClose()
+        }
       }
     }
     const previewStyle = computed<StyleValue>(() => {
@@ -286,9 +344,10 @@ const imagePreview = defineComponent({
           containerObserver.observe(container)
         }
       }
+      state.currentImageLoading = false
     }
     const handleKeyEsc = () => {
-      state.viewerVisible = false
+      handleClickClose()
     }
     const renderCloseIcon = () => {
       if (hasPropsOrSlots('renderCloseIcon', instance)) {
@@ -378,7 +437,7 @@ const imagePreview = defineComponent({
           min={numbers.SIZE_MIN}
           max={numbers.SIZE_MAX}
           onChange={handleZoomBySliderChange}
-          tipFormatter={null}
+          tipFormatter={undefined}
         ></Slider>
       )
       // 放大
@@ -439,9 +498,18 @@ const imagePreview = defineComponent({
     }
     const renderPageHandle = () => {
       const templates = []
-      const { infinite } = props
+      const { infinite, renderLeftIcon, renderRightIcon } = props
       const isShowPrev = infinite || state.currentIndex > 0
       if (isShowPrev) {
+        let leftIcon = null
+        if (renderLeftIcon) {
+          if (isObject(renderLeftIcon)) {
+            leftIcon = renderLeftIcon
+          }
+          if (isFunction(renderLeftIcon)) {
+            leftIcon = renderLeftIcon(state.currentIndex)
+          }
+        } else leftIcon = <IconArrowLeft></IconArrowLeft>
         templates.push(
           <div
             class={[
@@ -451,12 +519,21 @@ const imagePreview = defineComponent({
             ]}
             onClick={handlePrev}
           >
-            <IconArrowLeft></IconArrowLeft>
+            {leftIcon}
           </div>
         )
       }
       const isShowNext = infinite || state.currentIndex < getImagesUrls.value.length - 1
       if (isShowNext) {
+        let rightIcon = null
+        if (renderRightIcon) {
+          if (isObject(renderRightIcon)) {
+            rightIcon = renderRightIcon
+          }
+          if (isFunction(renderRightIcon)) {
+            rightIcon = renderRightIcon(state.currentIndex)
+          }
+        } else rightIcon = <IconArrowRight></IconArrowRight>
         templates.push(
           <div
             class={[
@@ -466,15 +543,36 @@ const imagePreview = defineComponent({
             ]}
             onClick={handleNext}
           >
-            <IconArrowRight></IconArrowRight>
+            {rightIcon}
           </div>
         )
       }
       return templates
     }
+    const renderHeader = () => {
+      if (isFunction(props.renderHeader)) {
+        const title = state.scopeImageTitles[state.currentIndex] || props.previewTitle || ''
+        return props.renderHeader(title)
+      }
+      return props.previewTitle
+    }
+    const attrs = useAttrs()
     return () => {
+      // 存在子节点情况
+      let defaultTemplates = ctx.slots.default?.()
+      if (defaultTemplates && defaultTemplates.length > 0) {
+        defaultTemplates = [
+          <div
+            {...attrs}
+            id={`${prefix}-image-preview-group-xqnf`}
+            class={`${prefix}-image-preview-group`}
+          >
+            {defaultTemplates}
+          </div>
+        ]
+      }
       if (!state.viewerVisible) {
-        return null
+        return [defaultTemplates]
       }
       const footerCls = [
         prefix + '-image-preview-footer',
@@ -482,21 +580,28 @@ const imagePreview = defineComponent({
         state.isHideMenu && prefix + '-image-preview-hide',
         prefix + '-image-preview-footer-content'
       ]
-      const { closable, crossOrigin } = props
-      return (
+      const { closable, crossOrigin, getPopupContainer } = props
+      const previewWrapper = (
         <Portal
           triggerElementRef={state.triggerElementRef!}
           zIndex={props.zIndex}
           getPopupContainer={props.getPopupContainer}
           closeOnEsc={props.closeOnEsc}
           onKeyEsc={handleKeyEsc}
+          style={getPopupContainer ? { position: 'static' } : {}}
         >
           <div
             onWheel={handleWheel}
-            onClick={() => cancelNotHandle()}
+            onClick={handleClickRoot}
             onMousemove={() => cancelNotHandle()}
-            class={`${prefix}-image-preview`}
+            class={[
+              `${prefix}-image-preview`,
+              getPopupContainer && `${prefix}-image-preview-popup`,
+              props.previewCls
+            ]}
             ref={(node) => (state.triggerElementRef = node as HTMLElement)}
+            style={props.previewStyle}
+            {...attrs}
           >
             <section
               class={[
@@ -504,7 +609,7 @@ const imagePreview = defineComponent({
                 state.isHideMenu && prefix + '-image-preview-hide'
               ]}
             >
-              <section class={`${prefix}-image-preview-header-title`}></section>
+              <section class={`${prefix}-image-preview-header-title`}>{renderHeader()}</section>
               {closable && (
                 <section class={`${prefix}-image-preview-header-close`} onClick={handleClickClose}>
                   {renderCloseIcon()}
@@ -518,18 +623,30 @@ const imagePreview = defineComponent({
                 style={previewStyle.value}
                 ref={(node) => (imageRef = node as HTMLImageElement)}
                 onLoad={handleImageLoad}
+                onError={() => {
+                  state.currentImageLoading = false
+                }}
                 src={currentImageUrl.value}
               />
+              {state.currentImageLoading && (
+                <div class={`${prefix}-image-preview-image-spin`}>
+                  <Spin size="large"></Spin>
+                </div>
+              )}
             </div>
             {getImagesUrls.value.length && renderPageHandle()}
             <section class={footerCls}>{renderPreviewMenu()}</section>
           </div>
         </Portal>
       )
+      return [defaultTemplates, previewWrapper]
     }
   },
+  inheritAttrs: false,
   props: imagePreviewProps,
   emits: imagePreviewEmits,
   name: prefix + '-image-preview'
 })
 export default imagePreview
+export type ImagePreviewPropsTypes = ExtractPropTypes<typeof imagePreviewProps>
+export type ImagePreviewPublicPropTypes = ExtractPublicPropTypes<typeof imagePreviewProps>

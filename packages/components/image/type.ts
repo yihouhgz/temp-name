@@ -1,5 +1,6 @@
 import type { CSSProperties, PropType } from 'vue'
 import type { VueNode } from '../_util/type'
+import type { ImagePreviewPublicPropTypes } from '../image-preview/image-preview'
 
 export const imageProps = {
   /**
@@ -58,7 +59,7 @@ export const imageProps = {
    * @description 图片加载失败时候的占位内容
    */
   preview: {
-    type: [Boolean, Object] as PropType<boolean | PreviewConfigType>,
+    type: [Boolean, Object] as PropType<boolean | ImagePreviewPublicPropTypes>,
     default: true
   },
   /**
@@ -72,8 +73,7 @@ export const imageProps = {
    * @description 设置图片下载名称
    */
   setDownloadName: {
-    type: Function as PropType<(src: string) => string>,
-    default: ''
+    type: Function as PropType<(src: string) => string>
   }
 }
 export const imageEmits = {
@@ -90,6 +90,3 @@ export const imageEmits = {
    */
   load: (e: Event) => e instanceof Event
 }
-
-export const previewProps = {}
-type PreviewConfigType = typeof previewProps

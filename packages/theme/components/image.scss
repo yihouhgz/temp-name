@@ -190,12 +190,33 @@ $width-image_preview_header_close: 30px;
         }
       }
     }
+    &-popup {
+      position: absolute;
+    }
     &-image {
       position: relative;
       height: 100%;
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+      &-img {
+        position: absolute;
+        transform: scaleX($transform_scale3d-image_preview_image_img)
+          $transform_rotate-image_preview_image_img;
+        z-index: 0;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      &-spin {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        svg {
+          color: $color-image_preview_image_spin;
+        }
+      }
     }
     &-footer {
       display: flex;

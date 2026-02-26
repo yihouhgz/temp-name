@@ -115,6 +115,43 @@ const MarkdownRender = defineComponent({
               src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/abstract.jpg"
             />
           </div>
+          <div
+            id="container1"
+            style={{
+              height: 400 + 'px',
+              width: 1156 + 'px',
+              position: 'relative'
+            }}
+          >
+            <tempui-image-preview
+              getPopupContainer={() => {
+                const node = document.getElementById('container1')
+                return node
+              }}
+              style={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              {[
+                'https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/abstract.jpg',
+                'https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/sky.jpg',
+                'https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/greenleaf.jpg'
+              ].map((src, index) => {
+                return (
+                  <tempui-image
+                    key={index}
+                    src={src}
+                    width={200}
+                    alt={`lamp${index + 1}`}
+                    style={{ marginRight: 5 + 'px' }}
+                  />
+                )
+              })}
+            </tempui-image-preview>
+          </div>
         </div>
       )
     }

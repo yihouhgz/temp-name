@@ -67,8 +67,8 @@ export const imagePreviewProps = {
    * @description 指定父级 DOM，弹层将会渲染至该 DOM 中，自定义需要设置 container position: relative 这会改变浮层 DOM 树位置，但不会改变视图渲染位置。
    */
   getPopupContainer: {
-    type: Function as PropType<(triggerNode: HTMLElement) => HTMLElement>,
-    default: () => document.body
+    type: Function as PropType<(triggerNode: HTMLElement) => HTMLElement>
+    // default: () => document.body
   },
   /**
    * @description 是否开启无限滚动
