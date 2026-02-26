@@ -1,0 +1,233 @@
+@import '../base/constant';
+
+// // 描边颜色 - 默认
+// $color-badge_default-border-default: var(--#{$prefix}-color-bg-1);
+// // 背景颜色 - 默认
+// $color-badge_default-bg-default: var(--#{$prefix}-color-bg-1);
+// // 背景颜色 - 浅版
+// $color-badge_default_light-bg-default: var(--#{$prefix}-color-bg-2);
+// // 文字颜色 - 默认
+// $color-badge_default-text-default: var(--#{$prefix}-color-bg-2);
+
+// // 背景颜色 - 主色
+// $color-badge_primary_solid-bg-default: var(--#{$prefix}-color-primary);
+// // 背景颜色 - 浅版主色
+// $color-badge_primary_light-bg-default: var(--#{$prefix}-color-primary-light-default);
+// // 文字颜色 - 浅版主色
+// $color-badge_primary_light-text-default: var(--#{$prefix}-color-primary);
+// // 文字颜色 - 白底
+// $color-badge_primary_inverted-text-default: var(--#{$prefix}-color-primary);
+
+// 背景颜色 - 次要
+$color-badge_secondary_solid-bg-default: var(--#{$prefix}-color-secondary);
+// 背景颜色 - 浅版次要
+$color-badge_secondary_light-bg-default: var(--#{$prefix}-color-secondary-light-default);
+// 描边颜色 - 默认
+$color-badge_default-border-default: var(--#{$prefix}-color-bg-1);
+// 背景颜色 - 默认
+$color-badge_default-bg-default: var(--#{$prefix}-color-bg-1);
+// 背景颜色 - 浅版
+$color-badge_default_light-bg-default: var(--#{$prefix}-color-bg-2);
+// 文字颜色 - 默认
+$color-badge_default-text-default: var(--#{$prefix}-color-bg-2);
+
+// 背景颜色 - 主色
+$color-badge_primary_solid-bg-default: var(--#{$prefix}-color-primary);
+// 背景颜色 - 浅版主色
+$color-badge_primary_light-bg-default: var(--#{$prefix}-color-primary-light-default);
+// 文字颜色 - 浅版主色
+$color-badge_primary_light-text-default: var(--#{$prefix}-color-primary);
+// 文字颜色 - 白底
+$color-badge_primary_inverted-text-default: var(--#{$prefix}-color-primary);
+
+// 背景颜色 - 次要
+$color-badge_secondary_solid-bg-default: var(--#{$prefix}-color-secondary);
+// 背景颜色 - 浅版次要
+$color-badge_secondary_light-bg-default: var(--#{$prefix}-color-secondary-light-default);
+// 文字颜色 - 浅版次要
+$color-badge_secondary_light-text-default: var(--#{$prefix}-color-secondary);
+// 文字颜色 - 白底
+$color-badge_secondary_inverted-text-default: var(--#{$prefix}-color-secondary);
+
+// 背景颜色 - 第三
+$color-badge_tertiary_solid-bg-default: var(--#{$prefix}-color-tertiary);
+// 背景颜色 - 第三
+$color-badge_tertiary_light-bg-default: var(--#{$prefix}-color-tertiary-light-default);
+// 文字颜色 - 浅版第三
+$color-badge_tertiary_light-text-default: var(--#{$prefix}-color-tertiary);
+// 文字颜色 - 白底
+$color-badge_tertiary_inverted-text-default: var(--#{$prefix}-color-tertiary);
+
+// 背景颜色 - 危险
+$color-badge_danger_solid-bg-default: var(--#{$prefix}-color-danger);
+// 背景颜色 - 浅版危险
+$color-badge_danger_light-bg-default: var(--#{$prefix}-color-danger-light-default);
+// 文字颜色 - 浅版危险
+$color-badge_danger_light-text-default: var(--#{$prefix}-color-danger);
+// 文字颜色 - 白底
+$color-badge_danger_inverted-text-default: var(--#{$prefix}-color-danger);
+
+// 背景颜色 - 警告
+$color-badge_warning_solid-bg-default: var(--#{$prefix}-color-warning);
+// 背景颜色 - 浅版警告
+$color-badge_warning_light-bg-default: var(--#{$prefix}-color-warning-light-default);
+// 文字颜色 - 浅版危险
+$color-badge_warning_light-text-default: var(--#{$prefix}-color-warning);
+// 文字颜色 - 白底
+$color-badge_warning_inverted-text-default: var(--#{$prefix}-color-warning);
+
+// 背景颜色 - 成功
+$color-badge_success_solid-bg-default: var(--#{$prefix}-color-success);
+// 背景颜色 - 浅版成功
+$color-badge_success_light-bg-default: var(--#{$prefix}-color-success-light-default);
+// 文字颜色 - 浅版成功
+$color-badge_success_light-text-default: var(--#{$prefix}-color-success);
+// 文字颜色 - 白底
+$color-badge_success_inverted-text-default: var(--#{$prefix}-color-success);
+
+// 点状徽标高度
+$height-badge_dot: 8px;
+// 数字徽标宽度
+$height-badge_count: 18px;
+// 徽标 z-index
+$z-badge: 1;
+// 徽标浅色背景 z-index
+$z-badge_light-bg: -1;
+// 点状徽标圆角
+$radius-badge_dot: var(--#{$prefix}-border-radius-circle);
+// 数字徽标上下内边距
+$spacing-badge_count-paddingY: 0px;
+// 数字徽标左右内边距
+$spacing-badge_count-paddingX: 4px;
+// 点状徽标宽度
+$width-badge_dot: 8px;
+// 描边宽度
+$width-badge-border: 1px;
+
+.#{$prefix}-badge {
+  position: relative;
+  display: inline-block;
+  &-block {
+    position: static;
+    display: inline-block;
+  }
+  &-rightTop {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    transform-origin: 100% 0;
+  }
+  &-rightBottom {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    transform: translate(50%, 50%);
+    transform-origin: 100% 0;
+  }
+  &-leftTop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    transform-origin: 100% 0;
+  }
+  &-leftBottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: translate(-50%, 50%);
+    transform-origin: 100% 0;
+  }
+  &-custom {
+    display: flex;
+  }
+  &-count {
+    height: $height-badge_count;
+    min-width: $height-badge_count;
+    border-radius: 9px;
+    padding: $spacing-badge_count-paddingY $spacing-badge_count-paddingX;
+    border: $width-badge-border solid $color-badge_default-border-default;
+    text-align: center;
+    font-size: $font-size-small;
+    line-height: 16px;
+    font-family: $font-family;
+    font-weight: $font-weight-regular;
+    color: $color-badge_default-text-default;
+  }
+  &-count,
+  &-dot {
+    box-sizing: border-box;
+    background-color: $color-badge_default-bg-default;
+    z-index: $z-badge;
+  }
+  &-dot {
+    width: $width-badge_dot;
+    height: $height-badge_dot;
+    border-radius: $radius-badge_dot;
+    border: $width-badge-border solid $color-badge_default-border-default;
+  }
+
+  &-primary.#{$prefix}-badge-solid {
+    background-color: $color-badge_primary_solid-bg-default;
+  }
+  &-danger.#{$prefix}-badge-solid {
+    background-color: $color-badge_danger_solid-bg-default;
+  }
+  &-warning.#{$prefix}-badge-solid {
+    background-color: $color-badge_warning_solid-bg-default;
+  }
+  &-success.#{$prefix}-badge-solid {
+    background-color: $color-badge_success_solid-bg-default;
+  }
+  &-secondary.#{$prefix}-badge-solid {
+    background-color: $color-badge_secondary_solid-bg-default;
+  }
+  &-tertiary.#{$prefix}-badge-solid {
+    background-color: $color-badge_tertiary_solid-bg-default;
+  }
+
+  &-primary.#{$prefix}-badge-light {
+    background-color: $color-badge_primary_light-bg-default;
+    color: $color-badge_primary_light-text-default;
+  }
+  &-success.#{$prefix}-badge-light {
+    background-color: $color-badge_success_light-bg-default;
+    color: $color-badge_success_light-text-default;
+  }
+  &-secondary.#{$prefix}-badge-light {
+    background-color: $color-badge_secondary_light-bg-default;
+    color: $color-badge_secondary_light-text-default;
+  }
+  &-warning.#{$prefix}-badge-light {
+    background-color: $color-badge_warning_light-bg-default;
+    color: $color-badge_warning_light-text-default;
+  }
+  &-danger.#{$prefix}-badge-light {
+    background-color: $color-badge_danger_light-bg-default;
+    color: $color-badge_danger_light-text-default;
+  }
+  &-tertiary.#{$prefix}-badge-light {
+    background-color: $color-badge_tertiary_light-bg-default;
+    color: $color-badge_tertiary_light-text-default;
+  }
+
+  &-primary.#{$prefix}-badge-inverted {
+    color: $color-badge_primary_inverted-text-default;
+  }
+  &-success.#{$prefix}-badge-inverted {
+    color: $color-badge_success_inverted-text-default;
+  }
+  &-warning.#{$prefix}-badge-inverted {
+    color: $color-badge_warning_inverted-text-default;
+  }
+  &-danger.#{$prefix}-badge-inverted {
+    color: $color-badge_danger_inverted-text-default;
+  }
+  &-tertiary.#{$prefix}-badge-inverted {
+    color: $color-badge_tertiary_inverted-text-default;
+  }
+  &-secondary.#{$prefix}-badge-inverted {
+    color: $color-badge_secondary_inverted-text-default;
+  }
+}

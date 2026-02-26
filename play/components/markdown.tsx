@@ -152,6 +152,66 @@ const MarkdownRender = defineComponent({
               })}
             </tempui-image-preview>
           </div>
+          <div>
+            <tempui-badge count={5}>
+              <tempui-avatar
+                color="blue"
+                shape="square"
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '4px'
+                }}
+              >
+                BM
+              </tempui-avatar>
+            </tempui-badge>
+            <br />
+            <br />
+            <tempui-badge dot>
+              <tempui-avatar
+                color="blue"
+                shape="square"
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '4px'
+                }}
+              >
+                YL
+              </tempui-avatar>
+            </tempui-badge>
+            <br />
+            <br />
+            <tempui-badge count={<span>123</span>}>
+              <tempui-avatar
+                color="light-blue"
+                shape="square"
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '4px'
+                }}
+              >
+                XZ
+              </tempui-avatar>
+            </tempui-badge>
+            <br />
+            <br />
+            <tempui-badge count="NEW">
+              <tempui-avatar
+                color="light-blue"
+                shape="square"
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '4px'
+                }}
+              >
+                WF
+              </tempui-avatar>
+            </tempui-badge>
+          </div>
         </div>
       )
     }
