@@ -20,10 +20,12 @@ import {
   hasPropsOrSlots,
   isArray,
   isFunction,
+  isNumber,
   isObject,
   isString,
   isUndefined,
-  renderElementForPropsOrSlot
+  renderElementForPropsOrSlot,
+  useRandomId
 } from '../_util'
 import {
   IconArrowLeft,
@@ -41,7 +43,7 @@ import Slider from '../slider'
 import { numbers, strings } from './constants'
 import { IconRealSizeStroked, IconWindowAdaptionStroked } from 'icons/stroked-icons'
 import Tooltip from '../tooltip'
-import { downloadFile } from './utils'
+import { downloadFile, getPreloadImagArr } from './utils'
 import Spin from '../spin'
 import { useImagePerviewProvider } from './scope'
 import type { VueNode } from '../_util/type'
@@ -59,6 +61,10 @@ type ImagePreviewState = {
   currentImageLoading: boolean
   scopeImageUrls: string[]
   scopeImageTitles: VueNode[]
+  preloadImages: string[]
+  direction: 'prev' | 'next'
+  preloadAfterVisibleChange: boolean
+  previewGroupId: string
 }
 const imagePreview = defineComponent({
   setup(props, ctx) {
@@ -75,11 +81,16 @@ const imagePreview = defineComponent({
       naturalHeight: 0,
       currentImageLoading: false,
       scopeImageUrls: [],
-      scopeImageTitles: []
+      scopeImageTitles: [],
+      preloadImages: [],
+      direction: 'prev',
+      preloadAfterVisibleChange: true,
+      previewGroupId: `${prefix}-image-preview-group` + useRandomId(6)
     })
     let imageRef: HTMLImageElement | null = null
     let containerObserver: ResizeObserver | null = null
     let scheduleIndex = 0
+    let previewObserver: IntersectionObserver | null = null
     useImagePerviewProvider({
       isChildren: true,
       setImageUrl(index, url) {
@@ -98,6 +109,14 @@ const imagePreview = defineComponent({
       },
       setImagePerviewTitle(index, title) {
         state.scopeImageTitles[index] = title
+      }
+    })
+    watchEffect(() => {
+      const { lazyLoad } = props
+      if (lazyLoad) {
+        observerImages()
+      } else {
+        previewObserver?.disconnect()
       }
     })
     watchEffect(() => {
@@ -170,7 +189,35 @@ const imagePreview = defineComponent({
         containerObserver.disconnect()
         containerObserver = null
       }
+      if (previewObserver) {
+        previewObserver?.disconnect()
+        containerObserver = null
+      }
     })
+    const observerImages = () => {
+      if (previewObserver) {
+        previewObserver?.disconnect()
+      } else {
+        previewObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((item) => {
+              const src = (item.target as HTMLImageElement).dataset?.src
+              if (item.isIntersecting && src) {
+                ;(item.target as HTMLImageElement).src = src
+                ;(item.target as HTMLImageElement).removeAttribute('data-src')
+                previewObserver?.unobserve(item.target)
+              }
+            })
+          },
+          {
+            root: document.querySelector(`#${state.previewGroupId}`),
+            rootMargin: props.lazyLoadMargin
+          }
+        )
+      }
+      const allImgElement = document.querySelectorAll(`.${prefix}-img`)
+      allImgElement.forEach((item) => previewObserver?.observe(item))
+    }
 
     const createMenuProps = computed(() => {
       return {
@@ -220,6 +267,7 @@ const imagePreview = defineComponent({
         index = 0
       }
       handleChangeIamge(index)
+      state.direction = 'prev'
       ctx.emit('prev', state.currentIndex)
     }
     const handleNext = () => {
@@ -231,6 +279,7 @@ const imagePreview = defineComponent({
         index = getImagesUrls.value.length - 1
       }
       handleChangeIamge(index)
+      state.direction = 'next'
       ctx.emit('next', state.currentIndex)
     }
 
@@ -345,6 +394,91 @@ const imagePreview = defineComponent({
         }
       }
       state.currentImageLoading = false
+      if (state.preloadAfterVisibleChange) {
+        preloadGapImage()
+        state.preloadAfterVisibleChange = false
+      } else {
+        preloadSingleImage()
+      }
+    }
+    // 当 visible 改变之后，预览组件完成首张图片加载后，启动预加载
+    // 如： 1，2，3，4，5，6，7，8张图片， 点击第 4 张图片，preLoadGap 为 2
+    // 当 visible 从 false 变为 true ，首先加载第 4 张图片，当第 4 张图片加载完成后，
+    // 再按照 5，3，6，2的顺序预先加载这几张图片
+    // When visible changes, the preview component finishes loading the first image and starts preloading
+    // Such as: 1, 2, 3, 4, 5, 6, 7, 8 pictures, click the 4th picture, preLoadGap is 2
+    // When visible changes from false to true , load the 4th image first, when the 4th image is loaded,
+    // Preload these pictures in the order of 5, 3, 6, 2
+    const preloadGapImage = () => {
+      const { preLoad, preLoadGap, infinite } = props
+      const currentIndex = state.currentIndex
+      const imgSrc = getImagesUrls.value
+      if (!preLoad || !isNumber(preLoadGap) || preLoadGap < 1) {
+        return
+      }
+      const preloadImages = getPreloadImagArr(imgSrc, currentIndex, preLoadGap, infinite)
+      if (preloadImages.length === 0) {
+        return
+      }
+
+      const Img = new Image()
+      let index = 0
+      function callback() {
+        index++
+        if (index < preloadImages.length) {
+          Img.src = preloadImages[index]
+        }
+      }
+      Img.onload = () => {
+        setPreloadImages(Img.src)
+        callback()
+      }
+      Img.onerror = callback
+      Img.src = preloadImages[0]
+    }
+
+    // 在切换左右图片时，当被切换图片完成加载后，根据方向决定下一个预加载的图片
+    // 如： 1，2，3，4，5，6，7，8张图片
+    // 当 preLoadGap 为 2， 从第 5 张图片进行切换
+    // - 如果向 右 切换到第 6 张，则第 6 张图片加载动作结束后（无论加载成功 or 失败），会预先加载第 8 张；
+    // - 如果向 左 切换到第 4 张，则第 4 张图片加载动作结束后（无论加载成功 or 失败），会预先加载第 2 张；
+    // When switching the left and right pictures, when the switched picture is loaded, the next preloaded picture is determined according to the direction
+    // Such as: 1, 2, 3, 4, 5, 6, 7, 8 pictures
+    // When preLoadGap is 2, switch from the 5th picture
+    // - If you switch to the 6th image(direction is next), the 8th image will be preloaded after the 6th image is loaded (whether it succeeds or fails to load);
+    // - If you switch to the 4th image(direction is prev), the second image will be preloaded after the 4th image is loaded (whether it succeeds or fails to load);
+    const preloadSingleImage = () => {
+      const { preLoad, preLoadGap, infinite } = props
+      const imgSrc = getImagesUrls.value
+      const currentIndex = state.currentIndex
+      const imgLoadStatus = state.preloadImages
+      const direction = state.direction
+      if (!preLoad || !isNumber(preLoadGap) || preLoadGap < 1) {
+        return
+      }
+      // 根据方向决定preload那个index
+      // Determine the index of preload according to the direction
+      let preloadIndex = currentIndex + (direction === 'prev' ? -1 : 1) * preLoadGap
+      if (preloadIndex < 0 || preloadIndex >= imgSrc.length) {
+        if (infinite) {
+          preloadIndex = (preloadIndex + imgSrc.length) % imgSrc.length
+        } else {
+          return
+        }
+      }
+      // 如果图片没有加载成功过，则进行预加载
+      // If the image has not been loaded successfully, preload it
+      if (!imgLoadStatus[preloadIndex]) {
+        const Img = new Image()
+        Img.onload = () => {
+          setPreloadImages(imgSrc[preloadIndex])
+        }
+        Img.src = imgSrc[preloadIndex]
+      }
+    }
+
+    const setPreloadImages = (src: string) => {
+      state.preloadImages.push(src)
     }
     const handleKeyEsc = () => {
       handleClickClose()
