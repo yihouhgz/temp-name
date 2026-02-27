@@ -48,6 +48,8 @@ import imagePreview from './image-preview'
 import Divider from './divider'
 import Slider from './slider'
 import Badge from './badge'
+import Table, { Column } from './table'
+
 const components: Component[] = [
   Button,
   ButtonGroup,
@@ -121,7 +123,9 @@ const components: Component[] = [
   imagePreview,
   Divider,
   Slider,
-  Badge
+  Badge,
+  Table,
+  Column
 ]
 export const install = (app: App) => withInstall(app, components)
 export {
@@ -197,7 +201,9 @@ export {
   imagePreview,
   Divider,
   Slider,
-  Badge
+  Badge,
+  Table,
+  Column
 }
 
 const globalApis: { [key: string]: unknown } = {

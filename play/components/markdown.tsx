@@ -56,6 +56,106 @@ const MarkdownRender = defineComponent({
 | 41 | 42 | 43 | 44 |
 
     `
+    const columns = [
+      {
+        title: '标题',
+        dataIndex: 'name',
+        render: (text, record, index) => {
+          return (
+            <div>
+              <tempui-avatar
+                size="small"
+                shape="square"
+                src={record.nameIconSrc}
+                style={{ marginRight: 12 }}
+              ></tempui-avatar>
+              {text}
+            </div>
+          )
+        }
+      },
+      {
+        title: '大小',
+        dataIndex: 'size'
+      },
+      {
+        title: '交付状态',
+        dataIndex: 'status',
+        render: (text) => {
+          const tagConfig = {
+            success: { color: 'green', prefixIcon: 1, text: '已交付' },
+            pending: { color: 'pink', prefixIcon: 2, text: '已延期' },
+            wait: { color: 'cyan', prefixIcon: 3, text: '待评审' }
+          }
+          const tagProps = tagConfig[text]
+          return (
+            <tempui-tag shape="circle" {...tagProps} style={{ userSelect: 'text' }}>
+              {tagProps.text}
+            </tempui-tag>
+          )
+        }
+      },
+      {
+        title: '所有者',
+        dataIndex: 'owner',
+        render: (text, record, index) => {
+          return (
+            <div>
+              <tempui-avatar size="small" color={record.avatarBg} style={{ marginRight: 4 }}>
+                {typeof text === 'string' && text.slice(0, 1)}
+              </tempui-avatar>
+              {text}
+            </div>
+          )
+        }
+      },
+      {
+        title: '更新日期',
+        dataIndex: 'updateTime'
+      },
+      {
+        title: '',
+        dataIndex: 'operate',
+        render: () => {
+          return 1
+        }
+      }
+    ]
+    const data = [
+      {
+        key: '1',
+        name: 'Semi Design 设计稿.fig',
+        nameIconSrc:
+          'https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/figma-icon.png',
+        size: '2M',
+        owner: '姜鹏志',
+        status: 'success',
+        updateTime: '2020-02-02 05:13',
+        avatarBg: 'grey'
+      },
+      {
+        key: '2',
+        name: 'Semi Design 分享演示文稿',
+        nameIconSrc:
+          'https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/docs-icon.png',
+        size: '2M',
+        owner: '郝宣',
+        status: 'pending',
+        updateTime: '2020-01-17 05:31',
+        avatarBg: 'red'
+      },
+      {
+        key: '3',
+        name: '设计文档',
+        nameIconSrc:
+          'https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/docs-icon.png',
+        size: '34KB',
+        status: 'wait',
+        owner: 'Zoey Edwards',
+        updateTime: '2020-01-26 11:01',
+        avatarBg: 'light-blue'
+      }
+    ]
     return () => {
       return (
         <div>
@@ -211,6 +311,9 @@ const MarkdownRender = defineComponent({
                 WF
               </tempui-avatar>
             </tempui-badge>
+          </div>
+          <div>
+            <tempui-table columns={columns} dataSource={data} pagination={false} />
           </div>
         </div>
       )

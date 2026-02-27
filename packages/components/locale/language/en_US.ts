@@ -18,5 +18,8 @@ export default {
   Navigation: {
     collapseText: 'Collapse Sidebar',
     expandText: 'Expand Sidebar'
+  },
+  Table: {
+    emptyText: 'No Data'
   }
 }

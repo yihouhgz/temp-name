@@ -1,4 +1,6 @@
 import type { VueNode } from '../_util/type'
+import type { Locale } from '../locale'
+
 export interface TableComponents {
   table?: VueNode
   header?: {
@@ -24,3 +26,10 @@ export interface TableComponents {
     outer?: VueNode
   }
 }
+export interface BodyScrollEvent extends Omit<UIEvent, 'currentTarget' | 'target'> {
+  [x: string]: unknown
+  currentTarget: unknown
+  target: unknown
+}
+export type TableLocale = Locale['Table']
+export type BodyScrollPosition = 'both' | 'middle' | 'left' | 'right'

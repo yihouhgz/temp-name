@@ -18,5 +18,8 @@ export default {
   Navigation: {
     collapseText: '收起側欄',
     expandText: '展開側欄'
+  },
+  Table: {
+    emptyText: '暫無數據'
   }
 }
