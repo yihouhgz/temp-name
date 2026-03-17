@@ -1,17 +1,21 @@
-import { computed, defineComponent, reactive } from 'vue'
+import { computed, defineComponent, reactive, type Ref } from 'vue'
 import { prefix } from 'constants/config'
 import './style/table'
 import Spin from '../spin'
 import { tableProps, tableEmits } from './type'
 import { isFunction } from '../_util'
-import { difference, get, some } from 'lodash'
+import { difference, get, omit } from 'lodash'
 import LocaleConsumer from '../locale/locale-consumer'
 import type { BodyScrollEvent, BodyScrollPosition, TableLocale } from './interface'
 import HeadTable from './headTable'
 import { filterColumns as filterColumnsFn, flattenColumns as flattenColumnsFn } from './utils'
 import BodyTable from './bodyTable'
 import Store from '../_util/store'
-import getColumns from './getColumns'
+// import getColumns from './getColumns'
+import type { VueNode } from '../_util/type'
+import type { ColumnProps, RecordType, RowSelectionProps } from './type'
+import type { HeadTableProps } from './headTable'
+import type { BodyProps } from './bodyTable'
 
 type TableState = {
   rootWrapRef: HTMLDivElement | null
@@ -28,9 +32,19 @@ type TableState = {
   store: Store
   disabledRowKeysSet: Set<string | number>
 }
+export type TableStateRowSelection =
+  | (RowSelectionProps & { selectedRowKeysSet?: Set<string | number> })
+  | boolean
+export interface RenderTableProps extends HeadTableProps, BodyProps {
+  filteredColumns: ColumnProps
+  useFixedHeader: boolean
+  bodyRef: Ref<HTMLDivElement> | ((instance: unknown) => void)
+  rowSelection: TableStateRowSelection
+  bodyHasScrollBar: boolean
+}
 
 const Table = defineComponent({
-  setup(props, ctx) {
+  setup(props) {
     const state = reactive<TableState>({
       rootWrapRef: null,
       wrapRef: null,
@@ -95,7 +109,11 @@ const Table = defineComponent({
       }
       return titleNode ? <div class={`${prefixCls}-title`}>{titleNode}</div> : null
     }
-    const renderEmpty = () => {
+    const renderEmpty = (props: {
+      prefixCls: string
+      empty: VueNode
+      dataSource: RecordType[]
+    }) => {
       const { prefixCls, empty, dataSource } = props
       const wrapCls = `${prefixCls}-placeholder`
 
@@ -177,21 +195,36 @@ const Table = defineComponent({
     }
     const handleWheel = () => {}
     const handleBodyScroll = () => {}
-    const renderTable = () => {
-      const { rowSelection, components, showHeader, dataSource, prefixCls, sticky } = props
-      const { bodyHasScrollBar, store, disabledRowKeysSet } = state
+    const renderTable = (props: RenderTableProps) => {
+      const {
+        filteredColumns,
+        fixed,
+        useFixedHeader,
+        scroll,
+        prefixCls,
+        anyColumnFixed,
+        includeHeader,
+        showHeader,
+        components,
+        headerRef,
+        bodyRef,
+        onHeaderRow,
+        rowSelection,
+        dataSource,
+        bodyHasScrollBar,
+        disabledRowKeysSet,
+        sticky
+      } = props
+
       const selectedRowKeysSet = get(rowSelection, 'selectedRowKeysSet', new Set())
       const tableLayout = getTableLayout()
-      const fixed = false
 
-      const headTable = useFixedHeader.value ? (
+      const headTable = useFixedHeader ? (
         <HeadTable
           key="head"
           tableLayout={tableLayout}
-          ref={(node) => {
-            state.headerWrapRef = node as HTMLDivElement
-          }}
-          columns={filteredColumns.value}
+          ref={headerRef}
+          columns={filteredColumns}
           prefixCls={prefixCls}
           fixed={fixed}
           handleBodyScroll={handleBodyScrollLeft}
@@ -208,32 +241,66 @@ const Table = defineComponent({
 
       const bodyTable = (
         <BodyTable
-          // {...(omit(props, ['rowSelection', 'headWidths']) as unknown)}
+          {...omit(props, ['rowSelection', 'headWidths'])}
           key="body"
-          ref={(node) => {
-            state.bodyWrapRef = node as HTMLDivElement
-          }}
+          ref={bodyRef}
           columns={filteredColumns}
           fixed={fixed}
           prefixCls={prefixCls}
           handleWheel={handleWheel}
           handleBodyScroll={handleBodyScroll}
-          // anyColumnFixed={anyColumnFixed}
+          anyColumnFixed={anyColumnFixed}
           tableLayout={tableLayout}
-          includeHeader={!useFixedHeader.value}
+          includeHeader={includeHeader}
           showHeader={showHeader}
           scroll={scroll}
           components={components}
-          store={store}
+          store={state.store}
           selectedRowKeysSet={selectedRowKeysSet}
           disabledRowKeysSet={disabledRowKeysSet}
         />
       )
       return [headTable, bodyTable]
     }
-    const renderFooter = () => {}
-    const renderMainTable = () => {
-      const table = [renderTable(), renderFooter()]
+    const renderFooter = (props: {
+      footer?: VueNode | ((dataSource: RecordType[]) => VueNode)
+      prefixCls: string
+      dataSource: RecordType[]
+    }) => {
+      let { footer } = props
+      const { prefixCls, dataSource } = props
+
+      if (typeof footer === 'function') {
+        footer = footer(dataSource)
+      }
+      if (footer) {
+        return (
+          <div class={`${prefixCls}-footer`} key="footer">
+            {footer}
+          </div>
+        )
+      }
+      return null
+    }
+    const renderMainTable = (props) => {
+      const fixedHeader = useFixedHeader.value
+      const emptySlot = renderEmpty(props)
+      const table = [
+        renderTable({
+          ...props,
+          fixed: false,
+          useFixedHeader,
+          headerRef: (node) => {
+            state.headerWrapRef = node as HTMLDivElement
+          },
+          bodyRef: (node) => {
+            state.bodyWrapRef = node as HTMLDivElement
+          },
+          includeHeader: !fixedHeader,
+          emptySlot
+        }),
+        renderFooter(props)
+      ]
       return table
     }
     return () => {
@@ -253,7 +320,7 @@ const Table = defineComponent({
               }}
             >
               {renderTitle()}
-              <div class={`${prefixCls}-container`}>{renderMainTable()}</div>
+              <div class={`${prefixCls}-container`}>{renderMainTable(props)}</div>
             </div>
           </Spin>
         </div>

@@ -1,10 +1,12 @@
-import type { ExtractPropTypes, PropType, VNode } from 'vue'
+import type { PropType, VNode, ExtractPublicPropTypes, Component } from 'vue'
 import type { TableComponents } from './interface'
 import type { VueNode } from '../_util/type'
 import { isArray, isBoolean, isNumber, isObject } from '../_util'
 import { prefix } from 'constants/config'
 import { strings } from './constants'
 import type { DropdownProps } from '../dropdown/dropdown'
+
+export type RowExpandable<RecordType> = (record?: RecordType) => boolean
 
 export const tableProps = {
   /**
@@ -251,7 +253,7 @@ export const tableProps = {
    * If the return value is false, the rendering of the expandable button will be disabled
    */
   rowExpandable: {
-    type: Function as PropType<(record: Record<string, unknown>) => boolean>
+    type: Function as PropType<RowExpandable<RecordType>>
   },
   /**
    * @zh 表格行 key 的取值，可以是字符串或一个函数
@@ -326,6 +328,7 @@ export const tableProps = {
     default: false
   }
 }
+
 export const columnProps = {
   /**
    * @zh 设置列的对齐方式，在 RTL 时会自动切换
@@ -341,7 +344,8 @@ export const columnProps = {
    * @en Table header merge settings for subcolumns
    */
   children: {
-    type: Array as PropType<ExtractPropTypes<typeof columnProps>[]>
+    //ExtractPropTypes<typeof columnProps>[]
+    type: Array as PropType<Array<unknown>>
   },
   /**
    * @zh 表头列合并，设置为 0 时，不渲染
@@ -703,6 +707,7 @@ export const rowSelectionEmits = {
     return isBoolean(selected) && isArray(selectedRows) && isArray(changedRows)
   }
 }
+export type RowSelectionProps = ExtractPublicPropTypes<typeof rowSelectionProps>
 
 export type TableRowScroll = {
   // 当分页、排序、筛选变化后是否自动滚动到表格顶部
@@ -712,6 +717,7 @@ export type TableRowScroll = {
   // 设置纵向滚动区域的高，可以为像素值
   y: number
 }
+export type Scroll = TableRowScroll
 
 export type TableCellProps = {
   column: Record<string, unknown>
@@ -744,12 +750,10 @@ export interface Filter extends BaseFilter {
 }
 export type SortOrder = 'ascend' | 'descend' | false
 export type BaseEllipsis = boolean | { showTitle: boolean }
-export type ColumnProps = Partial<ExtractPropTypes<typeof columnProps>> & {
-  [x: string]: unknown
-}
+export type ColumnProps = ExtractPublicPropTypes<typeof columnProps>
 export type Align = 'left' | 'center' | 'right'
 export type TableSize = 'small' | 'default' | 'large'
-type RecordType = Record<string, unknown>
+export type RecordType = Record<string, unknown>
 type TablePaginationProps = {
   total: number
 }
